@@ -1,0 +1,132 @@
+{
+  "name": "use-herald",
+  "repository": "git@github.com:gagoar/use-herald.git",
+  "license": "MIT",
+  "version": "3.3.0",
+  "description": "Invoke AWS Lambda",
+  "main": "index.ts",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "ncc build index.ts",
+    "lint": "eslint index.ts"
+  },
+  "engines": {
+    "node": ">12.0.0"
+  },
+  "keywords": [
+    "herald rules",
+    "github",
+    "action"
+  ],
+  "lint-staged": {
+    "*": [
+      "pretty-quick --staged"
+    ],
+    "*.ts": [
+      "eslint --fix",
+      "bash -c \"npm run build\"",
+      "git add ."
+    ]
+  },
+  "eslintConfig": {
+    "ignorePatterns": "dist/*",
+    "extends": [
+      "plugin:@typescript-eslint/recommended",
+      "prettier",
+      "prettier/@typescript-eslint"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.eslint.json"
+    },
+    "rules": {
+      "quotes": [
+        2,
+        "single",
+        "avoid-escape"
+      ],
+      "no-debugger": "error",
+      "no-process-env": "off",
+      "import/prefer-default-export": "off",
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          "vars": "all",
+          "args": "after-used",
+          "ignoreRestSiblings": true
+        }
+      ],
+      "new-cap": [
+        "error",
+        {
+          "capIsNewExceptions": [
+            "Injectable",
+            "Inject"
+          ]
+        }
+      ],
+      "prefer-destructuring": [
+        "error",
+        {
+          "VariableDeclarator": {
+            "array": false,
+            "object": true
+          },
+          "AssignmentExpression": {
+            "array": true,
+            "object": false
+          }
+        },
+        {
+          "enforceForRenamedProperties": false
+        }
+      ]
+    }
+  },
+  "author": "Gago <xeroice@gmail.com>",
+  "dependencies": {
+    "@actions/core": "^1.2.4",
+    "@astronautlabs/jsonpath": "^1.0.6",
+    "@octokit/plugin-retry": "^3.0.3",
+    "@octokit/rest": "^18.0.0",
+    "@types/jsonpath": "^0.2.0",
+    "aws-sdk": "^2.681.0",
+    "envalid": "^6.0.2",
+    "fast-glob": "^3.2.4",
+    "minimatch": "^3.0.4",
+    "p-queue": "^6.5.0"
+  },
+  "devDependencies": {
+    "@types/jest": "25.2.3",
+    "@types/node": "13.13.8",
+    "@typescript-eslint/eslint-plugin": "2.34.0",
+    "@typescript-eslint/parser": "2.34.0",
+    "@zeit/ncc": "0.22.2",
+    "ajv-keywords": "3.4.1",
+    "bufferutil": "4.0.1",
+    "canvas": "2.6.1",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.11.0",
+    "husky": "^4.2.5",
+    "jest": "26.0.1",
+    "jest-mock-process": "1.4.0",
+    "lint-staged": "^10.2.6",
+    "ncc": "0.3.6",
+    "prettier": "2.0.5",
+    "prettier-eslint": "9.0.1",
+    "prettier-eslint-cli": "5.0.0",
+    "pretty-quick": "2.0.1",
+    "ts-jest": "26.0.0",
+    "ts-node": "8.10.1",
+    "tslib": "2.0.0",
+    "typescript": "3.9.3",
+    "utf-8-validate": "5.0.2",
+    "ws": ">=3.3.1"
+  }
+}
