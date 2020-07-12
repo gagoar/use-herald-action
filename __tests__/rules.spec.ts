@@ -50,6 +50,19 @@ describe('rules', () => {
   });
 
   describe('composeCommentsForSubscribers', () => {
+    it('rule without subscribers', () => {
+      expect(
+        composeCommentsForSubscribers([
+          {
+            ...validRule,
+            subscribers: undefined,
+            assignees: validRule.subscribers,
+            path: '/some/rule.json',
+            matches: ['/some/file.ts'],
+          },
+        ])
+      ).toMatchInlineSnapshot('Array []');
+    });
     it('uses the customMessage in the rule', () => {
       expect(
         composeCommentsForSubscribers([
@@ -85,6 +98,25 @@ describe('rules', () => {
       expect(
         getMatchingRules(
           [{ ...validRule, path: '/some/rule.json' }],
+          files,
+          event
+        )
+      ).toMatchInlineSnapshot('Array []');
+    });
+
+    it('no matches', () => {
+      const files = [{ filename: '/some/file.js' }];
+
+      expect(
+        getMatchingRules(
+          [
+            {
+              ...validRule,
+              glob: undefined,
+              eventJsonPath: undefined,
+              path: '/some/rule.json',
+            },
+          ],
           files,
           event
         )
@@ -166,6 +198,22 @@ describe('rules', () => {
       readFileSync.mockClear();
       consoleInfoMock.mockClear();
       consoleLogMock.mockClear();
+    });
+    it('invalid rule: empty array, will be ignored', () => {
+      sync.mockReturnValue(['/some/rule.json']);
+      readFileSync.mockReturnValue('null');
+
+      expect(loadRules('/some/rule.json')).toMatchInlineSnapshot('Array []');
+
+      expect(consoleLogMock.mock.calls).toMatchInlineSnapshot('Array []');
+      expect(consoleInfoMock.mock.calls).toMatchInlineSnapshot(`
+        Array [
+          Array [
+            "found rules:",
+            Array [],
+          ],
+        ]
+      `);
     });
     it("invalid rule file: file can't be parse", () => {
       sync.mockReturnValue(['/some/rule.json']);
