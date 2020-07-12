@@ -2,7 +2,7 @@
 
 import PQueue from 'p-queue';
 
-import { composeCommentsFromRules, MatchingRule } from './rules';
+import { composeCommentsForSubscribers, MatchingRule } from './rules';
 
 import { maxPerPage } from './environment';
 
@@ -46,7 +46,7 @@ export const handleSubscribers = async (
 ) => {
   const queue = new PQueue({ concurrency: requestConcurrency });
 
-  const commentsFromRules = composeCommentsFromRules(matchingRules);
+  const commentsFromRules = composeCommentsForSubscribers(matchingRules);
 
   const raw_comments = await getAllComments(client, {
     owner,

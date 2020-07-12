@@ -579,7 +579,7 @@ const getMatchingRules = (rules, files, event) => {
     console.info('matching rules:', matchingRules);
     return matchingRules;
 };
-const composeCommentsFromRules = (matchingRules) => {
+const composeCommentsForSubscribers = (matchingRules) => {
     return matchingRules.reduce((comments, matchingRule) => {
         return matchingRule.subscribers
             ? [
@@ -611,7 +611,7 @@ const getAllComments = async (client, params) => {
 };
 const handleSubscribers = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
     const queue = new dist_default.a({ concurrency: requestConcurrency });
-    const commentsFromRules = composeCommentsFromRules(matchingRules);
+    const commentsFromRules = composeCommentsForSubscribers(matchingRules);
     const raw_comments = await getAllComments(client, {
         owner,
         repo,

@@ -44,7 +44,7 @@ export interface Rule {
   customMessage?: string;
 }
 
-type Files = RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files'];
+type File = RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files'][0];
 
 const sanitize = (content: Rule & StringIndexSignatureInterface): Rule => {
   const attrs = { ...RuleMatchers, ...RuleActors, ...RuleExtras };
@@ -95,7 +95,7 @@ export type MatchingRule = Rule & { matches: unknown[] };
 
 export const getMatchingRules = (
   rules: Rule[],
-  files: Files,
+  files: Partial<File> & Required<Pick<File, 'filename'>>[],
   event: Event
 ): MatchingRule[] => {
   const fileNames = files.map(({ filename }) => filename);
@@ -118,7 +118,7 @@ export const getMatchingRules = (
   return matchingRules;
 };
 
-export const composeCommentsFromRules = (
+export const composeCommentsForSubscribers = (
   matchingRules: MatchingRule[]
 ): string[] => {
   return matchingRules.reduce((comments, matchingRule) => {

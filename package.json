@@ -33,6 +33,10 @@
       "git add ."
     ]
   },
+  "prettier": {
+    "singleQuote": true,
+    "semi": true
+  },
   "eslintConfig": {
     "ignorePatterns": "dist/*",
     "extends": [
