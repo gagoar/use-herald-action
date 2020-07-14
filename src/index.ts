@@ -72,11 +72,14 @@ export const main = async () => {
 
       const matchingRules = getMatchingRules(rules, files, event);
 
+      const groupedRulesByAction = groupBy(
+        matchingRules,
+        (rule) => rule.action
+      );
+
       if (!dryRun) {
         if (matchingRules.length) {
-          const groups = groupBy(matchingRules, (rule) => rule.action);
-
-          const groupNames = Object.keys(groups) as ActionName[];
+          const groupNames = Object.keys(groupedRulesByAction) as ActionName[];
 
           await Promise.all([
             groupNames.map((actionName: ActionName) => {
@@ -87,14 +90,14 @@ export const main = async () => {
                 owner,
                 repo,
                 prNumber,
-                groups[RuleActions.comment]
+                groupedRulesByAction[RuleActions.comment]
               );
             }),
           ]);
         }
       }
 
-      setOutput(OUTPUT_NAME, matchingRules);
+      setOutput(OUTPUT_NAME, groupedRulesByAction);
     } else {
       setOutput(OUTPUT_NAME, []);
       throw new Error('use-herald only supports pull_request events for now');

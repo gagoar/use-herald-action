@@ -37807,19 +37807,19 @@ const main = async () => {
                 repo,
             });
             const matchingRules = getMatchingRules(rules, files, event);
+            const groupedRulesByAction = lodash_groupBy_default()(matchingRules, (rule) => rule.action);
             if (!dryRun) {
                 if (matchingRules.length) {
-                    const groups = lodash_groupBy_default()(matchingRules, (rule) => rule.action);
-                    const groupNames = Object.keys(groups);
+                    const groupNames = Object.keys(groupedRulesByAction);
                     await Promise.all([
                         groupNames.map((actionName) => {
                             const action = actionsMap[RuleActions[actionName]];
-                            return action(client, owner, repo, prNumber, groups[RuleActions.comment]);
+                            return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions.comment]);
                         }),
                     ]);
                 }
             }
-            Object(core.setOutput)(OUTPUT_NAME, matchingRules);
+            Object(core.setOutput)(OUTPUT_NAME, groupedRulesByAction);
         }
         else {
             Object(core.setOutput)(OUTPUT_NAME, []);
