@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/camelcase */
-
 import PQueue from 'p-queue';
 
 import { composeCommentsForUsers, MatchingRule } from './rules';
@@ -17,7 +16,7 @@ const getAllComments = async (
   client: InstanceType<typeof Octokit>,
   params: AllCommentsParams
 ): Promise<IssueComments> => {
-  const page = params.page ?? 1;
+  const page = 1;
   const { data: comments } = await client.issues.listComments({
     ...params,
     per_page: maxPerPage,
@@ -36,7 +35,7 @@ const getAllComments = async (
   }
 };
 
-export const comment = async (
+export const handleComment = async (
   client: InstanceType<typeof Octokit>,
   owner: string,
   repo: string,
@@ -45,16 +44,13 @@ export const comment = async (
   requestConcurrency = 1
 ) => {
   const queue = new PQueue({ concurrency: requestConcurrency });
-
   const commentsFromRules = composeCommentsForUsers(matchingRules);
-
-  const raw_comments = await getAllComments(client, {
+  const rawComments = await getAllComments(client, {
     owner,
     repo,
     issue_number: prNumber,
   });
-
-  const comments = raw_comments.map(({ body }) => body);
+  const comments = rawComments.map(({ body }) => body);
 
   const onlyNewComments = commentsFromRules.filter(
     (comment: string) => !comments.includes(comment)
@@ -62,7 +58,7 @@ export const comment = async (
 
   return Promise.all(
     onlyNewComments.map((body: string) => {
-      queue.add(() =>
+      return queue.add(() =>
         client.issues.createComment({
           owner,
           repo,

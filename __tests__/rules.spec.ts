@@ -7,7 +7,7 @@ import {
   loadRules,
   getMatchingRules,
   composeCommentsForUsers,
-  Actions,
+  RuleActions,
 } from '../src/rules';
 import { mockConsole, unMockConsole } from './helpers';
 import { Event } from '../src/environment';
@@ -27,7 +27,7 @@ const invalidRule = {
   users: ['@eeny', '@meeny', '@miny', '@moe'],
 };
 
-const validRule = { ...invalidRule, action: Actions.comment, glob: '*.ts' };
+const validRule = { ...invalidRule, action: RuleActions.comment, glob: '*.ts' };
 
 describe('rules', () => {
   let consoleInfoMock: jest.Mock;

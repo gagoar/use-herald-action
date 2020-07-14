@@ -37698,8 +37698,7 @@ const composeCommentsForUsers = (matchingRules) => {
 
 
 const getAllComments = async (client, params) => {
-    var _a;
-    const page = (_a = params.page) !== null && _a !== void 0 ? _a : 1;
+    const page = 1;
     const { data: comments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { per_page: maxPerPage, page }));
     if (comments.length < maxPerPage) {
         return comments;
@@ -37709,18 +37708,18 @@ const getAllComments = async (client, params) => {
         return [...comments, ...moreComments];
     }
 };
-const comment = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
+const handleComment = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
     const queue = new dist_default.a({ concurrency: requestConcurrency });
     const commentsFromRules = composeCommentsForUsers(matchingRules);
-    const raw_comments = await getAllComments(client, {
+    const rawComments = await getAllComments(client, {
         owner,
         repo,
         issue_number: prNumber,
     });
-    const comments = raw_comments.map(({ body }) => body);
+    const comments = rawComments.map(({ body }) => body);
     const onlyNewComments = commentsFromRules.filter((comment) => !comments.includes(comment));
     return Promise.all(onlyNewComments.map((body) => {
-        queue.add(() => client.issues.createComment({
+        return queue.add(() => client.issues.createComment({
             owner,
             repo,
             issue_number: prNumber,
@@ -37783,7 +37782,7 @@ var Props;
     Props["lint"] = "lint";
 })(Props || (Props = {}));
 const actionsMap = {
-    [RuleActions.comment]: comment,
+    [RuleActions.comment]: handleComment,
     [RuleActions.assign]: handleAssignees,
     [RuleActions.review]: handleReviewers,
 };

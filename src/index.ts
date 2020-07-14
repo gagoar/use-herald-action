@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { getInput, setOutput, setFailed } from '@actions/core';
 import groupBy from 'lodash.groupBy';
-import { comment } from './comment';
+import { handleComment } from './comment';
 import { loadRules, getMatchingRules, RuleActions } from './rules';
 import { env, Event, SUPPORTED_EVENT_TYPES, OUTPUT_NAME } from './environment';
 
@@ -22,10 +22,12 @@ export enum Props {
 }
 
 const actionsMap = {
-  [RuleActions.comment]: comment,
+  [RuleActions.comment]: handleComment,
   [RuleActions.assign]: handleAssignees,
   [RuleActions.review]: handleReviewers,
 };
+
+type ActionName = keyof typeof RuleActions;
 
 const getParams = () => {
   return Object.keys(Props).reduce((memo, prop) => {
@@ -73,8 +75,6 @@ export const main = async () => {
       if (!dryRun) {
         if (matchingRules.length) {
           const groups = groupBy(matchingRules, (rule) => rule.action);
-
-          type ActionName = keyof typeof RuleActions;
 
           const groupNames = Object.keys(groups) as ActionName[];
 
