@@ -2,8 +2,8 @@ import { handleComment } from '../src/comment';
 import { Octokit } from '@octokit/rest';
 import nock from 'nock';
 import { RuleActions } from '../src/rules';
-import listCommentsResponse from '../__mocks__/scenarios/listComments.json';
-import createIssueResponse from '../__mocks__/scenarios/createComment.json';
+import getCommentsResponse from '../__mocks__/scenarios/get_comments.json';
+import createIssueResponse from '../__mocks__/scenarios/create_comment.json';
 
 jest.mock('../src/environment', () => ({
   maxPerPage: 2,
@@ -33,13 +33,13 @@ describe('handleComment', () => {
       .get(
         `/repos/${owner}/${repo}/issues/${prIssue}/comments?page=1&per_page=2`
       )
-      .reply(200, listCommentsResponse.slice(0, 2));
+      .reply(200, getCommentsResponse.slice(0, 2));
 
     github
       .get(
         `/repos/${owner}/${repo}/issues/${prIssue}/comments?page=2&per_page=2`
       )
-      .reply(200, [listCommentsResponse[2]]);
+      .reply(200, [getCommentsResponse[2]]);
 
     github
       .post(`/repos/${owner}/${repo}/issues/${prIssue}/comments`)
@@ -104,7 +104,7 @@ describe('handleComment', () => {
       .get(
         `/repos/${owner}/${repo}/issues/${prIssue}/comments?page=1&per_page=2`
       )
-      .reply(200, [listCommentsResponse[0]]);
+      .reply(200, [getCommentsResponse[0]]);
 
     const response = await handleComment(client, owner, repo, 1, [
       { ...rule, customMessage: 'first comment' },

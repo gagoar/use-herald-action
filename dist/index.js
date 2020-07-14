@@ -37750,7 +37750,6 @@ const handleAssignees = async (client, owner, repo, prNumber, matchingRules, req
 
 const handleReviewers = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
     const queue = new dist_default.a({ concurrency: requestConcurrency });
-    // TODO https://octokit.github.io/rest.js/v18#pulls-request-reviewers come back to add team_reviewers
     return Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.pulls.requestReviewers({
         owner,
         repo,
