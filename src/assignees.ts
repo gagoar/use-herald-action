@@ -20,7 +20,7 @@ export const handleAssignees = async (
           owner,
           repo,
           issue_number: prNumber,
-          assignees: matchingRule.assignees,
+          assignees: matchingRule.users,
         })
       )
     )

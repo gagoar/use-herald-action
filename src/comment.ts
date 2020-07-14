@@ -2,7 +2,7 @@
 
 import PQueue from 'p-queue';
 
-import { composeCommentsForSubscribers, MatchingRule } from './rules';
+import { composeCommentsForUsers, MatchingRule } from './rules';
 
 import { maxPerPage } from './environment';
 
@@ -36,7 +36,7 @@ const getAllComments = async (
   }
 };
 
-export const handleSubscribers = async (
+export const comment = async (
   client: InstanceType<typeof Octokit>,
   owner: string,
   repo: string,
@@ -46,7 +46,7 @@ export const handleSubscribers = async (
 ) => {
   const queue = new PQueue({ concurrency: requestConcurrency });
 
-  const commentsFromRules = composeCommentsForSubscribers(matchingRules);
+  const commentsFromRules = composeCommentsForUsers(matchingRules);
 
   const raw_comments = await getAllComments(client, {
     owner,
@@ -61,7 +61,7 @@ export const handleSubscribers = async (
   );
 
   return Promise.all(
-    onlyNewComments.map((body) => {
+    onlyNewComments.map((body: string) => {
       queue.add(() =>
         client.issues.createComment({
           owner,

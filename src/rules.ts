@@ -9,14 +9,14 @@ import { RestEndpointMethodTypes } from '@octokit/rest';
 
 import { JSONPath } from '@astronautlabs/jsonpath';
 
-const commentTemplate = (subscribers: string[]): string =>
-  `Hi there, Herald found that given these changes ${subscribers.join(
+const commentTemplate = (users: string[]): string =>
+  `Hi there, Herald found that given these changes ${users.join(
     ', '
   )} might want to take a look!`;
+
 enum RuleActors {
-  subscribers = 'subscribers',
-  reviewers = 'reviewers',
-  assignees = 'assignees',
+  users = 'users',
+  teams = 'teams',
 }
 
 enum RuleExtras {
@@ -33,12 +33,17 @@ interface StringIndexSignatureInterface {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [index: string]: any;
 }
+export enum RuleActions {
+  comment = 'comment',
+  review = 'review',
+  assign = 'assign',
+}
 export interface Rule {
   name?: string;
   path: string;
-  subscribers?: string[];
-  reviewers?: string[];
-  assignees?: string[];
+  users: string[];
+  teams: string[];
+  action: keyof typeof RuleActions;
   glob?: string;
   eventJsonPath?: string;
   customMessage?: string;
@@ -46,24 +51,42 @@ export interface Rule {
 
 type File = RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files'][0];
 
-const sanitize = (content: Rule & StringIndexSignatureInterface): Rule => {
+type RawRule = Rule & { users?: string; teams?: string };
+const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
   const attrs = { ...RuleMatchers, ...RuleActors, ...RuleExtras };
+
   const rule = Object.keys(attrs).reduce((memo, attr) => {
     return content[attr] ? { ...memo, [attr]: content[attr] } : memo;
-  }, {} as Rule);
+  }, {} as RawRule);
 
-  return rule;
+  const users = rule.users?.split(',');
+  const teams = rule.teams?.split(',');
+
+  return { ...rule, users, teams };
 };
 
-const isValidRule = (content: unknown): content is Rule => {
+const hasAttribute = <Attr extends string>(
+  attr: string,
+  content: object
+): content is Record<Attr, string> => attr in content;
+
+const isValidRawRule = (content: unknown): content is RawRule => {
   if (typeof content !== 'object' || content === null) {
     return false;
   }
 
-  const actors = Object.keys(RuleActors).some((attr) => attr in content);
+  const hasValidActionValues =
+    hasAttribute<'action'>('action', content) &&
+    Object.keys(RuleActions).includes(content.action);
+
+  const hasTeams =
+    (hasAttribute('teams', content) && content.teams && true) || false;
+  const hasUsers =
+    (hasAttribute('users', content) && content.users && true) || false;
+  const hasActors = hasTeams || hasUsers;
   const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
 
-  return actors && matchers;
+  return hasValidActionValues && hasActors && matchers;
 };
 
 export const loadRules = (rulesLocation: string): Rule[] => {
@@ -74,7 +97,7 @@ export const loadRules = (rulesLocation: string): Rule[] => {
       const content = readFileSync(filePath, { encoding: FILE_ENCODING });
       const rule = JSON.parse(content) as unknown;
 
-      return isValidRule(rule)
+      return isValidRawRule(rule)
         ? [
             ...memo,
             { name: basename(filePath), ...sanitize(rule), path: filePath },
@@ -91,7 +114,9 @@ export const loadRules = (rulesLocation: string): Rule[] => {
   return rules;
 };
 
-export type MatchingRule = Rule & { matches: unknown[] };
+export type MatchingRule = Rule & {
+  matches: Partial<Record<RuleMatchers, unknown[]>>;
+};
 
 export const getMatchingRules = (
   rules: Rule[],
@@ -101,16 +126,21 @@ export const getMatchingRules = (
   const fileNames = files.map(({ filename }) => filename);
 
   const matchingRules = rules.reduce((memo, rule) => {
-    let matches: unknown[] = [];
+    const matches = {} as MatchingRule['matches'];
+
     if (rule.glob) {
-      matches = fileNames.filter(
+      matches.glob = fileNames.filter(
         minimatch.filter(rule.glob, { matchBase: true })
       );
-    } else if (rule.eventJsonPath) {
-      matches = JSONPath.query(event, rule.eventJsonPath);
     }
 
-    return matches.length ? [...memo, { ...rule, matches }] : memo;
+    if (rule.eventJsonPath) {
+      matches.eventJsonPath = JSONPath.query(event, rule.eventJsonPath);
+    }
+
+    return Object.values(matches).length
+      ? [...memo, { ...rule, matches }]
+      : memo;
   }, [] as MatchingRule[]);
 
   console.info('matching rules:', matchingRules);
@@ -118,17 +148,13 @@ export const getMatchingRules = (
   return matchingRules;
 };
 
-export const composeCommentsForSubscribers = (
+export const composeCommentsForUsers = (
   matchingRules: MatchingRule[]
 ): string[] => {
-  return matchingRules.reduce((comments, matchingRule) => {
-    return matchingRule.subscribers
-      ? [
-          ...comments,
-          matchingRule.customMessage
-            ? matchingRule.customMessage
-            : commentTemplate(matchingRule.subscribers),
-        ]
-      : comments;
+  return matchingRules.reduce((comments, { teams, users, customMessage }) => {
+    return [
+      ...comments,
+      customMessage ? customMessage : commentTemplate([...users, ...teams]),
+    ];
   }, [] as string[]);
 };

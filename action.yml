@@ -1,29 +1,26 @@
-name: "use-herald"
-description: "GitHub action to add reviewers, subscribers and assignees to your PR"
+name: 'use-herald'
+description: 'GitHub action to add reviewers, subscribers and assignees to your PR'
 branding:
   icon: arrow-up-right
   color: orange
 inputs:
   GITHUB_TOKEN:
-    description: "GITHUB_TOKEN, frequently available on secrets.GITHUB_TOKEN"
+    description: 'GITHUB_TOKEN, frequently available on secrets.GITHUB_TOKEN'
     required: true
   rulesDirectory:
-    description: "directory where the herald rules will be stored"
+    description: 'directory where the herald rules will be stored'
     required: true
   base:
-    description: "In case we wish to change the base commit we use to find the changeSet (default: master)"
-    default: "master"
-  subscribersAction:
-    description: "What is the desired action when subscribers are found? (default: comment), options are: assignees | comment | reviewer"
-    default: "comment"
+    description: 'In case we wish to change the base commit we use to find the changeSet (default: master)'
+    default: 'master'
   dryRun:
-    description: "Will evaluate the rules but it will not apply any, the output will be available"
+    description: 'Will evaluate the rules but it will not apply any, the output will be available'
     default: false
   lint:
-    description: "Will post the found rules that were found in the repo, useful for a linting step in any workflow"
+    description: 'Will post the found rules that were found in the repo, useful for a linting step in any workflow'
 outputs:
   appliedRules:
-    description: "It will report back what rules have been applied"
+    description: 'It will report back what rules have been applied'
 runs:
-  using: "node12"
-  main: "dist/index.js"
+  using: 'node12'
+  main: 'dist/index.js'

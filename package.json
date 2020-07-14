@@ -100,9 +100,11 @@
     "@octokit/plugin-retry": "^3.0.3",
     "@octokit/rest": "^18.0.0",
     "@types/jsonpath": "^0.2.0",
+    "@types/lodash.groupby": "^4.6.6",
     "aws-sdk": "^2.681.0",
     "envalid": "^6.0.2",
     "fast-glob": "^3.2.4",
+    "lodash.groupby": "^4.6.0",
     "minimatch": "^3.0.4",
     "p-queue": "^6.5.0"
   },

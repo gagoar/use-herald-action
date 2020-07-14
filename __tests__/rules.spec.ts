@@ -6,7 +6,8 @@ import * as fg from 'fast-glob';
 import {
   loadRules,
   getMatchingRules,
-  composeCommentsForSubscribers,
+  composeCommentsForUsers,
+  Actions,
 } from '../src/rules';
 import { mockConsole, unMockConsole } from './helpers';
 import { Event } from '../src/environment';
@@ -21,19 +22,12 @@ const event = (eventJSON as unknown) as Event;
 const sync = fg.sync as jest.Mock<any>;
 const readFileSync = fs.readFileSync as jest.Mock<any>;
 
-// enum RuleAttributes {
-//   subscribers = 'subscribers',
-//   assignees = 'assignees',
-//   glob = 'glob',
-//   eventJsonPath = 'eventJsonPath',
-//   customMessage = 'customMessage'
-// }
 const invalidRule = {
   customMessage: 'This is a custom message for a rule',
-  subscribers: ['@eeny', '@meeny', '@miny', '@moe'],
+  users: ['@eeny', '@meeny', '@miny', '@moe'],
 };
 
-const validRule = { ...invalidRule, glob: '*.ts' };
+const validRule = { ...invalidRule, action: Actions.comment, glob: '*.ts' };
 
 describe('rules', () => {
   let consoleInfoMock: jest.Mock;
@@ -49,24 +43,16 @@ describe('rules', () => {
     unMockConsole('error');
   });
 
-  describe('composeCommentsForSubscribers', () => {
-    it('rule without subscribers', () => {
-      expect(
-        composeCommentsForSubscribers([
-          {
-            ...validRule,
-            subscribers: undefined,
-            assignees: validRule.subscribers,
-            path: '/some/rule.json',
-            matches: ['/some/file.ts'],
-          },
-        ])
-      ).toMatchInlineSnapshot('Array []');
-    });
+  describe('composeCommentsForUsers', () => {
     it('uses the customMessage in the rule', () => {
       expect(
-        composeCommentsForSubscribers([
-          { ...validRule, path: '/some/rule.json', matches: ['/some/file.ts'] },
+        composeCommentsForUsers([
+          {
+            ...validRule,
+            path: '/some/rule.json',
+            matches: { glob: ['/some/file.ts'] },
+            teams: [],
+          },
         ])
       ).toMatchInlineSnapshot(`
         Array [
@@ -76,12 +62,13 @@ describe('rules', () => {
     });
     it('compose message', () => {
       expect(
-        composeCommentsForSubscribers([
+        composeCommentsForUsers([
           {
             ...validRule,
             customMessage: undefined,
             path: '/some/rule.json',
-            matches: ['/some/file.ts'],
+            matches: { glob: ['/some/file.ts'] },
+            teams: [],
           },
         ])
       ).toMatchInlineSnapshot(`
@@ -97,23 +84,11 @@ describe('rules', () => {
 
       expect(
         getMatchingRules(
-          [{ ...validRule, path: '/some/rule.json' }],
-          files,
-          event
-        )
-      ).toMatchInlineSnapshot('Array []');
-    });
-
-    it('no matches', () => {
-      const files = [{ filename: '/some/file.js' }];
-
-      expect(
-        getMatchingRules(
           [
             {
               ...validRule,
               glob: undefined,
-              eventJsonPath: undefined,
+              teams: [],
               path: '/some/rule.json',
             },
           ],
@@ -123,6 +98,53 @@ describe('rules', () => {
       ).toMatchInlineSnapshot('Array []');
     });
 
+    it('Matches glob and eventJsonPath', () => {
+      const files = [
+        { filename: '/some/file.js' },
+        { filename: '/some/file.ts' },
+      ];
+
+      expect(
+        getMatchingRules(
+          [
+            {
+              ...validRule,
+              teams: [],
+              eventJsonPath: '$.pull_request[?(@.login=="Codertocat")].login',
+              path: '/some/rule.json',
+            },
+          ],
+          files,
+          event
+        )
+      ).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "eventJsonPath": "$.pull_request[?(@.login==\\"Codertocat\\")].login",
+            "glob": "*.ts",
+            "matches": Object {
+              "eventJsonPath": Array [
+                "Codertocat",
+              ],
+              "glob": Array [
+                "/some/file.ts",
+              ],
+            },
+            "path": "/some/rule.json",
+            "teams": Array [],
+            "users": Array [
+              "@eeny",
+              "@meeny",
+              "@miny",
+              "@moe",
+            ],
+          },
+        ]
+      `);
+    });
+
     it('matching glob', () => {
       const files = [
         { filename: '/some/file.js' },
@@ -130,20 +152,24 @@ describe('rules', () => {
       ];
       expect(
         getMatchingRules(
-          [{ ...validRule, path: '/some/rule.json' }],
+          [{ ...validRule, teams: [], path: '/some/rule.json' }],
           files,
           event
         )
       ).toMatchInlineSnapshot(`
         Array [
           Object {
+            "action": "comment",
             "customMessage": "This is a custom message for a rule",
             "glob": "*.ts",
-            "matches": Array [
-              "/some/file.ts",
-            ],
+            "matches": Object {
+              "glob": Array [
+                "/some/file.ts",
+              ],
+            },
             "path": "/some/rule.json",
-            "subscribers": Array [
+            "teams": Array [],
+            "users": Array [
               "@eeny",
               "@meeny",
               "@miny",
@@ -163,6 +189,7 @@ describe('rules', () => {
             {
               ...validRule,
               glob: undefined,
+              teams: [],
               eventJsonPath: '$.pull_request[?(@.login=="Codertocat")].login',
               path: '/some/rule.json',
             },
@@ -173,14 +200,18 @@ describe('rules', () => {
       ).toMatchInlineSnapshot(`
         Array [
           Object {
+            "action": "comment",
             "customMessage": "This is a custom message for a rule",
             "eventJsonPath": "$.pull_request[?(@.login==\\"Codertocat\\")].login",
             "glob": undefined,
-            "matches": Array [
-              "Codertocat",
-            ],
+            "matches": Object {
+              "eventJsonPath": Array [
+                "Codertocat",
+              ],
+            },
             "path": "/some/rule.json",
-            "subscribers": Array [
+            "teams": Array [],
+            "users": Array [
               "@eeny",
               "@meeny",
               "@miny",
@@ -252,23 +283,50 @@ describe('rules', () => {
         ]
       `);
     });
-    it('loads rule successfully', () => {
-      sync.mockReturnValue(['/some/rule.json']);
-      readFileSync.mockReturnValue(JSON.stringify(validRule));
+    it('loads rules successfully', () => {
+      // rule coming from the rules.json  is called rawRule.
+      const rawRules = {
+        '/some/rule1.json': { ...validRule, users: validRule.users.join(', ') },
+        '/some/rule2.json': {
+          ...validRule,
+          teams: 'someTeams',
+          users: undefined,
+        },
+        '/some/badRule.json': {
+          ...validRule,
+          teams: undefined,
+          users: undefined,
+        },
+      };
+      sync.mockReturnValue(Object.keys(rawRules));
+      readFileSync.mockImplementation((filePath: keyof typeof rawRules) => {
+        return JSON.stringify(rawRules[filePath]);
+      });
 
-      expect(loadRules('/some/rule.json')).toMatchInlineSnapshot(`
+      expect(loadRules('/some/*.json')).toMatchInlineSnapshot(`
         Array [
           Object {
             "customMessage": "This is a custom message for a rule",
             "glob": "*.ts",
-            "name": "rule.json",
-            "path": "/some/rule.json",
-            "subscribers": Array [
+            "name": "rule1.json",
+            "path": "/some/rule1.json",
+            "teams": undefined,
+            "users": Array [
               "@eeny",
-              "@meeny",
-              "@miny",
-              "@moe",
+              " @meeny",
+              " @miny",
+              " @moe",
             ],
+          },
+          Object {
+            "customMessage": "This is a custom message for a rule",
+            "glob": "*.ts",
+            "name": "rule2.json",
+            "path": "/some/rule2.json",
+            "teams": Array [
+              "someTeams",
+            ],
+            "users": undefined,
           },
         ]
       `);

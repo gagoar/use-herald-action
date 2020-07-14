@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { getInput, setOutput, setFailed } from '@actions/core';
-
-import { handleSubscribers } from './subscribers';
-import { loadRules, getMatchingRules } from './rules';
+import groupBy from 'lodash.groupBy';
+import { comment } from './comment';
+import { loadRules, getMatchingRules, RuleActions } from './rules';
 import { env, Event, SUPPORTED_EVENT_TYPES, OUTPUT_NAME } from './environment';
 
 import { Octokit } from '@octokit/rest';
@@ -12,11 +12,6 @@ import { handleReviewers } from './reviewers';
 
 const EnhancedOctokit = Octokit.plugin(retry);
 
-enum SubscriberActionOptions {
-  comment = 'comment',
-  assignees = 'assignees',
-  reviewer = 'reviewer',
-}
 export enum Props {
   GITHUB_TOKEN = 'GITHUB_TOKEN',
   rulesLocation = 'rulesLocation',
@@ -25,6 +20,12 @@ export enum Props {
   base = 'base',
   lint = 'lint',
 }
+
+const actionsMap = {
+  [RuleActions.comment]: comment,
+  [RuleActions.assign]: handleAssignees,
+  [RuleActions.review]: handleReviewers,
+};
 
 const getParams = () => {
   return Object.keys(Props).reduce((memo, prop) => {
@@ -51,7 +52,6 @@ export const main = async () => {
         GITHUB_TOKEN,
         rulesLocation,
         base = 'master',
-        subscribeAction,
         dryRun = false,
       } = getParams();
 
@@ -68,47 +68,30 @@ export const main = async () => {
         repo,
       });
 
-      let matchingRules = getMatchingRules(rules, files, event);
+      const matchingRules = getMatchingRules(rules, files, event);
 
       if (!dryRun) {
         if (matchingRules.length) {
-          if (subscribeAction === String(SubscriberActionOptions.comment)) {
-            await handleSubscribers(
-              client,
-              owner,
-              repo,
-              prNumber,
-              matchingRules
-            );
-          }
+          const groups = groupBy(matchingRules, (rule) => rule.action);
 
-          if (subscribeAction === String(SubscriberActionOptions.assignees)) {
-            // moving all subscribers to assignees.
-            matchingRules = matchingRules.map((matchingRule) => {
-              const {
-                subscribers = [],
-                assignees = [],
-                ...rest
-              } = matchingRule;
-              return { ...rest, assignees: [...assignees, ...subscribers] };
-            });
-          }
+          type ActionName = keyof typeof RuleActions;
 
-          if (subscribeAction === String(SubscriberActionOptions.reviewer)) {
-            matchingRules = matchingRules.map((matchingRule) => {
-              const {
-                subscribers = [],
-                reviewers = [],
-                ...rest
-              } = matchingRule;
-              return { ...rest, reviewers: [...reviewers, ...subscribers] };
-            });
-          }
+          const groupNames = Object.keys(groups) as ActionName[];
+
+          await Promise.all([
+            groupNames.map((actionName: ActionName) => {
+              const action = actionsMap[RuleActions[actionName]];
+
+              return action(
+                client,
+                owner,
+                repo,
+                prNumber,
+                groups[RuleActions.comment]
+              );
+            }),
+          ]);
         }
-
-        await handleAssignees(client, owner, repo, prNumber, matchingRules);
-
-        await handleReviewers(client, owner, repo, prNumber, matchingRules);
       }
 
       setOutput(OUTPUT_NAME, matchingRules);

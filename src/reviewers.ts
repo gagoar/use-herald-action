@@ -22,7 +22,8 @@ export const handleReviewers = async (
           owner,
           repo,
           pull_number: prNumber,
-          reviewers: matchingRule.reviewers,
+          reviewers: matchingRule.users,
+          team_reviewers: matchingRule.teams,
         })
       )
     )
