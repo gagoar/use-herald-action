@@ -3,7 +3,8 @@ import { getInput, setOutput, setFailed } from '@actions/core';
 import groupBy from 'lodash.groupBy';
 import { handleComment } from './comment';
 import { loadRules, getMatchingRules, RuleActions } from './rules';
-import { env, Event, SUPPORTED_EVENT_TYPES, OUTPUT_NAME } from './environment';
+import { Event, SUPPORTED_EVENT_TYPES, OUTPUT_NAME } from './util/constants';
+import { env } from './environment';
 
 import { Octokit } from '@octokit/rest';
 import { retry } from '@octokit/plugin-retry';

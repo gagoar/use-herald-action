@@ -1,4 +1,4 @@
-import { Event } from './environment';
+import { Event } from './util/constants';
 import { RestEndpointMethodTypes } from '@octokit/rest';
 declare enum RuleMatchers {
     eventJsonPath = "eventJsonPath",

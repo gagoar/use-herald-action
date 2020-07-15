@@ -5,7 +5,7 @@ import { RuleActions } from '../src/rules';
 import getCommentsResponse from '../__mocks__/scenarios/get_comments.json';
 import createIssueResponse from '../__mocks__/scenarios/create_comment.json';
 
-jest.mock('../src/environment', () => ({
+jest.mock('../src/util/constants', () => ({
   maxPerPage: 2,
 }));
 

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { sync } from 'fast-glob';
 import { basename } from 'path';
-import { Event } from './environment';
+import { Event } from './util/constants';
 import minimatch from 'minimatch';
 
 import { RestEndpointMethodTypes } from '@octokit/rest';

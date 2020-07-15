@@ -10,7 +10,7 @@ import {
   RuleActions,
 } from '../src/rules';
 import { mockConsole, unMockConsole } from './helpers';
-import { Event } from '../src/environment';
+import { Event } from '../src/util/constants';
 
 import eventJSON from '../__mocks__/event.json';
 

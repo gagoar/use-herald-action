@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`use-herald should not call github (dryRun: true) 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "appliedRules",
+      Object {
+        "comment": Array [
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "glob": "*.ts",
+            "matches": Object {
+              "glob": Array [
+                "file1.ts",
+              ],
+            },
+            "name": "rule1.json",
+            "path": "/some/rule1.json",
+            "teams": undefined,
+            "users": Array [
+              "@eeny",
+              " @meeny",
+              " @miny",
+              " @moe",
+            ],
+          },
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "glob": "*.ts",
+            "matches": Object {
+              "glob": Array [
+                "file1.ts",
+              ],
+            },
+            "name": "rule2.json",
+            "path": "/some/rule2.json",
+            "teams": Array [
+              "someTeams",
+            ],
+            "users": undefined,
+          },
+        ],
+      },
+    ],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`use-herald should run the entire action (no rules found) 1`] = `
+Array [
+  Array [
+    "appliedRules",
+    Object {},
+  ],
+]
+`;
+
+exports[`use-herald should run the entire action 1`] = `
+Array [
+  Array [
+    "appliedRules",
+    Object {
+      "comment": Array [
+        Object {
+          "action": "comment",
+          "customMessage": "This is a custom message for a rule",
+          "glob": "*.ts",
+          "matches": Object {
+            "glob": Array [
+              "file1.ts",
+            ],
+          },
+          "name": "rule1.json",
+          "path": "/some/rule1.json",
+          "teams": undefined,
+          "users": Array [
+            "@eeny",
+            " @meeny",
+            " @miny",
+            " @moe",
+          ],
+        },
+        Object {
+          "action": "comment",
+          "customMessage": "This is a custom message for a rule",
+          "glob": "*.ts",
+          "matches": Object {
+            "glob": Array [
+              "file1.ts",
+            ],
+          },
+          "name": "rule2.json",
+          "path": "/some/rule2.json",
+          "teams": Array [
+            "someTeams",
+          ],
+          "users": undefined,
+        },
+      ],
+    },
+  ],
+]
+`;

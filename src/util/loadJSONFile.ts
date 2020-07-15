@@ -1,4 +1,4 @@
-import { FILE_ENCODING } from '../environment';
+import { FILE_ENCODING } from '../util/constants';
 import { readFileSync } from 'fs';
 
 export const loadJSONFile = (filePath: string) => {

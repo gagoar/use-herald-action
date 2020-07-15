@@ -3,7 +3,7 @@ import PQueue from 'p-queue';
 
 import { composeCommentsForUsers, MatchingRule } from './rules';
 
-import { maxPerPage } from './environment';
+import { maxPerPage } from './util/constants';
 
 import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
 type AllCommentsParams = RestEndpointMethodTypes['issues']['listComments']['parameters'];
