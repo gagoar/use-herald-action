@@ -35,25 +35,25 @@ describe('handleReviewers', () => {
           "data": Object {
             "_links": Object {
               "comments": Object {
-                "href": "https://api.github.com/repos/gagoar/example_repo/issues/1347/comments",
+                "href": "https://api.github.com/repos/gagoar/example_repo/issues/1/comments",
               },
               "commits": Object {
-                "href": "https://api.github.com/repos/gagoar/example_repo/pulls/1347/commits",
+                "href": "https://api.github.com/repos/gagoar/example_repo/pulls/1/commits",
               },
               "html": Object {
-                "href": "https://github.com/gagoar/example_repo/pull/1347",
+                "href": "https://github.com/gagoar/example_repo/pull/1",
               },
               "issue": Object {
-                "href": "https://api.github.com/repos/gagoar/example_repo/issues/1347",
+                "href": "https://api.github.com/repos/gagoar/example_repo/issues/1",
               },
               "review_comment": Object {
                 "href": "https://api.github.com/repos/gagoar/example_repo/pulls/comments{/number}",
               },
               "review_comments": Object {
-                "href": "https://api.github.com/repos/gagoar/example_repo/pulls/1347/comments",
+                "href": "https://api.github.com/repos/gagoar/example_repo/pulls/1/comments",
               },
               "self": Object {
-                "href": "https://api.github.com/repos/gagoar/example_repo/pulls/1347",
+                "href": "https://api.github.com/repos/gagoar/example_repo/pulls/1",
               },
               "statuses": Object {
                 "href": "https://api.github.com/repos/gagoar/example_repo/statuses/6dcb09b5b57875f334f61aebed695e2e4193db5e",
@@ -261,10 +261,10 @@ describe('handleReviewers', () => {
             },
             "body": "Please pull these awesome changes in!",
             "closed_at": "2011-01-26T19:01:12Z",
-            "comments_url": "https://api.github.com/repos/gagoar/example_repo/issues/1347/comments",
-            "commits_url": "https://api.github.com/repos/gagoar/example_repo/pulls/1347/commits",
+            "comments_url": "https://api.github.com/repos/gagoar/example_repo/issues/1/comments",
+            "commits_url": "https://api.github.com/repos/gagoar/example_repo/pulls/1/commits",
             "created_at": "2011-01-26T19:01:12Z",
-            "diff_url": "https://github.com/gagoar/example_repo/pull/1347.diff",
+            "diff_url": "https://github.com/gagoar/example_repo/pull/1.diff",
             "draft": false,
             "head": Object {
               "label": "gagoar:new-topic",
@@ -402,9 +402,9 @@ describe('handleReviewers', () => {
                 "url": "https://api.github.com/users/gagoar",
               },
             },
-            "html_url": "https://github.com/gagoar/example_repo/pull/1347",
+            "html_url": "https://github.com/gagoar/example_repo/pull/1",
             "id": 1,
-            "issue_url": "https://api.github.com/repos/gagoar/example_repo/issues/1347",
+            "issue_url": "https://api.github.com/repos/gagoar/example_repo/issues/1",
             "labels": Array [
               Object {
                 "color": "f29513",
@@ -457,8 +457,8 @@ describe('handleReviewers', () => {
               "url": "https://api.github.com/repos/gagoar/example_repo/milestones/1",
             },
             "node_id": "MDExOlB1bGxSZXF1ZXN0MQ==",
-            "number": 1347,
-            "patch_url": "https://github.com/gagoar/example_repo/pull/1347.patch",
+            "number": 1,
+            "patch_url": "https://github.com/gagoar/example_repo/pull/1.patch",
             "requested_reviewers": Array [
               Object {
                 "avatar_url": "https://github.com/images/error/gagoar_happy.gif",
@@ -538,12 +538,12 @@ describe('handleReviewers', () => {
               },
             ],
             "review_comment_url": "https://api.github.com/repos/gagoar/example_repo/pulls/comments{/number}",
-            "review_comments_url": "https://api.github.com/repos/gagoar/example_repo/pulls/1347/comments",
+            "review_comments_url": "https://api.github.com/repos/gagoar/example_repo/pulls/1/comments",
             "state": "open",
             "statuses_url": "https://api.github.com/repos/gagoar/example_repo/statuses/6dcb09b5b57875f334f61aebed695e2e4193db5e",
             "title": "Amazing new feature",
             "updated_at": "2011-01-26T19:01:12Z",
-            "url": "https://api.github.com/repos/gagoar/example_repo/pulls/1347",
+            "url": "https://api.github.com/repos/gagoar/example_repo/pulls/1",
             "user": Object {
               "avatar_url": "https://github.com/images/error/gagoar_happy.gif",
               "events_url": "https://api.github.com/users/gagoar/events{/privacy}",

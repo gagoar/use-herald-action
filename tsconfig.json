@@ -1,5 +1,5 @@
 {
-  "include": ["src", "__test__", "__mocks__", "src/index.ts"],
+  "include": ["src", "__test__", "__mocks__", "src/index.ts", "src/util"],
   "compilerOptions": {
     "target": "es2017",
     "module": "es6",

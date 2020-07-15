@@ -53,7 +53,7 @@ describe('handleComment', () => {
           "data": Object {
             "body": "Custom message",
             "created_at": "2011-04-14T16:00:49Z",
-            "html_url": "https://github.com/gagoar/example_repo/issues/1347#issuecomment-1",
+            "html_url": "https://github.com/gagoar/example_repo/issues/1#issuecomment-1",
             "id": 1,
             "node_id": "MDEyOklzc3VlQ29tbWVudDE=",
             "updated_at": "2011-04-14T16:00:49Z",

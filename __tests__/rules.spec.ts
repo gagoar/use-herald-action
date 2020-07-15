@@ -110,7 +110,7 @@ describe('rules', () => {
             {
               ...validRule,
               teams: [],
-              eventJsonPath: '$.pull_request[?(@.login=="Codertocat")].login',
+              eventJsonPath: '$.pull_request[?(@.login=="gagoar")].login',
               path: '/some/rule.json',
             },
           ],
@@ -122,11 +122,11 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "eventJsonPath": "$.pull_request[?(@.login==\\"Codertocat\\")].login",
+            "eventJsonPath": "$.pull_request[?(@.login==\\"gagoar\\")].login",
             "glob": "*.ts",
             "matches": Object {
               "eventJsonPath": Array [
-                "Codertocat",
+                "gagoar",
               ],
               "glob": Array [
                 "/some/file.ts",
@@ -190,7 +190,7 @@ describe('rules', () => {
               ...validRule,
               glob: undefined,
               teams: [],
-              eventJsonPath: '$.pull_request[?(@.login=="Codertocat")].login',
+              eventJsonPath: '$.pull_request[?(@.login=="gagoar")].login',
               path: '/some/rule.json',
             },
           ],
@@ -202,11 +202,11 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "eventJsonPath": "$.pull_request[?(@.login==\\"Codertocat\\")].login",
+            "eventJsonPath": "$.pull_request[?(@.login==\\"gagoar\\")].login",
             "glob": undefined,
             "matches": Object {
               "eventJsonPath": Array [
-                "Codertocat",
+                "gagoar",
               ],
             },
             "path": "/some/rule.json",
@@ -306,6 +306,7 @@ describe('rules', () => {
       expect(loadRules('/some/*.json')).toMatchInlineSnapshot(`
         Array [
           Object {
+            "action": "comment",
             "customMessage": "This is a custom message for a rule",
             "glob": "*.ts",
             "name": "rule1.json",
@@ -319,6 +320,7 @@ describe('rules', () => {
             ],
           },
           Object {
+            "action": "comment",
             "customMessage": "This is a custom message for a rule",
             "glob": "*.ts",
             "name": "rule2.json",

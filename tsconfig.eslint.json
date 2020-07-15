@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json",
   "include": [
     "src/*.ts",
+    "src/util/*.ts",
     "index.ts",
     "__mocks__/**/*.ts",
     "__tests__/**/*.ts",

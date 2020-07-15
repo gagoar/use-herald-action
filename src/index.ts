@@ -9,6 +9,7 @@ import { Octokit } from '@octokit/rest';
 import { retry } from '@octokit/plugin-retry';
 import { handleAssignees } from './assignees';
 import { handleReviewers } from './reviewers';
+import { loadJSONFile } from './util/loadJSONFile';
 
 const EnhancedOctokit = Octokit.plugin(retry);
 
@@ -16,9 +17,7 @@ export enum Props {
   GITHUB_TOKEN = 'GITHUB_TOKEN',
   rulesLocation = 'rulesLocation',
   dryRun = 'dryRun',
-  subscribeAction = 'subscribeAction',
   base = 'base',
-  lint = 'lint',
 }
 
 const actionsMap = {
@@ -39,21 +38,24 @@ const getParams = () => {
 export const main = async () => {
   try {
     if (env.GITHUB_EVENT_NAME === SUPPORTED_EVENT_TYPES.PULL_REQUEST) {
-      const event = require(env.GITHUB_EVENT_PATH) as Event;
-
-      const { pull_request, number: prNumber } = event;
+      const event = loadJSONFile(env.GITHUB_EVENT_PATH) as Event;
 
       const {
-        repo: {
-          owner: { login: owner },
-          full_name: repo,
+        pull_request: {
+          head: { sha: headSha },
+          base: { sha: baseSha },
         },
-      } = pull_request;
+        number: prNumber,
+        repository: {
+          name: repo,
+          owner: { login: owner },
+        },
+      } = event;
 
       const {
         GITHUB_TOKEN,
         rulesLocation,
-        base = 'master',
+        base = baseSha,
         dryRun = false,
       } = getParams();
 
@@ -65,7 +67,7 @@ export const main = async () => {
         data: { files },
       } = await client.repos.compareCommits({
         base,
-        head: pull_request.head.sha,
+        head: headSha,
         owner,
         repo,
       });

@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(963);
+/******/ 		return __webpack_require__(455);
 /******/ 	};
 /******/ 	// initialize runtime
 /******/ 	runtime(__webpack_require__);
@@ -49,9 +49,9 @@ module.exports =
 /******/ 	return startup();
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */,
-/* 1 */
+/******/ ({
+
+/***/ 1:
 /***/ (function(__unusedmodule, exports) {
 
 /* -*- Mode: js; js-indent-level: 2; -*- */
@@ -171,7 +171,8 @@ exports.quickSort = function (ary, comparator) {
 
 
 /***/ }),
-/* 2 */
+
+/***/ 2:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -226,8 +227,8 @@ exports.default = Provider;
 
 
 /***/ }),
-/* 3 */,
-/* 4 */
+
+/***/ 4:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -250,11 +251,8 @@ exports.createFileSystemAdapter = createFileSystemAdapter;
 
 
 /***/ }),
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */
+
+/***/ 9:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 var once = __webpack_require__(370);
@@ -354,8 +352,8 @@ module.exports = eos;
 
 
 /***/ }),
-/* 10 */,
-/* 11 */
+
+/***/ 11:
 /***/ (function(module) {
 
 // Returns a wrapper function that returns a wrapped callback
@@ -394,21 +392,16 @@ function wrappy (fn, cb) {
 
 
 /***/ }),
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */
+
+/***/ 18:
 /***/ (function(module) {
 
 module.exports = eval("require")("encoding");
 
 
 /***/ }),
-/* 19 */,
-/* 20 */
+
+/***/ 20:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -454,10 +447,8 @@ module.exports._enoent = enoent;
 
 
 /***/ }),
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */
+
+/***/ 24:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 /*
@@ -1245,21 +1236,8 @@ module.exports._enoent = enoent;
 
 
 /***/ }),
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */,
-/* 38 */,
-/* 39 */
+
+/***/ 39:
 /***/ (function(module) {
 
 "use strict";
@@ -1279,9 +1257,8 @@ module.exports = opts => {
 
 
 /***/ }),
-/* 40 */,
-/* 41 */,
-/* 42 */
+
+/***/ 42:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -1305,7 +1282,8 @@ function propagateCloseEventToSources(streams) {
 
 
 /***/ }),
-/* 43 */
+
+/***/ 43:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -1331,12 +1309,8 @@ exports.createDirentFromStats = createDirentFromStats;
 
 
 /***/ }),
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */
+
+/***/ 49:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -1395,16 +1369,15 @@ module.exports = windowsRelease;
 
 
 /***/ }),
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */
+
+/***/ 53:
 /***/ (function(module) {
 
 module.exports = {"_args":[["estraverse@4.3.0","/Users/gfrigerio/base/use-herald"]],"_from":"estraverse@4.3.0","_id":"estraverse@4.3.0","_inBundle":false,"_integrity":"sha512-39nnKffWz8xN1BU/2c79n9nB9HDzo0niYUqx6xyqUnyoAnQyyWpOTdZEeiCch8BBu515t4wp9ZmgVfVhn9EBpw==","_location":"/estraverse","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"estraverse@4.3.0","name":"estraverse","escapedName":"estraverse","rawSpec":"4.3.0","saveSpec":null,"fetchSpec":"4.3.0"},"_requiredBy":["/@typescript-eslint/experimental-utils/eslint-scope","/escodegen","/eslint-scope","/eslint/eslint-scope","/esrecurse","/prettier-eslint-cli/eslint/eslint-scope","/vue-eslint-parser/eslint-scope"],"_resolved":"https://registry.npmjs.org/estraverse/-/estraverse-4.3.0.tgz","_spec":"4.3.0","_where":"/Users/gfrigerio/base/use-herald","bugs":{"url":"https://github.com/estools/estraverse/issues"},"description":"ECMAScript JS AST traversal functions","devDependencies":{"babel-preset-env":"^1.6.1","babel-register":"^6.3.13","chai":"^2.1.1","espree":"^1.11.0","gulp":"^3.8.10","gulp-bump":"^0.2.2","gulp-filter":"^2.0.0","gulp-git":"^1.0.1","gulp-tag-version":"^1.3.0","jshint":"^2.5.6","mocha":"^2.1.0"},"engines":{"node":">=4.0"},"homepage":"https://github.com/estools/estraverse","license":"BSD-2-Clause","main":"estraverse.js","maintainers":[{"name":"Yusuke Suzuki","email":"utatane.tea@gmail.com","url":"http://github.com/Constellation"}],"name":"estraverse","repository":{"type":"git","url":"git+ssh://git@github.com/estools/estraverse.git"},"scripts":{"lint":"jshint estraverse.js","test":"npm run-script lint && npm run-script unit-test","unit-test":"mocha --compilers js:babel-register"},"version":"4.3.0"};
 
 /***/ }),
-/* 54 */
+
+/***/ 54:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 /* -*- Mode: js; js-indent-level: 2; -*- */
@@ -1823,10 +1796,8 @@ exports.SourceNode = SourceNode;
 
 
 /***/ }),
-/* 55 */,
-/* 56 */,
-/* 57 */,
-/* 58 */
+
+/***/ 58:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 /*
@@ -1997,7 +1968,8 @@ exports.SourceNode = SourceNode;
 
 
 /***/ }),
-/* 59 */
+
+/***/ 59:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -2025,7 +1997,8 @@ exports.default = lowerBound;
 
 
 /***/ }),
-/* 60 */
+
+/***/ 60:
 /***/ (function(module) {
 
 function levenshteinD (s1, s2) {
@@ -2080,9 +2053,8 @@ module.exports = meant
 
 
 /***/ }),
-/* 61 */,
-/* 62 */,
-/* 63 */
+
+/***/ 63:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 /* @flow */
@@ -2201,14 +2173,8 @@ module.exports.parse = parse
 
 
 /***/ }),
-/* 64 */,
-/* 65 */,
-/* 66 */,
-/* 67 */,
-/* 68 */,
-/* 69 */,
-/* 70 */,
-/* 71 */
+
+/***/ 71:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 var unparse = __webpack_require__(644).generate;
@@ -2392,9 +2358,8 @@ module.exports = function (ast, vars) {
 
 
 /***/ }),
-/* 72 */,
-/* 73 */,
-/* 74 */
+
+/***/ 74:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -2868,7 +2833,8 @@ module.exports = micromatch;
 
 
 /***/ }),
-/* 75 */
+
+/***/ 75:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -2913,9 +2879,8 @@ exports.default = PartialMatcher;
 
 
 /***/ }),
-/* 76 */,
-/* 77 */,
-/* 78 */
+
+/***/ 78:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -2945,26 +2910,15 @@ exports.default = ProviderSync;
 
 
 /***/ }),
-/* 79 */,
-/* 80 */,
-/* 81 */,
-/* 82 */,
-/* 83 */,
-/* 84 */,
-/* 85 */,
-/* 86 */,
-/* 87 */
+
+/***/ 87:
 /***/ (function(module) {
 
 module.exports = require("os");
 
 /***/ }),
-/* 88 */,
-/* 89 */,
-/* 90 */,
-/* 91 */,
-/* 92 */,
-/* 93 */
+
+/***/ 93:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 module.exports = minimatch
@@ -3893,7 +3847,8 @@ function regExpEscape (s) {
 
 
 /***/ }),
-/* 94 */
+
+/***/ 94:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 /*
@@ -3907,25 +3862,8 @@ exports.SourceNode = __webpack_require__(54).SourceNode;
 
 
 /***/ }),
-/* 95 */,
-/* 96 */,
-/* 97 */,
-/* 98 */,
-/* 99 */,
-/* 100 */,
-/* 101 */,
-/* 102 */,
-/* 103 */,
-/* 104 */,
-/* 105 */,
-/* 106 */,
-/* 107 */,
-/* 108 */,
-/* 109 */,
-/* 110 */,
-/* 111 */,
-/* 112 */,
-/* 113 */
+
+/***/ 113:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -3960,8 +3898,8 @@ exports.default = ProviderAsync;
 
 
 /***/ }),
-/* 114 */,
-/* 115 */
+
+/***/ 115:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -3975,9 +3913,8 @@ exports.isEnoentCodeError = isEnoentCodeError;
 
 
 /***/ }),
-/* 116 */,
-/* 117 */,
-/* 118 */
+
+/***/ 118:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -4020,27 +3957,15 @@ module.exports.default = macosRelease;
 
 
 /***/ }),
-/* 119 */,
-/* 120 */,
-/* 121 */,
-/* 122 */,
-/* 123 */,
-/* 124 */,
-/* 125 */,
-/* 126 */,
-/* 127 */,
-/* 128 */,
-/* 129 */
+
+/***/ 129:
 /***/ (function(module) {
 
 module.exports = require("child_process");
 
 /***/ }),
-/* 130 */,
-/* 131 */,
-/* 132 */,
-/* 133 */,
-/* 134 */
+
+/***/ 134:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -4079,17 +4004,8 @@ exports.default = PriorityQueue;
 
 
 /***/ }),
-/* 135 */,
-/* 136 */,
-/* 137 */,
-/* 138 */,
-/* 139 */,
-/* 140 */,
-/* 141 */,
-/* 142 */,
-/* 143 */,
-/* 144 */,
-/* 145 */
+
+/***/ 145:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -4146,9 +4062,8 @@ module.exports.MaxBufferError = MaxBufferError;
 
 
 /***/ }),
-/* 146 */,
-/* 147 */,
-/* 148 */
+
+/***/ 148:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -4207,31 +4122,15 @@ exports.readdir = readdir;
 
 
 /***/ }),
-/* 149 */,
-/* 150 */,
-/* 151 */,
-/* 152 */,
-/* 153 */,
-/* 154 */,
-/* 155 */,
-/* 156 */,
-/* 157 */,
-/* 158 */,
-/* 159 */,
-/* 160 */,
-/* 161 */
+
+/***/ 161:
 /***/ (function(module) {
 
 module.exports = require("assert");
 
 /***/ }),
-/* 162 */,
-/* 163 */,
-/* 164 */,
-/* 165 */,
-/* 166 */,
-/* 167 */,
-/* 168 */
+
+/***/ 168:
 /***/ (function(module) {
 
 "use strict";
@@ -4251,9 +4150,8 @@ module.exports = opts => {
 
 
 /***/ }),
-/* 169 */,
-/* 170 */,
-/* 171 */
+
+/***/ 171:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -4273,18 +4171,15 @@ exports.IS_SUPPORT_READDIR_WITH_FILE_TYPES = IS_MATCHED_BY_MAJOR || IS_MATCHED_B
 
 
 /***/ }),
-/* 172 */,
-/* 173 */,
-/* 174 */,
-/* 175 */
+
+/***/ 175:
 /***/ (function(module) {
 
 module.exports = {"_args":[["escodegen@1.14.1","/Users/gfrigerio/base/use-herald"]],"_from":"escodegen@1.14.1","_id":"escodegen@1.14.1","_inBundle":false,"_integrity":"sha512-Bmt7NcRySdIfNPfU2ZoXDrrXsG9ZjvDxcAlMfDUgRBjLOWTuIACXPBFJH7Z+cLb40JeQco5toikyc9t9P8E9SQ==","_location":"/escodegen","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"escodegen@1.14.1","name":"escodegen","escapedName":"escodegen","rawSpec":"1.14.1","saveSpec":null,"fetchSpec":"1.14.1"},"_requiredBy":["/jsdom","/static-eval"],"_resolved":"https://registry.npmjs.org/escodegen/-/escodegen-1.14.1.tgz","_spec":"1.14.1","_where":"/Users/gfrigerio/base/use-herald","bin":{"esgenerate":"bin/esgenerate.js","escodegen":"bin/escodegen.js"},"bugs":{"url":"https://github.com/estools/escodegen/issues"},"dependencies":{"esprima":"^4.0.1","estraverse":"^4.2.0","esutils":"^2.0.2","optionator":"^0.8.1","source-map":"~0.6.1"},"description":"ECMAScript code generator","devDependencies":{"acorn":"^7.1.0","bluebird":"^3.4.7","bower-registry-client":"^1.0.0","chai":"^3.5.0","commonjs-everywhere":"^0.9.7","gulp":"^3.8.10","gulp-eslint":"^3.0.1","gulp-mocha":"^3.0.1","semver":"^5.1.0"},"engines":{"node":">=4.0"},"files":["LICENSE.BSD","README.md","bin","escodegen.js","package.json"],"homepage":"http://github.com/estools/escodegen","license":"BSD-2-Clause","main":"escodegen.js","maintainers":[{"name":"Yusuke Suzuki","email":"utatane.tea@gmail.com","url":"http://github.com/Constellation"}],"name":"escodegen","optionalDependencies":{"source-map":"~0.6.1"},"repository":{"type":"git","url":"git+ssh://git@github.com/estools/escodegen.git"},"scripts":{"build":"cjsify -a path: tools/entry-point.js > escodegen.browser.js","build-min":"cjsify -ma path: tools/entry-point.js > escodegen.browser.min.js","lint":"gulp lint","release":"node tools/release.js","test":"gulp travis","unit-test":"gulp test"},"version":"1.14.1"};
 
 /***/ }),
-/* 176 */,
-/* 177 */,
-/* 178 */
+
+/***/ 178:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 /*
@@ -4323,10 +4218,8 @@ module.exports = {"_args":[["escodegen@1.14.1","/Users/gfrigerio/base/use-herald
 
 
 /***/ }),
-/* 179 */,
-/* 180 */,
-/* 181 */,
-/* 182 */
+
+/***/ 182:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -4423,21 +4316,8 @@ function callSuccessCallback(callback, result) {
 
 
 /***/ }),
-/* 183 */,
-/* 184 */,
-/* 185 */,
-/* 186 */,
-/* 187 */,
-/* 188 */,
-/* 189 */,
-/* 190 */,
-/* 191 */,
-/* 192 */,
-/* 193 */,
-/* 194 */,
-/* 195 */,
-/* 196 */,
-/* 197 */
+
+/***/ 197:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 module.exports = isexe
@@ -4484,8 +4364,8 @@ function checkMode (stat, options) {
 
 
 /***/ }),
-/* 198 */,
-/* 199 */
+
+/***/ 199:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -4671,15 +4551,8 @@ module.exports = {
 
 
 /***/ }),
-/* 200 */,
-/* 201 */,
-/* 202 */,
-/* 203 */,
-/* 204 */,
-/* 205 */,
-/* 206 */,
-/* 207 */,
-/* 208 */
+
+/***/ 208:
 /***/ (function(module) {
 
 // This is not the set of all possible signals.
@@ -4738,8 +4611,8 @@ if (process.platform === 'linux') {
 
 
 /***/ }),
-/* 209 */,
-/* 210 */
+
+/***/ 210:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -4764,26 +4637,15 @@ exports.createDirentFromStats = createDirentFromStats;
 
 
 /***/ }),
-/* 211 */
+
+/***/ 211:
 /***/ (function(module) {
 
 module.exports = require("https");
 
 /***/ }),
-/* 212 */,
-/* 213 */,
-/* 214 */,
-/* 215 */,
-/* 216 */,
-/* 217 */,
-/* 218 */,
-/* 219 */,
-/* 220 */,
-/* 221 */,
-/* 222 */,
-/* 223 */,
-/* 224 */,
-/* 225 */
+
+/***/ 225:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -4902,8 +4764,8 @@ exports.flatten = (...args) => {
 
 
 /***/ }),
-/* 226 */,
-/* 227 */
+
+/***/ 227:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -5243,10 +5105,8 @@ module.exports = parse;
 
 
 /***/ }),
-/* 228 */,
-/* 229 */,
-/* 230 */,
-/* 231 */
+
+/***/ 231:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -5277,22 +5137,8 @@ function getSettings(settingsOrOptions = {}) {
 
 
 /***/ }),
-/* 232 */,
-/* 233 */,
-/* 234 */,
-/* 235 */,
-/* 236 */,
-/* 237 */,
-/* 238 */,
-/* 239 */,
-/* 240 */,
-/* 241 */,
-/* 242 */,
-/* 243 */,
-/* 244 */,
-/* 245 */,
-/* 246 */,
-/* 247 */
+
+/***/ 247:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -5438,22 +5284,11 @@ module.exports = {
 
 
 /***/ }),
-/* 248 */,
-/* 249 */,
-/* 250 */,
-/* 251 */,
-/* 252 */,
-/* 253 */,
-/* 254 */,
-/* 255 */,
-/* 256 */,
-/* 257 */,
-/* 258 */,
-/* 259 */,
-/* 260 */
+
+/***/ 260:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
-const conversions = __webpack_require__(600);
+const conversions = __webpack_require__(445);
 
 /*
 	This function routes a model to all other models.
@@ -5553,8 +5388,8 @@ module.exports = function (fromModel) {
 
 
 /***/ }),
-/* 261 */,
-/* 262 */
+
+/***/ 262:
 /***/ (function(__unusedmodule, exports) {
 
 const extend = (x = {}, y = {}) => Object.assign({}, x, y)
@@ -5562,9 +5397,8 @@ exports.extend = extend
 
 
 /***/ }),
-/* 263 */,
-/* 264 */,
-/* 265 */
+
+/***/ 265:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -5635,17 +5469,8 @@ exports.wrapOutput = (input, state = {}, options = {}) => {
 
 
 /***/ }),
-/* 266 */,
-/* 267 */,
-/* 268 */,
-/* 269 */,
-/* 270 */,
-/* 271 */,
-/* 272 */,
-/* 273 */,
-/* 274 */,
-/* 275 */,
-/* 276 */
+
+/***/ 276:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 /* -*- Mode: js; js-indent-level: 2; -*- */
@@ -6796,7 +6621,8 @@ exports.IndexedSourceMapConsumer = IndexedSourceMapConsumer;
 
 
 /***/ }),
-/* 277 */
+
+/***/ 277:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 /* -*- Mode: js; js-indent-level: 2; -*- */
@@ -6942,9 +6768,8 @@ exports.decode = function base64VLQ_decode(aStr, aIndex, aOutParam) {
 
 
 /***/ }),
-/* 278 */,
-/* 279 */,
-/* 280 */
+
+/***/ 280:
 /***/ (function(module, exports) {
 
 exports = module.exports = SemVer
@@ -8546,8 +8371,8 @@ function coerce (version, options) {
 
 
 /***/ }),
-/* 281 */,
-/* 282 */
+
+/***/ 282:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -8600,8 +8425,8 @@ module.exports = osName;
 
 
 /***/ }),
-/* 283 */,
-/* 284 */
+
+/***/ 284:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 var once = __webpack_require__(370)
@@ -8689,13 +8514,8 @@ module.exports = pump
 
 
 /***/ }),
-/* 285 */,
-/* 286 */,
-/* 287 */,
-/* 288 */,
-/* 289 */,
-/* 290 */,
-/* 291 */
+
+/***/ 291:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -8795,14 +8615,8 @@ exports.default = AsyncReader;
 
 
 /***/ }),
-/* 292 */,
-/* 293 */,
-/* 294 */,
-/* 295 */,
-/* 296 */,
-/* 297 */,
-/* 298 */,
-/* 299 */
+
+/***/ 299:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -8939,13 +8753,8 @@ exports.paginateRest = paginateRest;
 
 
 /***/ }),
-/* 300 */,
-/* 301 */,
-/* 302 */,
-/* 303 */,
-/* 304 */,
-/* 305 */,
-/* 306 */
+
+/***/ 306:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 var concatMap = __webpack_require__(896);
@@ -9152,9 +8961,8 @@ function expand(str, isTop) {
 
 
 /***/ }),
-/* 307 */,
-/* 308 */,
-/* 309 */
+
+/***/ 309:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 const {
@@ -9313,14 +9121,8 @@ module.exports = {
 
 
 /***/ }),
-/* 310 */,
-/* 311 */,
-/* 312 */,
-/* 313 */,
-/* 314 */,
-/* 315 */,
-/* 316 */,
-/* 317 */
+
+/***/ 317:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -9353,9 +9155,8 @@ exports.default = EntryTransformer;
 
 
 /***/ }),
-/* 318 */,
-/* 319 */,
-/* 320 */
+
+/***/ 320:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -9412,8 +9213,8 @@ exports.default = Matcher;
 
 
 /***/ }),
-/* 321 */,
-/* 322 */
+
+/***/ 322:
 /***/ (function(module) {
 
 "use strict";
@@ -9435,7 +9236,8 @@ module.exports = (promise, onFinally) => {
 
 
 /***/ }),
-/* 323 */
+
+/***/ 323:
 /***/ (function(module) {
 
 "use strict";
@@ -9463,15 +9265,8 @@ isStream.transform = function (stream) {
 
 
 /***/ }),
-/* 324 */,
-/* 325 */,
-/* 326 */,
-/* 327 */,
-/* 328 */,
-/* 329 */,
-/* 330 */,
-/* 331 */,
-/* 332 */
+
+/***/ 332:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -9531,12 +9326,8 @@ exports.default = Settings;
 
 
 /***/ }),
-/* 333 */,
-/* 334 */,
-/* 335 */,
-/* 336 */,
-/* 337 */,
-/* 338 */
+
+/***/ 338:
 /***/ (function(__unusedmodule, exports) {
 
 /* -*- Mode: js; js-indent-level: 2; -*- */
@@ -10030,20 +9821,8 @@ exports.computeSourceURL = computeSourceURL;
 
 
 /***/ }),
-/* 339 */,
-/* 340 */,
-/* 341 */,
-/* 342 */,
-/* 343 */,
-/* 344 */,
-/* 345 */,
-/* 346 */,
-/* 347 */,
-/* 348 */,
-/* 349 */,
-/* 350 */,
-/* 351 */,
-/* 352 */
+
+/***/ 352:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -11232,8 +11011,8 @@ exports.restEndpointMethods = restEndpointMethods;
 
 
 /***/ }),
-/* 353 */,
-/* 354 */
+
+/***/ 354:
 /***/ (function(module) {
 
 module.exports = removeHook
@@ -11256,9 +11035,8 @@ function removeHook (state, name, method) {
 
 
 /***/ }),
-/* 355 */,
-/* 356 */,
-/* 357 */
+
+/***/ 357:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 /*!
@@ -11312,12 +11090,8 @@ module.exports = function isGlob(str, options) {
 
 
 /***/ }),
-/* 358 */,
-/* 359 */,
-/* 360 */,
-/* 361 */,
-/* 362 */,
-/* 363 */
+
+/***/ 363:
 /***/ (function(module) {
 
 module.exports = register
@@ -11351,7 +11125,8 @@ function register (state, name, method, options) {
 
 
 /***/ }),
-/* 364 */
+
+/***/ 364:
 /***/ (function(module) {
 
 "use strict";
@@ -11366,8 +11141,8 @@ module.exports = (flag, argv = process.argv) => {
 
 
 /***/ }),
-/* 365 */,
-/* 366 */
+
+/***/ 366:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -11713,10 +11488,8 @@ module.exports = picomatch;
 
 
 /***/ }),
-/* 367 */,
-/* 368 */,
-/* 369 */,
-/* 370 */
+
+/***/ 370:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 var wrappy = __webpack_require__(11)
@@ -11764,11 +11537,8 @@ function onceStrict (fn) {
 
 
 /***/ }),
-/* 371 */,
-/* 372 */,
-/* 373 */,
-/* 374 */,
-/* 375 */
+
+/***/ 375:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -11790,13 +11560,8 @@ exports.default = ErrorFilter;
 
 
 /***/ }),
-/* 376 */,
-/* 377 */,
-/* 378 */,
-/* 379 */,
-/* 380 */,
-/* 381 */,
-/* 382 */
+
+/***/ 382:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -11835,8 +11600,8 @@ module.exports = (ast, options = {}) => {
 
 
 /***/ }),
-/* 383 */,
-/* 384 */
+
+/***/ 384:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -11908,7 +11673,8 @@ exports.convertPatternGroupToTask = convertPatternGroupToTask;
 
 
 /***/ }),
-/* 385 */
+
+/***/ 385:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -12294,10 +12060,8 @@ exports.endpoint = endpoint;
 
 
 /***/ }),
-/* 386 */,
-/* 387 */,
-/* 388 */,
-/* 389 */
+
+/***/ 389:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -12336,11 +12100,8 @@ module.exports = readShebang;
 
 
 /***/ }),
-/* 390 */,
-/* 391 */,
-/* 392 */,
-/* 393 */,
-/* 394 */
+
+/***/ 394:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -12406,11 +12167,8 @@ exports.default = SyncReader;
 
 
 /***/ }),
-/* 395 */,
-/* 396 */,
-/* 397 */,
-/* 398 */,
-/* 399 */
+
+/***/ 399:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -12647,10 +12405,8 @@ exports.Handlers = Handlers;
 //# sourceMappingURL=handlers.js.map
 
 /***/ }),
-/* 400 */,
-/* 401 */,
-/* 402 */,
-/* 403 */
+
+/***/ 403:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -12681,9 +12437,8 @@ exports.default = Settings;
 
 
 /***/ }),
-/* 404 */,
-/* 405 */,
-/* 406 */
+
+/***/ 406:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -12757,23 +12512,15 @@ module.exports = FastGlob;
 
 
 /***/ }),
-/* 407 */,
-/* 408 */,
-/* 409 */,
-/* 410 */,
-/* 411 */,
-/* 412 */,
-/* 413 */
+
+/***/ 413:
 /***/ (function(module) {
 
 module.exports = require("stream");
 
 /***/ }),
-/* 414 */,
-/* 415 */,
-/* 416 */,
-/* 417 */,
-/* 418 */
+
+/***/ 418:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -12813,15 +12560,8 @@ exports.removeLeadingDotSegment = removeLeadingDotSegment;
 
 
 /***/ }),
-/* 419 */,
-/* 420 */,
-/* 421 */,
-/* 422 */,
-/* 423 */,
-/* 424 */,
-/* 425 */,
-/* 426 */,
-/* 427 */
+
+/***/ 427:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -12867,10 +12607,8 @@ function errname(uv, code) {
 
 
 /***/ }),
-/* 428 */,
-/* 429 */,
-/* 430 */,
-/* 431 */
+
+/***/ 431:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -12968,10 +12706,8 @@ function escapeProperty(s) {
 //# sourceMappingURL=command.js.map
 
 /***/ }),
-/* 432 */,
-/* 433 */,
-/* 434 */,
-/* 435 */
+
+/***/ 435:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -13035,11 +12771,8 @@ module.exports = compile;
 
 
 /***/ }),
-/* 436 */,
-/* 437 */,
-/* 438 */,
-/* 439 */,
-/* 440 */
+
+/***/ 440:
 /***/ (function(module) {
 
 "use strict";
@@ -13079,7 +12812,8 @@ module.exports = reusify
 
 
 /***/ }),
-/* 441 */
+
+/***/ 441:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -13199,9 +12933,8 @@ module.exports = expand;
 
 
 /***/ }),
-/* 442 */,
-/* 443 */,
-/* 444 */
+
+/***/ 444:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -13225,10 +12958,854 @@ exports.string = string;
 
 
 /***/ }),
-/* 445 */,
-/* 446 */,
-/* 447 */,
-/* 448 */
+
+/***/ 445:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+/* MIT license */
+/* eslint-disable no-mixed-operators */
+const cssKeywords = __webpack_require__(942);
+
+// NOTE: conversions should only return primitive values (i.e. arrays, or
+//       values that give correct `typeof` results).
+//       do not use box values types (i.e. Number(), String(), etc.)
+
+const reverseKeywords = {};
+for (const key of Object.keys(cssKeywords)) {
+	reverseKeywords[cssKeywords[key]] = key;
+}
+
+const convert = {
+	rgb: {channels: 3, labels: 'rgb'},
+	hsl: {channels: 3, labels: 'hsl'},
+	hsv: {channels: 3, labels: 'hsv'},
+	hwb: {channels: 3, labels: 'hwb'},
+	cmyk: {channels: 4, labels: 'cmyk'},
+	xyz: {channels: 3, labels: 'xyz'},
+	lab: {channels: 3, labels: 'lab'},
+	lch: {channels: 3, labels: 'lch'},
+	hex: {channels: 1, labels: ['hex']},
+	keyword: {channels: 1, labels: ['keyword']},
+	ansi16: {channels: 1, labels: ['ansi16']},
+	ansi256: {channels: 1, labels: ['ansi256']},
+	hcg: {channels: 3, labels: ['h', 'c', 'g']},
+	apple: {channels: 3, labels: ['r16', 'g16', 'b16']},
+	gray: {channels: 1, labels: ['gray']}
+};
+
+module.exports = convert;
+
+// Hide .channels and .labels properties
+for (const model of Object.keys(convert)) {
+	if (!('channels' in convert[model])) {
+		throw new Error('missing channels property: ' + model);
+	}
+
+	if (!('labels' in convert[model])) {
+		throw new Error('missing channel labels property: ' + model);
+	}
+
+	if (convert[model].labels.length !== convert[model].channels) {
+		throw new Error('channel and label counts mismatch: ' + model);
+	}
+
+	const {channels, labels} = convert[model];
+	delete convert[model].channels;
+	delete convert[model].labels;
+	Object.defineProperty(convert[model], 'channels', {value: channels});
+	Object.defineProperty(convert[model], 'labels', {value: labels});
+}
+
+convert.rgb.hsl = function (rgb) {
+	const r = rgb[0] / 255;
+	const g = rgb[1] / 255;
+	const b = rgb[2] / 255;
+	const min = Math.min(r, g, b);
+	const max = Math.max(r, g, b);
+	const delta = max - min;
+	let h;
+	let s;
+
+	if (max === min) {
+		h = 0;
+	} else if (r === max) {
+		h = (g - b) / delta;
+	} else if (g === max) {
+		h = 2 + (b - r) / delta;
+	} else if (b === max) {
+		h = 4 + (r - g) / delta;
+	}
+
+	h = Math.min(h * 60, 360);
+
+	if (h < 0) {
+		h += 360;
+	}
+
+	const l = (min + max) / 2;
+
+	if (max === min) {
+		s = 0;
+	} else if (l <= 0.5) {
+		s = delta / (max + min);
+	} else {
+		s = delta / (2 - max - min);
+	}
+
+	return [h, s * 100, l * 100];
+};
+
+convert.rgb.hsv = function (rgb) {
+	let rdif;
+	let gdif;
+	let bdif;
+	let h;
+	let s;
+
+	const r = rgb[0] / 255;
+	const g = rgb[1] / 255;
+	const b = rgb[2] / 255;
+	const v = Math.max(r, g, b);
+	const diff = v - Math.min(r, g, b);
+	const diffc = function (c) {
+		return (v - c) / 6 / diff + 1 / 2;
+	};
+
+	if (diff === 0) {
+		h = 0;
+		s = 0;
+	} else {
+		s = diff / v;
+		rdif = diffc(r);
+		gdif = diffc(g);
+		bdif = diffc(b);
+
+		if (r === v) {
+			h = bdif - gdif;
+		} else if (g === v) {
+			h = (1 / 3) + rdif - bdif;
+		} else if (b === v) {
+			h = (2 / 3) + gdif - rdif;
+		}
+
+		if (h < 0) {
+			h += 1;
+		} else if (h > 1) {
+			h -= 1;
+		}
+	}
+
+	return [
+		h * 360,
+		s * 100,
+		v * 100
+	];
+};
+
+convert.rgb.hwb = function (rgb) {
+	const r = rgb[0];
+	const g = rgb[1];
+	let b = rgb[2];
+	const h = convert.rgb.hsl(rgb)[0];
+	const w = 1 / 255 * Math.min(r, Math.min(g, b));
+
+	b = 1 - 1 / 255 * Math.max(r, Math.max(g, b));
+
+	return [h, w * 100, b * 100];
+};
+
+convert.rgb.cmyk = function (rgb) {
+	const r = rgb[0] / 255;
+	const g = rgb[1] / 255;
+	const b = rgb[2] / 255;
+
+	const k = Math.min(1 - r, 1 - g, 1 - b);
+	const c = (1 - r - k) / (1 - k) || 0;
+	const m = (1 - g - k) / (1 - k) || 0;
+	const y = (1 - b - k) / (1 - k) || 0;
+
+	return [c * 100, m * 100, y * 100, k * 100];
+};
+
+function comparativeDistance(x, y) {
+	/*
+		See https://en.m.wikipedia.org/wiki/Euclidean_distance#Squared_Euclidean_distance
+	*/
+	return (
+		((x[0] - y[0]) ** 2) +
+		((x[1] - y[1]) ** 2) +
+		((x[2] - y[2]) ** 2)
+	);
+}
+
+convert.rgb.keyword = function (rgb) {
+	const reversed = reverseKeywords[rgb];
+	if (reversed) {
+		return reversed;
+	}
+
+	let currentClosestDistance = Infinity;
+	let currentClosestKeyword;
+
+	for (const keyword of Object.keys(cssKeywords)) {
+		const value = cssKeywords[keyword];
+
+		// Compute comparative distance
+		const distance = comparativeDistance(rgb, value);
+
+		// Check if its less, if so set as closest
+		if (distance < currentClosestDistance) {
+			currentClosestDistance = distance;
+			currentClosestKeyword = keyword;
+		}
+	}
+
+	return currentClosestKeyword;
+};
+
+convert.keyword.rgb = function (keyword) {
+	return cssKeywords[keyword];
+};
+
+convert.rgb.xyz = function (rgb) {
+	let r = rgb[0] / 255;
+	let g = rgb[1] / 255;
+	let b = rgb[2] / 255;
+
+	// Assume sRGB
+	r = r > 0.04045 ? (((r + 0.055) / 1.055) ** 2.4) : (r / 12.92);
+	g = g > 0.04045 ? (((g + 0.055) / 1.055) ** 2.4) : (g / 12.92);
+	b = b > 0.04045 ? (((b + 0.055) / 1.055) ** 2.4) : (b / 12.92);
+
+	const x = (r * 0.4124) + (g * 0.3576) + (b * 0.1805);
+	const y = (r * 0.2126) + (g * 0.7152) + (b * 0.0722);
+	const z = (r * 0.0193) + (g * 0.1192) + (b * 0.9505);
+
+	return [x * 100, y * 100, z * 100];
+};
+
+convert.rgb.lab = function (rgb) {
+	const xyz = convert.rgb.xyz(rgb);
+	let x = xyz[0];
+	let y = xyz[1];
+	let z = xyz[2];
+
+	x /= 95.047;
+	y /= 100;
+	z /= 108.883;
+
+	x = x > 0.008856 ? (x ** (1 / 3)) : (7.787 * x) + (16 / 116);
+	y = y > 0.008856 ? (y ** (1 / 3)) : (7.787 * y) + (16 / 116);
+	z = z > 0.008856 ? (z ** (1 / 3)) : (7.787 * z) + (16 / 116);
+
+	const l = (116 * y) - 16;
+	const a = 500 * (x - y);
+	const b = 200 * (y - z);
+
+	return [l, a, b];
+};
+
+convert.hsl.rgb = function (hsl) {
+	const h = hsl[0] / 360;
+	const s = hsl[1] / 100;
+	const l = hsl[2] / 100;
+	let t2;
+	let t3;
+	let val;
+
+	if (s === 0) {
+		val = l * 255;
+		return [val, val, val];
+	}
+
+	if (l < 0.5) {
+		t2 = l * (1 + s);
+	} else {
+		t2 = l + s - l * s;
+	}
+
+	const t1 = 2 * l - t2;
+
+	const rgb = [0, 0, 0];
+	for (let i = 0; i < 3; i++) {
+		t3 = h + 1 / 3 * -(i - 1);
+		if (t3 < 0) {
+			t3++;
+		}
+
+		if (t3 > 1) {
+			t3--;
+		}
+
+		if (6 * t3 < 1) {
+			val = t1 + (t2 - t1) * 6 * t3;
+		} else if (2 * t3 < 1) {
+			val = t2;
+		} else if (3 * t3 < 2) {
+			val = t1 + (t2 - t1) * (2 / 3 - t3) * 6;
+		} else {
+			val = t1;
+		}
+
+		rgb[i] = val * 255;
+	}
+
+	return rgb;
+};
+
+convert.hsl.hsv = function (hsl) {
+	const h = hsl[0];
+	let s = hsl[1] / 100;
+	let l = hsl[2] / 100;
+	let smin = s;
+	const lmin = Math.max(l, 0.01);
+
+	l *= 2;
+	s *= (l <= 1) ? l : 2 - l;
+	smin *= lmin <= 1 ? lmin : 2 - lmin;
+	const v = (l + s) / 2;
+	const sv = l === 0 ? (2 * smin) / (lmin + smin) : (2 * s) / (l + s);
+
+	return [h, sv * 100, v * 100];
+};
+
+convert.hsv.rgb = function (hsv) {
+	const h = hsv[0] / 60;
+	const s = hsv[1] / 100;
+	let v = hsv[2] / 100;
+	const hi = Math.floor(h) % 6;
+
+	const f = h - Math.floor(h);
+	const p = 255 * v * (1 - s);
+	const q = 255 * v * (1 - (s * f));
+	const t = 255 * v * (1 - (s * (1 - f)));
+	v *= 255;
+
+	switch (hi) {
+		case 0:
+			return [v, t, p];
+		case 1:
+			return [q, v, p];
+		case 2:
+			return [p, v, t];
+		case 3:
+			return [p, q, v];
+		case 4:
+			return [t, p, v];
+		case 5:
+			return [v, p, q];
+	}
+};
+
+convert.hsv.hsl = function (hsv) {
+	const h = hsv[0];
+	const s = hsv[1] / 100;
+	const v = hsv[2] / 100;
+	const vmin = Math.max(v, 0.01);
+	let sl;
+	let l;
+
+	l = (2 - s) * v;
+	const lmin = (2 - s) * vmin;
+	sl = s * vmin;
+	sl /= (lmin <= 1) ? lmin : 2 - lmin;
+	sl = sl || 0;
+	l /= 2;
+
+	return [h, sl * 100, l * 100];
+};
+
+// http://dev.w3.org/csswg/css-color/#hwb-to-rgb
+convert.hwb.rgb = function (hwb) {
+	const h = hwb[0] / 360;
+	let wh = hwb[1] / 100;
+	let bl = hwb[2] / 100;
+	const ratio = wh + bl;
+	let f;
+
+	// Wh + bl cant be > 1
+	if (ratio > 1) {
+		wh /= ratio;
+		bl /= ratio;
+	}
+
+	const i = Math.floor(6 * h);
+	const v = 1 - bl;
+	f = 6 * h - i;
+
+	if ((i & 0x01) !== 0) {
+		f = 1 - f;
+	}
+
+	const n = wh + f * (v - wh); // Linear interpolation
+
+	let r;
+	let g;
+	let b;
+	/* eslint-disable max-statements-per-line,no-multi-spaces */
+	switch (i) {
+		default:
+		case 6:
+		case 0: r = v;  g = n;  b = wh; break;
+		case 1: r = n;  g = v;  b = wh; break;
+		case 2: r = wh; g = v;  b = n; break;
+		case 3: r = wh; g = n;  b = v; break;
+		case 4: r = n;  g = wh; b = v; break;
+		case 5: r = v;  g = wh; b = n; break;
+	}
+	/* eslint-enable max-statements-per-line,no-multi-spaces */
+
+	return [r * 255, g * 255, b * 255];
+};
+
+convert.cmyk.rgb = function (cmyk) {
+	const c = cmyk[0] / 100;
+	const m = cmyk[1] / 100;
+	const y = cmyk[2] / 100;
+	const k = cmyk[3] / 100;
+
+	const r = 1 - Math.min(1, c * (1 - k) + k);
+	const g = 1 - Math.min(1, m * (1 - k) + k);
+	const b = 1 - Math.min(1, y * (1 - k) + k);
+
+	return [r * 255, g * 255, b * 255];
+};
+
+convert.xyz.rgb = function (xyz) {
+	const x = xyz[0] / 100;
+	const y = xyz[1] / 100;
+	const z = xyz[2] / 100;
+	let r;
+	let g;
+	let b;
+
+	r = (x * 3.2406) + (y * -1.5372) + (z * -0.4986);
+	g = (x * -0.9689) + (y * 1.8758) + (z * 0.0415);
+	b = (x * 0.0557) + (y * -0.2040) + (z * 1.0570);
+
+	// Assume sRGB
+	r = r > 0.0031308
+		? ((1.055 * (r ** (1.0 / 2.4))) - 0.055)
+		: r * 12.92;
+
+	g = g > 0.0031308
+		? ((1.055 * (g ** (1.0 / 2.4))) - 0.055)
+		: g * 12.92;
+
+	b = b > 0.0031308
+		? ((1.055 * (b ** (1.0 / 2.4))) - 0.055)
+		: b * 12.92;
+
+	r = Math.min(Math.max(0, r), 1);
+	g = Math.min(Math.max(0, g), 1);
+	b = Math.min(Math.max(0, b), 1);
+
+	return [r * 255, g * 255, b * 255];
+};
+
+convert.xyz.lab = function (xyz) {
+	let x = xyz[0];
+	let y = xyz[1];
+	let z = xyz[2];
+
+	x /= 95.047;
+	y /= 100;
+	z /= 108.883;
+
+	x = x > 0.008856 ? (x ** (1 / 3)) : (7.787 * x) + (16 / 116);
+	y = y > 0.008856 ? (y ** (1 / 3)) : (7.787 * y) + (16 / 116);
+	z = z > 0.008856 ? (z ** (1 / 3)) : (7.787 * z) + (16 / 116);
+
+	const l = (116 * y) - 16;
+	const a = 500 * (x - y);
+	const b = 200 * (y - z);
+
+	return [l, a, b];
+};
+
+convert.lab.xyz = function (lab) {
+	const l = lab[0];
+	const a = lab[1];
+	const b = lab[2];
+	let x;
+	let y;
+	let z;
+
+	y = (l + 16) / 116;
+	x = a / 500 + y;
+	z = y - b / 200;
+
+	const y2 = y ** 3;
+	const x2 = x ** 3;
+	const z2 = z ** 3;
+	y = y2 > 0.008856 ? y2 : (y - 16 / 116) / 7.787;
+	x = x2 > 0.008856 ? x2 : (x - 16 / 116) / 7.787;
+	z = z2 > 0.008856 ? z2 : (z - 16 / 116) / 7.787;
+
+	x *= 95.047;
+	y *= 100;
+	z *= 108.883;
+
+	return [x, y, z];
+};
+
+convert.lab.lch = function (lab) {
+	const l = lab[0];
+	const a = lab[1];
+	const b = lab[2];
+	let h;
+
+	const hr = Math.atan2(b, a);
+	h = hr * 360 / 2 / Math.PI;
+
+	if (h < 0) {
+		h += 360;
+	}
+
+	const c = Math.sqrt(a * a + b * b);
+
+	return [l, c, h];
+};
+
+convert.lch.lab = function (lch) {
+	const l = lch[0];
+	const c = lch[1];
+	const h = lch[2];
+
+	const hr = h / 360 * 2 * Math.PI;
+	const a = c * Math.cos(hr);
+	const b = c * Math.sin(hr);
+
+	return [l, a, b];
+};
+
+convert.rgb.ansi16 = function (args, saturation = null) {
+	const [r, g, b] = args;
+	let value = saturation === null ? convert.rgb.hsv(args)[2] : saturation; // Hsv -> ansi16 optimization
+
+	value = Math.round(value / 50);
+
+	if (value === 0) {
+		return 30;
+	}
+
+	let ansi = 30
+		+ ((Math.round(b / 255) << 2)
+		| (Math.round(g / 255) << 1)
+		| Math.round(r / 255));
+
+	if (value === 2) {
+		ansi += 60;
+	}
+
+	return ansi;
+};
+
+convert.hsv.ansi16 = function (args) {
+	// Optimization here; we already know the value and don't need to get
+	// it converted for us.
+	return convert.rgb.ansi16(convert.hsv.rgb(args), args[2]);
+};
+
+convert.rgb.ansi256 = function (args) {
+	const r = args[0];
+	const g = args[1];
+	const b = args[2];
+
+	// We use the extended greyscale palette here, with the exception of
+	// black and white. normal palette only has 4 greyscale shades.
+	if (r === g && g === b) {
+		if (r < 8) {
+			return 16;
+		}
+
+		if (r > 248) {
+			return 231;
+		}
+
+		return Math.round(((r - 8) / 247) * 24) + 232;
+	}
+
+	const ansi = 16
+		+ (36 * Math.round(r / 255 * 5))
+		+ (6 * Math.round(g / 255 * 5))
+		+ Math.round(b / 255 * 5);
+
+	return ansi;
+};
+
+convert.ansi16.rgb = function (args) {
+	let color = args % 10;
+
+	// Handle greyscale
+	if (color === 0 || color === 7) {
+		if (args > 50) {
+			color += 3.5;
+		}
+
+		color = color / 10.5 * 255;
+
+		return [color, color, color];
+	}
+
+	const mult = (~~(args > 50) + 1) * 0.5;
+	const r = ((color & 1) * mult) * 255;
+	const g = (((color >> 1) & 1) * mult) * 255;
+	const b = (((color >> 2) & 1) * mult) * 255;
+
+	return [r, g, b];
+};
+
+convert.ansi256.rgb = function (args) {
+	// Handle greyscale
+	if (args >= 232) {
+		const c = (args - 232) * 10 + 8;
+		return [c, c, c];
+	}
+
+	args -= 16;
+
+	let rem;
+	const r = Math.floor(args / 36) / 5 * 255;
+	const g = Math.floor((rem = args % 36) / 6) / 5 * 255;
+	const b = (rem % 6) / 5 * 255;
+
+	return [r, g, b];
+};
+
+convert.rgb.hex = function (args) {
+	const integer = ((Math.round(args[0]) & 0xFF) << 16)
+		+ ((Math.round(args[1]) & 0xFF) << 8)
+		+ (Math.round(args[2]) & 0xFF);
+
+	const string = integer.toString(16).toUpperCase();
+	return '000000'.substring(string.length) + string;
+};
+
+convert.hex.rgb = function (args) {
+	const match = args.toString(16).match(/[a-f0-9]{6}|[a-f0-9]{3}/i);
+	if (!match) {
+		return [0, 0, 0];
+	}
+
+	let colorString = match[0];
+
+	if (match[0].length === 3) {
+		colorString = colorString.split('').map(char => {
+			return char + char;
+		}).join('');
+	}
+
+	const integer = parseInt(colorString, 16);
+	const r = (integer >> 16) & 0xFF;
+	const g = (integer >> 8) & 0xFF;
+	const b = integer & 0xFF;
+
+	return [r, g, b];
+};
+
+convert.rgb.hcg = function (rgb) {
+	const r = rgb[0] / 255;
+	const g = rgb[1] / 255;
+	const b = rgb[2] / 255;
+	const max = Math.max(Math.max(r, g), b);
+	const min = Math.min(Math.min(r, g), b);
+	const chroma = (max - min);
+	let grayscale;
+	let hue;
+
+	if (chroma < 1) {
+		grayscale = min / (1 - chroma);
+	} else {
+		grayscale = 0;
+	}
+
+	if (chroma <= 0) {
+		hue = 0;
+	} else
+	if (max === r) {
+		hue = ((g - b) / chroma) % 6;
+	} else
+	if (max === g) {
+		hue = 2 + (b - r) / chroma;
+	} else {
+		hue = 4 + (r - g) / chroma;
+	}
+
+	hue /= 6;
+	hue %= 1;
+
+	return [hue * 360, chroma * 100, grayscale * 100];
+};
+
+convert.hsl.hcg = function (hsl) {
+	const s = hsl[1] / 100;
+	const l = hsl[2] / 100;
+
+	const c = l < 0.5 ? (2.0 * s * l) : (2.0 * s * (1.0 - l));
+
+	let f = 0;
+	if (c < 1.0) {
+		f = (l - 0.5 * c) / (1.0 - c);
+	}
+
+	return [hsl[0], c * 100, f * 100];
+};
+
+convert.hsv.hcg = function (hsv) {
+	const s = hsv[1] / 100;
+	const v = hsv[2] / 100;
+
+	const c = s * v;
+	let f = 0;
+
+	if (c < 1.0) {
+		f = (v - c) / (1 - c);
+	}
+
+	return [hsv[0], c * 100, f * 100];
+};
+
+convert.hcg.rgb = function (hcg) {
+	const h = hcg[0] / 360;
+	const c = hcg[1] / 100;
+	const g = hcg[2] / 100;
+
+	if (c === 0.0) {
+		return [g * 255, g * 255, g * 255];
+	}
+
+	const pure = [0, 0, 0];
+	const hi = (h % 1) * 6;
+	const v = hi % 1;
+	const w = 1 - v;
+	let mg = 0;
+
+	/* eslint-disable max-statements-per-line */
+	switch (Math.floor(hi)) {
+		case 0:
+			pure[0] = 1; pure[1] = v; pure[2] = 0; break;
+		case 1:
+			pure[0] = w; pure[1] = 1; pure[2] = 0; break;
+		case 2:
+			pure[0] = 0; pure[1] = 1; pure[2] = v; break;
+		case 3:
+			pure[0] = 0; pure[1] = w; pure[2] = 1; break;
+		case 4:
+			pure[0] = v; pure[1] = 0; pure[2] = 1; break;
+		default:
+			pure[0] = 1; pure[1] = 0; pure[2] = w;
+	}
+	/* eslint-enable max-statements-per-line */
+
+	mg = (1.0 - c) * g;
+
+	return [
+		(c * pure[0] + mg) * 255,
+		(c * pure[1] + mg) * 255,
+		(c * pure[2] + mg) * 255
+	];
+};
+
+convert.hcg.hsv = function (hcg) {
+	const c = hcg[1] / 100;
+	const g = hcg[2] / 100;
+
+	const v = c + g * (1.0 - c);
+	let f = 0;
+
+	if (v > 0.0) {
+		f = c / v;
+	}
+
+	return [hcg[0], f * 100, v * 100];
+};
+
+convert.hcg.hsl = function (hcg) {
+	const c = hcg[1] / 100;
+	const g = hcg[2] / 100;
+
+	const l = g * (1.0 - c) + 0.5 * c;
+	let s = 0;
+
+	if (l > 0.0 && l < 0.5) {
+		s = c / (2 * l);
+	} else
+	if (l >= 0.5 && l < 1.0) {
+		s = c / (2 * (1 - l));
+	}
+
+	return [hcg[0], s * 100, l * 100];
+};
+
+convert.hcg.hwb = function (hcg) {
+	const c = hcg[1] / 100;
+	const g = hcg[2] / 100;
+	const v = c + g * (1.0 - c);
+	return [hcg[0], (v - c) * 100, (1 - v) * 100];
+};
+
+convert.hwb.hcg = function (hwb) {
+	const w = hwb[1] / 100;
+	const b = hwb[2] / 100;
+	const v = 1 - b;
+	const c = v - w;
+	let g = 0;
+
+	if (c < 1) {
+		g = (v - c) / (1 - c);
+	}
+
+	return [hwb[0], c * 100, g * 100];
+};
+
+convert.apple.rgb = function (apple) {
+	return [(apple[0] / 65535) * 255, (apple[1] / 65535) * 255, (apple[2] / 65535) * 255];
+};
+
+convert.rgb.apple = function (rgb) {
+	return [(rgb[0] / 255) * 65535, (rgb[1] / 255) * 65535, (rgb[2] / 255) * 65535];
+};
+
+convert.gray.rgb = function (args) {
+	return [args[0] / 100 * 255, args[0] / 100 * 255, args[0] / 100 * 255];
+};
+
+convert.gray.hsl = function (args) {
+	return [0, 0, args[0]];
+};
+
+convert.gray.hsv = convert.gray.hsl;
+
+convert.gray.hwb = function (gray) {
+	return [0, 100, gray[0]];
+};
+
+convert.gray.cmyk = function (gray) {
+	return [0, 0, 0, gray[0]];
+};
+
+convert.gray.lab = function (gray) {
+	return [gray[0], 0, 0];
+};
+
+convert.gray.hex = function (gray) {
+	const val = Math.round(gray[0] / 100 * 255) & 0xFF;
+	const integer = (val << 16) + (val << 8) + val;
+
+	const string = integer.toString(16).toUpperCase();
+	return '000000'.substring(string.length) + string;
+};
+
+convert.rgb.gray = function (rgb) {
+	const val = (rgb[0] + rgb[1] + rgb[2]) / 3;
+	return [val / 255 * 100];
+};
+
+
+/***/ }),
+
+/***/ 448:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -13411,9 +13988,8 @@ exports.Octokit = Octokit;
 
 
 /***/ }),
-/* 449 */,
-/* 450 */,
-/* 451 */
+
+/***/ 451:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 /* -*- Mode: js; js-indent-level: 2; -*- */
@@ -13498,8 +14074,8 @@ exports.MappingList = MappingList;
 
 
 /***/ }),
-/* 452 */,
-/* 453 */
+
+/***/ 453:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -13528,7 +14104,8 @@ exports.splitWhen = splitWhen;
 
 
 /***/ }),
-/* 454 */
+
+/***/ 454:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 /* -*- Mode: js; js-indent-level: 2; -*- */
@@ -13959,8 +14536,315 @@ exports.SourceMapGenerator = SourceMapGenerator;
 
 
 /***/ }),
-/* 455 */,
-/* 456 */
+
+/***/ 455:
+/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var core = __webpack_require__(470);
+
+// EXTERNAL MODULE: ./node_modules/lodash.groupBy/index.js
+var lodash_groupBy = __webpack_require__(820);
+var lodash_groupBy_default = /*#__PURE__*/__webpack_require__.n(lodash_groupBy);
+
+// EXTERNAL MODULE: ./node_modules/p-queue/dist/index.js
+var dist = __webpack_require__(984);
+var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
+
+// EXTERNAL MODULE: ./node_modules/fast-glob/out/index.js
+var out = __webpack_require__(406);
+
+// EXTERNAL MODULE: external "path"
+var external_path_ = __webpack_require__(622);
+
+// EXTERNAL MODULE: ./node_modules/minimatch/minimatch.js
+var minimatch = __webpack_require__(93);
+var minimatch_default = /*#__PURE__*/__webpack_require__.n(minimatch);
+
+// EXTERNAL MODULE: ./node_modules/@astronautlabs/jsonpath/dist/index.js
+var jsonpath_dist = __webpack_require__(607);
+
+// EXTERNAL MODULE: ./node_modules/envalid/src/envalid.js
+var envalid = __webpack_require__(456);
+var envalid_default = /*#__PURE__*/__webpack_require__.n(envalid);
+
+// CONCATENATED MODULE: ./src/environment.ts
+
+const maxPerPage = 100;
+const OUTPUT_NAME = 'appliedRules';
+const FILE_ENCODING = 'utf8';
+var SUPPORTED_EVENT_TYPES;
+(function (SUPPORTED_EVENT_TYPES) {
+    SUPPORTED_EVENT_TYPES["PULL_REQUEST"] = "pull_request";
+})(SUPPORTED_EVENT_TYPES || (SUPPORTED_EVENT_TYPES = {}));
+const environment = () => envalid_default().cleanEnv(process.env, {
+    GITHUB_EVENT_PATH: Object(envalid.str)({ devDefault: '/github/workflow/event.json' }),
+    GITHUB_EVENT_NAME: Object(envalid.str)({ devDefault: 'pull_request' }),
+    GITHUB_REPOSITORY: Object(envalid.str)({ devDefault: Object(envalid.testOnly)('someRepo') }),
+    GITHUB_SHA: Object(envalid.str)({
+        devDefault: Object(envalid.testOnly)('ffac537e6cbbf934b08745a378932722df287a53'),
+    }),
+}, { dotEnvPath: null });
+const env = environment();
+
+// EXTERNAL MODULE: external "fs"
+var external_fs_ = __webpack_require__(747);
+
+// CONCATENATED MODULE: ./src/util/loadJSONFile.ts
+
+
+const loadJSONFile = (filePath) => {
+    const file = Object(external_fs_.readFileSync)(filePath, { encoding: FILE_ENCODING });
+    const content = JSON.parse(file);
+    return content;
+};
+
+// CONCATENATED MODULE: ./src/rules.ts
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+
+
+
+
+const commentTemplate = (users) => `Hi there, Herald found that given these changes ${users.join(', ')} might want to take a look!`;
+var RuleActors;
+(function (RuleActors) {
+    RuleActors["users"] = "users";
+    RuleActors["teams"] = "teams";
+})(RuleActors || (RuleActors = {}));
+var RuleExtras;
+(function (RuleExtras) {
+    RuleExtras["customMessage"] = "customMessage";
+    RuleExtras["name"] = "name";
+})(RuleExtras || (RuleExtras = {}));
+var RuleMatchers;
+(function (RuleMatchers) {
+    RuleMatchers["eventJsonPath"] = "eventJsonPath";
+    RuleMatchers["glob"] = "glob";
+})(RuleMatchers || (RuleMatchers = {}));
+var RuleActions;
+(function (RuleActions) {
+    RuleActions["comment"] = "comment";
+    RuleActions["review"] = "review";
+    RuleActions["assign"] = "assign";
+})(RuleActions || (RuleActions = {}));
+const sanitize = (content) => {
+    var _a, _b;
+    const attrs = Object.assign(Object.assign(Object.assign({}, RuleMatchers), RuleActors), RuleExtras);
+    const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
+        return content[attr] ? Object.assign(Object.assign({}, memo), { [attr]: content[attr] }) : memo;
+    }, {});
+    const users = (_a = rule.users) === null || _a === void 0 ? void 0 : _a.split(',');
+    const teams = (_b = rule.teams) === null || _b === void 0 ? void 0 : _b.split(',');
+    return Object.assign(Object.assign({}, rule), { users, teams });
+};
+const hasAttribute = (attr, content) => attr in content;
+const isValidRawRule = (content) => {
+    if (typeof content !== 'object' || content === null) {
+        return false;
+    }
+    const hasValidActionValues = hasAttribute('action', content) &&
+        Object.keys(RuleActions).includes(content.action);
+    const hasTeams = (hasAttribute('teams', content) && content.teams && true) || false;
+    const hasUsers = (hasAttribute('users', content) && content.users && true) || false;
+    const hasActors = hasTeams || hasUsers;
+    const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
+    return hasValidActionValues && hasActors && matchers;
+};
+const loadRules = (rulesLocation) => {
+    const matches = Object(out.sync)(rulesLocation, { onlyFiles: true });
+    const rules = matches.reduce((memo, filePath) => {
+        try {
+            const rule = loadJSONFile(filePath);
+            return isValidRawRule(rule)
+                ? [
+                    ...memo,
+                    Object.assign(Object.assign({ name: Object(external_path_.basename)(filePath) }, sanitize(rule)), { path: filePath }),
+                ]
+                : memo;
+        }
+        catch (e) {
+            console.log(`${filePath} can't be parsed, it will be ignored`);
+            return memo;
+        }
+    }, []);
+    console.info('found rules:', rules);
+    return rules;
+};
+const getMatchingRules = (rules, files, event) => {
+    const fileNames = files.map(({ filename }) => filename);
+    const matchingRules = rules.reduce((memo, rule) => {
+        const matches = {};
+        if (rule.glob) {
+            matches.glob = fileNames.filter(minimatch_default().filter(rule.glob, { matchBase: true }));
+        }
+        if (rule.eventJsonPath) {
+            matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
+        }
+        return Object.values(matches).length
+            ? [...memo, Object.assign(Object.assign({}, rule), { matches })]
+            : memo;
+    }, []);
+    console.info('matching rules:', matchingRules);
+    return matchingRules;
+};
+const composeCommentsForUsers = (matchingRules) => {
+    return matchingRules.reduce((comments, { teams, users, customMessage }) => {
+        return [
+            ...comments,
+            customMessage ? customMessage : commentTemplate([...users, ...teams]),
+        ];
+    }, []);
+};
+
+// CONCATENATED MODULE: ./src/comment.ts
+/* eslint-disable @typescript-eslint/camelcase */
+
+
+
+const getAllComments = async (client, params) => {
+    const page = 1;
+    const { data: comments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { per_page: maxPerPage, page }));
+    if (comments.length < maxPerPage) {
+        return comments;
+    }
+    else {
+        const { data: moreComments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { page: page + 1, per_page: maxPerPage }));
+        return [...comments, ...moreComments];
+    }
+};
+const handleComment = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
+    const commentsFromRules = composeCommentsForUsers(matchingRules);
+    const rawComments = await getAllComments(client, {
+        owner,
+        repo,
+        issue_number: prNumber,
+    });
+    const comments = rawComments.map(({ body }) => body);
+    const onlyNewComments = commentsFromRules.filter((comment) => !comments.includes(comment));
+    return Promise.all(onlyNewComments.map((body) => {
+        return queue.add(() => client.issues.createComment({
+            owner,
+            repo,
+            issue_number: prNumber,
+            body,
+        }));
+    }));
+};
+
+// EXTERNAL MODULE: ./node_modules/@octokit/rest/dist-node/index.js
+var dist_node = __webpack_require__(889);
+
+// EXTERNAL MODULE: ./node_modules/@octokit/plugin-retry/dist-node/index.js
+var plugin_retry_dist_node = __webpack_require__(755);
+
+// CONCATENATED MODULE: ./src/assignees.ts
+
+const handleAssignees = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
+    return Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.issues.addAssignees({
+        owner,
+        repo,
+        issue_number: prNumber,
+        assignees: matchingRule.users,
+    }))));
+};
+
+// CONCATENATED MODULE: ./src/reviewers.ts
+
+const handleReviewers = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
+    return Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.pulls.requestReviewers({
+        owner,
+        repo,
+        pull_number: prNumber,
+        reviewers: matchingRule.users,
+        team_reviewers: matchingRule.teams,
+    }))));
+};
+
+// CONCATENATED MODULE: ./src/index.ts
+/* eslint-disable @typescript-eslint/camelcase */
+
+
+
+
+
+
+
+
+
+
+const EnhancedOctokit = Object(dist_node.Octokit.plugin)(plugin_retry_dist_node.retry);
+var Props;
+(function (Props) {
+    Props["GITHUB_TOKEN"] = "GITHUB_TOKEN";
+    Props["rulesLocation"] = "rulesLocation";
+    Props["dryRun"] = "dryRun";
+    Props["base"] = "base";
+})(Props || (Props = {}));
+const actionsMap = {
+    [RuleActions.comment]: handleComment,
+    [RuleActions.assign]: handleAssignees,
+    [RuleActions.review]: handleReviewers,
+};
+const getParams = () => {
+    return Object.keys(Props).reduce((memo, prop) => {
+        const value = Object(core.getInput)(prop);
+        return value ? Object.assign(Object.assign({}, memo), { [prop]: value }) : memo;
+    }, {});
+};
+const main = async () => {
+    try {
+        if (env.GITHUB_EVENT_NAME === SUPPORTED_EVENT_TYPES.PULL_REQUEST) {
+            const event = loadJSONFile(env.GITHUB_EVENT_PATH);
+            const { pull_request: { head: { sha: headSha }, base: { sha: baseSha }, }, number: prNumber, repository: { name: repo, owner: { login: owner }, }, } = event;
+            const { GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun = false, } = getParams();
+            const rules = loadRules(rulesLocation);
+            const client = new EnhancedOctokit({ auth: GITHUB_TOKEN });
+            const { data: { files }, } = await client.repos.compareCommits({
+                base,
+                head: headSha,
+                owner,
+                repo,
+            });
+            const matchingRules = getMatchingRules(rules, files, event);
+            const groupedRulesByAction = lodash_groupBy_default()(matchingRules, (rule) => rule.action);
+            if (!dryRun) {
+                if (matchingRules.length) {
+                    const groupNames = Object.keys(groupedRulesByAction);
+                    await Promise.all([
+                        groupNames.map((actionName) => {
+                            const action = actionsMap[RuleActions[actionName]];
+                            return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions.comment]);
+                        }),
+                    ]);
+                }
+            }
+            Object(core.setOutput)(OUTPUT_NAME, groupedRulesByAction);
+        }
+        else {
+            Object(core.setOutput)(OUTPUT_NAME, []);
+            throw new Error('use-herald only supports pull_request events for now');
+        }
+    }
+    catch (e) {
+        Object(core.setFailed)(e);
+    }
+};
+
+// CONCATENATED MODULE: ./index.ts
+
+main();
+
+
+/***/ }),
+
+/***/ 456:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 const envalid = __webpack_require__(309)
@@ -13994,8 +14878,8 @@ module.exports = envalid
 
 
 /***/ }),
-/* 457 */,
-/* 458 */
+
+/***/ 458:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 const meant = __webpack_require__(60)
@@ -14066,10 +14950,8 @@ module.exports = (envObj, originalEnv) =>
 
 
 /***/ }),
-/* 459 */,
-/* 460 */,
-/* 461 */,
-/* 462 */
+
+/***/ 462:
 /***/ (function(module) {
 
 "use strict";
@@ -14121,7 +15003,8 @@ module.exports.argument = escapeArgument;
 
 
 /***/ }),
-/* 463 */
+
+/***/ 463:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -14183,9 +15066,8 @@ exports.RequestError = RequestError;
 
 
 /***/ }),
-/* 464 */,
-/* 465 */,
-/* 466 */
+
+/***/ 466:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -14201,10 +15083,8 @@ exports.TOKENS = {
 //# sourceMappingURL=tokens.js.map
 
 /***/ }),
-/* 467 */,
-/* 468 */,
-/* 469 */,
-/* 470 */
+
+/***/ 470:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -14432,25 +15312,8 @@ exports.getState = getState;
 //# sourceMappingURL=core.js.map
 
 /***/ }),
-/* 471 */,
-/* 472 */,
-/* 473 */,
-/* 474 */,
-/* 475 */,
-/* 476 */,
-/* 477 */,
-/* 478 */,
-/* 479 */,
-/* 480 */,
-/* 481 */,
-/* 482 */,
-/* 483 */,
-/* 484 */,
-/* 485 */,
-/* 486 */,
-/* 487 */,
-/* 488 */,
-/* 489 */
+
+/***/ 489:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -14504,14 +15367,8 @@ module.exports = resolveCommand;
 
 
 /***/ }),
-/* 490 */,
-/* 491 */,
-/* 492 */,
-/* 493 */,
-/* 494 */,
-/* 495 */,
-/* 496 */,
-/* 497 */
+
+/***/ 497:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14654,19 +15511,8 @@ module.exports = exports.default;
 module.exports.default = exports.default;
 
 /***/ }),
-/* 498 */,
-/* 499 */,
-/* 500 */,
-/* 501 */,
-/* 502 */,
-/* 503 */,
-/* 504 */,
-/* 505 */,
-/* 506 */,
-/* 507 */,
-/* 508 */,
-/* 509 */,
-/* 510 */
+
+/***/ 510:
 /***/ (function(module) {
 
 module.exports = addHook
@@ -14718,8 +15564,8 @@ function addHook (state, kind, name, hook) {
 
 
 /***/ }),
-/* 511 */,
-/* 512 */
+
+/***/ 512:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -14765,13 +15611,8 @@ module.exports.env = opts => {
 
 
 /***/ }),
-/* 513 */,
-/* 514 */,
-/* 515 */,
-/* 516 */,
-/* 517 */,
-/* 518 */,
-/* 519 */
+
+/***/ 519:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -14821,9 +15662,8 @@ exports.default = ReaderSync;
 
 
 /***/ }),
-/* 520 */,
-/* 521 */,
-/* 522 */
+
+/***/ 522:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -14862,7 +15702,8 @@ function getSettings(settingsOrOptions = {}) {
 
 
 /***/ }),
-/* 523 */
+
+/***/ 523:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 var register = __webpack_require__(363)
@@ -14925,14 +15766,8 @@ module.exports.Collection = Hook.Collection
 
 
 /***/ }),
-/* 524 */,
-/* 525 */,
-/* 526 */,
-/* 527 */,
-/* 528 */,
-/* 529 */,
-/* 530 */,
-/* 531 */
+
+/***/ 531:
 /***/ (function(module) {
 
 /*
@@ -15082,7 +15917,8 @@ module.exports.Collection = Hook.Collection
 
 
 /***/ }),
-/* 532 */
+
+/***/ 532:
 /***/ (function(module) {
 
 /**
@@ -16611,11 +17447,8 @@ module.exports.Collection = Hook.Collection
 
 
 /***/ }),
-/* 533 */,
-/* 534 */,
-/* 535 */,
-/* 536 */,
-/* 537 */
+
+/***/ 537:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -17005,7 +17838,8 @@ module.exports = scan;
 
 
 /***/ }),
-/* 538 */
+
+/***/ 538:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -17156,10 +17990,8 @@ function pauseStreams (streams, options) {
 
 
 /***/ }),
-/* 539 */,
-/* 540 */,
-/* 541 */,
-/* 542 */
+
+/***/ 542:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -17351,32 +18183,8 @@ exports.JSONPath = JSONPath;
 //# sourceMappingURL=jsonpath.js.map
 
 /***/ }),
-/* 543 */,
-/* 544 */,
-/* 545 */,
-/* 546 */,
-/* 547 */,
-/* 548 */,
-/* 549 */,
-/* 550 */,
-/* 551 */,
-/* 552 */,
-/* 553 */,
-/* 554 */,
-/* 555 */,
-/* 556 */,
-/* 557 */,
-/* 558 */,
-/* 559 */,
-/* 560 */,
-/* 561 */,
-/* 562 */,
-/* 563 */,
-/* 564 */,
-/* 565 */,
-/* 566 */,
-/* 567 */,
-/* 568 */
+
+/***/ 568:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -17508,33 +18316,11 @@ module.exports = parse;
 
 
 /***/ }),
-/* 569 */,
-/* 570 */,
-/* 571 */,
-/* 572 */,
-/* 573 */,
-/* 574 */,
-/* 575 */,
-/* 576 */,
-/* 577 */,
-/* 578 */,
-/* 579 */,
-/* 580 */,
-/* 581 */,
-/* 582 */,
-/* 583 */,
-/* 584 */,
-/* 585 */,
-/* 586 */,
-/* 587 */,
-/* 588 */,
-/* 589 */,
-/* 590 */,
-/* 591 */,
-/* 592 */
+
+/***/ 592:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
-const conversions = __webpack_require__(600);
+const conversions = __webpack_require__(445);
 const route = __webpack_require__(260);
 
 const convert = {};
@@ -17618,7 +18404,8 @@ module.exports = convert;
 
 
 /***/ }),
-/* 593 */
+
+/***/ 593:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -17647,869 +18434,744 @@ exports.read = read;
 
 
 /***/ }),
-/* 594 */,
-/* 595 */,
-/* 596 */,
-/* 597 */,
-/* 598 */,
-/* 599 */,
-/* 600 */
-/***/ (function(module, __unusedexports, __webpack_require__) {
 
-/* MIT license */
-/* eslint-disable no-mixed-operators */
-const cssKeywords = __webpack_require__(942);
+/***/ 600:
+/***/ (function(__unusedmodule, exports) {
 
-// NOTE: conversions should only return primitive values (i.e. arrays, or
-//       values that give correct `typeof` results).
-//       do not use box values types (i.e. Number(), String(), etc.)
+/* parser generated by jison 0.4.18 */
+/*
+  Returns a Parser object of the following structure:
 
-const reverseKeywords = {};
-for (const key of Object.keys(cssKeywords)) {
-	reverseKeywords[cssKeywords[key]] = key;
+  Parser: {
+    yy: {}
+  }
+
+  Parser.prototype: {
+    yy: {},
+    trace: function(),
+    symbols_: {associative list: name ==> number},
+    terminals_: {associative list: number ==> name},
+    productions_: [...],
+    performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate, $$, _$),
+    table: [...],
+    defaultActions: {...},
+    parseError: function(str, hash),
+    parse: function(input),
+
+    lexer: {
+        EOF: 1,
+        parseError: function(str, hash),
+        setInput: function(input),
+        input: function(),
+        unput: function(str),
+        more: function(),
+        less: function(n),
+        pastInput: function(),
+        upcomingInput: function(),
+        showPosition: function(),
+        test_match: function(regex_match_array, rule_index),
+        next: function(),
+        lex: function(),
+        begin: function(condition),
+        popState: function(),
+        _currentRules: function(),
+        topState: function(),
+        pushState: function(condition),
+
+        options: {
+            ranges: boolean           (optional: true ==> token location info will include a .range[] member)
+            flex: boolean             (optional: true ==> flex-like lexing behaviour where the rules are tested exhaustively to find the longest match)
+            backtrack_lexer: boolean  (optional: true ==> lexer regexes are tested in order and for each matching regex the action code is invoked; the lexer terminates the scan when a token is returned by the action code)
+        },
+
+        performAction: function(yy, yy_, $avoiding_name_collisions, YY_START),
+        rules: [...],
+        conditions: {associative list: name ==> set},
+    }
+  }
+
+
+  token location info (@$, _$, etc.): {
+    first_line: n,
+    last_line: n,
+    first_column: n,
+    last_column: n,
+    range: [start_number, end_number]       (where the numbers are indexes into the input string, regular zero-based)
+  }
+
+
+  the parseError function receives a 'hash' object with these members for lexer and parser errors: {
+    text:        (matched text)
+    token:       (the produced terminal token, if any)
+    line:        (yylineno)
+  }
+  while parser (grammar) errors will also provide these members, i.e. parser errors deliver a superset of attributes: {
+    loc:         (yylloc)
+    expected:    (string describing the set of expected tokens)
+    recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
+  }
+*/
+var parser = (function(){
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,7],$V3=[1,8],$V4=[1,9],$V5=[1,18],$V6=[1,19],$V7=[1,20],$V8=[1,12,14,22],$V9=[1,29],$Va=[1,30],$Vb=[1,33],$Vc=[1,35],$Vd=[1,31],$Ve=[1,36],$Vf=[1,37],$Vg=[24,28];
+var parser = {trace: function trace () { },
+yy: {},
+symbols_: {"error":2,"JSON_PATH":3,"DOLLAR":4,"PATH_COMPONENTS":5,"LEADING_CHILD_MEMBER_EXPRESSION":6,"PATH_COMPONENT":7,"MEMBER_COMPONENT":8,"SUBSCRIPT_COMPONENT":9,"CHILD_MEMBER_COMPONENT":10,"DESCENDANT_MEMBER_COMPONENT":11,"DOT":12,"MEMBER_EXPRESSION":13,"DOT_DOT":14,"STAR":15,"IDENTIFIER":16,"SCRIPT_EXPRESSION":17,"INTEGER":18,"END":19,"CHILD_SUBSCRIPT_COMPONENT":20,"DESCENDANT_SUBSCRIPT_COMPONENT":21,"[":22,"SUBSCRIPT":23,"]":24,"SUBSCRIPT_EXPRESSION":25,"SUBSCRIPT_EXPRESSION_LIST":26,"SUBSCRIPT_EXPRESSION_LISTABLE":27,",":28,"STRING_LITERAL":29,"ARRAY_SLICE":30,"FILTER_EXPRESSION":31,"QQ_STRING":32,"Q_STRING":33,"$accept":0,"$end":1},
+terminals_: {2:"error",4:"DOLLAR",12:"DOT",14:"DOT_DOT",15:"STAR",16:"IDENTIFIER",17:"SCRIPT_EXPRESSION",18:"INTEGER",19:"END",22:"[",24:"]",28:",",30:"ARRAY_SLICE",31:"FILTER_EXPRESSION",32:"QQ_STRING",33:"Q_STRING"},
+productions_: [0,[3,1],[3,2],[3,1],[3,2],[5,1],[5,2],[7,1],[7,1],[8,1],[8,1],[10,2],[6,1],[11,2],[13,1],[13,1],[13,1],[13,1],[13,1],[9,1],[9,1],[20,3],[21,4],[23,1],[23,1],[26,1],[26,3],[27,1],[27,1],[27,1],[25,1],[25,1],[25,1],[29,1],[29,1]],
+performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
+/* this == yyval */
+if (!yy.ast) {
+    yy.ast = _ast;
+    _ast.initialize();
 }
 
-const convert = {
-	rgb: {channels: 3, labels: 'rgb'},
-	hsl: {channels: 3, labels: 'hsl'},
-	hsv: {channels: 3, labels: 'hsv'},
-	hwb: {channels: 3, labels: 'hwb'},
-	cmyk: {channels: 4, labels: 'cmyk'},
-	xyz: {channels: 3, labels: 'xyz'},
-	lab: {channels: 3, labels: 'lab'},
-	lch: {channels: 3, labels: 'lch'},
-	hex: {channels: 1, labels: ['hex']},
-	keyword: {channels: 1, labels: ['keyword']},
-	ansi16: {channels: 1, labels: ['ansi16']},
-	ansi256: {channels: 1, labels: ['ansi256']},
-	hcg: {channels: 3, labels: ['h', 'c', 'g']},
-	apple: {channels: 3, labels: ['r16', 'g16', 'b16']},
-	gray: {channels: 1, labels: ['gray']}
-};
+var $0 = $$.length - 1;
+switch (yystate) {
+case 1:
+yy.ast.set({ expression: { type: "root", value: $$[$0] } }); yy.ast.unshift(); return yy.ast.yield()
+break;
+case 2:
+yy.ast.set({ expression: { type: "root", value: $$[$0-1] } }); yy.ast.unshift(); return yy.ast.yield()
+break;
+case 3:
+yy.ast.unshift(); return yy.ast.yield()
+break;
+case 4:
+yy.ast.set({ operation: "member", scope: "child", expression: { type: "identifier", value: $$[$0-1] }}); yy.ast.unshift(); return yy.ast.yield()
+break;
+case 5: case 6: case 11: case 13: case 18: case 21: case 22: case 23:
 
-module.exports = convert;
-
-// Hide .channels and .labels properties
-for (const model of Object.keys(convert)) {
-	if (!('channels' in convert[model])) {
-		throw new Error('missing channels property: ' + model);
-	}
-
-	if (!('labels' in convert[model])) {
-		throw new Error('missing channel labels property: ' + model);
-	}
-
-	if (convert[model].labels.length !== convert[model].channels) {
-		throw new Error('channel and label counts mismatch: ' + model);
-	}
-
-	const {channels, labels} = convert[model];
-	delete convert[model].channels;
-	delete convert[model].labels;
-	Object.defineProperty(convert[model], 'channels', {value: channels});
-	Object.defineProperty(convert[model], 'labels', {value: labels});
+break;
+case 7:
+yy.ast.set({ operation: "member" }); yy.ast.push()
+break;
+case 8:
+yy.ast.set({ operation: "subscript" }); yy.ast.push() 
+break;
+case 9: case 19:
+yy.ast.set({ scope: "child" })
+break;
+case 10: case 20:
+yy.ast.set({ scope: "descendant" })
+break;
+case 12:
+yy.ast.set({ scope: "child", operation: "member" })
+break;
+case 14:
+yy.ast.set({ expression: { type: "wildcard", value: $$[$0] } })
+break;
+case 15:
+yy.ast.set({ expression: { type: "identifier", value: $$[$0] } })
+break;
+case 16:
+yy.ast.set({ expression: { type: "script_expression", value: $$[$0] } })
+break;
+case 17:
+yy.ast.set({ expression: { type: "numeric_literal", value: parseInt($$[$0]) } })
+break;
+case 24:
+$$[$0].length > 1? yy.ast.set({ expression: { type: "union", value: $$[$0] } }) : this.$ = $$[$0]
+break;
+case 25:
+this.$ = [$$[$0]]
+break;
+case 26:
+this.$ = $$[$0-2].concat($$[$0])
+break;
+case 27:
+this.$ = { expression: { type: "numeric_literal", value: parseInt($$[$0]) } }; yy.ast.set(this.$)
+break;
+case 28:
+this.$ = { expression: { type: "string_literal", value: $$[$0] } }; yy.ast.set(this.$)
+break;
+case 29:
+this.$ = { expression: { type: "slice", value: $$[$0] } }; yy.ast.set(this.$)
+break;
+case 30:
+this.$ = { expression: { type: "wildcard", value: $$[$0] } }; yy.ast.set(this.$)
+break;
+case 31:
+this.$ = { expression: { type: "script_expression", value: $$[$0] } }; yy.ast.set(this.$)
+break;
+case 32:
+this.$ = { expression: { type: "filter_expression", value: $$[$0] } }; yy.ast.set(this.$)
+break;
+case 33: case 34:
+this.$ = $$[$0]
+break;
 }
+},
+table: [{3:1,4:[1,2],6:3,13:4,15:$V0,16:$V1,17:$V2,18:$V3,19:$V4},{1:[3]},{1:[2,1],5:10,7:11,8:12,9:13,10:14,11:15,12:$V5,14:$V6,20:16,21:17,22:$V7},{1:[2,3],5:21,7:11,8:12,9:13,10:14,11:15,12:$V5,14:$V6,20:16,21:17,22:$V7},o($V8,[2,12]),o($V8,[2,14]),o($V8,[2,15]),o($V8,[2,16]),o($V8,[2,17]),o($V8,[2,18]),{1:[2,2],7:22,8:12,9:13,10:14,11:15,12:$V5,14:$V6,20:16,21:17,22:$V7},o($V8,[2,5]),o($V8,[2,7]),o($V8,[2,8]),o($V8,[2,9]),o($V8,[2,10]),o($V8,[2,19]),o($V8,[2,20]),{13:23,15:$V0,16:$V1,17:$V2,18:$V3,19:$V4},{13:24,15:$V0,16:$V1,17:$V2,18:$V3,19:$V4,22:[1,25]},{15:$V9,17:$Va,18:$Vb,23:26,25:27,26:28,27:32,29:34,30:$Vc,31:$Vd,32:$Ve,33:$Vf},{1:[2,4],7:22,8:12,9:13,10:14,11:15,12:$V5,14:$V6,20:16,21:17,22:$V7},o($V8,[2,6]),o($V8,[2,11]),o($V8,[2,13]),{15:$V9,17:$Va,18:$Vb,23:38,25:27,26:28,27:32,29:34,30:$Vc,31:$Vd,32:$Ve,33:$Vf},{24:[1,39]},{24:[2,23]},{24:[2,24],28:[1,40]},{24:[2,30]},{24:[2,31]},{24:[2,32]},o($Vg,[2,25]),o($Vg,[2,27]),o($Vg,[2,28]),o($Vg,[2,29]),o($Vg,[2,33]),o($Vg,[2,34]),{24:[1,41]},o($V8,[2,21]),{18:$Vb,27:42,29:34,30:$Vc,32:$Ve,33:$Vf},o($V8,[2,22]),o($Vg,[2,26])],
+defaultActions: {27:[2,23],29:[2,30],30:[2,31],31:[2,32]},
+parseError: function parseError (str, hash) {
+    if (hash.recoverable) {
+        this.trace(str);
+    } else {
+        var error = new Error(str);
+        error.hash = hash;
+        throw error;
+    }
+},
+parse: function parse(input) {
+    var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
+    var args = lstack.slice.call(arguments, 1);
+    var lexer = Object.create(this.lexer);
+    var sharedState = { yy: {} };
+    for (var k in this.yy) {
+        if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
+            sharedState.yy[k] = this.yy[k];
+        }
+    }
+    lexer.setInput(input, sharedState.yy);
+    sharedState.yy.lexer = lexer;
+    sharedState.yy.parser = this;
+    if (typeof lexer.yylloc == 'undefined') {
+        lexer.yylloc = {};
+    }
+    var yyloc = lexer.yylloc;
+    lstack.push(yyloc);
+    var ranges = lexer.options && lexer.options.ranges;
+    if (typeof sharedState.yy.parseError === 'function') {
+        this.parseError = sharedState.yy.parseError;
+    } else {
+        this.parseError = Object.getPrototypeOf(this).parseError;
+    }
+    function popStack(n) {
+        stack.length = stack.length - 2 * n;
+        vstack.length = vstack.length - n;
+        lstack.length = lstack.length - n;
+    }
+    _token_stack:
+        var lex = function () {
+            var token;
+            token = lexer.lex() || EOF;
+            if (typeof token !== 'number') {
+                token = self.symbols_[token] || token;
+            }
+            return token;
+        };
+    var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
+    while (true) {
+        state = stack[stack.length - 1];
+        if (this.defaultActions[state]) {
+            action = this.defaultActions[state];
+        } else {
+            if (symbol === null || typeof symbol == 'undefined') {
+                symbol = lex();
+            }
+            action = table[state] && table[state][symbol];
+        }
+                    if (typeof action === 'undefined' || !action.length || !action[0]) {
+                var errStr = '';
+                expected = [];
+                for (p in table[state]) {
+                    if (this.terminals_[p] && p > TERROR) {
+                        expected.push('\'' + this.terminals_[p] + '\'');
+                    }
+                }
+                if (lexer.showPosition) {
+                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
+                } else {
+                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
+                }
+                this.parseError(errStr, {
+                    text: lexer.match,
+                    token: this.terminals_[symbol] || symbol,
+                    line: lexer.yylineno,
+                    loc: yyloc,
+                    expected: expected
+                });
+            }
+        if (action[0] instanceof Array && action.length > 1) {
+            throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
+        }
+        switch (action[0]) {
+        case 1:
+            stack.push(symbol);
+            vstack.push(lexer.yytext);
+            lstack.push(lexer.yylloc);
+            stack.push(action[1]);
+            symbol = null;
+            if (!preErrorSymbol) {
+                yyleng = lexer.yyleng;
+                yytext = lexer.yytext;
+                yylineno = lexer.yylineno;
+                yyloc = lexer.yylloc;
+                if (recovering > 0) {
+                    recovering--;
+                }
+            } else {
+                symbol = preErrorSymbol;
+                preErrorSymbol = null;
+            }
+            break;
+        case 2:
+            len = this.productions_[action[1]][1];
+            yyval.$ = vstack[vstack.length - len];
+            yyval._$ = {
+                first_line: lstack[lstack.length - (len || 1)].first_line,
+                last_line: lstack[lstack.length - 1].last_line,
+                first_column: lstack[lstack.length - (len || 1)].first_column,
+                last_column: lstack[lstack.length - 1].last_column
+            };
+            if (ranges) {
+                yyval._$.range = [
+                    lstack[lstack.length - (len || 1)].range[0],
+                    lstack[lstack.length - 1].range[1]
+                ];
+            }
+            r = this.performAction.apply(yyval, [
+                yytext,
+                yyleng,
+                yylineno,
+                sharedState.yy,
+                action[1],
+                vstack,
+                lstack
+            ].concat(args));
+            if (typeof r !== 'undefined') {
+                return r;
+            }
+            if (len) {
+                stack = stack.slice(0, -1 * len * 2);
+                vstack = vstack.slice(0, -1 * len);
+                lstack = lstack.slice(0, -1 * len);
+            }
+            stack.push(this.productions_[action[1]][0]);
+            vstack.push(yyval.$);
+            lstack.push(yyval._$);
+            newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
+            stack.push(newState);
+            break;
+        case 3:
+            return true;
+        }
+    }
+    return true;
+}};
+var _ast = {
 
-convert.rgb.hsl = function (rgb) {
-	const r = rgb[0] / 255;
-	const g = rgb[1] / 255;
-	const b = rgb[2] / 255;
-	const min = Math.min(r, g, b);
-	const max = Math.max(r, g, b);
-	const delta = max - min;
-	let h;
-	let s;
+  initialize: function() {
+    this._nodes = [];
+    this._node = {};
+    this._stash = [];
+  },
 
-	if (max === min) {
-		h = 0;
-	} else if (r === max) {
-		h = (g - b) / delta;
-	} else if (g === max) {
-		h = 2 + (b - r) / delta;
-	} else if (b === max) {
-		h = 4 + (r - g) / delta;
-	}
+  set: function(props) {
+    for (var k in props) this._node[k] = props[k];
+    return this._node;
+  },
 
-	h = Math.min(h * 60, 360);
+  node: function(obj) {
+    if (arguments.length) this._node = obj;
+    return this._node;
+  },
 
-	if (h < 0) {
-		h += 360;
-	}
+  push: function() {
+    this._nodes.push(this._node);
+    this._node = {};
+  },
 
-	const l = (min + max) / 2;
+  unshift: function() {
+    this._nodes.unshift(this._node);
+    this._node = {};
+  },
 
-	if (max === min) {
-		s = 0;
-	} else if (l <= 0.5) {
-		s = delta / (max + min);
-	} else {
-		s = delta / (2 - max - min);
-	}
-
-	return [h, s * 100, l * 100];
+  yield: function() {
+    var _nodes = this._nodes;
+    this.initialize();
+    return _nodes;
+  }
 };
+/* generated by jison-lex 0.3.4 */
+var lexer = (function(){
+var lexer = ({
 
-convert.rgb.hsv = function (rgb) {
-	let rdif;
-	let gdif;
-	let bdif;
-	let h;
-	let s;
+EOF:1,
 
-	const r = rgb[0] / 255;
-	const g = rgb[1] / 255;
-	const b = rgb[2] / 255;
-	const v = Math.max(r, g, b);
-	const diff = v - Math.min(r, g, b);
-	const diffc = function (c) {
-		return (v - c) / 6 / diff + 1 / 2;
-	};
+parseError:function parseError(str, hash) {
+        if (this.yy.parser) {
+            this.yy.parser.parseError(str, hash);
+        } else {
+            throw new Error(str);
+        }
+    },
 
-	if (diff === 0) {
-		h = 0;
-		s = 0;
-	} else {
-		s = diff / v;
-		rdif = diffc(r);
-		gdif = diffc(g);
-		bdif = diffc(b);
+// resets the lexer, sets new input
+setInput:function (input, yy) {
+        this.yy = yy || this.yy || {};
+        this._input = input;
+        this._more = this._backtrack = this.done = false;
+        this.yylineno = this.yyleng = 0;
+        this.yytext = this.matched = this.match = '';
+        this.conditionStack = ['INITIAL'];
+        this.yylloc = {
+            first_line: 1,
+            first_column: 0,
+            last_line: 1,
+            last_column: 0
+        };
+        if (this.options.ranges) {
+            this.yylloc.range = [0,0];
+        }
+        this.offset = 0;
+        return this;
+    },
 
-		if (r === v) {
-			h = bdif - gdif;
-		} else if (g === v) {
-			h = (1 / 3) + rdif - bdif;
-		} else if (b === v) {
-			h = (2 / 3) + gdif - rdif;
-		}
+// consumes and returns one char from the input
+input:function () {
+        var ch = this._input[0];
+        this.yytext += ch;
+        this.yyleng++;
+        this.offset++;
+        this.match += ch;
+        this.matched += ch;
+        var lines = ch.match(/(?:\r\n?|\n).*/g);
+        if (lines) {
+            this.yylineno++;
+            this.yylloc.last_line++;
+        } else {
+            this.yylloc.last_column++;
+        }
+        if (this.options.ranges) {
+            this.yylloc.range[1]++;
+        }
 
-		if (h < 0) {
-			h += 1;
-		} else if (h > 1) {
-			h -= 1;
-		}
-	}
+        this._input = this._input.slice(1);
+        return ch;
+    },
 
-	return [
-		h * 360,
-		s * 100,
-		v * 100
-	];
-};
+// unshifts one char (or a string) into the input
+unput:function (ch) {
+        var len = ch.length;
+        var lines = ch.split(/(?:\r\n?|\n)/g);
 
-convert.rgb.hwb = function (rgb) {
-	const r = rgb[0];
-	const g = rgb[1];
-	let b = rgb[2];
-	const h = convert.rgb.hsl(rgb)[0];
-	const w = 1 / 255 * Math.min(r, Math.min(g, b));
+        this._input = ch + this._input;
+        this.yytext = this.yytext.substr(0, this.yytext.length - len);
+        //this.yyleng -= len;
+        this.offset -= len;
+        var oldLines = this.match.split(/(?:\r\n?|\n)/g);
+        this.match = this.match.substr(0, this.match.length - 1);
+        this.matched = this.matched.substr(0, this.matched.length - 1);
 
-	b = 1 - 1 / 255 * Math.max(r, Math.max(g, b));
+        if (lines.length - 1) {
+            this.yylineno -= lines.length - 1;
+        }
+        var r = this.yylloc.range;
 
-	return [h, w * 100, b * 100];
-};
+        this.yylloc = {
+            first_line: this.yylloc.first_line,
+            last_line: this.yylineno + 1,
+            first_column: this.yylloc.first_column,
+            last_column: lines ?
+                (lines.length === oldLines.length ? this.yylloc.first_column : 0)
+                 + oldLines[oldLines.length - lines.length].length - lines[0].length :
+              this.yylloc.first_column - len
+        };
 
-convert.rgb.cmyk = function (rgb) {
-	const r = rgb[0] / 255;
-	const g = rgb[1] / 255;
-	const b = rgb[2] / 255;
+        if (this.options.ranges) {
+            this.yylloc.range = [r[0], r[0] + this.yyleng - len];
+        }
+        this.yyleng = this.yytext.length;
+        return this;
+    },
 
-	const k = Math.min(1 - r, 1 - g, 1 - b);
-	const c = (1 - r - k) / (1 - k) || 0;
-	const m = (1 - g - k) / (1 - k) || 0;
-	const y = (1 - b - k) / (1 - k) || 0;
+// When called from action, caches matched text and appends it on next action
+more:function () {
+        this._more = true;
+        return this;
+    },
 
-	return [c * 100, m * 100, y * 100, k * 100];
-};
+// When called from action, signals the lexer that this rule fails to match the input, so the next matching rule (regex) should be tested instead.
+reject:function () {
+        if (this.options.backtrack_lexer) {
+            this._backtrack = true;
+        } else {
+            return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).\n' + this.showPosition(), {
+                text: "",
+                token: null,
+                line: this.yylineno
+            });
 
-function comparativeDistance(x, y) {
-	/*
-		See https://en.m.wikipedia.org/wiki/Euclidean_distance#Squared_Euclidean_distance
-	*/
-	return (
-		((x[0] - y[0]) ** 2) +
-		((x[1] - y[1]) ** 2) +
-		((x[2] - y[2]) ** 2)
-	);
+        }
+        return this;
+    },
+
+// retain first n characters of the match
+less:function (n) {
+        this.unput(this.match.slice(n));
+    },
+
+// displays already matched input, i.e. for error messages
+pastInput:function () {
+        var past = this.matched.substr(0, this.matched.length - this.match.length);
+        return (past.length > 20 ? '...':'') + past.substr(-20).replace(/\n/g, "");
+    },
+
+// displays upcoming input, i.e. for error messages
+upcomingInput:function () {
+        var next = this.match;
+        if (next.length < 20) {
+            next += this._input.substr(0, 20-next.length);
+        }
+        return (next.substr(0,20) + (next.length > 20 ? '...' : '')).replace(/\n/g, "");
+    },
+
+// displays the character position where the lexing error occurred, i.e. for error messages
+showPosition:function () {
+        var pre = this.pastInput();
+        var c = new Array(pre.length + 1).join("-");
+        return pre + this.upcomingInput() + "\n" + c + "^";
+    },
+
+// test the lexed token: return FALSE when not a match, otherwise return token
+test_match:function(match, indexed_rule) {
+        var token,
+            lines,
+            backup;
+
+        if (this.options.backtrack_lexer) {
+            // save context
+            backup = {
+                yylineno: this.yylineno,
+                yylloc: {
+                    first_line: this.yylloc.first_line,
+                    last_line: this.last_line,
+                    first_column: this.yylloc.first_column,
+                    last_column: this.yylloc.last_column
+                },
+                yytext: this.yytext,
+                match: this.match,
+                matches: this.matches,
+                matched: this.matched,
+                yyleng: this.yyleng,
+                offset: this.offset,
+                _more: this._more,
+                _input: this._input,
+                yy: this.yy,
+                conditionStack: this.conditionStack.slice(0),
+                done: this.done
+            };
+            if (this.options.ranges) {
+                backup.yylloc.range = this.yylloc.range.slice(0);
+            }
+        }
+
+        lines = match[0].match(/(?:\r\n?|\n).*/g);
+        if (lines) {
+            this.yylineno += lines.length;
+        }
+        this.yylloc = {
+            first_line: this.yylloc.last_line,
+            last_line: this.yylineno + 1,
+            first_column: this.yylloc.last_column,
+            last_column: lines ?
+                         lines[lines.length - 1].length - lines[lines.length - 1].match(/\r?\n?/)[0].length :
+                         this.yylloc.last_column + match[0].length
+        };
+        this.yytext += match[0];
+        this.match += match[0];
+        this.matches = match;
+        this.yyleng = this.yytext.length;
+        if (this.options.ranges) {
+            this.yylloc.range = [this.offset, this.offset += this.yyleng];
+        }
+        this._more = false;
+        this._backtrack = false;
+        this._input = this._input.slice(match[0].length);
+        this.matched += match[0];
+        token = this.performAction.call(this, this.yy, this, indexed_rule, this.conditionStack[this.conditionStack.length - 1]);
+        if (this.done && this._input) {
+            this.done = false;
+        }
+        if (token) {
+            return token;
+        } else if (this._backtrack) {
+            // recover context
+            for (var k in backup) {
+                this[k] = backup[k];
+            }
+            return false; // rule action called reject() implying the next rule should be tested instead.
+        }
+        return false;
+    },
+
+// return next match in input
+next:function () {
+        if (this.done) {
+            return this.EOF;
+        }
+        if (!this._input) {
+            this.done = true;
+        }
+
+        var token,
+            match,
+            tempMatch,
+            index;
+        if (!this._more) {
+            this.yytext = '';
+            this.match = '';
+        }
+        var rules = this._currentRules();
+        for (var i = 0; i < rules.length; i++) {
+            tempMatch = this._input.match(this.rules[rules[i]]);
+            if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
+                match = tempMatch;
+                index = i;
+                if (this.options.backtrack_lexer) {
+                    token = this.test_match(tempMatch, rules[i]);
+                    if (token !== false) {
+                        return token;
+                    } else if (this._backtrack) {
+                        match = false;
+                        continue; // rule action called reject() implying a rule MISmatch.
+                    } else {
+                        // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+                        return false;
+                    }
+                } else if (!this.options.flex) {
+                    break;
+                }
+            }
+        }
+        if (match) {
+            token = this.test_match(match, rules[index]);
+            if (token !== false) {
+                return token;
+            }
+            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+            return false;
+        }
+        if (this._input === "") {
+            return this.EOF;
+        } else {
+            return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. Unrecognized text.\n' + this.showPosition(), {
+                text: "",
+                token: null,
+                line: this.yylineno
+            });
+        }
+    },
+
+// return next match that has a token
+lex:function lex () {
+        var r = this.next();
+        if (r) {
+            return r;
+        } else {
+            return this.lex();
+        }
+    },
+
+// activates a new lexer condition state (pushes the new lexer condition state onto the condition stack)
+begin:function begin (condition) {
+        this.conditionStack.push(condition);
+    },
+
+// pop the previously active lexer condition state off the condition stack
+popState:function popState () {
+        var n = this.conditionStack.length - 1;
+        if (n > 0) {
+            return this.conditionStack.pop();
+        } else {
+            return this.conditionStack[0];
+        }
+    },
+
+// produce the lexer rule set which is active for the currently active lexer condition state
+_currentRules:function _currentRules () {
+        if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
+            return this.conditions[this.conditionStack[this.conditionStack.length - 1]].rules;
+        } else {
+            return this.conditions["INITIAL"].rules;
+        }
+    },
+
+// return the currently active lexer condition state; when an index argument is provided it produces the N-th previous condition state, if available
+topState:function topState (n) {
+        n = this.conditionStack.length - 1 - Math.abs(n || 0);
+        if (n >= 0) {
+            return this.conditionStack[n];
+        } else {
+            return "INITIAL";
+        }
+    },
+
+// alias for begin(condition)
+pushState:function pushState (condition) {
+        this.begin(condition);
+    },
+
+// return the number of states currently on the stack
+stateStackSize:function stateStackSize() {
+        return this.conditionStack.length;
+    },
+options: {},
+performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
+var YYSTATE=YY_START;
+switch($avoiding_name_collisions) {
+case 0:return 4
+break;
+case 1:return 14
+break;
+case 2:return 12
+break;
+case 3:return 15
+break;
+case 4:return 16
+break;
+case 5:return 22
+break;
+case 6:return 24
+break;
+case 7:return 28
+break;
+case 8:return 30
+break;
+case 9:return 18
+break;
+case 10:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 32;
+break;
+case 11:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 33;
+break;
+case 12:return 17
+break;
+case 13:return 31
+break;
 }
-
-convert.rgb.keyword = function (rgb) {
-	const reversed = reverseKeywords[rgb];
-	if (reversed) {
-		return reversed;
-	}
-
-	let currentClosestDistance = Infinity;
-	let currentClosestKeyword;
-
-	for (const keyword of Object.keys(cssKeywords)) {
-		const value = cssKeywords[keyword];
-
-		// Compute comparative distance
-		const distance = comparativeDistance(rgb, value);
-
-		// Check if its less, if so set as closest
-		if (distance < currentClosestDistance) {
-			currentClosestDistance = distance;
-			currentClosestKeyword = keyword;
-		}
-	}
-
-	return currentClosestKeyword;
-};
-
-convert.keyword.rgb = function (keyword) {
-	return cssKeywords[keyword];
-};
-
-convert.rgb.xyz = function (rgb) {
-	let r = rgb[0] / 255;
-	let g = rgb[1] / 255;
-	let b = rgb[2] / 255;
-
-	// Assume sRGB
-	r = r > 0.04045 ? (((r + 0.055) / 1.055) ** 2.4) : (r / 12.92);
-	g = g > 0.04045 ? (((g + 0.055) / 1.055) ** 2.4) : (g / 12.92);
-	b = b > 0.04045 ? (((b + 0.055) / 1.055) ** 2.4) : (b / 12.92);
-
-	const x = (r * 0.4124) + (g * 0.3576) + (b * 0.1805);
-	const y = (r * 0.2126) + (g * 0.7152) + (b * 0.0722);
-	const z = (r * 0.0193) + (g * 0.1192) + (b * 0.9505);
-
-	return [x * 100, y * 100, z * 100];
-};
-
-convert.rgb.lab = function (rgb) {
-	const xyz = convert.rgb.xyz(rgb);
-	let x = xyz[0];
-	let y = xyz[1];
-	let z = xyz[2];
-
-	x /= 95.047;
-	y /= 100;
-	z /= 108.883;
-
-	x = x > 0.008856 ? (x ** (1 / 3)) : (7.787 * x) + (16 / 116);
-	y = y > 0.008856 ? (y ** (1 / 3)) : (7.787 * y) + (16 / 116);
-	z = z > 0.008856 ? (z ** (1 / 3)) : (7.787 * z) + (16 / 116);
-
-	const l = (116 * y) - 16;
-	const a = 500 * (x - y);
-	const b = 200 * (y - z);
-
-	return [l, a, b];
-};
-
-convert.hsl.rgb = function (hsl) {
-	const h = hsl[0] / 360;
-	const s = hsl[1] / 100;
-	const l = hsl[2] / 100;
-	let t2;
-	let t3;
-	let val;
-
-	if (s === 0) {
-		val = l * 255;
-		return [val, val, val];
-	}
-
-	if (l < 0.5) {
-		t2 = l * (1 + s);
-	} else {
-		t2 = l + s - l * s;
-	}
-
-	const t1 = 2 * l - t2;
-
-	const rgb = [0, 0, 0];
-	for (let i = 0; i < 3; i++) {
-		t3 = h + 1 / 3 * -(i - 1);
-		if (t3 < 0) {
-			t3++;
-		}
-
-		if (t3 > 1) {
-			t3--;
-		}
-
-		if (6 * t3 < 1) {
-			val = t1 + (t2 - t1) * 6 * t3;
-		} else if (2 * t3 < 1) {
-			val = t2;
-		} else if (3 * t3 < 2) {
-			val = t1 + (t2 - t1) * (2 / 3 - t3) * 6;
-		} else {
-			val = t1;
-		}
-
-		rgb[i] = val * 255;
-	}
-
-	return rgb;
-};
-
-convert.hsl.hsv = function (hsl) {
-	const h = hsl[0];
-	let s = hsl[1] / 100;
-	let l = hsl[2] / 100;
-	let smin = s;
-	const lmin = Math.max(l, 0.01);
-
-	l *= 2;
-	s *= (l <= 1) ? l : 2 - l;
-	smin *= lmin <= 1 ? lmin : 2 - lmin;
-	const v = (l + s) / 2;
-	const sv = l === 0 ? (2 * smin) / (lmin + smin) : (2 * s) / (l + s);
-
-	return [h, sv * 100, v * 100];
-};
-
-convert.hsv.rgb = function (hsv) {
-	const h = hsv[0] / 60;
-	const s = hsv[1] / 100;
-	let v = hsv[2] / 100;
-	const hi = Math.floor(h) % 6;
-
-	const f = h - Math.floor(h);
-	const p = 255 * v * (1 - s);
-	const q = 255 * v * (1 - (s * f));
-	const t = 255 * v * (1 - (s * (1 - f)));
-	v *= 255;
-
-	switch (hi) {
-		case 0:
-			return [v, t, p];
-		case 1:
-			return [q, v, p];
-		case 2:
-			return [p, v, t];
-		case 3:
-			return [p, q, v];
-		case 4:
-			return [t, p, v];
-		case 5:
-			return [v, p, q];
-	}
-};
-
-convert.hsv.hsl = function (hsv) {
-	const h = hsv[0];
-	const s = hsv[1] / 100;
-	const v = hsv[2] / 100;
-	const vmin = Math.max(v, 0.01);
-	let sl;
-	let l;
-
-	l = (2 - s) * v;
-	const lmin = (2 - s) * vmin;
-	sl = s * vmin;
-	sl /= (lmin <= 1) ? lmin : 2 - lmin;
-	sl = sl || 0;
-	l /= 2;
-
-	return [h, sl * 100, l * 100];
-};
-
-// http://dev.w3.org/csswg/css-color/#hwb-to-rgb
-convert.hwb.rgb = function (hwb) {
-	const h = hwb[0] / 360;
-	let wh = hwb[1] / 100;
-	let bl = hwb[2] / 100;
-	const ratio = wh + bl;
-	let f;
-
-	// Wh + bl cant be > 1
-	if (ratio > 1) {
-		wh /= ratio;
-		bl /= ratio;
-	}
-
-	const i = Math.floor(6 * h);
-	const v = 1 - bl;
-	f = 6 * h - i;
-
-	if ((i & 0x01) !== 0) {
-		f = 1 - f;
-	}
-
-	const n = wh + f * (v - wh); // Linear interpolation
-
-	let r;
-	let g;
-	let b;
-	/* eslint-disable max-statements-per-line,no-multi-spaces */
-	switch (i) {
-		default:
-		case 6:
-		case 0: r = v;  g = n;  b = wh; break;
-		case 1: r = n;  g = v;  b = wh; break;
-		case 2: r = wh; g = v;  b = n; break;
-		case 3: r = wh; g = n;  b = v; break;
-		case 4: r = n;  g = wh; b = v; break;
-		case 5: r = v;  g = wh; b = n; break;
-	}
-	/* eslint-enable max-statements-per-line,no-multi-spaces */
-
-	return [r * 255, g * 255, b * 255];
-};
-
-convert.cmyk.rgb = function (cmyk) {
-	const c = cmyk[0] / 100;
-	const m = cmyk[1] / 100;
-	const y = cmyk[2] / 100;
-	const k = cmyk[3] / 100;
-
-	const r = 1 - Math.min(1, c * (1 - k) + k);
-	const g = 1 - Math.min(1, m * (1 - k) + k);
-	const b = 1 - Math.min(1, y * (1 - k) + k);
-
-	return [r * 255, g * 255, b * 255];
-};
-
-convert.xyz.rgb = function (xyz) {
-	const x = xyz[0] / 100;
-	const y = xyz[1] / 100;
-	const z = xyz[2] / 100;
-	let r;
-	let g;
-	let b;
-
-	r = (x * 3.2406) + (y * -1.5372) + (z * -0.4986);
-	g = (x * -0.9689) + (y * 1.8758) + (z * 0.0415);
-	b = (x * 0.0557) + (y * -0.2040) + (z * 1.0570);
-
-	// Assume sRGB
-	r = r > 0.0031308
-		? ((1.055 * (r ** (1.0 / 2.4))) - 0.055)
-		: r * 12.92;
-
-	g = g > 0.0031308
-		? ((1.055 * (g ** (1.0 / 2.4))) - 0.055)
-		: g * 12.92;
-
-	b = b > 0.0031308
-		? ((1.055 * (b ** (1.0 / 2.4))) - 0.055)
-		: b * 12.92;
-
-	r = Math.min(Math.max(0, r), 1);
-	g = Math.min(Math.max(0, g), 1);
-	b = Math.min(Math.max(0, b), 1);
-
-	return [r * 255, g * 255, b * 255];
-};
-
-convert.xyz.lab = function (xyz) {
-	let x = xyz[0];
-	let y = xyz[1];
-	let z = xyz[2];
-
-	x /= 95.047;
-	y /= 100;
-	z /= 108.883;
-
-	x = x > 0.008856 ? (x ** (1 / 3)) : (7.787 * x) + (16 / 116);
-	y = y > 0.008856 ? (y ** (1 / 3)) : (7.787 * y) + (16 / 116);
-	z = z > 0.008856 ? (z ** (1 / 3)) : (7.787 * z) + (16 / 116);
-
-	const l = (116 * y) - 16;
-	const a = 500 * (x - y);
-	const b = 200 * (y - z);
-
-	return [l, a, b];
-};
-
-convert.lab.xyz = function (lab) {
-	const l = lab[0];
-	const a = lab[1];
-	const b = lab[2];
-	let x;
-	let y;
-	let z;
-
-	y = (l + 16) / 116;
-	x = a / 500 + y;
-	z = y - b / 200;
-
-	const y2 = y ** 3;
-	const x2 = x ** 3;
-	const z2 = z ** 3;
-	y = y2 > 0.008856 ? y2 : (y - 16 / 116) / 7.787;
-	x = x2 > 0.008856 ? x2 : (x - 16 / 116) / 7.787;
-	z = z2 > 0.008856 ? z2 : (z - 16 / 116) / 7.787;
-
-	x *= 95.047;
-	y *= 100;
-	z *= 108.883;
-
-	return [x, y, z];
-};
-
-convert.lab.lch = function (lab) {
-	const l = lab[0];
-	const a = lab[1];
-	const b = lab[2];
-	let h;
-
-	const hr = Math.atan2(b, a);
-	h = hr * 360 / 2 / Math.PI;
-
-	if (h < 0) {
-		h += 360;
-	}
-
-	const c = Math.sqrt(a * a + b * b);
-
-	return [l, c, h];
-};
-
-convert.lch.lab = function (lch) {
-	const l = lch[0];
-	const c = lch[1];
-	const h = lch[2];
-
-	const hr = h / 360 * 2 * Math.PI;
-	const a = c * Math.cos(hr);
-	const b = c * Math.sin(hr);
-
-	return [l, a, b];
-};
-
-convert.rgb.ansi16 = function (args, saturation = null) {
-	const [r, g, b] = args;
-	let value = saturation === null ? convert.rgb.hsv(args)[2] : saturation; // Hsv -> ansi16 optimization
-
-	value = Math.round(value / 50);
-
-	if (value === 0) {
-		return 30;
-	}
-
-	let ansi = 30
-		+ ((Math.round(b / 255) << 2)
-		| (Math.round(g / 255) << 1)
-		| Math.round(r / 255));
-
-	if (value === 2) {
-		ansi += 60;
-	}
-
-	return ansi;
-};
-
-convert.hsv.ansi16 = function (args) {
-	// Optimization here; we already know the value and don't need to get
-	// it converted for us.
-	return convert.rgb.ansi16(convert.hsv.rgb(args), args[2]);
-};
-
-convert.rgb.ansi256 = function (args) {
-	const r = args[0];
-	const g = args[1];
-	const b = args[2];
-
-	// We use the extended greyscale palette here, with the exception of
-	// black and white. normal palette only has 4 greyscale shades.
-	if (r === g && g === b) {
-		if (r < 8) {
-			return 16;
-		}
-
-		if (r > 248) {
-			return 231;
-		}
-
-		return Math.round(((r - 8) / 247) * 24) + 232;
-	}
-
-	const ansi = 16
-		+ (36 * Math.round(r / 255 * 5))
-		+ (6 * Math.round(g / 255 * 5))
-		+ Math.round(b / 255 * 5);
-
-	return ansi;
-};
-
-convert.ansi16.rgb = function (args) {
-	let color = args % 10;
-
-	// Handle greyscale
-	if (color === 0 || color === 7) {
-		if (args > 50) {
-			color += 3.5;
-		}
-
-		color = color / 10.5 * 255;
-
-		return [color, color, color];
-	}
-
-	const mult = (~~(args > 50) + 1) * 0.5;
-	const r = ((color & 1) * mult) * 255;
-	const g = (((color >> 1) & 1) * mult) * 255;
-	const b = (((color >> 2) & 1) * mult) * 255;
-
-	return [r, g, b];
-};
-
-convert.ansi256.rgb = function (args) {
-	// Handle greyscale
-	if (args >= 232) {
-		const c = (args - 232) * 10 + 8;
-		return [c, c, c];
-	}
-
-	args -= 16;
-
-	let rem;
-	const r = Math.floor(args / 36) / 5 * 255;
-	const g = Math.floor((rem = args % 36) / 6) / 5 * 255;
-	const b = (rem % 6) / 5 * 255;
-
-	return [r, g, b];
-};
-
-convert.rgb.hex = function (args) {
-	const integer = ((Math.round(args[0]) & 0xFF) << 16)
-		+ ((Math.round(args[1]) & 0xFF) << 8)
-		+ (Math.round(args[2]) & 0xFF);
-
-	const string = integer.toString(16).toUpperCase();
-	return '000000'.substring(string.length) + string;
-};
-
-convert.hex.rgb = function (args) {
-	const match = args.toString(16).match(/[a-f0-9]{6}|[a-f0-9]{3}/i);
-	if (!match) {
-		return [0, 0, 0];
-	}
-
-	let colorString = match[0];
-
-	if (match[0].length === 3) {
-		colorString = colorString.split('').map(char => {
-			return char + char;
-		}).join('');
-	}
-
-	const integer = parseInt(colorString, 16);
-	const r = (integer >> 16) & 0xFF;
-	const g = (integer >> 8) & 0xFF;
-	const b = integer & 0xFF;
-
-	return [r, g, b];
-};
-
-convert.rgb.hcg = function (rgb) {
-	const r = rgb[0] / 255;
-	const g = rgb[1] / 255;
-	const b = rgb[2] / 255;
-	const max = Math.max(Math.max(r, g), b);
-	const min = Math.min(Math.min(r, g), b);
-	const chroma = (max - min);
-	let grayscale;
-	let hue;
-
-	if (chroma < 1) {
-		grayscale = min / (1 - chroma);
-	} else {
-		grayscale = 0;
-	}
-
-	if (chroma <= 0) {
-		hue = 0;
-	} else
-	if (max === r) {
-		hue = ((g - b) / chroma) % 6;
-	} else
-	if (max === g) {
-		hue = 2 + (b - r) / chroma;
-	} else {
-		hue = 4 + (r - g) / chroma;
-	}
-
-	hue /= 6;
-	hue %= 1;
-
-	return [hue * 360, chroma * 100, grayscale * 100];
-};
-
-convert.hsl.hcg = function (hsl) {
-	const s = hsl[1] / 100;
-	const l = hsl[2] / 100;
-
-	const c = l < 0.5 ? (2.0 * s * l) : (2.0 * s * (1.0 - l));
-
-	let f = 0;
-	if (c < 1.0) {
-		f = (l - 0.5 * c) / (1.0 - c);
-	}
-
-	return [hsl[0], c * 100, f * 100];
-};
-
-convert.hsv.hcg = function (hsv) {
-	const s = hsv[1] / 100;
-	const v = hsv[2] / 100;
-
-	const c = s * v;
-	let f = 0;
-
-	if (c < 1.0) {
-		f = (v - c) / (1 - c);
-	}
-
-	return [hsv[0], c * 100, f * 100];
-};
-
-convert.hcg.rgb = function (hcg) {
-	const h = hcg[0] / 360;
-	const c = hcg[1] / 100;
-	const g = hcg[2] / 100;
-
-	if (c === 0.0) {
-		return [g * 255, g * 255, g * 255];
-	}
-
-	const pure = [0, 0, 0];
-	const hi = (h % 1) * 6;
-	const v = hi % 1;
-	const w = 1 - v;
-	let mg = 0;
-
-	/* eslint-disable max-statements-per-line */
-	switch (Math.floor(hi)) {
-		case 0:
-			pure[0] = 1; pure[1] = v; pure[2] = 0; break;
-		case 1:
-			pure[0] = w; pure[1] = 1; pure[2] = 0; break;
-		case 2:
-			pure[0] = 0; pure[1] = 1; pure[2] = v; break;
-		case 3:
-			pure[0] = 0; pure[1] = w; pure[2] = 1; break;
-		case 4:
-			pure[0] = v; pure[1] = 0; pure[2] = 1; break;
-		default:
-			pure[0] = 1; pure[1] = 0; pure[2] = w;
-	}
-	/* eslint-enable max-statements-per-line */
-
-	mg = (1.0 - c) * g;
-
-	return [
-		(c * pure[0] + mg) * 255,
-		(c * pure[1] + mg) * 255,
-		(c * pure[2] + mg) * 255
-	];
-};
-
-convert.hcg.hsv = function (hcg) {
-	const c = hcg[1] / 100;
-	const g = hcg[2] / 100;
-
-	const v = c + g * (1.0 - c);
-	let f = 0;
-
-	if (v > 0.0) {
-		f = c / v;
-	}
-
-	return [hcg[0], f * 100, v * 100];
-};
-
-convert.hcg.hsl = function (hcg) {
-	const c = hcg[1] / 100;
-	const g = hcg[2] / 100;
-
-	const l = g * (1.0 - c) + 0.5 * c;
-	let s = 0;
-
-	if (l > 0.0 && l < 0.5) {
-		s = c / (2 * l);
-	} else
-	if (l >= 0.5 && l < 1.0) {
-		s = c / (2 * (1 - l));
-	}
-
-	return [hcg[0], s * 100, l * 100];
-};
-
-convert.hcg.hwb = function (hcg) {
-	const c = hcg[1] / 100;
-	const g = hcg[2] / 100;
-	const v = c + g * (1.0 - c);
-	return [hcg[0], (v - c) * 100, (1 - v) * 100];
-};
-
-convert.hwb.hcg = function (hwb) {
-	const w = hwb[1] / 100;
-	const b = hwb[2] / 100;
-	const v = 1 - b;
-	const c = v - w;
-	let g = 0;
-
-	if (c < 1) {
-		g = (v - c) / (1 - c);
-	}
-
-	return [hwb[0], c * 100, g * 100];
-};
-
-convert.apple.rgb = function (apple) {
-	return [(apple[0] / 65535) * 255, (apple[1] / 65535) * 255, (apple[2] / 65535) * 255];
-};
-
-convert.rgb.apple = function (rgb) {
-	return [(rgb[0] / 255) * 65535, (rgb[1] / 255) * 65535, (rgb[2] / 255) * 65535];
-};
-
-convert.gray.rgb = function (args) {
-	return [args[0] / 100 * 255, args[0] / 100 * 255, args[0] / 100 * 255];
-};
-
-convert.gray.hsl = function (args) {
-	return [0, 0, args[0]];
-};
-
-convert.gray.hsv = convert.gray.hsl;
-
-convert.gray.hwb = function (gray) {
-	return [0, 100, gray[0]];
-};
-
-convert.gray.cmyk = function (gray) {
-	return [0, 0, 0, gray[0]];
-};
-
-convert.gray.lab = function (gray) {
-	return [gray[0], 0, 0];
-};
-
-convert.gray.hex = function (gray) {
-	const val = Math.round(gray[0] / 100 * 255) & 0xFF;
-	const integer = (val << 16) + (val << 8) + val;
-
-	const string = integer.toString(16).toUpperCase();
-	return '000000'.substring(string.length) + string;
-};
-
-convert.rgb.gray = function (rgb) {
-	const val = (rgb[0] + rgb[1] + rgb[2]) / 3;
-	return [val / 255 * 100];
-};
-
+},
+rules: [/^(?:\$)/,/^(?:\.\.)/,/^(?:\.)/,/^(?:\*)/,/^(?:[a-zA-Z_]+[a-zA-Z0-9_]*)/,/^(?:\[)/,/^(?:\])/,/^(?:,)/,/^(?:((-?(?:0|[1-9][0-9]*)))?\:((-?(?:0|[1-9][0-9]*)))?(\:((-?(?:0|[1-9][0-9]*)))?)?)/,/^(?:(-?(?:0|[1-9][0-9]*)))/,/^(?:"(?:\\["bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^"\\])*")/,/^(?:'(?:\\['bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^'\\])*')/,/^(?:\(.+?\)(?=\]))/,/^(?:\?\(.+?\)(?=\]))/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13],"inclusive":true}}
+});
+return lexer;
+})();
+parser.lexer = lexer;
+function Parser () {
+  this.yy = {};
+}
+Parser.prototype = parser;parser.Parser = Parser;
+return new Parser;
+})();
+
+
+if (true) {
+exports.parser = parser;
+exports.Parser = parser.Parser;
+exports.parse = function () { return parser.parse.apply(parser, arguments); };
+
+}
 
 /***/ }),
-/* 601 */,
-/* 602 */,
-/* 603 */,
-/* 604 */,
-/* 605 */
+
+/***/ 605:
 /***/ (function(module) {
 
 module.exports = require("http");
 
 /***/ }),
-/* 606 */,
-/* 607 */
+
+/***/ 607:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -18529,7 +19191,8 @@ __exportStar(__webpack_require__(542), exports);
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 608 */
+
+/***/ 608:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -18591,9 +19254,8 @@ exports.default = ReaderStream;
 
 
 /***/ }),
-/* 609 */,
-/* 610 */,
-/* 611 */
+
+/***/ 611:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -18626,8 +19288,8 @@ exports.default = Settings;
 
 
 /***/ }),
-/* 612 */,
-/* 613 */
+
+/***/ 613:
 /***/ (function(module) {
 
 /*
@@ -18768,15 +19430,15 @@ exports.default = Settings;
 
 
 /***/ }),
-/* 614 */
+
+/***/ 614:
 /***/ (function(module) {
 
 module.exports = require("events");
 
 /***/ }),
-/* 615 */,
-/* 616 */,
-/* 617 */
+
+/***/ 617:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -18807,10 +19469,8 @@ exports.joinPathSegments = joinPathSegments;
 
 
 /***/ }),
-/* 618 */,
-/* 619 */,
-/* 620 */,
-/* 621 */
+
+/***/ 621:
 /***/ (function(module) {
 
 "use strict";
@@ -18876,29 +19536,15 @@ function range(a, b, str) {
 
 
 /***/ }),
-/* 622 */
+
+/***/ 622:
 /***/ (function(module) {
 
 module.exports = require("path");
 
 /***/ }),
-/* 623 */,
-/* 624 */,
-/* 625 */,
-/* 626 */,
-/* 627 */,
-/* 628 */,
-/* 629 */,
-/* 630 */,
-/* 631 */,
-/* 632 */,
-/* 633 */,
-/* 634 */,
-/* 635 */,
-/* 636 */,
-/* 637 */,
-/* 638 */,
-/* 639 */
+
+/***/ 639:
 /***/ (function(module) {
 
 "use strict";
@@ -18920,11 +19566,8 @@ module.exports = function (x) {
 
 
 /***/ }),
-/* 640 */,
-/* 641 */,
-/* 642 */,
-/* 643 */,
-/* 644 */
+
+/***/ 644:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 /*
@@ -21550,7 +22193,8 @@ module.exports = function (x) {
 
 
 /***/ }),
-/* 645 */
+
+/***/ 645:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 /* eslint-disable no-console */
@@ -21595,15 +22239,8 @@ module.exports = function defaultReporter({ errors = {}, env = {} }) {
 
 
 /***/ }),
-/* 646 */,
-/* 647 */,
-/* 648 */,
-/* 649 */,
-/* 650 */,
-/* 651 */,
-/* 652 */,
-/* 653 */,
-/* 654 */
+
+/***/ 654:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -21667,13 +22304,8 @@ module.exports.TimeoutError = TimeoutError;
 
 
 /***/ }),
-/* 655 */,
-/* 656 */,
-/* 657 */,
-/* 658 */,
-/* 659 */,
-/* 660 */,
-/* 661 */
+
+/***/ 661:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -21704,8 +22336,8 @@ function getSettings(settingsOrOptions = {}) {
 
 
 /***/ }),
-/* 662 */,
-/* 663 */
+
+/***/ 663:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -21876,32 +22508,15 @@ Object.defineProperty(module, 'exports', {
 
 
 /***/ }),
-/* 664 */,
-/* 665 */,
-/* 666 */,
-/* 667 */,
-/* 668 */,
-/* 669 */
+
+/***/ 669:
 /***/ (function(module) {
 
 module.exports = require("util");
 
 /***/ }),
-/* 670 */,
-/* 671 */,
-/* 672 */,
-/* 673 */,
-/* 674 */,
-/* 675 */,
-/* 676 */,
-/* 677 */,
-/* 678 */,
-/* 679 */,
-/* 680 */,
-/* 681 */,
-/* 682 */,
-/* 683 */,
-/* 684 */
+
+/***/ 684:
 /***/ (function(module) {
 
 "use strict";
@@ -21947,11 +22562,8 @@ module.exports = {
 
 
 /***/ }),
-/* 685 */,
-/* 686 */,
-/* 687 */,
-/* 688 */,
-/* 689 */
+
+/***/ 689:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -22144,9 +22756,8 @@ module.exports = fastqueue
 
 
 /***/ }),
-/* 690 */,
-/* 691 */,
-/* 692 */
+
+/***/ 692:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -22173,11 +22784,8 @@ exports.Deprecation = Deprecation;
 
 
 /***/ }),
-/* 693 */,
-/* 694 */,
-/* 695 */,
-/* 696 */,
-/* 697 */
+
+/***/ 697:
 /***/ (function(module) {
 
 "use strict";
@@ -22199,12 +22807,8 @@ module.exports = (promise, onFinally) => {
 
 
 /***/ }),
-/* 698 */,
-/* 699 */,
-/* 700 */,
-/* 701 */,
-/* 702 */,
-/* 703 */
+
+/***/ 703:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -22267,27 +22871,8 @@ exports.default = EntryFilter;
 
 
 /***/ }),
-/* 704 */,
-/* 705 */,
-/* 706 */,
-/* 707 */,
-/* 708 */,
-/* 709 */,
-/* 710 */,
-/* 711 */,
-/* 712 */,
-/* 713 */,
-/* 714 */,
-/* 715 */,
-/* 716 */,
-/* 717 */,
-/* 718 */,
-/* 719 */,
-/* 720 */,
-/* 721 */,
-/* 722 */,
-/* 723 */,
-/* 724 */
+
+/***/ 724:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -22426,10 +23011,8 @@ exports.matchAny = matchAny;
 
 
 /***/ }),
-/* 725 */,
-/* 726 */,
-/* 727 */,
-/* 728 */
+
+/***/ 728:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -22467,8 +23050,8 @@ function callSuccessCallback(callback, result) {
 
 
 /***/ }),
-/* 729 */,
-/* 730 */
+
+/***/ 730:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -22724,14 +23307,8 @@ module.exports = fill;
 
 
 /***/ }),
-/* 731 */,
-/* 732 */,
-/* 733 */,
-/* 734 */,
-/* 735 */,
-/* 736 */,
-/* 737 */,
-/* 738 */
+
+/***/ 738:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -22971,10 +23548,8 @@ module.exports = chalk;
 
 
 /***/ }),
-/* 739 */,
-/* 740 */,
-/* 741 */,
-/* 742 */
+
+/***/ 742:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 var fs = __webpack_require__(747)
@@ -23037,9 +23612,8 @@ function sync (path, options) {
 
 
 /***/ }),
-/* 743 */,
-/* 744 */,
-/* 745 */
+
+/***/ 745:
 /***/ (function(module) {
 
 "use strict";
@@ -23087,15 +23661,15 @@ module.exports = opts => {
 
 
 /***/ }),
-/* 746 */,
-/* 747 */
+
+/***/ 747:
 /***/ (function(module) {
 
 module.exports = require("fs");
 
 /***/ }),
-/* 748 */,
-/* 749 */
+
+/***/ 749:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -23121,7 +23695,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Parser = void 0;
-var gparser = __importStar(__webpack_require__(897));
+var gparser = __importStar(__webpack_require__(600));
 function Parser() {
     var parser = new gparser.Parser();
     var _parseError = parser.parseError;
@@ -23137,10 +23711,8 @@ exports.Parser = Parser;
 //# sourceMappingURL=parser.js.map
 
 /***/ }),
-/* 750 */,
-/* 751 */,
-/* 752 */,
-/* 753 */
+
+/***/ 753:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -23295,8 +23867,8 @@ exports.request = request;
 
 
 /***/ }),
-/* 754 */,
-/* 755 */
+
+/***/ 755:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -23378,19 +23950,15 @@ exports.retry = retry;
 
 
 /***/ }),
-/* 756 */,
-/* 757 */,
-/* 758 */,
-/* 759 */,
-/* 760 */,
-/* 761 */
+
+/***/ 761:
 /***/ (function(module) {
 
 module.exports = require("zlib");
 
 /***/ }),
-/* 762 */,
-/* 763 */
+
+/***/ 763:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -23438,11 +24006,8 @@ module.exports = function globParent(str, opts) {
 
 
 /***/ }),
-/* 764 */,
-/* 765 */,
-/* 766 */,
-/* 767 */,
-/* 768 */
+
+/***/ 768:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -23479,11 +24044,8 @@ function callSuccessCallback(callback, entries) {
 
 
 /***/ }),
-/* 769 */,
-/* 770 */,
-/* 771 */,
-/* 772 */,
-/* 773 */
+
+/***/ 773:
 /***/ (function(module, exports) {
 
 "use strict";
@@ -23511,8 +24073,8 @@ module.exports = exports.default;
 module.exports.default = exports.default;
 
 /***/ }),
-/* 774 */,
-/* 775 */
+
+/***/ 775:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -23550,13 +24112,8 @@ exports.default = ProviderStream;
 
 
 /***/ }),
-/* 776 */,
-/* 777 */,
-/* 778 */,
-/* 779 */,
-/* 780 */,
-/* 781 */,
-/* 782 */
+
+/***/ 782:
 /***/ (function(module) {
 
 "use strict";
@@ -23575,7 +24132,8 @@ module.exports = function isObject(val) {
 
 
 /***/ }),
-/* 783 */
+
+/***/ 783:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -23752,12 +24310,8 @@ module.exports = braces;
 
 
 /***/ }),
-/* 784 */,
-/* 785 */,
-/* 786 */,
-/* 787 */,
-/* 788 */,
-/* 789 */
+
+/***/ 789:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -24052,13 +24606,8 @@ module.exports = toRegexRange;
 
 
 /***/ }),
-/* 790 */,
-/* 791 */,
-/* 792 */,
-/* 793 */,
-/* 794 */,
-/* 795 */,
-/* 796 */
+
+/***/ 796:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -24087,8 +24636,8 @@ exports.getUserAgent = getUserAgent;
 
 
 /***/ }),
-/* 797 */,
-/* 798 */
+
+/***/ 798:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -24125,8 +24674,8 @@ exports.default = StreamProvider;
 
 
 /***/ }),
-/* 799 */,
-/* 800 */
+
+/***/ 800:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 // Note: since nyc uses this module to output coverage, any lines
@@ -24295,7 +24844,8 @@ function processEmit (ev, arg) {
 
 
 /***/ }),
-/* 801 */
+
+/***/ 801:
 /***/ (function(module, exports) {
 
 "use strict";
@@ -24334,11 +24884,8 @@ module.exports = exports.default;
 module.exports.default = exports.default;
 
 /***/ }),
-/* 802 */,
-/* 803 */,
-/* 804 */,
-/* 805 */,
-/* 806 */
+
+/***/ 806:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -25423,7 +25970,8 @@ module.exports = parse;
 
 
 /***/ }),
-/* 807 */
+
+/***/ 807:
 /***/ (function(module) {
 
 "use strict";
@@ -25487,12 +26035,8 @@ module.exports = {
 
 
 /***/ }),
-/* 808 */,
-/* 809 */,
-/* 810 */,
-/* 811 */,
-/* 812 */,
-/* 813 */
+
+/***/ 813:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -25548,7 +26092,8 @@ exports.createTokenAuth = createTokenAuth;
 
 
 /***/ }),
-/* 814 */
+
+/***/ 814:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 const isWindows = process.platform === 'win32' ||
@@ -25679,8 +26224,8 @@ which.sync = whichSync
 
 
 /***/ }),
-/* 815 */,
-/* 816 */
+
+/***/ 816:
 /***/ (function(module) {
 
 "use strict";
@@ -25689,7 +26234,8 @@ module.exports = /^#!.*/;
 
 
 /***/ }),
-/* 817 */
+
+/***/ 817:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -25737,7 +26283,8 @@ exports.slice = slice;
 //# sourceMappingURL=slice.js.map
 
 /***/ }),
-/* 818 */
+
+/***/ 818:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 module.exports = isexe
@@ -25785,8 +26332,8 @@ function sync (path, options) {
 
 
 /***/ }),
-/* 819 */,
-/* 820 */
+
+/***/ 820:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* module decorator */ module = __webpack_require__.nmd(module);
@@ -28162,13 +28709,8 @@ module.exports = groupBy;
 
 
 /***/ }),
-/* 821 */,
-/* 822 */,
-/* 823 */,
-/* 824 */,
-/* 825 */,
-/* 826 */,
-/* 827 */
+
+/***/ 827:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -28178,7 +28720,8 @@ module.exports = __webpack_require__(366);
 
 
 /***/ }),
-/* 828 */
+
+/***/ 828:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29827,11 +30370,8 @@ exports.FetchError = FetchError;
 
 
 /***/ }),
-/* 829 */,
-/* 830 */,
-/* 831 */,
-/* 832 */,
-/* 833 */
+
+/***/ 833:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -29852,14 +30392,15 @@ exports.default = SyncProvider;
 
 
 /***/ }),
-/* 834 */,
-/* 835 */
+
+/***/ 835:
 /***/ (function(module) {
 
 module.exports = require("url");
 
 /***/ }),
-/* 836 */
+
+/***/ 836:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -33607,12 +34148,8 @@ exports.Syntax = (function () {
 
 
 /***/ }),
-/* 837 */,
-/* 838 */,
-/* 839 */,
-/* 840 */,
-/* 841 */,
-/* 842 */
+
+/***/ 842:
 /***/ (function(module) {
 
 "use strict";
@@ -33955,30 +34492,8 @@ if (true) {
 
 
 /***/ }),
-/* 843 */,
-/* 844 */,
-/* 845 */,
-/* 846 */,
-/* 847 */,
-/* 848 */,
-/* 849 */,
-/* 850 */,
-/* 851 */,
-/* 852 */,
-/* 853 */,
-/* 854 */,
-/* 855 */,
-/* 856 */,
-/* 857 */,
-/* 858 */,
-/* 859 */,
-/* 860 */,
-/* 861 */,
-/* 862 */,
-/* 863 */,
-/* 864 */,
-/* 865 */,
-/* 866 */
+
+/***/ 866:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -34004,17 +34519,15 @@ module.exports = function (str) {
 
 
 /***/ }),
-/* 867 */
+
+/***/ 867:
 /***/ (function(module) {
 
 module.exports = require("tty");
 
 /***/ }),
-/* 868 */,
-/* 869 */,
-/* 870 */,
-/* 871 */,
-/* 872 */
+
+/***/ 872:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -34037,8 +34550,8 @@ exports.default = Settings;
 
 
 /***/ }),
-/* 873 */,
-/* 874 */
+
+/***/ 874:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -34063,30 +34576,8 @@ exports.createFileSystemAdapter = createFileSystemAdapter;
 
 
 /***/ }),
-/* 875 */
-/***/ (function(module) {
 
-function webpackEmptyContext(req) {
-	if (typeof req === 'number' && __webpack_require__.m[req])
-  return __webpack_require__(req);
-try { return require(req) }
-catch (e) { if (e.code !== 'MODULE_NOT_FOUND') throw e }
-var e = new Error("Cannot find module '" + req + "'");
-	e.code = 'MODULE_NOT_FOUND';
-	throw e;
-}
-webpackEmptyContext.keys = function() { return []; };
-webpackEmptyContext.resolve = webpackEmptyContext;
-module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 875;
-
-/***/ }),
-/* 876 */,
-/* 877 */,
-/* 878 */,
-/* 879 */,
-/* 880 */,
-/* 881 */
+/***/ 881:
 /***/ (function(module) {
 
 "use strict";
@@ -34152,9 +34643,8 @@ module.exports = {
 
 
 /***/ }),
-/* 882 */,
-/* 883 */,
-/* 884 */
+
+/***/ 884:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -34172,7 +34662,8 @@ exports.isEmpty = isEmpty;
 
 
 /***/ }),
-/* 885 */
+
+/***/ 885:
 /***/ (function(module) {
 
 module.exports = runParallel
@@ -34226,8 +34717,8 @@ function runParallel (tasks, cb) {
 
 
 /***/ }),
-/* 886 */,
-/* 887 */
+
+/***/ 887:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -34296,7 +34787,8 @@ exports.default = DeepFilter;
 
 
 /***/ }),
-/* 888 */
+
+/***/ 888:
 /***/ (function(module) {
 
 /*!
@@ -34322,7 +34814,8 @@ module.exports = function isExtglob(str) {
 
 
 /***/ }),
-/* 889 */
+
+/***/ 889:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -34346,8 +34839,8 @@ exports.Octokit = Octokit;
 
 
 /***/ }),
-/* 890 */,
-/* 891 */
+
+/***/ 891:
 /***/ (function(module, exports) {
 
 //     Underscore.js 1.7.0
@@ -35766,11 +36259,8 @@ exports.Octokit = Octokit;
 
 
 /***/ }),
-/* 892 */,
-/* 893 */,
-/* 894 */,
-/* 895 */,
-/* 896 */
+
+/***/ 896:
 /***/ (function(module) {
 
 module.exports = function (xs, fn) {
@@ -35789,735 +36279,8 @@ var isArray = Array.isArray || function (xs) {
 
 
 /***/ }),
-/* 897 */
-/***/ (function(__unusedmodule, exports) {
 
-/* parser generated by jison 0.4.18 */
-/*
-  Returns a Parser object of the following structure:
-
-  Parser: {
-    yy: {}
-  }
-
-  Parser.prototype: {
-    yy: {},
-    trace: function(),
-    symbols_: {associative list: name ==> number},
-    terminals_: {associative list: number ==> name},
-    productions_: [...],
-    performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate, $$, _$),
-    table: [...],
-    defaultActions: {...},
-    parseError: function(str, hash),
-    parse: function(input),
-
-    lexer: {
-        EOF: 1,
-        parseError: function(str, hash),
-        setInput: function(input),
-        input: function(),
-        unput: function(str),
-        more: function(),
-        less: function(n),
-        pastInput: function(),
-        upcomingInput: function(),
-        showPosition: function(),
-        test_match: function(regex_match_array, rule_index),
-        next: function(),
-        lex: function(),
-        begin: function(condition),
-        popState: function(),
-        _currentRules: function(),
-        topState: function(),
-        pushState: function(condition),
-
-        options: {
-            ranges: boolean           (optional: true ==> token location info will include a .range[] member)
-            flex: boolean             (optional: true ==> flex-like lexing behaviour where the rules are tested exhaustively to find the longest match)
-            backtrack_lexer: boolean  (optional: true ==> lexer regexes are tested in order and for each matching regex the action code is invoked; the lexer terminates the scan when a token is returned by the action code)
-        },
-
-        performAction: function(yy, yy_, $avoiding_name_collisions, YY_START),
-        rules: [...],
-        conditions: {associative list: name ==> set},
-    }
-  }
-
-
-  token location info (@$, _$, etc.): {
-    first_line: n,
-    last_line: n,
-    first_column: n,
-    last_column: n,
-    range: [start_number, end_number]       (where the numbers are indexes into the input string, regular zero-based)
-  }
-
-
-  the parseError function receives a 'hash' object with these members for lexer and parser errors: {
-    text:        (matched text)
-    token:       (the produced terminal token, if any)
-    line:        (yylineno)
-  }
-  while parser (grammar) errors will also provide these members, i.e. parser errors deliver a superset of attributes: {
-    loc:         (yylloc)
-    expected:    (string describing the set of expected tokens)
-    recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
-  }
-*/
-var parser = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,7],$V3=[1,8],$V4=[1,9],$V5=[1,18],$V6=[1,19],$V7=[1,20],$V8=[1,12,14,22],$V9=[1,29],$Va=[1,30],$Vb=[1,33],$Vc=[1,35],$Vd=[1,31],$Ve=[1,36],$Vf=[1,37],$Vg=[24,28];
-var parser = {trace: function trace () { },
-yy: {},
-symbols_: {"error":2,"JSON_PATH":3,"DOLLAR":4,"PATH_COMPONENTS":5,"LEADING_CHILD_MEMBER_EXPRESSION":6,"PATH_COMPONENT":7,"MEMBER_COMPONENT":8,"SUBSCRIPT_COMPONENT":9,"CHILD_MEMBER_COMPONENT":10,"DESCENDANT_MEMBER_COMPONENT":11,"DOT":12,"MEMBER_EXPRESSION":13,"DOT_DOT":14,"STAR":15,"IDENTIFIER":16,"SCRIPT_EXPRESSION":17,"INTEGER":18,"END":19,"CHILD_SUBSCRIPT_COMPONENT":20,"DESCENDANT_SUBSCRIPT_COMPONENT":21,"[":22,"SUBSCRIPT":23,"]":24,"SUBSCRIPT_EXPRESSION":25,"SUBSCRIPT_EXPRESSION_LIST":26,"SUBSCRIPT_EXPRESSION_LISTABLE":27,",":28,"STRING_LITERAL":29,"ARRAY_SLICE":30,"FILTER_EXPRESSION":31,"QQ_STRING":32,"Q_STRING":33,"$accept":0,"$end":1},
-terminals_: {2:"error",4:"DOLLAR",12:"DOT",14:"DOT_DOT",15:"STAR",16:"IDENTIFIER",17:"SCRIPT_EXPRESSION",18:"INTEGER",19:"END",22:"[",24:"]",28:",",30:"ARRAY_SLICE",31:"FILTER_EXPRESSION",32:"QQ_STRING",33:"Q_STRING"},
-productions_: [0,[3,1],[3,2],[3,1],[3,2],[5,1],[5,2],[7,1],[7,1],[8,1],[8,1],[10,2],[6,1],[11,2],[13,1],[13,1],[13,1],[13,1],[13,1],[9,1],[9,1],[20,3],[21,4],[23,1],[23,1],[26,1],[26,3],[27,1],[27,1],[27,1],[25,1],[25,1],[25,1],[29,1],[29,1]],
-performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
-/* this == yyval */
-if (!yy.ast) {
-    yy.ast = _ast;
-    _ast.initialize();
-}
-
-var $0 = $$.length - 1;
-switch (yystate) {
-case 1:
-yy.ast.set({ expression: { type: "root", value: $$[$0] } }); yy.ast.unshift(); return yy.ast.yield()
-break;
-case 2:
-yy.ast.set({ expression: { type: "root", value: $$[$0-1] } }); yy.ast.unshift(); return yy.ast.yield()
-break;
-case 3:
-yy.ast.unshift(); return yy.ast.yield()
-break;
-case 4:
-yy.ast.set({ operation: "member", scope: "child", expression: { type: "identifier", value: $$[$0-1] }}); yy.ast.unshift(); return yy.ast.yield()
-break;
-case 5: case 6: case 11: case 13: case 18: case 21: case 22: case 23:
-
-break;
-case 7:
-yy.ast.set({ operation: "member" }); yy.ast.push()
-break;
-case 8:
-yy.ast.set({ operation: "subscript" }); yy.ast.push() 
-break;
-case 9: case 19:
-yy.ast.set({ scope: "child" })
-break;
-case 10: case 20:
-yy.ast.set({ scope: "descendant" })
-break;
-case 12:
-yy.ast.set({ scope: "child", operation: "member" })
-break;
-case 14:
-yy.ast.set({ expression: { type: "wildcard", value: $$[$0] } })
-break;
-case 15:
-yy.ast.set({ expression: { type: "identifier", value: $$[$0] } })
-break;
-case 16:
-yy.ast.set({ expression: { type: "script_expression", value: $$[$0] } })
-break;
-case 17:
-yy.ast.set({ expression: { type: "numeric_literal", value: parseInt($$[$0]) } })
-break;
-case 24:
-$$[$0].length > 1? yy.ast.set({ expression: { type: "union", value: $$[$0] } }) : this.$ = $$[$0]
-break;
-case 25:
-this.$ = [$$[$0]]
-break;
-case 26:
-this.$ = $$[$0-2].concat($$[$0])
-break;
-case 27:
-this.$ = { expression: { type: "numeric_literal", value: parseInt($$[$0]) } }; yy.ast.set(this.$)
-break;
-case 28:
-this.$ = { expression: { type: "string_literal", value: $$[$0] } }; yy.ast.set(this.$)
-break;
-case 29:
-this.$ = { expression: { type: "slice", value: $$[$0] } }; yy.ast.set(this.$)
-break;
-case 30:
-this.$ = { expression: { type: "wildcard", value: $$[$0] } }; yy.ast.set(this.$)
-break;
-case 31:
-this.$ = { expression: { type: "script_expression", value: $$[$0] } }; yy.ast.set(this.$)
-break;
-case 32:
-this.$ = { expression: { type: "filter_expression", value: $$[$0] } }; yy.ast.set(this.$)
-break;
-case 33: case 34:
-this.$ = $$[$0]
-break;
-}
-},
-table: [{3:1,4:[1,2],6:3,13:4,15:$V0,16:$V1,17:$V2,18:$V3,19:$V4},{1:[3]},{1:[2,1],5:10,7:11,8:12,9:13,10:14,11:15,12:$V5,14:$V6,20:16,21:17,22:$V7},{1:[2,3],5:21,7:11,8:12,9:13,10:14,11:15,12:$V5,14:$V6,20:16,21:17,22:$V7},o($V8,[2,12]),o($V8,[2,14]),o($V8,[2,15]),o($V8,[2,16]),o($V8,[2,17]),o($V8,[2,18]),{1:[2,2],7:22,8:12,9:13,10:14,11:15,12:$V5,14:$V6,20:16,21:17,22:$V7},o($V8,[2,5]),o($V8,[2,7]),o($V8,[2,8]),o($V8,[2,9]),o($V8,[2,10]),o($V8,[2,19]),o($V8,[2,20]),{13:23,15:$V0,16:$V1,17:$V2,18:$V3,19:$V4},{13:24,15:$V0,16:$V1,17:$V2,18:$V3,19:$V4,22:[1,25]},{15:$V9,17:$Va,18:$Vb,23:26,25:27,26:28,27:32,29:34,30:$Vc,31:$Vd,32:$Ve,33:$Vf},{1:[2,4],7:22,8:12,9:13,10:14,11:15,12:$V5,14:$V6,20:16,21:17,22:$V7},o($V8,[2,6]),o($V8,[2,11]),o($V8,[2,13]),{15:$V9,17:$Va,18:$Vb,23:38,25:27,26:28,27:32,29:34,30:$Vc,31:$Vd,32:$Ve,33:$Vf},{24:[1,39]},{24:[2,23]},{24:[2,24],28:[1,40]},{24:[2,30]},{24:[2,31]},{24:[2,32]},o($Vg,[2,25]),o($Vg,[2,27]),o($Vg,[2,28]),o($Vg,[2,29]),o($Vg,[2,33]),o($Vg,[2,34]),{24:[1,41]},o($V8,[2,21]),{18:$Vb,27:42,29:34,30:$Vc,32:$Ve,33:$Vf},o($V8,[2,22]),o($Vg,[2,26])],
-defaultActions: {27:[2,23],29:[2,30],30:[2,31],31:[2,32]},
-parseError: function parseError (str, hash) {
-    if (hash.recoverable) {
-        this.trace(str);
-    } else {
-        var error = new Error(str);
-        error.hash = hash;
-        throw error;
-    }
-},
-parse: function parse(input) {
-    var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
-    var args = lstack.slice.call(arguments, 1);
-    var lexer = Object.create(this.lexer);
-    var sharedState = { yy: {} };
-    for (var k in this.yy) {
-        if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
-            sharedState.yy[k] = this.yy[k];
-        }
-    }
-    lexer.setInput(input, sharedState.yy);
-    sharedState.yy.lexer = lexer;
-    sharedState.yy.parser = this;
-    if (typeof lexer.yylloc == 'undefined') {
-        lexer.yylloc = {};
-    }
-    var yyloc = lexer.yylloc;
-    lstack.push(yyloc);
-    var ranges = lexer.options && lexer.options.ranges;
-    if (typeof sharedState.yy.parseError === 'function') {
-        this.parseError = sharedState.yy.parseError;
-    } else {
-        this.parseError = Object.getPrototypeOf(this).parseError;
-    }
-    function popStack(n) {
-        stack.length = stack.length - 2 * n;
-        vstack.length = vstack.length - n;
-        lstack.length = lstack.length - n;
-    }
-    _token_stack:
-        var lex = function () {
-            var token;
-            token = lexer.lex() || EOF;
-            if (typeof token !== 'number') {
-                token = self.symbols_[token] || token;
-            }
-            return token;
-        };
-    var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
-    while (true) {
-        state = stack[stack.length - 1];
-        if (this.defaultActions[state]) {
-            action = this.defaultActions[state];
-        } else {
-            if (symbol === null || typeof symbol == 'undefined') {
-                symbol = lex();
-            }
-            action = table[state] && table[state][symbol];
-        }
-                    if (typeof action === 'undefined' || !action.length || !action[0]) {
-                var errStr = '';
-                expected = [];
-                for (p in table[state]) {
-                    if (this.terminals_[p] && p > TERROR) {
-                        expected.push('\'' + this.terminals_[p] + '\'');
-                    }
-                }
-                if (lexer.showPosition) {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
-                } else {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
-                }
-                this.parseError(errStr, {
-                    text: lexer.match,
-                    token: this.terminals_[symbol] || symbol,
-                    line: lexer.yylineno,
-                    loc: yyloc,
-                    expected: expected
-                });
-            }
-        if (action[0] instanceof Array && action.length > 1) {
-            throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
-        }
-        switch (action[0]) {
-        case 1:
-            stack.push(symbol);
-            vstack.push(lexer.yytext);
-            lstack.push(lexer.yylloc);
-            stack.push(action[1]);
-            symbol = null;
-            if (!preErrorSymbol) {
-                yyleng = lexer.yyleng;
-                yytext = lexer.yytext;
-                yylineno = lexer.yylineno;
-                yyloc = lexer.yylloc;
-                if (recovering > 0) {
-                    recovering--;
-                }
-            } else {
-                symbol = preErrorSymbol;
-                preErrorSymbol = null;
-            }
-            break;
-        case 2:
-            len = this.productions_[action[1]][1];
-            yyval.$ = vstack[vstack.length - len];
-            yyval._$ = {
-                first_line: lstack[lstack.length - (len || 1)].first_line,
-                last_line: lstack[lstack.length - 1].last_line,
-                first_column: lstack[lstack.length - (len || 1)].first_column,
-                last_column: lstack[lstack.length - 1].last_column
-            };
-            if (ranges) {
-                yyval._$.range = [
-                    lstack[lstack.length - (len || 1)].range[0],
-                    lstack[lstack.length - 1].range[1]
-                ];
-            }
-            r = this.performAction.apply(yyval, [
-                yytext,
-                yyleng,
-                yylineno,
-                sharedState.yy,
-                action[1],
-                vstack,
-                lstack
-            ].concat(args));
-            if (typeof r !== 'undefined') {
-                return r;
-            }
-            if (len) {
-                stack = stack.slice(0, -1 * len * 2);
-                vstack = vstack.slice(0, -1 * len);
-                lstack = lstack.slice(0, -1 * len);
-            }
-            stack.push(this.productions_[action[1]][0]);
-            vstack.push(yyval.$);
-            lstack.push(yyval._$);
-            newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
-            stack.push(newState);
-            break;
-        case 3:
-            return true;
-        }
-    }
-    return true;
-}};
-var _ast = {
-
-  initialize: function() {
-    this._nodes = [];
-    this._node = {};
-    this._stash = [];
-  },
-
-  set: function(props) {
-    for (var k in props) this._node[k] = props[k];
-    return this._node;
-  },
-
-  node: function(obj) {
-    if (arguments.length) this._node = obj;
-    return this._node;
-  },
-
-  push: function() {
-    this._nodes.push(this._node);
-    this._node = {};
-  },
-
-  unshift: function() {
-    this._nodes.unshift(this._node);
-    this._node = {};
-  },
-
-  yield: function() {
-    var _nodes = this._nodes;
-    this.initialize();
-    return _nodes;
-  }
-};
-/* generated by jison-lex 0.3.4 */
-var lexer = (function(){
-var lexer = ({
-
-EOF:1,
-
-parseError:function parseError(str, hash) {
-        if (this.yy.parser) {
-            this.yy.parser.parseError(str, hash);
-        } else {
-            throw new Error(str);
-        }
-    },
-
-// resets the lexer, sets new input
-setInput:function (input, yy) {
-        this.yy = yy || this.yy || {};
-        this._input = input;
-        this._more = this._backtrack = this.done = false;
-        this.yylineno = this.yyleng = 0;
-        this.yytext = this.matched = this.match = '';
-        this.conditionStack = ['INITIAL'];
-        this.yylloc = {
-            first_line: 1,
-            first_column: 0,
-            last_line: 1,
-            last_column: 0
-        };
-        if (this.options.ranges) {
-            this.yylloc.range = [0,0];
-        }
-        this.offset = 0;
-        return this;
-    },
-
-// consumes and returns one char from the input
-input:function () {
-        var ch = this._input[0];
-        this.yytext += ch;
-        this.yyleng++;
-        this.offset++;
-        this.match += ch;
-        this.matched += ch;
-        var lines = ch.match(/(?:\r\n?|\n).*/g);
-        if (lines) {
-            this.yylineno++;
-            this.yylloc.last_line++;
-        } else {
-            this.yylloc.last_column++;
-        }
-        if (this.options.ranges) {
-            this.yylloc.range[1]++;
-        }
-
-        this._input = this._input.slice(1);
-        return ch;
-    },
-
-// unshifts one char (or a string) into the input
-unput:function (ch) {
-        var len = ch.length;
-        var lines = ch.split(/(?:\r\n?|\n)/g);
-
-        this._input = ch + this._input;
-        this.yytext = this.yytext.substr(0, this.yytext.length - len);
-        //this.yyleng -= len;
-        this.offset -= len;
-        var oldLines = this.match.split(/(?:\r\n?|\n)/g);
-        this.match = this.match.substr(0, this.match.length - 1);
-        this.matched = this.matched.substr(0, this.matched.length - 1);
-
-        if (lines.length - 1) {
-            this.yylineno -= lines.length - 1;
-        }
-        var r = this.yylloc.range;
-
-        this.yylloc = {
-            first_line: this.yylloc.first_line,
-            last_line: this.yylineno + 1,
-            first_column: this.yylloc.first_column,
-            last_column: lines ?
-                (lines.length === oldLines.length ? this.yylloc.first_column : 0)
-                 + oldLines[oldLines.length - lines.length].length - lines[0].length :
-              this.yylloc.first_column - len
-        };
-
-        if (this.options.ranges) {
-            this.yylloc.range = [r[0], r[0] + this.yyleng - len];
-        }
-        this.yyleng = this.yytext.length;
-        return this;
-    },
-
-// When called from action, caches matched text and appends it on next action
-more:function () {
-        this._more = true;
-        return this;
-    },
-
-// When called from action, signals the lexer that this rule fails to match the input, so the next matching rule (regex) should be tested instead.
-reject:function () {
-        if (this.options.backtrack_lexer) {
-            this._backtrack = true;
-        } else {
-            return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).\n' + this.showPosition(), {
-                text: "",
-                token: null,
-                line: this.yylineno
-            });
-
-        }
-        return this;
-    },
-
-// retain first n characters of the match
-less:function (n) {
-        this.unput(this.match.slice(n));
-    },
-
-// displays already matched input, i.e. for error messages
-pastInput:function () {
-        var past = this.matched.substr(0, this.matched.length - this.match.length);
-        return (past.length > 20 ? '...':'') + past.substr(-20).replace(/\n/g, "");
-    },
-
-// displays upcoming input, i.e. for error messages
-upcomingInput:function () {
-        var next = this.match;
-        if (next.length < 20) {
-            next += this._input.substr(0, 20-next.length);
-        }
-        return (next.substr(0,20) + (next.length > 20 ? '...' : '')).replace(/\n/g, "");
-    },
-
-// displays the character position where the lexing error occurred, i.e. for error messages
-showPosition:function () {
-        var pre = this.pastInput();
-        var c = new Array(pre.length + 1).join("-");
-        return pre + this.upcomingInput() + "\n" + c + "^";
-    },
-
-// test the lexed token: return FALSE when not a match, otherwise return token
-test_match:function(match, indexed_rule) {
-        var token,
-            lines,
-            backup;
-
-        if (this.options.backtrack_lexer) {
-            // save context
-            backup = {
-                yylineno: this.yylineno,
-                yylloc: {
-                    first_line: this.yylloc.first_line,
-                    last_line: this.last_line,
-                    first_column: this.yylloc.first_column,
-                    last_column: this.yylloc.last_column
-                },
-                yytext: this.yytext,
-                match: this.match,
-                matches: this.matches,
-                matched: this.matched,
-                yyleng: this.yyleng,
-                offset: this.offset,
-                _more: this._more,
-                _input: this._input,
-                yy: this.yy,
-                conditionStack: this.conditionStack.slice(0),
-                done: this.done
-            };
-            if (this.options.ranges) {
-                backup.yylloc.range = this.yylloc.range.slice(0);
-            }
-        }
-
-        lines = match[0].match(/(?:\r\n?|\n).*/g);
-        if (lines) {
-            this.yylineno += lines.length;
-        }
-        this.yylloc = {
-            first_line: this.yylloc.last_line,
-            last_line: this.yylineno + 1,
-            first_column: this.yylloc.last_column,
-            last_column: lines ?
-                         lines[lines.length - 1].length - lines[lines.length - 1].match(/\r?\n?/)[0].length :
-                         this.yylloc.last_column + match[0].length
-        };
-        this.yytext += match[0];
-        this.match += match[0];
-        this.matches = match;
-        this.yyleng = this.yytext.length;
-        if (this.options.ranges) {
-            this.yylloc.range = [this.offset, this.offset += this.yyleng];
-        }
-        this._more = false;
-        this._backtrack = false;
-        this._input = this._input.slice(match[0].length);
-        this.matched += match[0];
-        token = this.performAction.call(this, this.yy, this, indexed_rule, this.conditionStack[this.conditionStack.length - 1]);
-        if (this.done && this._input) {
-            this.done = false;
-        }
-        if (token) {
-            return token;
-        } else if (this._backtrack) {
-            // recover context
-            for (var k in backup) {
-                this[k] = backup[k];
-            }
-            return false; // rule action called reject() implying the next rule should be tested instead.
-        }
-        return false;
-    },
-
-// return next match in input
-next:function () {
-        if (this.done) {
-            return this.EOF;
-        }
-        if (!this._input) {
-            this.done = true;
-        }
-
-        var token,
-            match,
-            tempMatch,
-            index;
-        if (!this._more) {
-            this.yytext = '';
-            this.match = '';
-        }
-        var rules = this._currentRules();
-        for (var i = 0; i < rules.length; i++) {
-            tempMatch = this._input.match(this.rules[rules[i]]);
-            if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
-                match = tempMatch;
-                index = i;
-                if (this.options.backtrack_lexer) {
-                    token = this.test_match(tempMatch, rules[i]);
-                    if (token !== false) {
-                        return token;
-                    } else if (this._backtrack) {
-                        match = false;
-                        continue; // rule action called reject() implying a rule MISmatch.
-                    } else {
-                        // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-                        return false;
-                    }
-                } else if (!this.options.flex) {
-                    break;
-                }
-            }
-        }
-        if (match) {
-            token = this.test_match(match, rules[index]);
-            if (token !== false) {
-                return token;
-            }
-            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-            return false;
-        }
-        if (this._input === "") {
-            return this.EOF;
-        } else {
-            return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. Unrecognized text.\n' + this.showPosition(), {
-                text: "",
-                token: null,
-                line: this.yylineno
-            });
-        }
-    },
-
-// return next match that has a token
-lex:function lex () {
-        var r = this.next();
-        if (r) {
-            return r;
-        } else {
-            return this.lex();
-        }
-    },
-
-// activates a new lexer condition state (pushes the new lexer condition state onto the condition stack)
-begin:function begin (condition) {
-        this.conditionStack.push(condition);
-    },
-
-// pop the previously active lexer condition state off the condition stack
-popState:function popState () {
-        var n = this.conditionStack.length - 1;
-        if (n > 0) {
-            return this.conditionStack.pop();
-        } else {
-            return this.conditionStack[0];
-        }
-    },
-
-// produce the lexer rule set which is active for the currently active lexer condition state
-_currentRules:function _currentRules () {
-        if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
-            return this.conditions[this.conditionStack[this.conditionStack.length - 1]].rules;
-        } else {
-            return this.conditions["INITIAL"].rules;
-        }
-    },
-
-// return the currently active lexer condition state; when an index argument is provided it produces the N-th previous condition state, if available
-topState:function topState (n) {
-        n = this.conditionStack.length - 1 - Math.abs(n || 0);
-        if (n >= 0) {
-            return this.conditionStack[n];
-        } else {
-            return "INITIAL";
-        }
-    },
-
-// alias for begin(condition)
-pushState:function pushState (condition) {
-        this.begin(condition);
-    },
-
-// return the number of states currently on the stack
-stateStackSize:function stateStackSize() {
-        return this.conditionStack.length;
-    },
-options: {},
-performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
-var YYSTATE=YY_START;
-switch($avoiding_name_collisions) {
-case 0:return 4
-break;
-case 1:return 14
-break;
-case 2:return 12
-break;
-case 3:return 15
-break;
-case 4:return 16
-break;
-case 5:return 22
-break;
-case 6:return 24
-break;
-case 7:return 28
-break;
-case 8:return 30
-break;
-case 9:return 18
-break;
-case 10:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 32;
-break;
-case 11:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 33;
-break;
-case 12:return 17
-break;
-case 13:return 31
-break;
-}
-},
-rules: [/^(?:\$)/,/^(?:\.\.)/,/^(?:\.)/,/^(?:\*)/,/^(?:[a-zA-Z_]+[a-zA-Z0-9_]*)/,/^(?:\[)/,/^(?:\])/,/^(?:,)/,/^(?:((-?(?:0|[1-9][0-9]*)))?\:((-?(?:0|[1-9][0-9]*)))?(\:((-?(?:0|[1-9][0-9]*)))?)?)/,/^(?:(-?(?:0|[1-9][0-9]*)))/,/^(?:"(?:\\["bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^"\\])*")/,/^(?:'(?:\\['bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^'\\])*')/,/^(?:\(.+?\)(?=\]))/,/^(?:\?\(.+?\)(?=\]))/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13],"inclusive":true}}
-});
-return lexer;
-})();
-parser.lexer = lexer;
-function Parser () {
-  this.yy = {};
-}
-Parser.prototype = parser;parser.Parser = Parser;
-return new Parser;
-})();
-
-
-if (true) {
-exports.parser = parser;
-exports.Parser = parser.Parser;
-exports.parse = function () { return parser.parse.apply(parser, arguments); };
-
-}
-
-/***/ }),
-/* 898 */
+/***/ 898:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -36609,22 +36372,8 @@ exports.withCustomRequest = withCustomRequest;
 
 
 /***/ }),
-/* 899 */,
-/* 900 */,
-/* 901 */,
-/* 902 */,
-/* 903 */,
-/* 904 */,
-/* 905 */,
-/* 906 */,
-/* 907 */,
-/* 908 */,
-/* 909 */,
-/* 910 */,
-/* 911 */,
-/* 912 */,
-/* 913 */,
-/* 914 */
+
+/***/ 914:
 /***/ (function(module) {
 
 "use strict";
@@ -36649,8 +36398,8 @@ module.exports = function(num) {
 
 
 /***/ }),
-/* 915 */,
-/* 916 */
+
+/***/ 916:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -36687,23 +36436,8 @@ exports.requestLog = requestLog;
 
 
 /***/ }),
-/* 917 */,
-/* 918 */,
-/* 919 */,
-/* 920 */,
-/* 921 */,
-/* 922 */,
-/* 923 */,
-/* 924 */,
-/* 925 */,
-/* 926 */,
-/* 927 */,
-/* 928 */,
-/* 929 */,
-/* 930 */,
-/* 931 */,
-/* 932 */,
-/* 933 */
+
+/***/ 933:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -36714,15 +36448,8 @@ exports.fs = fs;
 
 
 /***/ }),
-/* 934 */,
-/* 935 */,
-/* 936 */,
-/* 937 */,
-/* 938 */,
-/* 939 */,
-/* 940 */,
-/* 941 */,
-/* 942 */
+
+/***/ 942:
 /***/ (function(module) {
 
 "use strict";
@@ -36881,11 +36608,8 @@ module.exports = {
 
 
 /***/ }),
-/* 943 */,
-/* 944 */,
-/* 945 */,
-/* 946 */,
-/* 947 */
+
+/***/ 947:
 /***/ (function(__unusedmodule, exports) {
 
 /* -*- Mode: js; js-indent-level: 2; -*- */
@@ -36958,7 +36682,8 @@ exports.decode = function (charCode) {
 
 
 /***/ }),
-/* 948 */
+
+/***/ 948:
 /***/ (function(module) {
 
 "use strict";
@@ -36976,7 +36701,8 @@ module.exports = function(fn) {
 }
 
 /***/ }),
-/* 949 */
+
+/***/ 949:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -37016,92 +36742,8 @@ exports.default = Reader;
 
 
 /***/ }),
-/* 950 */,
-/* 951 */,
-/* 952 */
-/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = isFQDN;
-
-var _assertString = _interopRequireDefault(__webpack_require__(801));
-
-var _merge = _interopRequireDefault(__webpack_require__(773));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var default_fqdn_options = {
-  require_tld: true,
-  allow_underscores: false,
-  allow_trailing_dot: false
-};
-
-function isFQDN(str, options) {
-  (0, _assertString.default)(str);
-  options = (0, _merge.default)(options, default_fqdn_options);
-  /* Remove the optional trailing dot before checking validity */
-
-  if (options.allow_trailing_dot && str[str.length - 1] === '.') {
-    str = str.substring(0, str.length - 1);
-  }
-
-  var parts = str.split('.');
-
-  for (var i = 0; i < parts.length; i++) {
-    if (parts[i].length > 63) {
-      return false;
-    }
-  }
-
-  if (options.require_tld) {
-    var tld = parts.pop();
-
-    if (!parts.length || !/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
-      return false;
-    } // disallow spaces && special characers
-
-
-    if (/[\s\u2002-\u200B\u202F\u205F\u3000\uFEFF\uDB40\uDC20\u00A9\uFFFD]/.test(tld)) {
-      return false;
-    }
-  }
-
-  for (var part, _i = 0; _i < parts.length; _i++) {
-    part = parts[_i];
-
-    if (options.allow_underscores) {
-      part = part.replace(/_/g, '');
-    }
-
-    if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
-      return false;
-    } // disallow full-width chars
-
-
-    if (/[\uff01-\uff5e]/.test(part)) {
-      return false;
-    }
-
-    if (part[0] === '-' || part[part.length - 1] === '-') {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-module.exports = exports.default;
-module.exports.default = exports.default;
-
-/***/ }),
-/* 953 */,
-/* 954 */,
-/* 955 */
+/***/ 955:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -37469,11 +37111,8 @@ module.exports.shellSync = (cmd, opts) => handleShell(module.exports.sync, cmd, 
 
 
 /***/ }),
-/* 956 */,
-/* 957 */,
-/* 958 */,
-/* 959 */,
-/* 960 */
+
+/***/ 960:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -37517,8 +37156,8 @@ module.exports = function isPlainObject(o) {
 
 
 /***/ }),
-/* 961 */,
-/* 962 */
+
+/***/ 962:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -37536,310 +37175,90 @@ exports.default = Reader;
 
 
 /***/ }),
-/* 963 */
-/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+
+/***/ 963:
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __webpack_require__(470);
-
-// EXTERNAL MODULE: ./node_modules/lodash.groupBy/index.js
-var lodash_groupBy = __webpack_require__(820);
-var lodash_groupBy_default = /*#__PURE__*/__webpack_require__.n(lodash_groupBy);
-
-// EXTERNAL MODULE: ./node_modules/p-queue/dist/index.js
-var dist = __webpack_require__(984);
-var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
-
-// EXTERNAL MODULE: external "fs"
-var external_fs_ = __webpack_require__(747);
-
-// EXTERNAL MODULE: ./node_modules/fast-glob/out/index.js
-var out = __webpack_require__(406);
-
-// EXTERNAL MODULE: external "path"
-var external_path_ = __webpack_require__(622);
-
-// EXTERNAL MODULE: ./node_modules/envalid/src/envalid.js
-var envalid = __webpack_require__(456);
-var envalid_default = /*#__PURE__*/__webpack_require__.n(envalid);
-
-// CONCATENATED MODULE: ./src/environment.ts
-
-const maxPerPage = 100;
-const OUTPUT_NAME = 'appliedRules';
-const FILE_ENCODING = 'utf8';
-var SUPPORTED_EVENT_TYPES;
-(function (SUPPORTED_EVENT_TYPES) {
-    SUPPORTED_EVENT_TYPES["PULL_REQUEST"] = "pull_request";
-})(SUPPORTED_EVENT_TYPES || (SUPPORTED_EVENT_TYPES = {}));
-const environment = () => envalid_default().cleanEnv(process.env, {
-    GITHUB_EVENT_PATH: Object(envalid.str)({ devDefault: '/github/workflow/event.json' }),
-    GITHUB_EVENT_NAME: Object(envalid.str)({ devDefault: 'pull_request' }),
-    GITHUB_REPOSITORY: Object(envalid.str)({ devDefault: Object(envalid.testOnly)('someRepo') }),
-    GITHUB_SHA: Object(envalid.str)({
-        devDefault: Object(envalid.testOnly)('ffac537e6cbbf934b08745a378932722df287a53'),
-    }),
-}, { dotEnvPath: null });
-const env = environment();
-
-// EXTERNAL MODULE: ./node_modules/minimatch/minimatch.js
-var minimatch = __webpack_require__(93);
-var minimatch_default = /*#__PURE__*/__webpack_require__.n(minimatch);
-
-// EXTERNAL MODULE: ./node_modules/@astronautlabs/jsonpath/dist/index.js
-var jsonpath_dist = __webpack_require__(607);
-
-// CONCATENATED MODULE: ./src/rules.ts
-/* eslint-disable @typescript-eslint/no-var-requires */
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isFQDN;
 
+var _assertString = _interopRequireDefault(__webpack_require__(801));
 
+var _merge = _interopRequireDefault(__webpack_require__(773));
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const commentTemplate = (users) => `Hi there, Herald found that given these changes ${users.join(', ')} might want to take a look!`;
-var RuleActors;
-(function (RuleActors) {
-    RuleActors["users"] = "users";
-    RuleActors["teams"] = "teams";
-})(RuleActors || (RuleActors = {}));
-var RuleExtras;
-(function (RuleExtras) {
-    RuleExtras["customMessage"] = "customMessage";
-    RuleExtras["name"] = "name";
-})(RuleExtras || (RuleExtras = {}));
-var RuleMatchers;
-(function (RuleMatchers) {
-    RuleMatchers["eventJsonPath"] = "eventJsonPath";
-    RuleMatchers["glob"] = "glob";
-})(RuleMatchers || (RuleMatchers = {}));
-var RuleActions;
-(function (RuleActions) {
-    RuleActions["comment"] = "comment";
-    RuleActions["review"] = "review";
-    RuleActions["assign"] = "assign";
-})(RuleActions || (RuleActions = {}));
-const sanitize = (content) => {
-    var _a, _b;
-    const attrs = Object.assign(Object.assign(Object.assign({}, RuleMatchers), RuleActors), RuleExtras);
-    const rule = Object.keys(attrs).reduce((memo, attr) => {
-        return content[attr] ? Object.assign(Object.assign({}, memo), { [attr]: content[attr] }) : memo;
-    }, {});
-    const users = (_a = rule.users) === null || _a === void 0 ? void 0 : _a.split(',');
-    const teams = (_b = rule.teams) === null || _b === void 0 ? void 0 : _b.split(',');
-    return Object.assign(Object.assign({}, rule), { users, teams });
+var default_fqdn_options = {
+  require_tld: true,
+  allow_underscores: false,
+  allow_trailing_dot: false
 };
-const hasAttribute = (attr, content) => attr in content;
-const isValidRawRule = (content) => {
-    if (typeof content !== 'object' || content === null) {
-        return false;
+
+function isFQDN(str, options) {
+  (0, _assertString.default)(str);
+  options = (0, _merge.default)(options, default_fqdn_options);
+  /* Remove the optional trailing dot before checking validity */
+
+  if (options.allow_trailing_dot && str[str.length - 1] === '.') {
+    str = str.substring(0, str.length - 1);
+  }
+
+  var parts = str.split('.');
+
+  for (var i = 0; i < parts.length; i++) {
+    if (parts[i].length > 63) {
+      return false;
     }
-    const hasValidActionValues = hasAttribute('action', content) &&
-        Object.keys(RuleActions).includes(content.action);
-    const hasTeams = (hasAttribute('teams', content) && content.teams && true) || false;
-    const hasUsers = (hasAttribute('users', content) && content.users && true) || false;
-    const hasActors = hasTeams || hasUsers;
-    const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
-    return hasValidActionValues && hasActors && matchers;
-};
-const loadRules = (rulesLocation) => {
-    const matches = Object(out.sync)(rulesLocation, { onlyFiles: true });
-    const rules = matches.reduce((memo, filePath) => {
-        try {
-            const content = Object(external_fs_.readFileSync)(filePath, { encoding: FILE_ENCODING });
-            const rule = JSON.parse(content);
-            return isValidRawRule(rule)
-                ? [
-                    ...memo,
-                    Object.assign(Object.assign({ name: Object(external_path_.basename)(filePath) }, sanitize(rule)), { path: filePath }),
-                ]
-                : memo;
-        }
-        catch (e) {
-            console.log(`${filePath} can't be parsed, it will be ignored`);
-            return memo;
-        }
-    }, []);
-    console.info('found rules:', rules);
-    return rules;
-};
-const getMatchingRules = (rules, files, event) => {
-    const fileNames = files.map(({ filename }) => filename);
-    const matchingRules = rules.reduce((memo, rule) => {
-        const matches = {};
-        if (rule.glob) {
-            matches.glob = fileNames.filter(minimatch_default().filter(rule.glob, { matchBase: true }));
-        }
-        if (rule.eventJsonPath) {
-            matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
-        }
-        return Object.values(matches).length
-            ? [...memo, Object.assign(Object.assign({}, rule), { matches })]
-            : memo;
-    }, []);
-    console.info('matching rules:', matchingRules);
-    return matchingRules;
-};
-const composeCommentsForUsers = (matchingRules) => {
-    return matchingRules.reduce((comments, { teams, users, customMessage }) => {
-        return [
-            ...comments,
-            customMessage ? customMessage : commentTemplate([...users, ...teams]),
-        ];
-    }, []);
-};
+  }
 
-// CONCATENATED MODULE: ./src/comment.ts
-/* eslint-disable @typescript-eslint/camelcase */
+  if (options.require_tld) {
+    var tld = parts.pop();
+
+    if (!parts.length || !/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
+      return false;
+    } // disallow spaces && special characers
 
 
-
-const getAllComments = async (client, params) => {
-    const page = 1;
-    const { data: comments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { per_page: maxPerPage, page }));
-    if (comments.length < maxPerPage) {
-        return comments;
+    if (/[\s\u2002-\u200B\u202F\u205F\u3000\uFEFF\uDB40\uDC20\u00A9\uFFFD]/.test(tld)) {
+      return false;
     }
-    else {
-        const { data: moreComments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { page: page + 1, per_page: maxPerPage }));
-        return [...comments, ...moreComments];
+  }
+
+  for (var part, _i = 0; _i < parts.length; _i++) {
+    part = parts[_i];
+
+    if (options.allow_underscores) {
+      part = part.replace(/_/g, '');
     }
-};
-const handleComment = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    const commentsFromRules = composeCommentsForUsers(matchingRules);
-    const rawComments = await getAllComments(client, {
-        owner,
-        repo,
-        issue_number: prNumber,
-    });
-    const comments = rawComments.map(({ body }) => body);
-    const onlyNewComments = commentsFromRules.filter((comment) => !comments.includes(comment));
-    return Promise.all(onlyNewComments.map((body) => {
-        return queue.add(() => client.issues.createComment({
-            owner,
-            repo,
-            issue_number: prNumber,
-            body,
-        }));
-    }));
-};
 
-// EXTERNAL MODULE: ./node_modules/@octokit/rest/dist-node/index.js
-var dist_node = __webpack_require__(889);
-
-// EXTERNAL MODULE: ./node_modules/@octokit/plugin-retry/dist-node/index.js
-var plugin_retry_dist_node = __webpack_require__(755);
-
-// CONCATENATED MODULE: ./src/assignees.ts
-
-const handleAssignees = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    return Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.issues.addAssignees({
-        owner,
-        repo,
-        issue_number: prNumber,
-        assignees: matchingRule.users,
-    }))));
-};
-
-// CONCATENATED MODULE: ./src/reviewers.ts
-
-const handleReviewers = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    return Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.pulls.requestReviewers({
-        owner,
-        repo,
-        pull_number: prNumber,
-        reviewers: matchingRule.users,
-        team_reviewers: matchingRule.teams,
-    }))));
-};
-
-// CONCATENATED MODULE: ./src/index.ts
-/* eslint-disable @typescript-eslint/camelcase */
+    if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
+      return false;
+    } // disallow full-width chars
 
 
-
-
-
-
-
-
-
-const EnhancedOctokit = Object(dist_node.Octokit.plugin)(plugin_retry_dist_node.retry);
-var Props;
-(function (Props) {
-    Props["GITHUB_TOKEN"] = "GITHUB_TOKEN";
-    Props["rulesLocation"] = "rulesLocation";
-    Props["dryRun"] = "dryRun";
-    Props["subscribeAction"] = "subscribeAction";
-    Props["base"] = "base";
-    Props["lint"] = "lint";
-})(Props || (Props = {}));
-const actionsMap = {
-    [RuleActions.comment]: handleComment,
-    [RuleActions.assign]: handleAssignees,
-    [RuleActions.review]: handleReviewers,
-};
-const getParams = () => {
-    return Object.keys(Props).reduce((memo, prop) => {
-        const value = Object(core.getInput)(prop);
-        return value ? Object.assign(Object.assign({}, memo), { [prop]: value }) : memo;
-    }, {});
-};
-const main = async () => {
-    try {
-        if (env.GITHUB_EVENT_NAME === SUPPORTED_EVENT_TYPES.PULL_REQUEST) {
-            const event = __webpack_require__(875)(env.GITHUB_EVENT_PATH);
-            const { pull_request, number: prNumber } = event;
-            const { repo: { owner: { login: owner }, full_name: repo, }, } = pull_request;
-            const { GITHUB_TOKEN, rulesLocation, base = 'master', dryRun = false, } = getParams();
-            const rules = loadRules(rulesLocation);
-            const client = new EnhancedOctokit({ auth: GITHUB_TOKEN });
-            const { data: { files }, } = await client.repos.compareCommits({
-                base,
-                head: pull_request.head.sha,
-                owner,
-                repo,
-            });
-            const matchingRules = getMatchingRules(rules, files, event);
-            const groupedRulesByAction = lodash_groupBy_default()(matchingRules, (rule) => rule.action);
-            if (!dryRun) {
-                if (matchingRules.length) {
-                    const groupNames = Object.keys(groupedRulesByAction);
-                    await Promise.all([
-                        groupNames.map((actionName) => {
-                            const action = actionsMap[RuleActions[actionName]];
-                            return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions.comment]);
-                        }),
-                    ]);
-                }
-            }
-            Object(core.setOutput)(OUTPUT_NAME, groupedRulesByAction);
-        }
-        else {
-            Object(core.setOutput)(OUTPUT_NAME, []);
-            throw new Error('use-herald only supports pull_request events for now');
-        }
+    if (/[\uff01-\uff5e]/.test(part)) {
+      return false;
     }
-    catch (e) {
-        Object(core.setFailed)(e);
+
+    if (part[0] === '-' || part[part.length - 1] === '-') {
+      return false;
     }
-};
+  }
 
-// CONCATENATED MODULE: ./index.ts
+  return true;
+}
 
-main();
-
+module.exports = exports.default;
+module.exports.default = exports.default;
 
 /***/ }),
-/* 964 */,
-/* 965 */,
-/* 966 */
+
+/***/ 966:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
@@ -37897,9 +37316,8 @@ module.exports = options => {
 
 
 /***/ }),
-/* 967 */,
-/* 968 */,
-/* 969 */
+
+/***/ 969:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 /* -*- Mode: js; js-indent-level: 2; -*- */
@@ -38026,9 +37444,8 @@ exports.ArraySet = ArraySet;
 
 
 /***/ }),
-/* 970 */,
-/* 971 */,
-/* 972 */
+
+/***/ 972:
 /***/ (function(__unusedmodule, exports) {
 
 /* -*- Mode: js; js-indent-level: 2; -*- */
@@ -38145,18 +37562,8 @@ exports.search = function search(aNeedle, aHaystack, aCompare, aBias) {
 
 
 /***/ }),
-/* 973 */,
-/* 974 */,
-/* 975 */,
-/* 976 */,
-/* 977 */,
-/* 978 */,
-/* 979 */,
-/* 980 */,
-/* 981 */,
-/* 982 */,
-/* 983 */,
-/* 984 */
+
+/***/ 984:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -38436,11 +37843,11 @@ exports.default = PQueue;
 
 
 /***/ }),
-/* 985 */,
-/* 986 */
+
+/***/ 986:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
-const isFQDN = __webpack_require__(952)
+const isFQDN = __webpack_require__(963)
 const isIP = __webpack_require__(497)
 const EMAIL_REGEX = /^[^@\s]+@[^@\s]+\.[^@\s]+$/ // intentionally non-exhaustive
 
@@ -38555,14 +37962,8 @@ exports.json = makeValidator(x => {
 
 
 /***/ }),
-/* 987 */,
-/* 988 */,
-/* 989 */,
-/* 990 */,
-/* 991 */,
-/* 992 */,
-/* 993 */,
-/* 994 */
+
+/***/ 994:
 /***/ (function(module) {
 
 "use strict";
@@ -38703,7 +38104,8 @@ module.exports = (chalk, temporary) => {
 
 
 /***/ })
-/******/ ],
+
+/******/ },
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ 	"use strict";
 /******/ 

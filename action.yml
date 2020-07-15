@@ -16,8 +16,6 @@ inputs:
   dryRun:
     description: 'Will evaluate the rules but it will not apply any, the output will be available'
     default: false
-  lint:
-    description: 'Will post the found rules that were found in the repo, useful for a linting step in any workflow'
 outputs:
   appliedRules:
     description: 'It will report back what rules have been applied'

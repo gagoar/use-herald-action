@@ -1,163 +1,148 @@
-import AWS from 'aws-sdk/global';
-import { main, Props, Credentials, ExtraOptions } from '../src';
-import { setFailed, getInput, setOutput } from '../__mocks__/@actions/core';
-import Lambda, { constructorMock } from '../__mocks__/aws-sdk/clients/lambda';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { main, Props } from '../src';
+import * as fs from 'fs';
+import * as fg from 'fast-glob';
+import * as actions from '@actions/core';
+import { RuleActions } from '../src/rules';
+import { env, Event } from '../src/environment';
+import nock from 'nock';
 
+import getCompareCommitsResponse from '../__mocks__/scenarios/get_compare_commits.json';
+
+import jsonEvent from '../__mocks__/event.json';
+
+jest.mock('@actions/core');
+jest.mock('fs');
+jest.mock('fast-glob');
+
+const event = (jsonEvent as unknown) as Event;
+const sync = fg.sync as jest.Mock<any>;
+const getInput = actions.getInput as jest.Mock<any>;
+const setOutput = actions.setOutput as jest.Mock<any>;
+const setFailed = actions.setFailed as jest.Mock<any>;
+const readFileSync = fs.readFileSync as jest.Mock<any>;
 describe('use-herald', () => {
   const mockedInput = {
-    [Props.FunctionName]: 'SomeFunction',
-    [Props.LogType]: 'None',
-    [Props.Payload]: '{"input": {value: "1"}',
-    [Props.Qualifier]: 'production',
-    [ExtraOptions.HTTP_TIMEOUT]: '220000',
-    [ExtraOptions.MAX_RETRIES]: '3',
-    [ExtraOptions.SUCCEED_ON_FUNCTION_FAILURE]: 'false',
-    [Credentials.AWS_ACCESS_KEY_ID]: 'someAccessKey',
-    [Credentials.AWS_SECRET_ACCESS_KEY]: 'someSecretKey',
-    REGION: 'us-west-2',
+    [Props.GITHUB_TOKEN]: 'TOKEN',
+    [Props.dryRun]: true,
+    [Props.rulesLocation]: './rules',
   };
-
-  beforeAll(() => {
-    getInput.mockImplementation(
-      (key: Partial<Props & Credentials & 'REGION'>) => {
-        return mockedInput[key];
-      }
-    );
-  });
 
   afterEach(() => {
     getInput.mockClear();
     setFailed.mockClear();
     setOutput.mockClear();
+    sync.mockClear();
+    readFileSync.mockClear();
   });
 
-  it('runs when provided the correct input', async () => {
-    const handler = jest.fn(() => ({ response: 'ok' }));
+  const invalidRule = {
+    customMessage: 'This is a custom message for a rule',
+    users: ['@eeny', '@meeny', '@miny', '@moe'],
+  };
 
-    Lambda.__setResponseForMethods({ invoke: handler });
+  const validRule = {
+    ...invalidRule,
+    action: RuleActions.comment,
+    glob: '*.ts',
+  };
+
+  const rawRules = {
+    '/some/rule1.json': { ...validRule, users: validRule.users.join(', ') },
+    '/some/rule2.json': {
+      ...validRule,
+      teams: 'someTeams',
+      users: undefined,
+    },
+    '/some/badRule.json': {
+      ...validRule,
+    },
+  };
+
+  sync.mockReturnValue(Object.keys(rawRules));
+  readFileSync.mockImplementation(
+    (filePath: keyof typeof rawRules | typeof env.GITHUB_EVENT_PATH) => {
+      if (env.GITHUB_EVENT_PATH === filePath) {
+        return JSON.stringify(event);
+      }
+
+      return JSON.stringify(rawRules[filePath]);
+    }
+  );
+
+  const owner = 'gagoar';
+  const repo = 'example_repo';
+
+  it('should not call github (dryRun: true)', async () => {
+    getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
+      return mockedInput[key];
+    });
+    sync.mockReturnValue(Object.keys(rawRules));
+
+    const github = nock('https://api.github.com')
+      .get(
+        `/repos/${owner}/${repo}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`
+      )
+      .reply(200, getCompareCommitsResponse);
 
     await main();
-    expect(getInput).toHaveBeenCalledTimes(13);
+
+    expect(getInput).toHaveBeenCalledTimes(Object.keys(Props).length);
     expect(setFailed).not.toHaveBeenCalled();
-    expect(AWS.config.httpOptions).toMatchInlineSnapshot(`
-      Object {
-        "timeout": 220000,
+    expect(setOutput).toMatchInlineSnapshot(`
+      [MockFunction] {
+        "calls": Array [
+          Array [
+            "appliedRules",
+            Object {
+              "comment": Array [
+                Object {
+                  "action": "comment",
+                  "customMessage": "This is a custom message for a rule",
+                  "glob": "*.ts",
+                  "matches": Object {
+                    "glob": Array [
+                      "file1.ts",
+                    ],
+                  },
+                  "name": "rule1.json",
+                  "path": "/some/rule1.json",
+                  "teams": undefined,
+                  "users": Array [
+                    "@eeny",
+                    " @meeny",
+                    " @miny",
+                    " @moe",
+                  ],
+                },
+                Object {
+                  "action": "comment",
+                  "customMessage": "This is a custom message for a rule",
+                  "glob": "*.ts",
+                  "matches": Object {
+                    "glob": Array [
+                      "file1.ts",
+                    ],
+                  },
+                  "name": "rule2.json",
+                  "path": "/some/rule2.json",
+                  "teams": Array [
+                    "someTeams",
+                  ],
+                  "users": undefined,
+                },
+              ],
+            },
+          ],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
       }
     `);
-    expect(constructorMock.mock.calls).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Object {
-            "apiVersion": "2015-03-31",
-            "region": "us-west-2",
-          },
-        ],
-      ]
-    `);
-    expect(handler.mock.calls).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Object {
-            "FunctionName": "SomeFunction",
-            "LogType": "None",
-            "Payload": "{\\"input\\": {value: \\"1\\"}",
-            "Qualifier": "production",
-          },
-        ],
-      ]
-    `);
-    expect(setOutput.mock.calls).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          "response",
-          Object {
-            "response": "ok",
-          },
-        ],
-      ]
-    `);
-  });
-
-  it('fails when lambda invocation throws an error', async () => {
-    const handler = jest.fn(() => {
-      throw new Error('something went horribly wrong');
-    });
-
-    Lambda.__setResponseForMethods({ invoke: handler });
-
-    await main();
-
-    expect(getInput).toHaveBeenCalledTimes(12);
-    expect(AWS.config.httpOptions).toMatchInlineSnapshot(`
-      Object {
-        "timeout": 220000,
-      }
-    `);
-    expect(setFailed).toHaveBeenCalled();
-    expect(setOutput).not.toHaveBeenCalled();
-  });
-
-  describe('when the function returns an error', () => {
-    beforeEach(() => {
-      const handler = jest.fn().mockReturnValue({
-        FunctionError: 'Unhandled',
-      });
-
-      Lambda.__setResponseForMethods({ invoke: handler });
-    });
-
-    it('should fail the action when SUCCEED_ON_FUNCTION_FAILURE is undefined', async () => {
-      const overriddenMockedInput = {
-        ...mockedInput,
-        [ExtraOptions.SUCCEED_ON_FUNCTION_FAILURE]: undefined,
-      };
-
-      getInput.mockImplementation(
-        (key: Partial<Props & Credentials & 'REGION'>) => {
-          return overriddenMockedInput[key];
-        }
-      );
-
-      await main();
-
-      expect(setOutput).toHaveBeenCalled();
-      expect(setFailed).toHaveBeenCalled();
-    });
-
-    it('should fail the action when SUCCEED_ON_FUNCTION_FAILURE is false', async () => {
-      const overriddenMockedInput = {
-        ...mockedInput,
-        [ExtraOptions.SUCCEED_ON_FUNCTION_FAILURE]: 'false',
-      };
-
-      getInput.mockImplementation(
-        (key: Partial<Props & Credentials & 'REGION'>) => {
-          return overriddenMockedInput[key];
-        }
-      );
-
-      await main();
-
-      expect(setOutput).toHaveBeenCalled();
-      expect(setFailed).toHaveBeenCalled();
-    });
-
-    it('should succeed the action when SUCCEED_ON_FUNCTION_FAILURE is true', async () => {
-      const overriddenMockedInput = {
-        ...mockedInput,
-        [ExtraOptions.SUCCEED_ON_FUNCTION_FAILURE]: 'true',
-      };
-
-      getInput.mockImplementation(
-        (key: Partial<Props & Credentials & 'REGION'>) => {
-          return overriddenMockedInput[key];
-        }
-      );
-
-      await main();
-
-      expect(setOutput).toHaveBeenCalled();
-      expect(setFailed).not.toHaveBeenCalled();
-    });
+    expect(github.isDone()).toBe(true);
   });
 });

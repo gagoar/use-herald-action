@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { readFileSync } from 'fs';
 import { sync } from 'fast-glob';
 import { basename } from 'path';
-import { Event, FILE_ENCODING } from './environment';
+import { Event } from './environment';
 import minimatch from 'minimatch';
 
 import { RestEndpointMethodTypes } from '@octokit/rest';
 
 import { JSONPath } from '@astronautlabs/jsonpath';
+import { loadJSONFile } from './util/loadJSONFile';
 
 const commentTemplate = (users: string[]): string =>
   `Hi there, Herald found that given these changes ${users.join(
@@ -52,10 +52,11 @@ export interface Rule {
 type File = RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files'][0];
 
 type RawRule = Rule & { users?: string; teams?: string };
+
 const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
   const attrs = { ...RuleMatchers, ...RuleActors, ...RuleExtras };
 
-  const rule = Object.keys(attrs).reduce((memo, attr) => {
+  const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
     return content[attr] ? { ...memo, [attr]: content[attr] } : memo;
   }, {} as RawRule);
 
@@ -94,8 +95,7 @@ export const loadRules = (rulesLocation: string): Rule[] => {
 
   const rules = matches.reduce((memo, filePath) => {
     try {
-      const content = readFileSync(filePath, { encoding: FILE_ENCODING });
-      const rule = JSON.parse(content) as unknown;
+      const rule = loadJSONFile(filePath);
 
       return isValidRawRule(rule)
         ? [

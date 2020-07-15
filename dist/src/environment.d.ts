@@ -5,26 +5,27 @@ export declare const FILE_ENCODING = "utf8";
 export declare enum SUPPORTED_EVENT_TYPES {
     PULL_REQUEST = "pull_request"
 }
-interface Head {
+interface Commit {
     sha: string;
 }
 interface Owner {
     login: string;
     id: number;
 }
-interface Repo {
-    full_name: string;
+interface Repository {
+    name: string;
     owner: Owner;
 }
 interface PullRequest {
-    head: Head;
-    repo: Repo;
+    head: Commit;
+    base: Commit;
     organization: string;
 }
 export interface Event {
     action: string;
     number: number;
     pull_request: PullRequest;
+    repository: Repository;
 }
 export declare const env: Readonly<{
     GITHUB_EVENT_PATH: "/github/workflow/event.json";
