@@ -2,7 +2,8 @@ export declare const maxPerPage = 100;
 export declare const OUTPUT_NAME = "appliedRules";
 export declare const FILE_ENCODING = "utf8";
 export declare enum SUPPORTED_EVENT_TYPES {
-    PULL_REQUEST = "pull_request"
+    PULL_REQUEST = "pull_request",
+    push = "push"
 }
 interface Commit {
     sha: string;

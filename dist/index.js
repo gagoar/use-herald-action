@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(885);
+/******/ 		return __webpack_require__(461);
 /******/ 	};
 /******/ 	// initialize runtime
 /******/ 	runtime(__webpack_require__);
@@ -4226,7 +4226,7 @@ module.exports = {"_args":[["escodegen@1.14.1","/Users/gfrigerio/base/use-herald
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const fsStat = __webpack_require__(231);
-const rpl = __webpack_require__(934);
+const rpl = __webpack_require__(885);
 const constants_1 = __webpack_require__(171);
 const utils = __webpack_require__(933);
 function read(directory, settings, callback) {
@@ -14640,6 +14640,326 @@ module.exports = (envObj, originalEnv) =>
             throw new TypeError(`[envalid] Attempt to mutate environment value: ${name}`)
         }
     })
+
+
+/***/ }),
+
+/***/ 461:
+/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var core = __webpack_require__(470);
+
+// EXTERNAL MODULE: ./node_modules/lodash.groupby/index.js
+var lodash_groupby = __webpack_require__(604);
+var lodash_groupby_default = /*#__PURE__*/__webpack_require__.n(lodash_groupby);
+
+// EXTERNAL MODULE: ./node_modules/p-queue/dist/index.js
+var dist = __webpack_require__(984);
+var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
+
+// EXTERNAL MODULE: ./node_modules/fast-glob/out/index.js
+var out = __webpack_require__(406);
+
+// EXTERNAL MODULE: external "path"
+var external_path_ = __webpack_require__(622);
+
+// EXTERNAL MODULE: ./node_modules/minimatch/minimatch.js
+var minimatch = __webpack_require__(93);
+var minimatch_default = /*#__PURE__*/__webpack_require__.n(minimatch);
+
+// EXTERNAL MODULE: ./node_modules/@astronautlabs/jsonpath/dist/index.js
+var jsonpath_dist = __webpack_require__(607);
+
+// CONCATENATED MODULE: ./src/util/constants.ts
+const maxPerPage = 100;
+const OUTPUT_NAME = 'appliedRules';
+const FILE_ENCODING = 'utf8';
+var SUPPORTED_EVENT_TYPES;
+(function (SUPPORTED_EVENT_TYPES) {
+    SUPPORTED_EVENT_TYPES["PULL_REQUEST"] = "pull_request";
+    SUPPORTED_EVENT_TYPES["push"] = "push";
+})(SUPPORTED_EVENT_TYPES || (SUPPORTED_EVENT_TYPES = {}));
+
+// EXTERNAL MODULE: external "fs"
+var external_fs_ = __webpack_require__(747);
+
+// CONCATENATED MODULE: ./src/util/loadJSONFile.ts
+
+
+const loadJSONFile = (filePath) => {
+    const file = Object(external_fs_.readFileSync)(filePath, { encoding: FILE_ENCODING });
+    const content = JSON.parse(file);
+    return content;
+};
+
+// CONCATENATED MODULE: ./src/rules.ts
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+
+
+
+
+const commentTemplate = (users) => `Hi there, Herald found that given these changes ${users.join(', ')} might want to take a look!`;
+var RuleActors;
+(function (RuleActors) {
+    RuleActors["users"] = "users";
+    RuleActors["teams"] = "teams";
+})(RuleActors || (RuleActors = {}));
+var RuleExtras;
+(function (RuleExtras) {
+    RuleExtras["customMessage"] = "customMessage";
+    RuleExtras["name"] = "name";
+})(RuleExtras || (RuleExtras = {}));
+var RuleMatchers;
+(function (RuleMatchers) {
+    RuleMatchers["eventJsonPath"] = "eventJsonPath";
+    RuleMatchers["glob"] = "glob";
+})(RuleMatchers || (RuleMatchers = {}));
+var RuleActions;
+(function (RuleActions) {
+    RuleActions["comment"] = "comment";
+    RuleActions["review"] = "review";
+    RuleActions["assign"] = "assign";
+})(RuleActions || (RuleActions = {}));
+const sanitize = (content) => {
+    var _a, _b;
+    const attrs = Object.assign(Object.assign(Object.assign({}, RuleMatchers), RuleActors), RuleExtras);
+    const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
+        return content[attr] ? Object.assign(Object.assign({}, memo), { [attr]: content[attr] }) : memo;
+    }, {});
+    const users = (_a = rule.users) === null || _a === void 0 ? void 0 : _a.split(',');
+    const teams = (_b = rule.teams) === null || _b === void 0 ? void 0 : _b.split(',');
+    return Object.assign(Object.assign({}, rule), { users, teams });
+};
+const hasAttribute = (attr, content) => attr in content;
+const isValidRawRule = (content) => {
+    if (typeof content !== 'object' || content === null) {
+        return false;
+    }
+    const hasValidActionValues = hasAttribute('action', content) &&
+        Object.keys(RuleActions).includes(content.action);
+    const hasTeams = (hasAttribute('teams', content) && content.teams && true) || false;
+    const hasUsers = (hasAttribute('users', content) && content.users && true) || false;
+    const hasActors = hasTeams || hasUsers;
+    const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
+    return hasValidActionValues && hasActors && matchers;
+};
+const loadRules = (rulesLocation) => {
+    const matches = Object(out.sync)(rulesLocation, { onlyFiles: true });
+    const rules = matches.reduce((memo, filePath) => {
+        try {
+            const rule = loadJSONFile(filePath);
+            return isValidRawRule(rule)
+                ? [
+                    ...memo,
+                    Object.assign(Object.assign({ name: Object(external_path_.basename)(filePath) }, sanitize(rule)), { path: filePath }),
+                ]
+                : memo;
+        }
+        catch (e) {
+            console.log(`${filePath} can't be parsed, it will be ignored`);
+            return memo;
+        }
+    }, []);
+    console.info('found rules:', rules);
+    return rules;
+};
+const getMatchingRules = (rules, files, event) => {
+    const fileNames = files.map(({ filename }) => filename);
+    const matchingRules = rules.reduce((memo, rule) => {
+        const matches = {};
+        if (rule.glob) {
+            matches.glob = fileNames.filter(minimatch_default().filter(rule.glob, { matchBase: true }));
+        }
+        if (rule.eventJsonPath) {
+            matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
+        }
+        return Object.values(matches).length
+            ? [...memo, Object.assign(Object.assign({}, rule), { matches })]
+            : memo;
+    }, []);
+    console.info('matching rules:', matchingRules);
+    return matchingRules;
+};
+const composeCommentsForUsers = (matchingRules) => {
+    return matchingRules.reduce((comments, { teams, users, customMessage }) => {
+        return [
+            ...comments,
+            customMessage ? customMessage : commentTemplate([...users, ...teams]),
+        ];
+    }, []);
+};
+
+// CONCATENATED MODULE: ./src/comment.ts
+/* eslint-disable @typescript-eslint/camelcase */
+
+
+
+const getAllComments = async (client, params) => {
+    const page = 1;
+    const { data: comments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { per_page: maxPerPage, page }));
+    if (comments.length < maxPerPage) {
+        return comments;
+    }
+    else {
+        const { data: moreComments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { page: page + 1, per_page: maxPerPage }));
+        return [...comments, ...moreComments];
+    }
+};
+const handleComment = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
+    const commentsFromRules = composeCommentsForUsers(matchingRules);
+    const rawComments = await getAllComments(client, {
+        owner,
+        repo,
+        issue_number: prNumber,
+    });
+    const comments = rawComments.map(({ body }) => body);
+    const onlyNewComments = commentsFromRules.filter((comment) => !comments.includes(comment));
+    return Promise.all(onlyNewComments.map((body) => {
+        return queue.add(() => client.issues.createComment({
+            owner,
+            repo,
+            issue_number: prNumber,
+            body,
+        }));
+    }));
+};
+
+// EXTERNAL MODULE: ./node_modules/envalid/src/envalid.js
+var envalid = __webpack_require__(456);
+var envalid_default = /*#__PURE__*/__webpack_require__.n(envalid);
+
+// CONCATENATED MODULE: ./src/environment.ts
+
+const environment = () => envalid_default().cleanEnv(process.env, {
+    GITHUB_EVENT_PATH: Object(envalid.str)({
+        devDefault: '/home/runner/work/_temp/_github_workflow/event.json',
+    }),
+    GITHUB_EVENT_NAME: Object(envalid.str)({ devDefault: 'pull_request' }),
+    GITHUB_REPOSITORY: Object(envalid.str)({ devDefault: Object(envalid.testOnly)('someRepo') }),
+    GITHUB_SHA: Object(envalid.str)({
+        devDefault: Object(envalid.testOnly)('ffac537e6cbbf934b08745a378932722df287a53'),
+    }),
+}, { dotEnvPath: null });
+const env = environment();
+
+// EXTERNAL MODULE: ./node_modules/@octokit/rest/dist-node/index.js
+var dist_node = __webpack_require__(889);
+
+// EXTERNAL MODULE: ./node_modules/@octokit/plugin-retry/dist-node/index.js
+var plugin_retry_dist_node = __webpack_require__(755);
+
+// CONCATENATED MODULE: ./src/assignees.ts
+
+const handleAssignees = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
+    return Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.issues.addAssignees({
+        owner,
+        repo,
+        issue_number: prNumber,
+        assignees: matchingRule.users,
+    }))));
+};
+
+// CONCATENATED MODULE: ./src/reviewers.ts
+
+const handleReviewers = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
+    return Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.pulls.requestReviewers({
+        owner,
+        repo,
+        pull_number: prNumber,
+        reviewers: matchingRule.users,
+        team_reviewers: matchingRule.teams,
+    }))));
+};
+
+// CONCATENATED MODULE: ./src/util/isEventSupported.ts
+
+const isEventSupported = (event) => {
+    return Object.values(SUPPORTED_EVENT_TYPES).some((e) => event === e);
+};
+
+// CONCATENATED MODULE: ./src/index.ts
+/* eslint-disable @typescript-eslint/camelcase */
+
+
+
+
+
+
+
+
+
+
+
+
+const EnhancedOctokit = Object(dist_node.Octokit.plugin)(plugin_retry_dist_node.retry);
+var Props;
+(function (Props) {
+    Props["GITHUB_TOKEN"] = "GITHUB_TOKEN";
+    Props["rulesLocation"] = "rulesLocation";
+    Props["dryRun"] = "dryRun";
+    Props["base"] = "base";
+})(Props || (Props = {}));
+const actionsMap = {
+    [RuleActions.comment]: handleComment,
+    [RuleActions.assign]: handleAssignees,
+    [RuleActions.review]: handleReviewers,
+};
+const getParams = () => {
+    return Object.keys(Props).reduce((memo, prop) => {
+        const value = Object(core.getInput)(prop);
+        return value ? Object.assign(Object.assign({}, memo), { [prop]: value }) : memo;
+    }, {});
+};
+const main = async () => {
+    try {
+        if (isEventSupported(env.GITHUB_EVENT_NAME)) {
+            const event = loadJSONFile(env.GITHUB_EVENT_PATH);
+            const { pull_request: { head: { sha: headSha }, base: { sha: baseSha }, }, number: prNumber, repository: { name: repo, owner: { login: owner }, }, } = event;
+            const { GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun = false, } = getParams();
+            const rules = loadRules(rulesLocation);
+            const client = new EnhancedOctokit({ auth: GITHUB_TOKEN });
+            const { data: { files }, } = await client.repos.compareCommits({
+                base,
+                head: headSha,
+                owner,
+                repo,
+            });
+            const matchingRules = getMatchingRules(rules, files, event);
+            const groupedRulesByAction = lodash_groupby_default()(matchingRules, (rule) => rule.action);
+            if (!dryRun) {
+                if (matchingRules.length) {
+                    const groupNames = Object.keys(groupedRulesByAction);
+                    await Promise.all([
+                        groupNames.map((actionName) => {
+                            const action = actionsMap[RuleActions[actionName]];
+                            return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions.comment]);
+                        }),
+                    ]);
+                }
+            }
+            Object(core.setOutput)(OUTPUT_NAME, groupedRulesByAction);
+        }
+        else {
+            Object(core.setOutput)(OUTPUT_NAME, []);
+            throw new Error(`use-herald-action only supports [ ${Object.values(SUPPORTED_EVENT_TYPES).join(', ')} ] events for now, event found: ${env.GITHUB_EVENT_NAME}`);
+        }
+    }
+    catch (e) {
+        Object(core.setFailed)(e);
+    }
+};
+
+// CONCATENATED MODULE: ./index.ts
+
+main();
 
 
 /***/ }),
@@ -34357,313 +34677,56 @@ exports.isEmpty = isEmpty;
 /***/ }),
 
 /***/ 885:
-/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+/***/ (function(module) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
+module.exports = runParallel
 
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __webpack_require__(470);
+function runParallel (tasks, cb) {
+  var results, pending, keys
+  var isSync = true
 
-// EXTERNAL MODULE: ./node_modules/lodash.groupby/index.js
-var lodash_groupby = __webpack_require__(604);
-var lodash_groupby_default = /*#__PURE__*/__webpack_require__.n(lodash_groupby);
+  if (Array.isArray(tasks)) {
+    results = []
+    pending = tasks.length
+  } else {
+    keys = Object.keys(tasks)
+    results = {}
+    pending = keys.length
+  }
 
-// EXTERNAL MODULE: ./node_modules/p-queue/dist/index.js
-var dist = __webpack_require__(984);
-var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
-
-// EXTERNAL MODULE: ./node_modules/fast-glob/out/index.js
-var out = __webpack_require__(406);
-
-// EXTERNAL MODULE: external "path"
-var external_path_ = __webpack_require__(622);
-
-// EXTERNAL MODULE: ./node_modules/minimatch/minimatch.js
-var minimatch = __webpack_require__(93);
-var minimatch_default = /*#__PURE__*/__webpack_require__.n(minimatch);
-
-// EXTERNAL MODULE: ./node_modules/@astronautlabs/jsonpath/dist/index.js
-var jsonpath_dist = __webpack_require__(607);
-
-// CONCATENATED MODULE: ./src/util/constants.ts
-const maxPerPage = 100;
-const OUTPUT_NAME = 'appliedRules';
-const FILE_ENCODING = 'utf8';
-var SUPPORTED_EVENT_TYPES;
-(function (SUPPORTED_EVENT_TYPES) {
-    SUPPORTED_EVENT_TYPES["PULL_REQUEST"] = "pull_request";
-})(SUPPORTED_EVENT_TYPES || (SUPPORTED_EVENT_TYPES = {}));
-
-// EXTERNAL MODULE: external "fs"
-var external_fs_ = __webpack_require__(747);
-
-// CONCATENATED MODULE: ./src/util/loadJSONFile.ts
-
-
-const loadJSONFile = (filePath) => {
-    const file = Object(external_fs_.readFileSync)(filePath, { encoding: FILE_ENCODING });
-    const content = JSON.parse(file);
-    return content;
-};
-
-// CONCATENATED MODULE: ./src/rules.ts
-/* eslint-disable @typescript-eslint/no-var-requires */
-
-
-
-
-
-const commentTemplate = (users) => `Hi there, Herald found that given these changes ${users.join(', ')} might want to take a look!`;
-var RuleActors;
-(function (RuleActors) {
-    RuleActors["users"] = "users";
-    RuleActors["teams"] = "teams";
-})(RuleActors || (RuleActors = {}));
-var RuleExtras;
-(function (RuleExtras) {
-    RuleExtras["customMessage"] = "customMessage";
-    RuleExtras["name"] = "name";
-})(RuleExtras || (RuleExtras = {}));
-var RuleMatchers;
-(function (RuleMatchers) {
-    RuleMatchers["eventJsonPath"] = "eventJsonPath";
-    RuleMatchers["glob"] = "glob";
-})(RuleMatchers || (RuleMatchers = {}));
-var RuleActions;
-(function (RuleActions) {
-    RuleActions["comment"] = "comment";
-    RuleActions["review"] = "review";
-    RuleActions["assign"] = "assign";
-})(RuleActions || (RuleActions = {}));
-const sanitize = (content) => {
-    var _a, _b;
-    const attrs = Object.assign(Object.assign(Object.assign({}, RuleMatchers), RuleActors), RuleExtras);
-    const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
-        return content[attr] ? Object.assign(Object.assign({}, memo), { [attr]: content[attr] }) : memo;
-    }, {});
-    const users = (_a = rule.users) === null || _a === void 0 ? void 0 : _a.split(',');
-    const teams = (_b = rule.teams) === null || _b === void 0 ? void 0 : _b.split(',');
-    return Object.assign(Object.assign({}, rule), { users, teams });
-};
-const hasAttribute = (attr, content) => attr in content;
-const isValidRawRule = (content) => {
-    if (typeof content !== 'object' || content === null) {
-        return false;
+  function done (err) {
+    function end () {
+      if (cb) cb(err, results)
+      cb = null
     }
-    const hasValidActionValues = hasAttribute('action', content) &&
-        Object.keys(RuleActions).includes(content.action);
-    const hasTeams = (hasAttribute('teams', content) && content.teams && true) || false;
-    const hasUsers = (hasAttribute('users', content) && content.users && true) || false;
-    const hasActors = hasTeams || hasUsers;
-    const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
-    return hasValidActionValues && hasActors && matchers;
-};
-const loadRules = (rulesLocation) => {
-    const matches = Object(out.sync)(rulesLocation, { onlyFiles: true });
-    const rules = matches.reduce((memo, filePath) => {
-        try {
-            const rule = loadJSONFile(filePath);
-            return isValidRawRule(rule)
-                ? [
-                    ...memo,
-                    Object.assign(Object.assign({ name: Object(external_path_.basename)(filePath) }, sanitize(rule)), { path: filePath }),
-                ]
-                : memo;
-        }
-        catch (e) {
-            console.log(`${filePath} can't be parsed, it will be ignored`);
-            return memo;
-        }
-    }, []);
-    console.info('found rules:', rules);
-    return rules;
-};
-const getMatchingRules = (rules, files, event) => {
-    const fileNames = files.map(({ filename }) => filename);
-    const matchingRules = rules.reduce((memo, rule) => {
-        const matches = {};
-        if (rule.glob) {
-            matches.glob = fileNames.filter(minimatch_default().filter(rule.glob, { matchBase: true }));
-        }
-        if (rule.eventJsonPath) {
-            matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
-        }
-        return Object.values(matches).length
-            ? [...memo, Object.assign(Object.assign({}, rule), { matches })]
-            : memo;
-    }, []);
-    console.info('matching rules:', matchingRules);
-    return matchingRules;
-};
-const composeCommentsForUsers = (matchingRules) => {
-    return matchingRules.reduce((comments, { teams, users, customMessage }) => {
-        return [
-            ...comments,
-            customMessage ? customMessage : commentTemplate([...users, ...teams]),
-        ];
-    }, []);
-};
+    if (isSync) process.nextTick(end)
+    else end()
+  }
 
-// CONCATENATED MODULE: ./src/comment.ts
-/* eslint-disable @typescript-eslint/camelcase */
-
-
-
-const getAllComments = async (client, params) => {
-    const page = 1;
-    const { data: comments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { per_page: maxPerPage, page }));
-    if (comments.length < maxPerPage) {
-        return comments;
+  function each (i, err, result) {
+    results[i] = result
+    if (--pending === 0 || err) {
+      done(err)
     }
-    else {
-        const { data: moreComments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { page: page + 1, per_page: maxPerPage }));
-        return [...comments, ...moreComments];
-    }
-};
-const handleComment = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    const commentsFromRules = composeCommentsForUsers(matchingRules);
-    const rawComments = await getAllComments(client, {
-        owner,
-        repo,
-        issue_number: prNumber,
-    });
-    const comments = rawComments.map(({ body }) => body);
-    const onlyNewComments = commentsFromRules.filter((comment) => !comments.includes(comment));
-    return Promise.all(onlyNewComments.map((body) => {
-        return queue.add(() => client.issues.createComment({
-            owner,
-            repo,
-            issue_number: prNumber,
-            body,
-        }));
-    }));
-};
+  }
 
-// EXTERNAL MODULE: ./node_modules/envalid/src/envalid.js
-var envalid = __webpack_require__(456);
-var envalid_default = /*#__PURE__*/__webpack_require__.n(envalid);
+  if (!pending) {
+    // empty
+    done(null)
+  } else if (keys) {
+    // object
+    keys.forEach(function (key) {
+      tasks[key](function (err, result) { each(key, err, result) })
+    })
+  } else {
+    // array
+    tasks.forEach(function (task, i) {
+      task(function (err, result) { each(i, err, result) })
+    })
+  }
 
-// CONCATENATED MODULE: ./src/environment.ts
-
-const environment = () => envalid_default().cleanEnv(process.env, {
-    GITHUB_EVENT_PATH: Object(envalid.str)({
-        devDefault: '/home/runner/work/_temp/_github_workflow/event.json',
-    }),
-    GITHUB_EVENT_NAME: Object(envalid.str)({ devDefault: 'pull_request' }),
-    GITHUB_REPOSITORY: Object(envalid.str)({ devDefault: Object(envalid.testOnly)('someRepo') }),
-    GITHUB_SHA: Object(envalid.str)({
-        devDefault: Object(envalid.testOnly)('ffac537e6cbbf934b08745a378932722df287a53'),
-    }),
-}, { dotEnvPath: null });
-const env = environment();
-
-// EXTERNAL MODULE: ./node_modules/@octokit/rest/dist-node/index.js
-var dist_node = __webpack_require__(889);
-
-// EXTERNAL MODULE: ./node_modules/@octokit/plugin-retry/dist-node/index.js
-var plugin_retry_dist_node = __webpack_require__(755);
-
-// CONCATENATED MODULE: ./src/assignees.ts
-
-const handleAssignees = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    return Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.issues.addAssignees({
-        owner,
-        repo,
-        issue_number: prNumber,
-        assignees: matchingRule.users,
-    }))));
-};
-
-// CONCATENATED MODULE: ./src/reviewers.ts
-
-const handleReviewers = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    return Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.pulls.requestReviewers({
-        owner,
-        repo,
-        pull_number: prNumber,
-        reviewers: matchingRule.users,
-        team_reviewers: matchingRule.teams,
-    }))));
-};
-
-// CONCATENATED MODULE: ./src/index.ts
-/* eslint-disable @typescript-eslint/camelcase */
-
-
-
-
-
-
-
-
-
-
-
-const EnhancedOctokit = Object(dist_node.Octokit.plugin)(plugin_retry_dist_node.retry);
-var Props;
-(function (Props) {
-    Props["GITHUB_TOKEN"] = "GITHUB_TOKEN";
-    Props["rulesLocation"] = "rulesLocation";
-    Props["dryRun"] = "dryRun";
-    Props["base"] = "base";
-})(Props || (Props = {}));
-const actionsMap = {
-    [RuleActions.comment]: handleComment,
-    [RuleActions.assign]: handleAssignees,
-    [RuleActions.review]: handleReviewers,
-};
-const getParams = () => {
-    return Object.keys(Props).reduce((memo, prop) => {
-        const value = Object(core.getInput)(prop);
-        return value ? Object.assign(Object.assign({}, memo), { [prop]: value }) : memo;
-    }, {});
-};
-const main = async () => {
-    try {
-        if (env.GITHUB_EVENT_NAME === SUPPORTED_EVENT_TYPES.PULL_REQUEST) {
-            const event = loadJSONFile(env.GITHUB_EVENT_PATH);
-            const { pull_request: { head: { sha: headSha }, base: { sha: baseSha }, }, number: prNumber, repository: { name: repo, owner: { login: owner }, }, } = event;
-            const { GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun = false, } = getParams();
-            const rules = loadRules(rulesLocation);
-            const client = new EnhancedOctokit({ auth: GITHUB_TOKEN });
-            const { data: { files }, } = await client.repos.compareCommits({
-                base,
-                head: headSha,
-                owner,
-                repo,
-            });
-            const matchingRules = getMatchingRules(rules, files, event);
-            const groupedRulesByAction = lodash_groupby_default()(matchingRules, (rule) => rule.action);
-            if (!dryRun) {
-                if (matchingRules.length) {
-                    const groupNames = Object.keys(groupedRulesByAction);
-                    await Promise.all([
-                        groupNames.map((actionName) => {
-                            const action = actionsMap[RuleActions[actionName]];
-                            return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions.comment]);
-                        }),
-                    ]);
-                }
-            }
-            Object(core.setOutput)(OUTPUT_NAME, groupedRulesByAction);
-        }
-        else {
-            Object(core.setOutput)(OUTPUT_NAME, []);
-            throw new Error(`use-herald only supports pull_request events for now, event found: ${env.GITHUB_EVENT_NAME}`);
-        }
-    }
-    catch (e) {
-        Object(core.setFailed)(e);
-    }
-};
-
-// CONCATENATED MODULE: ./index.ts
-
-main();
+  isSync = false
+}
 
 
 /***/ }),
@@ -36395,61 +36458,6 @@ exports.requestLog = requestLog;
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __webpack_require__(210);
 exports.fs = fs;
-
-
-/***/ }),
-
-/***/ 934:
-/***/ (function(module) {
-
-module.exports = runParallel
-
-function runParallel (tasks, cb) {
-  var results, pending, keys
-  var isSync = true
-
-  if (Array.isArray(tasks)) {
-    results = []
-    pending = tasks.length
-  } else {
-    keys = Object.keys(tasks)
-    results = {}
-    pending = keys.length
-  }
-
-  function done (err) {
-    function end () {
-      if (cb) cb(err, results)
-      cb = null
-    }
-    if (isSync) process.nextTick(end)
-    else end()
-  }
-
-  function each (i, err, result) {
-    results[i] = result
-    if (--pending === 0 || err) {
-      done(err)
-    }
-  }
-
-  if (!pending) {
-    // empty
-    done(null)
-  } else if (keys) {
-    // object
-    keys.forEach(function (key) {
-      tasks[key](function (err, result) { each(key, err, result) })
-    })
-  } else {
-    // array
-    tasks.forEach(function (task, i) {
-      task(function (err, result) { each(i, err, result) })
-    })
-  }
-
-  isSync = false
-}
 
 
 /***/ }),

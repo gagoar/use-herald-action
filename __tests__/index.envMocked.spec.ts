@@ -5,7 +5,7 @@ import * as actions from '@actions/core';
 jest.mock('@actions/core');
 jest.mock('../src/environment', () => ({
   env: {
-    GITHUB_EVENT_NAME: 'push',
+    GITHUB_EVENT_NAME: 'tag',
   },
 }));
 describe('use-herald', () => {
@@ -17,7 +17,7 @@ describe('use-herald', () => {
     expect(setFailed.mock.calls).toMatchInlineSnapshot(`
       Array [
         Array [
-          [Error: use-herald only supports pull_request events for now, event found: push],
+          [Error: use-herald-action only supports [ pull_request, push ] events for now, event found: tag],
         ],
       ]
     `);

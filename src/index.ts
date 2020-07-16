@@ -3,7 +3,7 @@ import { getInput, setOutput, setFailed } from '@actions/core';
 import groupBy from 'lodash.groupby';
 import { handleComment } from './comment';
 import { loadRules, getMatchingRules, RuleActions } from './rules';
-import { Event, SUPPORTED_EVENT_TYPES, OUTPUT_NAME } from './util/constants';
+import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES } from './util/constants';
 import { env } from './environment';
 
 import { Octokit } from '@octokit/rest';
@@ -11,6 +11,7 @@ import { retry } from '@octokit/plugin-retry';
 import { handleAssignees } from './assignees';
 import { handleReviewers } from './reviewers';
 import { loadJSONFile } from './util/loadJSONFile';
+import { isEventSupported } from './util/isEventSupported';
 
 const EnhancedOctokit = Octokit.plugin(retry);
 
@@ -38,7 +39,7 @@ const getParams = () => {
 
 export const main = async () => {
   try {
-    if (env.GITHUB_EVENT_NAME === SUPPORTED_EVENT_TYPES.PULL_REQUEST) {
+    if (isEventSupported(env.GITHUB_EVENT_NAME)) {
       const event = loadJSONFile(env.GITHUB_EVENT_PATH) as Event;
 
       const {
@@ -104,7 +105,9 @@ export const main = async () => {
     } else {
       setOutput(OUTPUT_NAME, []);
       throw new Error(
-        `use-herald only supports pull_request events for now, event found: ${env.GITHUB_EVENT_NAME}`
+        `use-herald-action only supports [ ${Object.values(
+          SUPPORTED_EVENT_TYPES
+        ).join(', ')} ] events for now, event found: ${env.GITHUB_EVENT_NAME}`
       );
     }
   } catch (e) {

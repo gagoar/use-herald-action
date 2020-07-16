@@ -3,6 +3,7 @@ export const OUTPUT_NAME = 'appliedRules';
 export const FILE_ENCODING = 'utf8';
 export enum SUPPORTED_EVENT_TYPES {
   PULL_REQUEST = 'pull_request',
+  push = 'push',
 }
 interface Commit {
   sha: string;
