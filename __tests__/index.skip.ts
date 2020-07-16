@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { main, Props } from '../src';
-import * as fs from 'fs';
 import * as fg from 'fast-glob';
 import * as actions from '@actions/core';
 import { RuleActions } from '../src/rules';

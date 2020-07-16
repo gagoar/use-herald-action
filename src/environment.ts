@@ -1,3 +1,4 @@
+import { join } from 'path';
 import envalid, { str, testOnly } from 'envalid';
 
 const environment = () =>
@@ -5,7 +6,10 @@ const environment = () =>
     process.env,
     {
       GITHUB_EVENT_PATH: str({
-        devDefault: '/home/runner/work/_temp/_github_workflow/event.json',
+        devDefault: testOnly('__mocks__/event.json'),
+      }),
+      GITHUB_WORKSPACE: str({
+        devDefault: testOnly(join(__dirname, '../')),
       }),
       GITHUB_EVENT_NAME: str({ devDefault: 'pull_request' }),
       GITHUB_REPOSITORY: str({ devDefault: testOnly('someRepo') }),

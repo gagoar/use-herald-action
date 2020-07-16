@@ -2,6 +2,7 @@
 import { sync } from 'fast-glob';
 import { basename } from 'path';
 import { Event } from './util/constants';
+import { env } from './environment';
 import minimatch from 'minimatch';
 
 import { RestEndpointMethodTypes } from '@octokit/rest';
@@ -91,7 +92,11 @@ const isValidRawRule = (content: unknown): content is RawRule => {
 };
 
 export const loadRules = (rulesLocation: string): Rule[] => {
-  const matches = sync(rulesLocation, { onlyFiles: true });
+  const matches = sync(rulesLocation, {
+    onlyFiles: true,
+    cwd: env.GITHUB_WORKSPACE,
+    absolute: true,
+  });
 
   const rules = matches.reduce((memo, filePath) => {
     try {

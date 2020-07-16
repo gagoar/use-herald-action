@@ -1,0 +1,90 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import nock from 'nock';
+import { main, Props } from '../src';
+import { Event } from '../src/util/constants';
+import * as actions from '@actions/core';
+
+import jsonEvent from '../__mocks__/event.json';
+import getCompareCommitsResponse from '../__mocks__/scenarios/get_compare_commits.json';
+import { mockConsole } from './helpers';
+
+jest.mock('@actions/core');
+
+const event = (jsonEvent as unknown) as Event;
+const setOutput = actions.setOutput as jest.Mock<any>;
+const setFailed = actions.setFailed as jest.Mock<any>;
+const getInput = actions.getInput as jest.Mock<any>;
+
+const mockedInput = {
+  [Props.GITHUB_TOKEN]: 'TOKEN',
+  [Props.dryRun]: true,
+  [Props.rulesLocation]: '__mocks__/rules/*.json',
+};
+
+const owner = 'gagoar';
+const repo = 'example_repo';
+
+describe('use-herald-action', () => {
+  let consoleInfoMock: jest.Mock;
+  let consoleLogMock: jest.Mock;
+
+  beforeAll(() => {
+    consoleLogMock = mockConsole('log');
+    consoleInfoMock = mockConsole('info');
+  });
+  beforeEach(() => {
+    getInput.mockClear();
+    setFailed.mockClear();
+    setOutput.mockClear();
+    consoleInfoMock.mockClear();
+    consoleLogMock.mockClear();
+  });
+  it('should run normally (with dryRun: true)', async () => {
+    getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
+      return mockedInput[key];
+    });
+    const github = nock('https://api.github.com')
+      .get(
+        `/repos/${owner}/${repo}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`
+      )
+      .reply(200, getCompareCommitsResponse);
+
+    await main();
+
+    expect(consoleInfoMock.mock.calls[0]).toMatchInlineSnapshot(`
+      Array [
+        "found rules:",
+        Array [
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "glob": "*.ts",
+            "name": "rule1.json",
+            "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule1.json",
+            "teams": undefined,
+            "users": Array [
+              "@eeny",
+              " @meeny",
+              " @miny",
+              " @moe",
+            ],
+          },
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "glob": "*.js",
+            "name": "The rule that only has a team",
+            "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule2.json",
+            "teams": Array [
+              "@someTeam",
+            ],
+            "users": undefined,
+          },
+        ],
+      ]
+    `);
+    expect(setFailed).not.toHaveBeenCalled();
+    expect(setOutput).toHaveBeenCalled();
+    expect(github.isDone()).toBe(true);
+  });
+});
