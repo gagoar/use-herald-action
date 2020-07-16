@@ -3202,6 +3202,14 @@ const getParams = () => {
         return value ? Object.assign(Object.assign({}, memo), { [prop]: value }) : memo;
     }, {});
 };
+const beta = async () => {
+    const params = getParams();
+    console.warn(params);
+    const rules = loadRules(params.rulesLocation);
+    const response = { rules, dir: env.GITHUB_WORKSPACE, params };
+    console.warn(response);
+    return response;
+};
 const main = async () => {
     try {
         if (isEventSupported(env.GITHUB_EVENT_NAME)) {

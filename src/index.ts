@@ -37,6 +37,18 @@ const getParams = () => {
   }, {} as typeof Props);
 };
 
+export const beta = async () => {
+  const params = getParams();
+
+  console.warn(params);
+  const rules = loadRules(params.rulesLocation);
+
+  const response = { rules, dir: env.GITHUB_WORKSPACE, params };
+
+  console.warn(response);
+
+  return response;
+};
 export const main = async () => {
   try {
     if (isEventSupported(env.GITHUB_EVENT_NAME)) {

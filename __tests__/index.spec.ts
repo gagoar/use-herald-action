@@ -42,7 +42,54 @@ describe('use-herald-action', () => {
     consoleLogMock.mockClear();
     consoleWarnMock.mockClear();
   });
-  it('should run normally (with dryRun: true)', async () => {
+  it('beta', async () => {
+    getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
+      return mockedInput[key];
+    });
+    const { beta } = require('../src') as { beta: Function };
+
+    const response = await beta();
+
+    expect(getInput).toHaveBeenCalled();
+    expect(response).toMatchInlineSnapshot(`
+      Object {
+        "dir": "/Users/gfrigerio/base/use-herald/",
+        "params": Object {
+          "GITHUB_TOKEN": "TOKEN",
+          "dryRun": true,
+          "rulesLocation": "__mocks__/rules/*.json",
+        },
+        "rules": Array [
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "glob": "*.ts",
+            "name": "rule1.json",
+            "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule1.json",
+            "teams": undefined,
+            "users": Array [
+              "@eeny",
+              " @meeny",
+              " @miny",
+              " @moe",
+            ],
+          },
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "glob": "*.js",
+            "name": "The rule that only has a team",
+            "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule2.json",
+            "teams": Array [
+              "@someTeam",
+            ],
+            "users": undefined,
+          },
+        ],
+      }
+    `);
+  });
+  it.skip('should run normally (with dryRun: true)', async () => {
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
       return mockedInput[key];
     });
