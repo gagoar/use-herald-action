@@ -6,10 +6,14 @@ import * as actions from '@actions/core';
 import { env } from '../src/environment';
 import getCompareCommitsResponse from '../__mocks__/scenarios/get_compare_commits.json';
 import { mockConsole } from './helpers';
+import { isAbsolute, join } from 'path';
 
 jest.mock('@actions/core');
 
-const event = require(`../${env.GITHUB_EVENT_PATH}`) as Event;
+const eventPath = isAbsolute(env.GITHUB_EVENT_PATH)
+  ? env.GITHUB_EVENT_PATH
+  : join('..', env.GITHUB_EVENT_PATH);
+const event = require(eventPath) as Event;
 
 const setOutput = actions.setOutput as jest.Mock<any>;
 const setFailed = actions.setFailed as jest.Mock<any>;
@@ -48,52 +52,7 @@ describe('use-herald-action', () => {
     const response = await beta();
 
     expect(getInput).toHaveBeenCalled();
-    expect(response).toMatchInlineSnapshot(`
-      Object {
-        "response": Object {
-          "dir": "/Users/gfrigerio/base/use-herald/",
-          "params": Object {
-            "GITHUB_TOKEN": "TOKEN",
-            "dryRun": true,
-            "rulesLocation": "__mocks__/rules/*.json",
-          },
-          "rules": Array [
-            Object {
-              "action": "comment",
-              "customMessage": "This is a custom message for a rule",
-              "glob": "*.ts",
-              "name": "rule1.json",
-              "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule1.json",
-              "teams": undefined,
-              "users": Array [
-                "@eeny",
-                " @meeny",
-                " @miny",
-                " @moe",
-              ],
-            },
-            Object {
-              "action": "comment",
-              "customMessage": "This is a custom message for a rule",
-              "glob": "*.js",
-              "name": "The rule that only has a team",
-              "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule2.json",
-              "teams": Array [
-                "@someTeam",
-              ],
-              "users": undefined,
-            },
-          ],
-        },
-        "subset": Object {
-          "baseSha": "f95f852bd8fca8fcc58a9a2d6c842781e32a215e",
-          "headSha": "ec26c3e57ca3a959ca5aad62de7213c562f8c821",
-          "owner": "gagoar",
-          "prNumber": 2,
-          "repo": "example_repo",
-        },
-      }
-    `);
+    expect(response).toMatchInlineSnapshot();
   });
   it('should run normally (with dryRun: true)', async () => {
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
