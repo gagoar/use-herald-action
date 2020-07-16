@@ -101,6 +101,34 @@ describe('use-herald', () => {
 
     await main();
 
+    expect(readFileSync.mock.calls).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          "/home/runner/work/_temp/_github_workflow/event.json",
+          Object {
+            "encoding": "utf8",
+          },
+        ],
+        Array [
+          "/some/rule1.json",
+          Object {
+            "encoding": "utf8",
+          },
+        ],
+        Array [
+          "/some/rule2.json",
+          Object {
+            "encoding": "utf8",
+          },
+        ],
+        Array [
+          "/some/badRule.json",
+          Object {
+            "encoding": "utf8",
+          },
+        ],
+      ]
+    `);
     expect(env.GITHUB_EVENT_PATH).toMatchInlineSnapshot(
       '"/home/runner/work/_temp/_github_workflow/event.json"'
     );
