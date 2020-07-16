@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import nock from 'nock';
-import { main, Props } from '../src';
+import { Props } from '../src';
 import { Event } from '../src/util/constants';
 import * as actions from '@actions/core';
 
@@ -51,6 +51,8 @@ describe('use-herald-action', () => {
         `/repos/${owner}/${repo}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`
       )
       .reply(200, getCompareCommitsResponse);
+
+    const { main } = require('../src') as { main: Function };
 
     await main();
 
