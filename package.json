@@ -1,9 +1,9 @@
 {
-  "name": "use-herald",
-  "repository": "git@github.com:gagoar/use-herald.git",
+  "name": "use-herald-action",
+  "repository": "git@github.com:gagoar/use-herald-action.git",
   "license": "MIT",
   "version": "3.3.0",
-  "description": "Invoke AWS Lambda",
+  "description": "add subscribers, assignees and reviewers to your pull request",
   "main": "index.ts",
   "husky": {
     "hooks": {

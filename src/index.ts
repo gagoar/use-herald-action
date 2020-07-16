@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { getInput, setOutput, setFailed } from '@actions/core';
-import groupBy from 'lodash.groupBy';
+import groupBy from 'lodash.groupby';
 import { handleComment } from './comment';
 import { loadRules, getMatchingRules, RuleActions } from './rules';
 import { Event, SUPPORTED_EVENT_TYPES, OUTPUT_NAME } from './util/constants';
