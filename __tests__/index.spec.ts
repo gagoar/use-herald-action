@@ -99,6 +99,7 @@ describe('use-herald-action', () => {
     `);
   });
   it('should run normally (with dryRun: true)', async () => {
+    nock.recorder.rec();
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
       return mockedInput[key];
     });
