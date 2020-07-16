@@ -58,18 +58,6 @@ describe('use-herald', () => {
     },
   };
 
-  readFileSync.mockImplementation(
-    (filePath: keyof typeof rawRules | typeof env.GITHUB_EVENT_PATH) => {
-      if (
-        filePath.endsWith('event.json') ||
-        filePath === env.GITHUB_EVENT_PATH
-      ) {
-        return JSON.stringify(event);
-      }
-      return JSON.stringify(rawRules[filePath]);
-    }
-  );
-
   const owner = 'gagoar';
   const repo = 'example_repo';
 
@@ -88,6 +76,18 @@ describe('use-herald', () => {
     readFileSync.mockClear();
     consoleInfoMock.mockClear();
     consoleLogMock.mockClear();
+
+    readFileSync.mockImplementation(
+      (filePath: keyof typeof rawRules | typeof env.GITHUB_EVENT_PATH) => {
+        if (
+          filePath.endsWith('event.json') ||
+          filePath === env.GITHUB_EVENT_PATH
+        ) {
+          return JSON.stringify(event);
+        }
+        return JSON.stringify(rawRules[filePath]);
+      }
+    );
   });
 
   beforeEach(() => {
