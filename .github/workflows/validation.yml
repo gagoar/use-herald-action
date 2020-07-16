@@ -3,6 +3,15 @@ name: validation
 on: [push]
 
 jobs:
+  name: uploading event
+  run-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v2
+    - name: upload event.json
+    - uses: actions/upload-artifact@v2
+      with:
+        name: event
+        path: $GITHUB_EVENT_PATH
   lint:
     name: Linting
     runs-on: ubuntu-latest
