@@ -3209,6 +3209,7 @@ const main = async () => {
             const { pull_request: { head: { sha: headSha }, base: { sha: baseSha }, }, number: prNumber, repository: { name: repo, owner: { login: owner }, }, } = event;
             const { GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun = false, } = getParams();
             const rules = loadRules(rulesLocation);
+            console.warn({ rules, dir: env.GITHUB_WORKSPACE, rulesLocation });
             const client = new EnhancedOctokit({ auth: GITHUB_TOKEN });
             const { data: { files }, } = await client.repos.compareCommits({
                 base,

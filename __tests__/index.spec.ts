@@ -64,6 +64,39 @@ describe('use-herald-action', () => {
             "workspace": "/Users/gfrigerio/base/use-herald/",
           },
         ],
+        Array [
+          Object {
+            "dir": "/Users/gfrigerio/base/use-herald/",
+            "rules": Array [
+              Object {
+                "action": "comment",
+                "customMessage": "This is a custom message for a rule",
+                "glob": "*.ts",
+                "name": "rule1.json",
+                "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule1.json",
+                "teams": undefined,
+                "users": Array [
+                  "@eeny",
+                  " @meeny",
+                  " @miny",
+                  " @moe",
+                ],
+              },
+              Object {
+                "action": "comment",
+                "customMessage": "This is a custom message for a rule",
+                "glob": "*.js",
+                "name": "The rule that only has a team",
+                "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule2.json",
+                "teams": Array [
+                  "@someTeam",
+                ],
+                "users": undefined,
+              },
+            ],
+            "rulesLocation": "__mocks__/rules/*.json",
+          },
+        ],
       ]
     `);
     expect(consoleInfoMock.mock.calls[0]).toMatchInlineSnapshot(`

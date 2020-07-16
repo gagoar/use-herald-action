@@ -63,6 +63,7 @@ export const main = async () => {
 
       const rules = loadRules(rulesLocation);
 
+      console.warn({ rules, dir: env.GITHUB_WORKSPACE, rulesLocation });
       const client = new EnhancedOctokit({ auth: GITHUB_TOKEN });
 
       const {
