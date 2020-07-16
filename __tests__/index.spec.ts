@@ -21,9 +21,6 @@ const mockedInput = {
   [Props.rulesLocation]: '__mocks__/rules/*.json',
 };
 
-const owner = 'gagoar';
-const repo = 'example_repo';
-
 describe('use-herald-action', () => {
   let consoleWarnMock: jest.Mock;
   let consoleInfoMock: jest.Mock;
@@ -99,13 +96,12 @@ describe('use-herald-action', () => {
     `);
   });
   it('should run normally (with dryRun: true)', async () => {
-    nock.recorder.rec();
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
       return mockedInput[key];
     });
     const github = nock('https://api.github.com')
       .get(
-        `/repos/${owner}/${repo}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`
+        `/repos/${event.repository.owner.login}/${event.repository.name}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`
       )
       .reply(200, getCompareCommitsResponse);
 
