@@ -6,15 +6,18 @@ import * as actions from '@actions/core';
 import { env } from '../src/environment';
 import getCompareCommitsResponse from '../__mocks__/scenarios/get_compare_commits.json';
 import { mockConsole } from './helpers';
+import * as comment from '../src/comment';
 import { isAbsolute, join } from 'path';
 
 jest.mock('@actions/core');
+jest.mock('../src/comment');
 
 const eventPath = isAbsolute(env.GITHUB_EVENT_PATH)
   ? env.GITHUB_EVENT_PATH
   : join('..', env.GITHUB_EVENT_PATH);
 const event = require(eventPath) as Event;
 
+const handleComment = comment.handleComment as jest.Mock<any>;
 const setOutput = actions.setOutput as jest.Mock<any>;
 const setFailed = actions.setFailed as jest.Mock<any>;
 const getInput = actions.getInput as jest.Mock<any>;
@@ -43,17 +46,6 @@ describe('use-herald-action', () => {
     consoleLogMock.mockClear();
     consoleWarnMock.mockClear();
   });
-  // it.skip('beta', async () => {
-  //   getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
-  //     return mockedInput[key];
-  //   });
-  //   const { beta } = require('../src') as { beta: Function };
-
-  //   const response = await beta();
-
-  //   expect(getInput).toHaveBeenCalled();
-  //   expect(response).toMatchInlineSnapshot();
-  // });
   it('should run normally (with dryRun: true)', async () => {
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
       return mockedInput[key];
@@ -111,6 +103,70 @@ describe('use-herald-action', () => {
     `);
     expect(setFailed).not.toHaveBeenCalled();
     expect(setOutput).toHaveBeenCalled();
+    expect(github.isDone()).toBe(true);
+  });
+
+  it('should run the entire action', async () => {
+    const input = { ...mockedInput, [Props.dryRun]: false };
+    getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
+      return input[key];
+    });
+
+    const github = nock('https://api.github.com')
+      .get(
+        `/repos/${event.repository.owner.login}/${event.repository.name}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`
+      )
+      .reply(200, getCompareCommitsResponse);
+
+    const { main } = require('../src') as { main: Function };
+
+    await main();
+
+    expect(handleComment).toHaveBeenCalled();
+    expect(setOutput.mock.calls).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          "appliedRules",
+          Object {
+            "comment": Array [
+              Object {
+                "action": "comment",
+                "customMessage": "This is a custom message for a rule",
+                "glob": "*.ts",
+                "matches": Object {
+                  "glob": Array [
+                    "file1.ts",
+                  ],
+                },
+                "name": "rule1.json",
+                "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
+                "teams": undefined,
+                "users": Array [
+                  "@eeny",
+                  " @meeny",
+                  " @miny",
+                  " @moe",
+                ],
+              },
+              Object {
+                "action": "comment",
+                "customMessage": "This is a custom message for a rule",
+                "glob": "*.js",
+                "matches": Object {
+                  "glob": Array [],
+                },
+                "name": "The rule that only has a team",
+                "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule2.json",
+                "teams": Array [
+                  "@someTeam",
+                ],
+                "users": undefined,
+              },
+            ],
+          },
+        ],
+      ]
+    `);
     expect(github.isDone()).toBe(true);
   });
 });
