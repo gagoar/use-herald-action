@@ -3023,14 +3023,11 @@ var RuleActions;
     RuleActions["assign"] = "assign";
 })(RuleActions || (RuleActions = {}));
 const sanitize = (content) => {
-    var _a, _b;
     const attrs = Object.assign(Object.assign(Object.assign({}, RuleMatchers), RuleActors), RuleExtras);
     const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
         return content[attr] ? Object.assign(Object.assign({}, memo), { [attr]: content[attr] }) : memo;
     }, {});
-    const users = (_a = rule.users) === null || _a === void 0 ? void 0 : _a.split(',');
-    const teams = (_b = rule.teams) === null || _b === void 0 ? void 0 : _b.split(',');
-    return Object.assign(Object.assign({}, rule), { users, teams });
+    return Object.assign({}, rule);
 };
 const hasAttribute = (attr, content) => attr in content;
 const isValidRawRule = (content) => {
@@ -3039,8 +3036,8 @@ const isValidRawRule = (content) => {
     }
     const hasValidActionValues = hasAttribute('action', content) &&
         Object.keys(RuleActions).includes(content.action);
-    const hasTeams = (hasAttribute('teams', content) && content.teams && true) || false;
-    const hasUsers = (hasAttribute('users', content) && content.users && true) || false;
+    const hasTeams = hasAttribute('teams', content) && Array.isArray(content.teams);
+    const hasUsers = hasAttribute('users', content) && Array.isArray(content.users);
     const hasActors = hasTeams || hasUsers;
     const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
     return hasValidActionValues && hasActors && matchers;

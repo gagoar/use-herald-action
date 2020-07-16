@@ -286,10 +286,10 @@ describe('rules', () => {
     it('loads rules successfully', () => {
       // rule coming from the rules.json  is called rawRule.
       const rawRules = {
-        '/some/rule1.json': { ...validRule, users: validRule.users.join(', ') },
+        '/some/rule1.json': validRule,
         '/some/rule2.json': {
           ...validRule,
-          teams: 'someTeams',
+          teams: ['@someTeam'],
           users: undefined,
         },
         '/some/badRule.json': {
@@ -311,12 +311,11 @@ describe('rules', () => {
             "glob": "*.ts",
             "name": "rule1.json",
             "path": "/some/rule1.json",
-            "teams": undefined,
             "users": Array [
               "@eeny",
-              " @meeny",
-              " @miny",
-              " @moe",
+              "@meeny",
+              "@miny",
+              "@moe",
             ],
           },
           Object {
@@ -326,9 +325,8 @@ describe('rules', () => {
             "name": "rule2.json",
             "path": "/some/rule2.json",
             "teams": Array [
-              "someTeams",
+              "@someTeam",
             ],
-            "users": undefined,
           },
         ]
       `);

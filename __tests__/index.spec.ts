@@ -80,12 +80,11 @@ describe('use-herald-action', () => {
             "glob": "*.ts",
             "name": "rule1.json",
             "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
-            "teams": undefined,
             "users": Array [
               "@eeny",
-              " @meeny",
-              " @miny",
-              " @moe",
+              "@meeny",
+              "@miny",
+              "@moe",
             ],
           },
           Object {
@@ -97,7 +96,6 @@ describe('use-herald-action', () => {
             "teams": Array [
               "@someTeam",
             ],
-            "users": undefined,
           },
         ],
       ]
@@ -141,12 +139,11 @@ describe('use-herald-action', () => {
                 },
                 "name": "rule1.json",
                 "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
-                "teams": undefined,
                 "users": Array [
                   "@eeny",
-                  " @meeny",
-                  " @miny",
-                  " @moe",
+                  "@meeny",
+                  "@miny",
+                  "@moe",
                 ],
               },
               Object {
@@ -161,7 +158,6 @@ describe('use-herald-action', () => {
                 "teams": Array [
                   "@someTeam",
                 ],
-                "users": undefined,
               },
             ],
           },

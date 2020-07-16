@@ -52,7 +52,7 @@ export interface Rule {
 
 type File = RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files'][0];
 
-type RawRule = Rule & { users?: string; teams?: string };
+type RawRule = Rule & { users?: string[]; teams?: string[] };
 
 const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
   const attrs = { ...RuleMatchers, ...RuleActors, ...RuleExtras };
@@ -61,10 +61,7 @@ const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
     return content[attr] ? { ...memo, [attr]: content[attr] } : memo;
   }, {} as RawRule);
 
-  const users = rule.users?.split(',');
-  const teams = rule.teams?.split(',');
-
-  return { ...rule, users, teams };
+  return { ...rule };
 };
 
 const hasAttribute = <Attr extends string>(
@@ -82,10 +79,11 @@ const isValidRawRule = (content: unknown): content is RawRule => {
     Object.keys(RuleActions).includes(content.action);
 
   const hasTeams =
-    (hasAttribute('teams', content) && content.teams && true) || false;
+    hasAttribute('teams', content) && Array.isArray(content.teams);
   const hasUsers =
-    (hasAttribute('users', content) && content.users && true) || false;
+    hasAttribute('users', content) && Array.isArray(content.users);
   const hasActors = hasTeams || hasUsers;
+
   const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
 
   return hasValidActionValues && hasActors && matchers;
