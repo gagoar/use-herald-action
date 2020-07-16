@@ -3,15 +3,16 @@ name: validation
 on: pull_request
 
 jobs:
-  name: uploading event
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v2
-    - name: upload event.json
-    - uses: actions/upload-artifact@v2
-      with:
-        name: event
-        path: $GITHUB_EVENT_PATH
+  upload:
+    name: uploading
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: upload event.json
+      - uses: actions/upload-artifact@v2
+        with:
+          name: event
+          path: $GITHUB_EVENT_PATH
   lint:
     name: Linting
     runs-on: ubuntu-latest
