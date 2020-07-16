@@ -1,10 +1,10 @@
 name: validation
 
-on: [push]
+on: pull_request
 
 jobs:
   name: uploading event
-  run-on: ubuntu-latest
+  runs-on: ubuntu-latest
   steps:
     - uses: actions/checkout@v2
     - name: upload event.json
