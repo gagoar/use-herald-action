@@ -12,7 +12,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: event
-          path: $GITHUB_EVENT_PATH
+          path: ${{env.$GITHUB_EVENT_PATH }}
   lint:
     name: Linting
     runs-on: ubuntu-latest

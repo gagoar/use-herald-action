@@ -3204,13 +3204,18 @@ const getParams = () => {
 };
 const beta = async () => {
     const event = loadJSONFile(env.GITHUB_EVENT_PATH);
+    const { pull_request: { head: { sha: headSha }, base: { sha: baseSha }, }, number: prNumber, repository: { name: repo, owner: { login: owner }, }, } = event;
     const params = getParams();
     console.warn(params);
     const rules = loadRules(params.rulesLocation);
     const response = { rules, dir: env.GITHUB_WORKSPACE, params };
+    const subset = { repo, owner, baseSha, headSha, prNumber };
     console.warn('response on beta:', response);
-    console.warn('event on beta', { event });
-    return { response, event };
+    console.warn('event on beta', subset);
+    return {
+        response,
+        subset,
+    };
 };
 const main = async () => {
     try {

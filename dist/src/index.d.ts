@@ -1,4 +1,3 @@
-import { Event } from './util/constants';
 export declare enum Props {
     GITHUB_TOKEN = "GITHUB_TOKEN",
     rulesLocation = "rulesLocation",
@@ -11,6 +10,12 @@ export declare const beta: () => Promise<{
         dir: any;
         params: typeof Props;
     };
-    event: Event;
+    subset: {
+        repo: string;
+        owner: string;
+        baseSha: string;
+        headSha: string;
+        prNumber: number;
+    };
 }>;
 export declare const main: () => Promise<void>;
