@@ -101,6 +101,9 @@ describe('use-herald', () => {
 
     await main();
 
+    expect(env.GITHUB_EVENT_PATH).toMatchInlineSnapshot(
+      '"/home/runner/work/_temp/_github_workflow/event.json"'
+    );
     expect(handleComment).not.toHaveBeenCalled();
     expect(setFailed.mock.calls).toMatchInlineSnapshot(`
       Array [
