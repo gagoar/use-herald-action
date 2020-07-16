@@ -42,6 +42,7 @@ describe('use-herald-action', () => {
     getInput.mockClear();
     setFailed.mockClear();
     setOutput.mockClear();
+    handleComment.mockClear();
     consoleInfoMock.mockClear();
     consoleLogMock.mockClear();
     consoleWarnMock.mockClear();
@@ -167,6 +168,34 @@ describe('use-herald-action', () => {
         ],
       ]
     `);
+    expect(github.isDone()).toBe(true);
+  });
+
+  it('should run the entire action (no rules found)', async () => {
+    const input = {
+      ...mockedInput,
+      [Props.rulesLocation]: 'someWrongDirectory',
+      [Props.dryRun]: false,
+    };
+
+    getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
+      return input[key];
+    });
+
+    const github = nock('https://api.github.com')
+      .get(
+        `/repos/${event.repository.owner.login}/${event.repository.name}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`
+      )
+      .reply(200, getCompareCommitsResponse);
+
+    const { main } = require('../src') as { main: Function };
+
+    await main();
+
+    expect(handleComment).not.toHaveBeenCalled();
+    // expect(setFailed).not.toHaveBeenCalled();
+    expect(setFailed.mock.calls).toMatchInlineSnapshot('Array []');
+    expect(setOutput.mock.calls).toMatchSnapshot();
     expect(github.isDone()).toBe(true);
   });
 });

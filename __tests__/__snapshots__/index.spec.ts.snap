@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`use-herald-action should run the entire action (no rules found) 2`] = `
+Array [
+  Array [
+    "appliedRules",
+    Object {},
+  ],
+]
+`;

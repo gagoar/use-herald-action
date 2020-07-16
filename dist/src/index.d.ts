@@ -4,18 +4,4 @@ export declare enum Props {
     dryRun = "dryRun",
     base = "base"
 }
-export declare const beta: () => Promise<{
-    response: {
-        rules: import("./rules").Rule[];
-        dir: any;
-        params: typeof Props;
-    };
-    subset: {
-        repo: string;
-        owner: string;
-        baseSha: string;
-        headSha: string;
-        prNumber: number;
-    };
-}>;
 export declare const main: () => Promise<void>;
