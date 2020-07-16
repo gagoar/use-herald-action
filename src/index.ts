@@ -38,6 +38,8 @@ const getParams = () => {
 };
 
 export const beta = async () => {
+  const event = loadJSONFile(env.GITHUB_EVENT_PATH) as Event;
+
   const params = getParams();
 
   console.warn(params);
@@ -45,9 +47,9 @@ export const beta = async () => {
 
   const response = { rules, dir: env.GITHUB_WORKSPACE, params };
 
-  console.warn(response);
-
-  return response;
+  console.warn('response on beta:', response);
+  console.warn('event on beta', { event });
+  return { response, event };
 };
 export const main = async () => {
   try {

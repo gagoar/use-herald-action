@@ -3203,12 +3203,14 @@ const getParams = () => {
     }, {});
 };
 const beta = async () => {
+    const event = loadJSONFile(env.GITHUB_EVENT_PATH);
     const params = getParams();
     console.warn(params);
     const rules = loadRules(params.rulesLocation);
     const response = { rules, dir: env.GITHUB_WORKSPACE, params };
-    console.warn(response);
-    return response;
+    console.warn('response on beta:', response);
+    console.warn('event on beta', { event });
+    return { response, event };
 };
 const main = async () => {
     try {
