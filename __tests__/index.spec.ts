@@ -77,7 +77,7 @@ describe('use-herald', () => {
     consoleLogMock = mockConsole('log');
     consoleInfoMock = mockConsole('info');
   });
-  afterEach(() => {
+  beforeEach(() => {
     getInput.mockClear();
     setFailed.mockClear();
     setOutput.mockClear();
@@ -98,7 +98,7 @@ describe('use-herald', () => {
 
     await main();
 
-    // expect(getInput).toHaveBeenCalledTimes(Object.keys(Props).length);
+    expect(getInput).toHaveBeenCalled();
     expect(handleComment).not.toHaveBeenCalled();
     expect(setFailed.mock.calls).toMatchInlineSnapshot(`
       Array [
