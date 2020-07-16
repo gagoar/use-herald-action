@@ -34653,7 +34653,7 @@ const main = async () => {
         }
         else {
             Object(core.setOutput)(OUTPUT_NAME, []);
-            throw new Error('use-herald only supports pull_request events for now');
+            throw new Error(`use-herald only supports pull_request events for now, event found: ${env.GITHUB_EVENT_NAME}`);
         }
     }
     catch (e) {
