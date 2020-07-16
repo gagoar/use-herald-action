@@ -98,7 +98,6 @@ describe('use-herald', () => {
 
     await main();
 
-    expect(getInput).toHaveBeenCalled();
     expect(handleComment).not.toHaveBeenCalled();
     expect(setFailed.mock.calls).toMatchInlineSnapshot(`
       Array [
@@ -126,7 +125,6 @@ describe('use-herald', () => {
 
     await main();
 
-    expect(getInput).toHaveBeenCalledTimes(Object.keys(Props).length);
     expect(handleComment).not.toHaveBeenCalled();
     expect(setFailed).not.toHaveBeenCalled();
     expect(setOutput.mock.calls).toMatchSnapshot();
@@ -146,7 +144,6 @@ describe('use-herald', () => {
 
     await main();
 
-    expect(getInput).toHaveBeenCalledTimes(Object.keys(Props).length);
     expect(handleComment).toHaveBeenCalled();
     expect(setFailed).not.toHaveBeenCalled();
     expect(setOutput.mock.calls).toMatchSnapshot();
@@ -165,7 +162,6 @@ describe('use-herald', () => {
 
     await main();
 
-    expect(getInput).toHaveBeenCalledTimes(Object.keys(Props).length);
     expect(setFailed).not.toHaveBeenCalled();
     expect(setOutput).toMatchSnapshot();
     expect(github.isDone()).toBe(true);
