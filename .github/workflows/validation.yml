@@ -30,7 +30,7 @@ jobs:
         run: |
           npm install
       - name: Jest
-        run: npm run test --coverage
+        run: npm run test index.spec.ts --coverage
       - name: Send coverage to codecov
         uses: codecov/codecov-action@v1
         with:
