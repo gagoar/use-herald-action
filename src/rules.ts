@@ -92,6 +92,8 @@ const isValidRawRule = (content: unknown): content is RawRule => {
 };
 
 export const loadRules = (rulesLocation: string): Rule[] => {
+  console.warn({ rulesLocation, workspace: env.GITHUB_WORKSPACE });
+
   const matches = sync(rulesLocation, {
     onlyFiles: true,
     cwd: env.GITHUB_WORKSPACE,

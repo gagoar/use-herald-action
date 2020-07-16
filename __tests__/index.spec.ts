@@ -25,12 +25,14 @@ const owner = 'gagoar';
 const repo = 'example_repo';
 
 describe('use-herald-action', () => {
+  let consoleWarnMock: jest.Mock;
   let consoleInfoMock: jest.Mock;
   let consoleLogMock: jest.Mock;
 
   beforeAll(() => {
     consoleLogMock = mockConsole('log');
     consoleInfoMock = mockConsole('info');
+    consoleWarnMock = mockConsole('warn');
   });
   beforeEach(() => {
     getInput.mockClear();
@@ -38,6 +40,7 @@ describe('use-herald-action', () => {
     setOutput.mockClear();
     consoleInfoMock.mockClear();
     consoleLogMock.mockClear();
+    consoleWarnMock.mockClear();
   });
   it('should run normally (with dryRun: true)', async () => {
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
@@ -51,6 +54,16 @@ describe('use-herald-action', () => {
 
     await main();
 
+    expect(consoleWarnMock.mock.calls).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          Object {
+            "rulesLocation": "__mocks__/rules/*.json",
+            "workspace": "/Users/gfrigerio/base/use-herald/",
+          },
+        ],
+      ]
+    `);
     expect(consoleInfoMock.mock.calls[0]).toMatchInlineSnapshot(`
       Array [
         "found rules:",

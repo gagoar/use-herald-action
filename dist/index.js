@@ -3046,6 +3046,7 @@ const isValidRawRule = (content) => {
     return hasValidActionValues && hasActors && matchers;
 };
 const loadRules = (rulesLocation) => {
+    console.warn({ rulesLocation, workspace: env.GITHUB_WORKSPACE });
     const matches = Object(out.sync)(rulesLocation, {
         onlyFiles: true,
         cwd: env.GITHUB_WORKSPACE,
