@@ -2953,7 +2953,7 @@ const environment = () => envalid_default().cleanEnv(process.env, {
         devDefault: Object(envalid.testOnly)('__mocks__/event.json'),
     }),
     GITHUB_WORKSPACE: Object(envalid.str)({
-        devDefault: Object(envalid.testOnly)(Object(external_path_.join)(__dirname, '../')),
+        devDefault: Object(envalid.testOnly)(Object(external_path_.join)(__dirname, '..')),
     }),
     GITHUB_EVENT_NAME: Object(envalid.str)({ devDefault: 'pull_request' }),
     GITHUB_REPOSITORY: Object(envalid.str)({ devDefault: Object(envalid.testOnly)('someRepo') }),

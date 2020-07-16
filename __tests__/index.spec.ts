@@ -43,17 +43,17 @@ describe('use-herald-action', () => {
     consoleLogMock.mockClear();
     consoleWarnMock.mockClear();
   });
-  it.skip('beta', async () => {
-    getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
-      return mockedInput[key];
-    });
-    const { beta } = require('../src') as { beta: Function };
+  // it.skip('beta', async () => {
+  //   getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
+  //     return mockedInput[key];
+  //   });
+  //   const { beta } = require('../src') as { beta: Function };
 
-    const response = await beta();
+  //   const response = await beta();
 
-    expect(getInput).toHaveBeenCalled();
-    expect(response).toMatchInlineSnapshot();
-  });
+  //   expect(getInput).toHaveBeenCalled();
+  //   expect(response).toMatchInlineSnapshot();
+  // });
   it('should run normally (with dryRun: true)', async () => {
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
       return mockedInput[key];
@@ -73,7 +73,7 @@ describe('use-herald-action', () => {
       Array [
         Object {
           "rulesLocation": "__mocks__/rules/*.json",
-          "workspace": "/Users/gfrigerio/base/use-herald/",
+          "workspace": "${env.GITHUB_WORKSPACE}",
         },
       ]
     `);
@@ -86,7 +86,7 @@ describe('use-herald-action', () => {
             "customMessage": "This is a custom message for a rule",
             "glob": "*.ts",
             "name": "rule1.json",
-            "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule1.json",
+            "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
             "teams": undefined,
             "users": Array [
               "@eeny",
@@ -100,7 +100,7 @@ describe('use-herald-action', () => {
             "customMessage": "This is a custom message for a rule",
             "glob": "*.js",
             "name": "The rule that only has a team",
-            "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule2.json",
+            "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule2.json",
             "teams": Array [
               "@someTeam",
             ],

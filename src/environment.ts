@@ -9,7 +9,7 @@ const environment = () =>
         devDefault: testOnly('__mocks__/event.json'),
       }),
       GITHUB_WORKSPACE: str({
-        devDefault: testOnly(join(__dirname, '../')),
+        devDefault: testOnly(join(__dirname, '..')),
       }),
       GITHUB_EVENT_NAME: str({ devDefault: 'pull_request' }),
       GITHUB_REPOSITORY: str({ devDefault: testOnly('someRepo') }),
