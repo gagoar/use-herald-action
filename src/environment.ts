@@ -4,7 +4,9 @@ const environment = () =>
   envalid.cleanEnv(
     process.env,
     {
-      GITHUB_EVENT_PATH: str({ devDefault: '/github/workflow/event.json' }),
+      GITHUB_EVENT_PATH: str({
+        devDefault: '/home/runner/work/_temp/_github_workflow/event.json',
+      }),
       GITHUB_EVENT_NAME: str({ devDefault: 'pull_request' }),
       GITHUB_REPOSITORY: str({ devDefault: testOnly('someRepo') }),
       GITHUB_SHA: str({

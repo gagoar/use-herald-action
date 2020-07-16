@@ -34548,7 +34548,9 @@ var envalid_default = /*#__PURE__*/__webpack_require__.n(envalid);
 // CONCATENATED MODULE: ./src/environment.ts
 
 const environment = () => envalid_default().cleanEnv(process.env, {
-    GITHUB_EVENT_PATH: Object(envalid.str)({ devDefault: '/github/workflow/event.json' }),
+    GITHUB_EVENT_PATH: Object(envalid.str)({
+        devDefault: '/home/runner/work/_temp/_github_workflow/event.json',
+    }),
     GITHUB_EVENT_NAME: Object(envalid.str)({ devDefault: 'pull_request' }),
     GITHUB_REPOSITORY: Object(envalid.str)({ devDefault: Object(envalid.testOnly)('someRepo') }),
     GITHUB_SHA: Object(envalid.str)({
