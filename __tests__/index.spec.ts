@@ -99,6 +99,12 @@ describe('use-herald-action', () => {
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
       return mockedInput[key];
     });
+    console.error(
+      `/repos/${event.repository.owner.login}/${event.repository.name}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`
+    );
+
+    nock.recorder.rec();
+
     const github = nock('https://api.github.com')
       .get(
         `/repos/${event.repository.owner.login}/${event.repository.name}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`
