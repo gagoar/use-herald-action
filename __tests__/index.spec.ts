@@ -60,6 +60,7 @@ describe('use-herald', () => {
 
   readFileSync.mockImplementation(
     (filePath: keyof typeof rawRules | typeof env.GITHUB_EVENT_PATH) => {
+      console.warn(filePath);
       if (filePath === env.GITHUB_EVENT_PATH) {
         return JSON.stringify(event);
       }
@@ -90,7 +91,7 @@ describe('use-herald', () => {
   beforeEach(() => {
     sync.mockReturnValue(Object.keys(rawRules));
   });
-  it('should fail when calling github fails', async () => {
+  it.only('should fail when calling github fails', async () => {
     const input = { ...mockedInput, [Props.dryRun]: false };
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
       return input[key];
