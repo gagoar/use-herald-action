@@ -42,7 +42,7 @@ describe('use-herald-action', () => {
     consoleLogMock.mockClear();
     consoleWarnMock.mockClear();
   });
-  it('beta', async () => {
+  it.skip('beta', async () => {
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
       return mockedInput[key];
     });
@@ -98,7 +98,7 @@ describe('use-herald-action', () => {
       }
     `);
   });
-  it.skip('should run normally (with dryRun: true)', async () => {
+  it('should run normally (with dryRun: true)', async () => {
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
       return mockedInput[key];
     });
