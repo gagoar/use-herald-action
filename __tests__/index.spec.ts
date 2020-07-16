@@ -60,7 +60,6 @@ describe('use-herald', () => {
 
   readFileSync.mockImplementation(
     (filePath: keyof typeof rawRules | typeof env.GITHUB_EVENT_PATH) => {
-      console.warn(filePath);
       if (filePath === env.GITHUB_EVENT_PATH) {
         return JSON.stringify(event);
       }
@@ -99,6 +98,9 @@ describe('use-herald', () => {
 
     await main();
 
+    expect(env.GITHUB_EVENT_PATH).toMatchInlineSnapshot(
+      '"/github/workflow/event.json"'
+    );
     expect(handleComment).not.toHaveBeenCalled();
     expect(setFailed.mock.calls).toMatchInlineSnapshot(`
       Array [
