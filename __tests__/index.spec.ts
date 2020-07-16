@@ -76,7 +76,12 @@ describe('use-herald', () => {
     readFileSync.mockClear();
     consoleInfoMock.mockClear();
     consoleLogMock.mockClear();
+  });
 
+  beforeEach(() => {
+    sync.mockReturnValue(Object.keys(rawRules));
+  });
+  it.only('should fail when calling github fails', async () => {
     readFileSync.mockImplementation(
       (filePath: keyof typeof rawRules | typeof env.GITHUB_EVENT_PATH) => {
         if (
@@ -88,12 +93,6 @@ describe('use-herald', () => {
         return JSON.stringify(rawRules[filePath]);
       }
     );
-  });
-
-  beforeEach(() => {
-    sync.mockReturnValue(Object.keys(rawRules));
-  });
-  it.only('should fail when calling github fails', async () => {
     const input = { ...mockedInput, [Props.dryRun]: false };
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
       return input[key];
