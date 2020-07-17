@@ -1,0 +1,7 @@
+{
+  "name": "The rule that only has a team",
+  "customMessage": "This is a custom message for a rule",
+  "teams": ["@someTeam"],
+  "action": "comment",
+  "includes": "*.js"
+}

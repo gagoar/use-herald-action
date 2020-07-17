@@ -1,0 +1,24 @@
+name: 'use-herald-action'
+description: 'GitHub action to add reviewers, subscribers and assignees to your PR'
+branding:
+  icon: arrow-up-right
+  color: orange
+inputs:
+  GITHUB_TOKEN:
+    description: 'GITHUB_TOKEN, frequently available on secrets.GITHUB_TOKEN'
+    required: true
+  rulesLocation:
+    description: 'Directory where the rules can be found'
+    required: true
+  base:
+    description: 'In case we wish to change the base commit we use to find the changeSet (default: master)'
+    default: 'master'
+  dryRun:
+    description: 'It will evaluate the rules but not perform the actions, the output will be available'
+    default: false
+outputs:
+  appliedRules:
+    description: 'It will report back what rules have been applied'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

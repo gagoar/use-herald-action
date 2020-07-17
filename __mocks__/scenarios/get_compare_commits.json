@@ -1,0 +1,261 @@
+{
+  "url": "https://api.github.com/repos/gagoar/example_repo/compare/master...topic",
+  "html_url": "https://github.com/gagoar/example_repo/compare/master...topic",
+  "permalink_url": "https://github.com/gagoar/example_repo/compare/gagoar:bbcd538c8e72b8c175046e27cc8f907076331401...gagoar:0328041d1152db8ae77652d1618a02e57f745f17",
+  "diff_url": "https://github.com/gagoar/example_repo/compare/master...topic.diff",
+  "patch_url": "https://github.com/gagoar/example_repo/compare/master...topic.patch",
+  "base_commit": {
+    "url": "https://api.github.com/repos/gagoar/example_repo/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+    "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e",
+    "node_id": "MDY6Q29tbWl0NmRjYjA5YjViNTc4NzVmMzM0ZjYxYWViZWQ2OTVlMmU0MTkzZGI1ZQ==",
+    "html_url": "https://github.com/gagoar/example_repo/commit/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+    "comments_url": "https://api.github.com/repos/gagoar/example_repo/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e/comments",
+    "commit": {
+      "url": "https://api.github.com/repos/gagoar/example_repo/git/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+      "author": {
+        "name": "Monalisa gagoar",
+        "email": "support@github.com",
+        "date": "2011-04-14T16:00:49Z"
+      },
+      "committer": {
+        "name": "Monalisa gagoar",
+        "email": "support@github.com",
+        "date": "2011-04-14T16:00:49Z"
+      },
+      "message": "Fix all the bugs",
+      "tree": {
+        "url": "https://api.github.com/repos/gagoar/example_repo/tree/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+        "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e"
+      },
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "author": {
+      "login": "gagoar",
+      "id": 1,
+      "node_id": "MDQ6VXNlcjE=",
+      "avatar_url": "https://github.com/images/error/gagoar_happy.gif",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/gagoar",
+      "html_url": "https://github.com/gagoar",
+      "followers_url": "https://api.github.com/users/gagoar/followers",
+      "following_url": "https://api.github.com/users/gagoar/following{/other_user}",
+      "gists_url": "https://api.github.com/users/gagoar/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/gagoar/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/gagoar/subscriptions",
+      "organizations_url": "https://api.github.com/users/gagoar/orgs",
+      "repos_url": "https://api.github.com/users/gagoar/repos",
+      "events_url": "https://api.github.com/users/gagoar/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/gagoar/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "gagoar",
+      "id": 1,
+      "node_id": "MDQ6VXNlcjE=",
+      "avatar_url": "https://github.com/images/error/gagoar_happy.gif",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/gagoar",
+      "html_url": "https://github.com/gagoar",
+      "followers_url": "https://api.github.com/users/gagoar/followers",
+      "following_url": "https://api.github.com/users/gagoar/following{/other_user}",
+      "gists_url": "https://api.github.com/users/gagoar/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/gagoar/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/gagoar/subscriptions",
+      "organizations_url": "https://api.github.com/users/gagoar/orgs",
+      "repos_url": "https://api.github.com/users/gagoar/repos",
+      "events_url": "https://api.github.com/users/gagoar/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/gagoar/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "url": "https://api.github.com/repos/gagoar/example_repo/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+        "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e"
+      }
+    ]
+  },
+  "merge_base_commit": {
+    "url": "https://api.github.com/repos/gagoar/example_repo/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+    "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e",
+    "node_id": "MDY6Q29tbWl0NmRjYjA5YjViNTc4NzVmMzM0ZjYxYWViZWQ2OTVlMmU0MTkzZGI1ZQ==",
+    "html_url": "https://github.com/gagoar/example_repo/commit/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+    "comments_url": "https://api.github.com/repos/gagoar/example_repo/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e/comments",
+    "commit": {
+      "url": "https://api.github.com/repos/gagoar/example_repo/git/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+      "author": {
+        "name": "Monalisa gagoar",
+        "email": "support@github.com",
+        "date": "2011-04-14T16:00:49Z"
+      },
+      "committer": {
+        "name": "Monalisa gagoar",
+        "email": "support@github.com",
+        "date": "2011-04-14T16:00:49Z"
+      },
+      "message": "Fix all the bugs",
+      "tree": {
+        "url": "https://api.github.com/repos/gagoar/example_repo/tree/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+        "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e"
+      },
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "author": {
+      "login": "gagoar",
+      "id": 1,
+      "node_id": "MDQ6VXNlcjE=",
+      "avatar_url": "https://github.com/images/error/gagoar_happy.gif",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/gagoar",
+      "html_url": "https://github.com/gagoar",
+      "followers_url": "https://api.github.com/users/gagoar/followers",
+      "following_url": "https://api.github.com/users/gagoar/following{/other_user}",
+      "gists_url": "https://api.github.com/users/gagoar/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/gagoar/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/gagoar/subscriptions",
+      "organizations_url": "https://api.github.com/users/gagoar/orgs",
+      "repos_url": "https://api.github.com/users/gagoar/repos",
+      "events_url": "https://api.github.com/users/gagoar/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/gagoar/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "gagoar",
+      "id": 1,
+      "node_id": "MDQ6VXNlcjE=",
+      "avatar_url": "https://github.com/images/error/gagoar_happy.gif",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/gagoar",
+      "html_url": "https://github.com/gagoar",
+      "followers_url": "https://api.github.com/users/gagoar/followers",
+      "following_url": "https://api.github.com/users/gagoar/following{/other_user}",
+      "gists_url": "https://api.github.com/users/gagoar/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/gagoar/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/gagoar/subscriptions",
+      "organizations_url": "https://api.github.com/users/gagoar/orgs",
+      "repos_url": "https://api.github.com/users/gagoar/repos",
+      "events_url": "https://api.github.com/users/gagoar/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/gagoar/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "url": "https://api.github.com/repos/gagoar/example_repo/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+        "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e"
+      }
+    ]
+  },
+  "status": "behind",
+  "ahead_by": 1,
+  "behind_by": 2,
+  "total_commits": 1,
+  "commits": [
+    {
+      "url": "https://api.github.com/repos/gagoar/example_repo/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+      "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e",
+      "node_id": "MDY6Q29tbWl0NmRjYjA5YjViNTc4NzVmMzM0ZjYxYWViZWQ2OTVlMmU0MTkzZGI1ZQ==",
+      "html_url": "https://github.com/gagoar/example_repo/commit/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+      "comments_url": "https://api.github.com/repos/gagoar/example_repo/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e/comments",
+      "commit": {
+        "url": "https://api.github.com/repos/gagoar/example_repo/git/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+        "author": {
+          "name": "Monalisa gagoar",
+          "email": "support@github.com",
+          "date": "2011-04-14T16:00:49Z"
+        },
+        "committer": {
+          "name": "Monalisa gagoar",
+          "email": "support@github.com",
+          "date": "2011-04-14T16:00:49Z"
+        },
+        "message": "Fix all the bugs",
+        "tree": {
+          "url": "https://api.github.com/repos/gagoar/example_repo/tree/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+          "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e"
+        },
+        "comment_count": 0,
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null
+        }
+      },
+      "author": {
+        "login": "gagoar",
+        "id": 1,
+        "node_id": "MDQ6VXNlcjE=",
+        "avatar_url": "https://github.com/images/error/gagoar_happy.gif",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/gagoar",
+        "html_url": "https://github.com/gagoar",
+        "followers_url": "https://api.github.com/users/gagoar/followers",
+        "following_url": "https://api.github.com/users/gagoar/following{/other_user}",
+        "gists_url": "https://api.github.com/users/gagoar/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/gagoar/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/gagoar/subscriptions",
+        "organizations_url": "https://api.github.com/users/gagoar/orgs",
+        "repos_url": "https://api.github.com/users/gagoar/repos",
+        "events_url": "https://api.github.com/users/gagoar/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/gagoar/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "gagoar",
+        "id": 1,
+        "node_id": "MDQ6VXNlcjE=",
+        "avatar_url": "https://github.com/images/error/gagoar_happy.gif",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/gagoar",
+        "html_url": "https://github.com/gagoar",
+        "followers_url": "https://api.github.com/users/gagoar/followers",
+        "following_url": "https://api.github.com/users/gagoar/following{/other_user}",
+        "gists_url": "https://api.github.com/users/gagoar/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/gagoar/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/gagoar/subscriptions",
+        "organizations_url": "https://api.github.com/users/gagoar/orgs",
+        "repos_url": "https://api.github.com/users/gagoar/repos",
+        "events_url": "https://api.github.com/users/gagoar/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/gagoar/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "url": "https://api.github.com/repos/gagoar/example_repo/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+          "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "sha": "bbcd538c8e72b8c175046e27cc8f907076331401",
+      "filename": "file1.ts",
+      "status": "added",
+      "additions": 103,
+      "deletions": 21,
+      "changes": 124,
+      "blob_url": "https://github.com/gagoar/example_repo/blob/6dcb09b5b57875f334f61aebed695e2e4193db5e/file1.txt",
+      "raw_url": "https://github.com/gagoar/example_repo/raw/6dcb09b5b57875f334f61aebed695e2e4193db5e/file1.txt",
+      "contents_url": "https://api.github.com/repos/gagoar/example_repo/contents/file1.txt?ref=6dcb09b5b57875f334f61aebed695e2e4193db5e",
+      "patch": "@@ -132,7 +132,7 @@ module Test @@ -1000,7 +1000,7 @@ module Test"
+    }
+  ]
+}
