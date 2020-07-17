@@ -1,6 +1,9 @@
-name: validation
+name: validation on Master
 
-on: pull_request
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   lint:
