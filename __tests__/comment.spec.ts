@@ -92,12 +92,12 @@ describe('handleComment', () => {
   it('should not publish the message because is duplicated', async () => {
     const rule = {
       users: ['@eeny', '@meeny', '@miny', '@moe'],
-      glob: '*.ts',
+      includes: '*.ts',
       action: RuleActions.comment,
       path: 'rules/rule.json',
       customMessage: 'Custom message',
       teams: [],
-      matches: { glob: ['fileChanged.ts'] },
+      matches: { includes: ['fileChanged.ts'] },
     };
 
     nock('https://api.github.com')
