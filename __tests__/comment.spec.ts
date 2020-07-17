@@ -21,12 +21,12 @@ describe('handleComment', () => {
   it('should publish a comment (pulling 2 pages of comments)', async () => {
     const rule = {
       users: ['@eeny', '@meeny', '@miny', '@moe'],
-      glob: '*.ts',
+      includes: '*.ts',
       action: RuleActions.comment,
       path: 'rules/rule.json',
       customMessage: 'Custom message',
       teams: [],
-      matches: { glob: ['fileChanged.ts'] },
+      matches: { includes: ['fileChanged.ts'] },
     };
 
     const github = nock('https://api.github.com')
