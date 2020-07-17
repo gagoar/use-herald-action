@@ -27,7 +27,11 @@ const invalidRule = {
   users: ['@eeny', '@meeny', '@miny', '@moe'],
 };
 
-const validRule = { ...invalidRule, action: RuleActions.comment, glob: '*.ts' };
+const validRule = {
+  ...invalidRule,
+  action: RuleActions.comment,
+  includes: '*.ts',
+};
 
 describe('rules', () => {
   let consoleInfoMock: jest.Mock;
@@ -50,7 +54,7 @@ describe('rules', () => {
           {
             ...validRule,
             path: '/some/rule.json',
-            matches: { glob: ['/some/file.ts'] },
+            matches: { includes: ['/some/file.ts'] },
             teams: [],
           },
         ])
@@ -67,7 +71,7 @@ describe('rules', () => {
             ...validRule,
             customMessage: undefined,
             path: '/some/rule.json',
-            matches: { glob: ['/some/file.ts'] },
+            matches: { includes: ['/some/file.ts'] },
             teams: [],
           },
         ])
@@ -87,7 +91,7 @@ describe('rules', () => {
           [
             {
               ...validRule,
-              glob: undefined,
+              includes: undefined,
               teams: [],
               path: '/some/rule.json',
             },
@@ -98,7 +102,7 @@ describe('rules', () => {
       ).toMatchInlineSnapshot('Array []');
     });
 
-    it('Matches glob and eventJsonPath', () => {
+    it('Matches includes and eventJsonPath', () => {
       const files = [
         { filename: '/some/file.js' },
         { filename: '/some/file.ts' },
@@ -123,12 +127,12 @@ describe('rules', () => {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
             "eventJsonPath": "$.pull_request[?(@.login==\\"gagoar\\")].login",
-            "glob": "*.ts",
+            "includes": "*.ts",
             "matches": Object {
               "eventJsonPath": Array [
                 "gagoar",
               ],
-              "glob": Array [
+              "includes": Array [
                 "/some/file.ts",
               ],
             },
@@ -145,7 +149,50 @@ describe('rules', () => {
       `);
     });
 
-    it('matching glob', () => {
+    it('matching includes/excludes combined', () => {
+      const files = [
+        { filename: '/some/file.js' },
+        { filename: '/some/file.ts' },
+        { filename: '/some/uglyFile.ts' },
+      ];
+      expect(
+        getMatchingRules(
+          [
+            {
+              ...validRule,
+              excludes: '/some/uglyFile.ts',
+              teams: [],
+              path: '/some/rule.json',
+            },
+          ],
+          files,
+          event
+        )
+      ).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "excludes": "/some/uglyFile.ts",
+            "includes": "*.ts",
+            "matches": Object {
+              "includeExclude": Array [
+                "/some/file.ts",
+              ],
+            },
+            "path": "/some/rule.json",
+            "teams": Array [],
+            "users": Array [
+              "@eeny",
+              "@meeny",
+              "@miny",
+              "@moe",
+            ],
+          },
+        ]
+      `);
+    });
+    it('matching includes', () => {
       const files = [
         { filename: '/some/file.js' },
         { filename: '/some/file.ts' },
@@ -161,9 +208,9 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "glob": "*.ts",
+            "includes": "*.ts",
             "matches": Object {
-              "glob": Array [
+              "includes": Array [
                 "/some/file.ts",
               ],
             },
@@ -188,7 +235,7 @@ describe('rules', () => {
           [
             {
               ...validRule,
-              glob: undefined,
+              includes: undefined,
               teams: [],
               eventJsonPath: '$.pull_request[?(@.login=="gagoar")].login',
               path: '/some/rule.json',
@@ -203,7 +250,7 @@ describe('rules', () => {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
             "eventJsonPath": "$.pull_request[?(@.login==\\"gagoar\\")].login",
-            "glob": undefined,
+            "includes": undefined,
             "matches": Object {
               "eventJsonPath": Array [
                 "gagoar",
@@ -308,7 +355,7 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "glob": "*.ts",
+            "includes": "*.ts",
             "name": "rule1.json",
             "path": "/some/rule1.json",
             "users": Array [
@@ -321,7 +368,7 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "glob": "*.ts",
+            "includes": "*.ts",
             "name": "rule2.json",
             "path": "/some/rule2.json",
             "teams": Array [

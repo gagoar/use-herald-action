@@ -26,7 +26,8 @@ enum RuleExtras {
 }
 enum RuleMatchers {
   eventJsonPath = 'eventJsonPath',
-  glob = 'glob',
+  includes = 'includes',
+  excludes = 'excludes',
 }
 
 // Nothings lost, nothings added except string indexes
@@ -45,7 +46,8 @@ export interface Rule {
   users: string[];
   teams: string[];
   action: keyof typeof RuleActions;
-  glob?: string;
+  includes?: string;
+  excludes?: string;
   eventJsonPath?: string;
   customMessage?: string;
 }
@@ -120,9 +122,39 @@ export const loadRules = (rulesLocation: string): Rule[] => {
 };
 
 export type MatchingRule = Rule & {
-  matches: Partial<Record<RuleMatchers, unknown[]>>;
+  matches: Partial<Record<RuleMatchers | 'includeExclude', unknown[]>>;
 };
 
+type IncludeExcludeFilesParams = {
+  includes?: string;
+  excludes?: string;
+  fileNames: string[];
+};
+
+const includeExcludeFiles = ({
+  includes,
+  excludes,
+  fileNames,
+}: IncludeExcludeFilesParams) => {
+  const matches = {} as MatchingRule['matches'];
+
+  let results = [] as string[];
+
+  if (includes) {
+    results = minimatch.match(fileNames, includes, { matchBase: true });
+    matches[RuleMatchers.includes] = results;
+    if (excludes && results.length) {
+      const toExclude = minimatch.match(results, excludes, { matchBase: true });
+      results = results.filter((filename) => !toExclude.includes(filename));
+    }
+  }
+
+  if (includes && excludes) {
+    return { includeExclude: results };
+  }
+
+  return matches;
+};
 export const getMatchingRules = (
   rules: Rule[],
   files: Partial<File> & Required<Pick<File, 'filename'>>[],
@@ -131,17 +163,19 @@ export const getMatchingRules = (
   const fileNames = files.map(({ filename }) => filename);
 
   const matchingRules = rules.reduce((memo, rule) => {
-    const matches = {} as MatchingRule['matches'];
+    let matches = {} as MatchingRule['matches'];
 
-    if (rule.glob) {
-      matches.glob = fileNames.filter(
-        minimatch.filter(rule.glob, { matchBase: true })
-      );
-    }
+    const extraMatches = includeExcludeFiles({
+      includes: rule.includes,
+      excludes: rule.excludes,
+      fileNames,
+    });
 
     if (rule.eventJsonPath) {
       matches.eventJsonPath = JSONPath.query(event, rule.eventJsonPath);
     }
+
+    matches = { ...matches, ...extraMatches };
 
     return Object.values(matches).length
       ? [...memo, { ...rule, matches }]

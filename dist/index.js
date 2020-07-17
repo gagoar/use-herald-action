@@ -3014,7 +3014,8 @@ var RuleExtras;
 var RuleMatchers;
 (function (RuleMatchers) {
     RuleMatchers["eventJsonPath"] = "eventJsonPath";
-    RuleMatchers["glob"] = "glob";
+    RuleMatchers["includes"] = "includes";
+    RuleMatchers["excludes"] = "excludes";
 })(RuleMatchers || (RuleMatchers = {}));
 var RuleActions;
 (function (RuleActions) {
@@ -3067,16 +3068,35 @@ const loadRules = (rulesLocation) => {
     console.info('found rules:', rules);
     return rules;
 };
+const includeExcludeFiles = ({ includes, excludes, fileNames, }) => {
+    const matches = {};
+    let results = [];
+    if (includes) {
+        results = minimatch_default().match(fileNames, includes, { matchBase: true });
+        matches[RuleMatchers.includes] = results;
+        if (excludes && results.length) {
+            const toExclude = minimatch_default().match(results, excludes, { matchBase: true });
+            results = results.filter((filename) => !toExclude.includes(filename));
+        }
+    }
+    if (includes && excludes) {
+        return { includeExclude: results };
+    }
+    return matches;
+};
 const getMatchingRules = (rules, files, event) => {
     const fileNames = files.map(({ filename }) => filename);
     const matchingRules = rules.reduce((memo, rule) => {
-        const matches = {};
-        if (rule.glob) {
-            matches.glob = fileNames.filter(minimatch_default().filter(rule.glob, { matchBase: true }));
-        }
+        let matches = {};
+        const extraMatches = includeExcludeFiles({
+            includes: rule.includes,
+            excludes: rule.excludes,
+            fileNames,
+        });
         if (rule.eventJsonPath) {
             matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
         }
+        matches = Object.assign(Object.assign({}, matches), extraMatches);
         return Object.values(matches).length
             ? [...memo, Object.assign(Object.assign({}, rule), { matches })]
             : memo;

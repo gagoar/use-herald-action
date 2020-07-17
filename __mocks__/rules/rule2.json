@@ -3,5 +3,5 @@
   "customMessage": "This is a custom message for a rule",
   "teams": ["@someTeam"],
   "action": "comment",
-  "glob": "*.js"
+  "includes": "*.js"
 }

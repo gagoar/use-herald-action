@@ -2,5 +2,5 @@
   "customMessage": "This is a custom message for a rule",
   "users": ["@eeny", "@meeny", "@miny", "@moe"],
   "action": "comment",
-  "glob": "*.ts"
+  "includes": "*.ts"
 }

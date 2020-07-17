@@ -77,7 +77,7 @@ describe('use-herald-action', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "glob": "*.ts",
+            "includes": "*.ts",
             "name": "rule1.json",
             "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
             "users": Array [
@@ -90,7 +90,7 @@ describe('use-herald-action', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "glob": "*.js",
+            "includes": "*.js",
             "name": "The rule that only has a team",
             "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule2.json",
             "teams": Array [
@@ -131,9 +131,9 @@ describe('use-herald-action', () => {
               Object {
                 "action": "comment",
                 "customMessage": "This is a custom message for a rule",
-                "glob": "*.ts",
+                "includes": "*.ts",
                 "matches": Object {
-                  "glob": Array [
+                  "includes": Array [
                     "file1.ts",
                   ],
                 },
@@ -149,9 +149,9 @@ describe('use-herald-action', () => {
               Object {
                 "action": "comment",
                 "customMessage": "This is a custom message for a rule",
-                "glob": "*.js",
+                "includes": "*.js",
                 "matches": Object {
-                  "glob": Array [],
+                  "includes": Array [],
                 },
                 "name": "The rule that only has a team",
                 "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule2.json",
