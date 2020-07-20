@@ -43,6 +43,8 @@ export const handleComment = async (
   matchingRules: MatchingRule[],
   requestConcurrency = 1
 ) => {
+  console.warn('handleComment called with', matchingRules);
+
   const queue = new PQueue({ concurrency: requestConcurrency });
   const commentsFromRules = composeCommentsForUsers(matchingRules);
   const rawComments = await getAllComments(client, {
@@ -50,6 +52,7 @@ export const handleComment = async (
     repo,
     issue_number: prNumber,
   });
+  console.warn('comments on PR currently:', rawComments);
   const comments = rawComments.map(({ body }) => body);
 
   const onlyNewComments = commentsFromRules.filter(

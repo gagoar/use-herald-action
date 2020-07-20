@@ -7,13 +7,13 @@ import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES } from './util/constants';
 import { env } from './environment';
 
 import { Octokit } from '@octokit/rest';
-import { retry } from '@octokit/plugin-retry';
+// import { retry } from '@octokit/plugin-retry';
 import { handleAssignees } from './assignees';
 import { handleReviewers } from './reviewers';
 import { loadJSONFile } from './util/loadJSONFile';
 import { isEventSupported } from './util/isEventSupported';
 
-const EnhancedOctokit = Octokit.plugin(retry);
+const EnhancedOctokit = Octokit;
 
 export enum Props {
   GITHUB_TOKEN = 'GITHUB_TOKEN',
@@ -61,9 +61,15 @@ export const main = async () => {
         dryRun = false,
       } = getParams();
 
+      console.log('params:', { rulesLocation, base, dryRun });
+
       const rules = loadRules(rulesLocation);
 
-      console.warn({ rules, dir: env.GITHUB_WORKSPACE, rulesLocation });
+      console.warn('loaded rules and locations', {
+        rules,
+        dir: env.GITHUB_WORKSPACE,
+        rulesLocation,
+      });
       const client = new EnhancedOctokit({ auth: GITHUB_TOKEN });
 
       const {
@@ -77,6 +83,8 @@ export const main = async () => {
 
       const matchingRules = getMatchingRules(rules, files, event);
 
+      console.warn('matchingRules', matchingRules);
+
       const groupedRulesByAction = groupBy(
         matchingRules,
         (rule) => rule.action
@@ -86,7 +94,8 @@ export const main = async () => {
         if (matchingRules.length) {
           const groupNames = Object.keys(groupedRulesByAction) as ActionName[];
 
-          await Promise.all([
+          console.warn('groupNames:', groupNames);
+          const results = await Promise.all([
             groupNames.map((actionName: ActionName) => {
               const action = actionsMap[RuleActions[actionName]];
 
@@ -99,12 +108,13 @@ export const main = async () => {
               );
             }),
           ]);
+          console.log('invocations', results);
         }
       }
 
-      setOutput(OUTPUT_NAME, groupedRulesByAction);
+      setOutput(OUTPUT_NAME, JSON.stringify({ groupedRulesByAction }));
     } else {
-      setOutput(OUTPUT_NAME, []);
+      setOutput(OUTPUT_NAME, JSON.stringify([]));
       throw new Error(
         `use-herald-action only supports [ ${Object.values(
           SUPPORTED_EVENT_TYPES

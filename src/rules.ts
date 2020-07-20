@@ -88,18 +88,24 @@ const isValidRawRule = (content: unknown): content is RawRule => {
 
   const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
 
+  console.warn('validation:', {
+    rule: content,
+    hasActors,
+    hasValidActionValues,
+    matchers,
+  });
+
   return hasValidActionValues && hasActors && matchers;
 };
 
 export const loadRules = (rulesLocation: string): Rule[] => {
-  console.warn({ rulesLocation, workspace: env.GITHUB_WORKSPACE });
-
   const matches = sync(rulesLocation, {
     onlyFiles: true,
     cwd: env.GITHUB_WORKSPACE,
     absolute: true,
   });
 
+  console.warn('files found:', matches);
   const rules = matches.reduce((memo, filePath) => {
     try {
       const rule = loadJSONFile(filePath);
@@ -115,8 +121,6 @@ export const loadRules = (rulesLocation: string): Rule[] => {
       return memo;
     }
   }, [] as Rule[]);
-
-  console.info('found rules:', rules);
 
   return rules;
 };
@@ -147,6 +151,7 @@ const includeExcludeFiles = ({
       const toExclude = minimatch.match(results, excludes, { matchBase: true });
       results = results.filter((filename) => !toExclude.includes(filename));
     }
+    console.warn('evaluating includes:', matches);
   }
 
   if (includes && excludes) {
@@ -181,8 +186,6 @@ export const getMatchingRules = (
       ? [...memo, { ...rule, matches }]
       : memo;
   }, [] as MatchingRule[]);
-
-  console.info('matching rules:', matchingRules);
 
   return matchingRules;
 };
