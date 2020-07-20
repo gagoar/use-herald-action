@@ -120,10 +120,10 @@
     "canvas": "2.6.1",
     "eslint": "6.8.0",
     "eslint-config-prettier": "6.11.0",
-    "husky": "^4.2.5",
+    "husky": "4.2.5",
     "jest": "26.0.1",
     "jest-mock-process": "1.4.0",
-    "lint-staged": "^10.2.6",
+    "lint-staged": "10.2.6",
     "ncc": "0.3.6",
     "prettier": "2.0.5",
     "prettier-eslint": "9.0.1",
@@ -134,6 +134,6 @@
     "tslib": "2.0.0",
     "typescript": "3.9.3",
     "utf-8-validate": "5.0.2",
-    "ws": ">=3.3.1"
+    "ws": "7.3.0"
   }
 }
