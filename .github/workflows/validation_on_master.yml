@@ -1,7 +1,9 @@
 name: validation on Master
 
-on: push
-
+on:
+  push:
+    branches:
+      - master
 jobs:
   lint:
     name: Linting
