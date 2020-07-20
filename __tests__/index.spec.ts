@@ -7,15 +7,22 @@ import { env } from '../src/environment';
 import getCompareCommitsResponse from '../__mocks__/scenarios/get_compare_commits.json';
 import { mockConsole } from './helpers';
 import * as comment from '../src/comment';
-import { isAbsolute, join } from 'path';
 
 jest.mock('@actions/core');
 jest.mock('../src/comment');
+jest.mock('../src/environment', () => {
+  const { env } = jest.requireActual('../src/environment');
 
-const eventPath = isAbsolute(env.GITHUB_EVENT_PATH)
-  ? env.GITHUB_EVENT_PATH
-  : join('..', env.GITHUB_EVENT_PATH);
-const event = require(eventPath) as Event;
+  return {
+    env: {
+      ...env,
+      GITHUB_EVENT_PATH: '__mocks__/event.json',
+      GITHUB_EVENT_NAME: 'pull_request',
+    },
+  };
+});
+
+const event = require(`../${env.GITHUB_EVENT_PATH}`) as Event;
 
 const handleComment = comment.handleComment as jest.Mock<any>;
 const setOutput = actions.setOutput as jest.Mock<any>;
