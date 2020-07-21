@@ -105,7 +105,7 @@
     "fast-glob": "3.2.4",
     "lodash.groupby": "4.6.0",
     "minimatch": "3.0.4",
-    "p-queue": "6.5.0"
+    "p-queue": "6.6.0"
   },
   "devDependencies": {
     "nock": "13.0.2",
