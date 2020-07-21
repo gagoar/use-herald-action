@@ -111,7 +111,7 @@
     "nock": "13.0.2",
     "@types/lodash.groupby": "4.6.6",
     "@types/jest": "25.2.3",
-    "@types/node": "13.13.8",
+    "@types/node": "13.13.14",
     "@typescript-eslint/eslint-plugin": "2.34.0",
     "@typescript-eslint/parser": "2.34.0",
     "@zeit/ncc": "0.22.2",
