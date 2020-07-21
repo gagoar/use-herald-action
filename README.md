@@ -13,60 +13,73 @@
     </a>
 </p>
 
-# Use Herald Action.
+# Use Herald Action
 
 This action allows you to add comments, reviewers and assignees to a pull request depending on rules you define!
 
 ## Table of contents
 
-- [What is use-herald-action](#what-is-use-herald-action)
-- [How to create rules](#how)
-- [How To Create Rules](#input-parameters)
-  - [Examples](#rule-examples)
-- [Input parameters](#input-parameters)
-- [Output](#output)
-- [Examples](#examples)
-  - [Basic example](#basic-example)
-  - [Using output](#using-output)
-  - [Specifying alias/version](#specifying-aliasversion)
-  - [Handling logs](#handling-logs)
+  - [What is `use-herald-action`?](#what-is-use-herald-action)
+    - [Motivation](#motivation)
+  - [How to create a rule](#how-to-create-a-rule)
+  - [Rule Examples](#rule-examples)
+  - [Input parameters](#input-parameters)
+  - [Output](#output)
+  - [Examples](#examples)
+    - [Basic example](#basic-example)
+    - [Using output](#using-output)
 
 <hr>
 
-## What is use-herald-action
+## What is `use-herald-action`?
 
-This action allows you to write rules which run automatically when you create a pull request. For instance, you might want to get notified every time someone sends out a revision that affects some file you're interested in, even if they didn't add you as a reviewer or you are not a [CODEOWNERS](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners).
+Given a set of rules defined in a JSON document, this action will execute actions based on those rules.
 
-One way to think about `use-herald-action` is that it is a lot like the mail rules you can set up in most email clients to organize mail based on "To", "Subject", etc. This action works very similarly, but operates on pull requests changes instead of emails.
+A **rule** is a way of defining an action that is to be performed once a certain set of conditions is met.
+For example, you might want to get notified every time somebody opens a pull request that affects some file you're interested in, even if they didn't add you as a reviewer and you are not a [codeowner](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners).
 
-For example, you can write a personal rule like this which triggers on tasks:
+Working with a more concrete example, we have the power to create a rule that:
+- Has conditions:
+  - { `pull_request` `title` contains `node`}
+  - { files matching `*.ts` are changed }
+- If all conditions met, will take the action:
+  - `notify me`
 
-When all of these conditions are met: { `pull_request` `title` contains `node`} and { files matching `*.ts` are changed } Take these actions: `notify me`.
+One way to think about these rules is to compare it to mail filters ([Gmail filters](https://support.google.com/mail/answer/6579)) that will, for example, apply labels to incoming mail if certain keywords are found in the subject or body.
+In this context, we are dealing with pull requests instead of emails.
 
-For attaching reviewers github offers [CODEOWNERS](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners), but for [ assigning ](https://docs.github.com/en/github/managing-your-work-on-github/assigning-issues-and-pull-requests-to-other-github-users) or just notifying users about changes in certain files is something missing.
+### Motivation
+
+This action is particularly useful when you want to subscribe to changes made to certain files, much like the "Subscriber" concept used in [Phabricator](https://www.phacility.com/phabricator/).
+
+For attaching reviewers, GitHub offers [CODEOWNERS](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners).
+However, no equivalent exists for [assigning](https://docs.github.com/en/github/managing-your-work-on-github/assigning-issues-and-pull-requests-to-other-github-users) users.
+Nor does there exist a method to automatically subscribe to said pull requests (without being a reviewer).
+
+Although the main motivation behind this GitHub Action is to bridge the gap described above, this can be extended to many different use cases.
 
 <hr>
 
 ## How to create a rule
 
-Every rule can be written in a json file. with the following fields:
+Every rule can be written in JSON with the following key-value pairs:
 
-| Key             |    Type    | Required | Description                                                                                                                                                                                      |
-| --------------- | :--------: | :------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `name`          |  `string`  |    No    | Friendly name to recognize the rule, if name is not provided, the filename will be used                                                                                                          |
-| `action`        |  `string`  |   Yes    | The available actions are `comment` `review` `assign`                                                                                                                                            |
-| `users`         | `string[]` |    No    | Github users (or emails of the users) that the rule will take action on                                                                                                                          |
-| `teams`         | `string[]` |    No    | Github teams that the rule will take action on                                                                                                                                                   |
-| `includes`      |  `string`  |    No    | Glob pattern that will be used to compare with the changed files in the pull request                                                                                                             |
-| `excludes`      |  `string`  |    No    | Glob pattern that will remove occurrences found after `includes` has filtered the changed files (only used when `includes` is present)                                                           |
-| `eventJsonPath` |  `string`  |    No    | [JsonPath expression](https://goessner.net/articles/JsonPath/) that will allow filtering content in the [pull request event](https://developer.github.com/webhooks/event-payloads/#pull_request) |
-| `customMessage` |  `string`  |    No    | Message added as a comment when the rule is applied. (only used when action = `comment`)                                                                                                         |
+| Key             |    Type    | Required | Description                                                                                                                                                                               |
+| --------------- | :--------: | :------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`          |  `string`  |    No    | Friendly name to recognize the rule; defaults to the rule filename                                                                                                                        |
+| `action`        |  `string`  |   Yes    | Currently, supported actions are `comment` `review` and `assign`                                                                                                                          |
+| `users`         | `string[]` |    No    | GitHub user handles (or emails) on which the rule will take action                                                                                                                        |
+| `teams`         | `string[]` |    No    | GitHub teams on which the rule will take action                                                                                                                                           |
+| `includes`      |  `string`  |    No    | Glob pattern used to match changed filenames in the pull request                                                                                                                          |
+| `excludes`      |  `string`  |    No    | Glob pattern used to exclude chnaged filenames (requires `includes` key to be provided)                                                                                                   |
+| `eventJsonPath` |  `string`  |    No    | [JsonPath expression](https://goessner.net/articles/JsonPath/) used to filter information in the [pull request event](https://developer.github.com/webhooks/event-payloads/#pull_request) |
+| `customMessage` |  `string`  |    No    | Message to be commented on the pull request when the rule is applied (requires `action === comment`)                                                                                      |
 
 ## Rule Examples
 
-### Notify users @eeny, @meeny, @miny and @moe when all files matching the glob `*.ts` are changed
+### Notify users @eeny, @meeny, @miny and @moe when all files matching `*.ts` are changed
 
-```typescript
+```json
 {
   "users": ["@eeny", "@meeny", "@miny", "@moe"],
   "action": "comment",
@@ -74,9 +87,9 @@ Every rule can be written in a json file. with the following fields:
 }
 ```
 
-### Notify team @myTeam when files matching `directory/*.js` are changed and also exclude the file `directory/notThisFile.js`
+### Notify team @myTeam when files matching `directory/*.js` are changed, excluding `directory/notThisFile.js`
 
-```typescript
+```json
 {
   "teams": ["@myTeam"],
   "action": "comment",
@@ -87,31 +100,32 @@ Every rule can be written in a json file. with the following fields:
 
 ### Assign team @QATeam when files matching `integration/*.js` are changed and the title of the pull request includes QA
 
-```typescript
+```json
 {
   "teams": ["@QATeam"],
   "action": "assign",
   "includes": "integration/*.ts",
-  "eventJSONPath": '$[?(@.title =~ /QA/)].title'
+  "eventJSONPath": "$[?(@.title =~ /QA/)].title"
 }
 ```
 
 ## Input parameters
 
-| Key             |   Type    | Required | Description                                                                                                                                                                                                                    |
-| --------------- | :-------: | :------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `GITHUB_TOKEN`  | `string`  |   Yes    | [GITHUB_TOKEN](https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token#using-the-github_token-in-a-workflow) necessary for assign reviewers, assignees or comment on the PR |
-| `rulesLocation` | `string`  |   Yes    | Directory where the rules can be found                                                                                                                                                                                         |
-| `base`          | `string`  |    No    | Base can be fixed to always compare changes with a given tag/branch or master (more info on [base](https://docs.github.com/en/github/committing-changes-to-your-project/comparing-commits))                                    |
-| `dryRun`        | `boolean` |    No    | Evaluate the rules but not perform the actions. the output will be available, [ check output for more details ](#output)                                                                                                       |
+| Key             |   Type    | Required | Description                                                                                                                                                                                                                      |
+| --------------- | :-------: | :------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GITHUB_TOKEN`  | `string`  |   Yes    | [GitHub token](https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token#using-the-github_token-in-a-workflow), necessary for adding reviewers, assignees or comments on the PR |
+| `rulesLocation` | `string`  |   Yes    | Directory where the rules can be found                                                                                                                                                                                           |
+| `base`          | `string`  |    No    | Fixed base - tag/branch against which to always compare changes (more info on [base](https://docs.github.com/en/github/committing-changes-to-your-project/comparing-commits)                                                     |
+| `dryRun`        | `boolean` |    No    | Evaluate rule conditions but do not execute actions - [see output for results](#output)                                                                                                                                   |
 
 <hr>
 
 ## Output
 
-This step will store the appliedRules from the action in `outputs.appliedRules`, inside you will find the matching rules, grouped by action (`comment | assign | review`)
+This action will store the rules applied in `outputs.appliedRules`.
+Here, you will find the matching rules, grouped by actions (`comment | assign | review`).
 
-Note that you will have to parse the output using the `fromJSON` [function](https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#functions) before accessing individual properties.
+Note that you will have to parse the output using the [`fromJSON` function](https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#functions) before accessing individual properties.
 See the [Using Output](#Using-Output) example for more details.
 
 <hr>
@@ -120,7 +134,7 @@ See the [Using Output](#Using-Output) example for more details.
 
 ### Basic example
 
-This step invokes a Lambda function without regard for the invocation output:
+This step invokes a Lambda function without regard for the action's output:
 
 ```yaml
 - name: Invoke foobarFunction Lambda
@@ -133,7 +147,7 @@ This step invokes a Lambda function without regard for the invocation output:
 
 ### Using output
 
-These steps process the response payload by using step outputs:
+These steps process the response payload by using the action's outputs:
 
 ```yaml
 - name: Invoke foobarFunction Lambda
@@ -147,5 +161,5 @@ These steps process the response payload by using step outputs:
   run: echo '\${{ fromJSON(steps.foobar.outputs.appliedRules) }}' > rulesApplied.json
 ```
 
-Notice the addition of the `id` field to the invocation step.
+Notice the inclusion of the `id` field in the first step (`Invoke foobarFunction Lambda`). This is so that the second step (`Store response payload to file`) can reference the result of the first step.
 For more information for Github Actions outputs, see their [reference](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjobs_idoutputs).
