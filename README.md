@@ -77,7 +77,7 @@ Every rule can be written in JSON with the following key-value pairs:
 
 ## Rule Examples
 
-### Notify users @eeny, @meeny, @miny and @moe when all files matching `*.ts` are changed
+**Notify users @eeny, @meeny, @miny and @moe when all files matching `*.ts` are changed**
 
 ```json
 {
@@ -87,7 +87,7 @@ Every rule can be written in JSON with the following key-value pairs:
 }
 ```
 
-### Notify team @myTeam when files matching `directory/*.js` are changed, excluding `directory/notThisFile.js`
+**Notify team @myTeam when files matching `directory/*.js` are changed, excluding `directory/notThisFile.js`**
 
 ```json
 {
@@ -98,7 +98,7 @@ Every rule can be written in JSON with the following key-value pairs:
 }
 ```
 
-### Assign team @QATeam when files matching `integration/*.js` are changed and the title of the pull request includes QA
+**Assign team @QATeam when files matching `integration/*.js` are changed and the title of the pull request includes QA**
 
 ```json
 {
@@ -134,10 +134,10 @@ See the [Using Output](#Using-Output) example for more details.
 
 ### Basic example
 
-This step invokes a Lambda function without regard for the action's output:
+This step runs the action without regard for output:
 
 ```yaml
-- name: Invoke foobarFunction Lambda
+- name: Apply Herald rules
   uses: gagoar/use-herald-action@master
   with:
     GITHUB_ACTION: ${{ secrets.GITHUB_ACTION }}
@@ -147,17 +147,17 @@ This step invokes a Lambda function without regard for the action's output:
 
 ### Using output
 
-These steps process the response payload by using the action's outputs:
+These steps stores the action's outputs into a JSON file:
 
 ```yaml
-- name: Invoke foobarFunction Lambda
+- name: Apply Herald rules
   uses: gagoar/use-herald-action@master
   id: foobar
   with:
     GITHUB_ACTION: ${{ secrets.GITHUB_ACTION }}
     rulesLocation: 'rules/*.json'
     dryRun: true
-- name: Store response payload to file
+- name: Store applied rules to file
   run: echo '\${{ fromJSON(steps.foobar.outputs.appliedRules) }}' > rulesApplied.json
 ```
 
