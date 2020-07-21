@@ -121,7 +121,7 @@
     "eslint": "6.8.0",
     "eslint-config-prettier": "6.11.0",
     "husky": "4.2.5",
-    "jest": "26.0.1",
+    "jest": "26.1.0",
     "jest-mock-process": "1.4.0",
     "lint-staged": "10.2.6",
     "ncc": "0.3.6",
