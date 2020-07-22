@@ -126,7 +126,7 @@ export const loadRules = (rulesLocation: string): Rule[] => {
           ]
         : memo;
     } catch (e) {
-      console.log(`${filePath} can't be parsed, it will be ignored`);
+      console.error(`${filePath} can't be parsed, it will be ignored`);
       return memo;
     }
   }, [] as Rule[]);
