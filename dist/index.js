@@ -23993,7 +23993,9 @@ var _a;
 
 
 const DEBUG = (_a = Object(core.getInput)('DEBUG')) !== null && _a !== void 0 ? _a : false;
-console.log('debug is', DEBUG);
+if (DEBUG) {
+    console.log('debug is enabled, provided pattern:', DEBUG);
+}
 function logger(nameSpace) {
     const { TASK_ID } = env;
     const log = src_default()(`${TASK_ID}:${nameSpace}`);
