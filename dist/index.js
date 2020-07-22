@@ -24052,18 +24052,17 @@ const isValidRawRule = (content) => {
     if (typeof content !== 'object' || content === null) {
         return false;
     }
-    const hasValidActionValues = hasAttribute('action', content) &&
-        Object.keys(RuleActions).includes(content.action);
+    const hasValidActionValues = hasAttribute('action', content) && Object.keys(RuleActions).includes(content.action);
     const hasTeams = hasAttribute('teams', content) && Array.isArray(content.teams);
     const hasUsers = hasAttribute('users', content) && Array.isArray(content.users);
     const hasActors = hasTeams || hasUsers;
     const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
-    debug(`validation: ${{
+    debug('validation:', {
         rule: content,
         hasActors,
         hasValidActionValues,
         matchers,
-    }}`);
+    });
     return hasValidActionValues && hasActors && matchers;
 };
 const loadRules = (rulesLocation) => {
@@ -24072,16 +24071,11 @@ const loadRules = (rulesLocation) => {
         cwd: env.GITHUB_WORKSPACE,
         absolute: true,
     });
-    debug(`files found: ${matches}`);
+    debug('files found:', matches);
     const rules = matches.reduce((memo, filePath) => {
         try {
             const rule = loadJSONFile(filePath);
-            return isValidRawRule(rule)
-                ? [
-                    ...memo,
-                    Object.assign(Object.assign({ name: Object(external_path_.basename)(filePath) }, sanitize(rule)), { path: filePath }),
-                ]
-                : memo;
+            return isValidRawRule(rule) ? [...memo, Object.assign(Object.assign({ name: Object(external_path_.basename)(filePath) }, sanitize(rule)), { path: filePath })] : memo;
         }
         catch (e) {
             console.error(`${filePath} can't be parsed, it will be ignored`);
@@ -24090,7 +24084,7 @@ const loadRules = (rulesLocation) => {
     }, []);
     return rules;
 };
-const includeExcludeFiles = ({ includes, excludes, fileNames, }) => {
+const includeExcludeFiles = ({ includes, excludes, fileNames }) => {
     const matches = {};
     let results = [];
     if (includes) {
@@ -24120,18 +24114,13 @@ const getMatchingRules = (rules, files, event) => {
             matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
         }
         matches = Object.assign(Object.assign({}, matches), extraMatches);
-        return Object.values(matches).length
-            ? [...memo, Object.assign(Object.assign({}, rule), { matches })]
-            : memo;
+        return Object.values(matches).some((value) => value === null || value === void 0 ? void 0 : value.length) ? [...memo, Object.assign(Object.assign({}, rule), { matches })] : memo;
     }, []);
     return matchingRules;
 };
 const composeCommentsForUsers = (matchingRules) => {
     return matchingRules.reduce((comments, { teams, users, customMessage }) => {
-        return [
-            ...comments,
-            customMessage ? customMessage : commentTemplate([...users, ...teams]),
-        ];
+        return [...comments, customMessage ? customMessage : commentTemplate([...users, ...teams])];
     }, []);
 };
 
@@ -33438,6 +33427,7 @@ class PQueue extends EventEmitter {
     _next() {
         this._pendingCount--;
         this._tryToStartAnother();
+        this.emit('next');
     }
     _resolvePromises() {
         this._resolveEmpty();
@@ -33556,6 +33546,7 @@ class PQueue extends EventEmitter {
             };
             this._queue.enqueue(run, options);
             this._tryToStartAnother();
+            this.emit('add');
         });
     }
     /**

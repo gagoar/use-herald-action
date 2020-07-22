@@ -190,6 +190,48 @@ describe('rules', () => {
         ]
       `);
     });
+    it('matching includes (and not matching another rule)', () => {
+      const files = [
+        { filename: '/some/file.js' },
+        { filename: '/some/file.ts' },
+      ];
+      expect(
+        getMatchingRules(
+          [
+            { ...validRule, teams: [], path: '/some/rule.json' },
+            {
+              ...validRule,
+              includes: 'src/*.ts',
+              teams: [],
+              path: '/some/ruleThatShouldNotMatch.json',
+            },
+          ],
+          files,
+          event
+        )
+      ).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "includes": "*.ts",
+            "matches": Object {
+              "includes": Array [
+                "/some/file.ts",
+              ],
+            },
+            "path": "/some/rule.json",
+            "teams": Array [],
+            "users": Array [
+              "@eeny",
+              "@meeny",
+              "@miny",
+              "@moe",
+            ],
+          },
+        ]
+      `);
+    });
     it('matching includes', () => {
       const files = [
         { filename: '/some/file.js' },
