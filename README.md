@@ -103,6 +103,7 @@ Every rule can be written in a json file. with the following fields:
 | `GITHUB_TOKEN`  | `string`  |   Yes    | [GITHUB_TOKEN](https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token#using-the-github_token-in-a-workflow) necessary for assign reviewers, assignees or comment on the PR |
 | `rulesLocation` | `string`  |   Yes    | Directory where the rules can be found                                                                                                                                                                                         |
 | `base`          | `string`  |    No    | Base can be fixed to always compare changes with a given tag/branch or master (more info on [base](https://docs.github.com/en/github/committing-changes-to-your-project/comparing-commits))                                    |
+| `DEBUG`         | `string`  |    No    | It will show verbose information (ex: DEBUG: "\*")                                                                                                                                                                             |
 | `dryRun`        | `boolean` |    No    | Evaluate the rules but not perform the actions. the output will be available, [ check output for more details ](#output)                                                                                                       |
 
 <hr>
