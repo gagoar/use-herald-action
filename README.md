@@ -3,7 +3,7 @@
       <img src="https://img.shields.io/badge/Marketplace-v1-undefined.svg?logo=github&logoColor=white&style=flat" alt="GitHub Marketplace" />
     </a>
     <a href="https://github.com/gagoar/use-herald-action/actions">
-      <img src="https://github.com/gagoar/use-herald-action/workflows/validation/badge.svg" alt="Workflow" />
+      <img src="https://github.com/gagoar/use-herald-action/workflows/validation%20on%20Master/badge.svg" alt="Workflow" />
     </a>
     <a href="https://codecov.io/gh/gagoar/use-herald-action">
       <img src="https://codecov.io/gh/gagoar/use-herald-action/branch/master/graph/badge.svg?token=48gHuQl8zV" alt="codecov" />
@@ -116,6 +116,7 @@ Every rule can be written in JSON with the following key-value pairs:
 | `GITHUB_TOKEN`  | `string`  |   Yes    | [GitHub token](https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token#using-the-github_token-in-a-workflow), necessary for adding reviewers, assignees or comments on the PR |
 | `rulesLocation` | `string`  |   Yes    | Directory where the rules can be found                                                                                                                                                                                           |
 | `base`          | `string`  |    No    | Fixed base - tag/branch against which to always compare changes (more info on [base](https://docs.github.com/en/github/committing-changes-to-your-project/comparing-commits)                                                     |
+| `DEBUG`         | `string`  |    No    | Provide to enable verbose logging (ex: `DEBUG: "\*"`)
 | `dryRun`        | `boolean` |    No    | Evaluate rule conditions but do not execute actions - [see output for results](#output)                                                                                                                                   |
 
 <hr>

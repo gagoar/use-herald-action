@@ -1,0 +1,6 @@
+{
+  "name": "This is a rule to add @gagoar as a assignee when workflow changes",
+  "includes": ".github/workflows/*",
+  "action": "assign",
+  "users": ["@gagoar"]
+}

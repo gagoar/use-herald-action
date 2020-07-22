@@ -4,16 +4,19 @@ import groupBy from 'lodash.groupby';
 import { handleComment } from './comment';
 import { loadRules, getMatchingRules, RuleActions } from './rules';
 import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES } from './util/constants';
+import { logger } from './util/debug';
 import { env } from './environment';
 
 import { Octokit } from '@octokit/rest';
-import { retry } from '@octokit/plugin-retry';
+// import { retry } from '@octokit/plugin-retry';
 import { handleAssignees } from './assignees';
 import { handleReviewers } from './reviewers';
 import { loadJSONFile } from './util/loadJSONFile';
 import { isEventSupported } from './util/isEventSupported';
 
-const EnhancedOctokit = Octokit.plugin(retry);
+const debug = logger('index');
+
+const EnhancedOctokit = Octokit;
 
 export enum Props {
   GITHUB_TOKEN = 'GITHUB_TOKEN',
@@ -34,7 +37,7 @@ const getParams = () => {
   return Object.keys(Props).reduce((memo, prop) => {
     const value = getInput(prop);
     return value ? { ...memo, [prop]: value } : memo;
-  }, {} as typeof Props);
+  }, {} as Partial<Record<keyof typeof Props, string>>);
 };
 
 export const main = async () => {
@@ -58,12 +61,24 @@ export const main = async () => {
         GITHUB_TOKEN,
         rulesLocation,
         base = baseSha,
-        dryRun = false,
+        dryRun,
       } = getParams();
+
+      debug('params:', { rulesLocation, base, dryRun });
+
+      if (!rulesLocation) {
+        const message = `${Props.rulesLocation} is required`;
+        setFailed(message);
+        throw new Error(message);
+      }
 
       const rules = loadRules(rulesLocation);
 
-      console.warn({ rules, dir: env.GITHUB_WORKSPACE, rulesLocation });
+      debug('loaded rules and locations', {
+        rules,
+        dir: env.GITHUB_WORKSPACE,
+        rulesLocation,
+      });
       const client = new EnhancedOctokit({ auth: GITHUB_TOKEN });
 
       const {
@@ -77,14 +92,20 @@ export const main = async () => {
 
       const matchingRules = getMatchingRules(rules, files, event);
 
+      debug('matchingRules:', matchingRules);
+
       const groupedRulesByAction = groupBy(
         matchingRules,
         (rule) => rule.action
       );
 
-      if (!dryRun) {
+      if (dryRun !== 'true') {
+        debug('not a dry Run');
+
         if (matchingRules.length) {
           const groupNames = Object.keys(groupedRulesByAction) as ActionName[];
+
+          debug('groupNames', groupNames);
 
           await Promise.all([
             groupNames.map((actionName: ActionName) => {
@@ -95,7 +116,7 @@ export const main = async () => {
                 owner,
                 repo,
                 prNumber,
-                groupedRulesByAction[RuleActions.comment]
+                groupedRulesByAction[RuleActions[actionName]]
               );
             }),
           ]);
@@ -106,9 +127,9 @@ export const main = async () => {
     } else {
       setOutput(OUTPUT_NAME, []);
       throw new Error(
-        `use-herald-action only supports [ ${Object.values(
+        `use-herald-action only supports [${Object.values(
           SUPPORTED_EVENT_TYPES
-        ).join(', ')} ] events for now, event found: ${env.GITHUB_EVENT_NAME}`
+        ).join(', ')}] events for now, event found: ${env.GITHUB_EVENT_NAME}`
       );
     }
   } catch (e) {
