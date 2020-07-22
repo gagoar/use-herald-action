@@ -105,7 +105,7 @@ describe('use-herald-action', () => {
                   ],
                 },
                 "name": "rule1.json",
-                "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
+                "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule1.json",
                 "teams": Array [],
                 "users": Array [
                   "@eeny",
@@ -113,20 +113,6 @@ describe('use-herald-action', () => {
                   "@miny",
                   "@moe",
                 ],
-              },
-              Object {
-                "action": "comment",
-                "customMessage": "This is a custom message for a rule",
-                "includes": "*.js",
-                "matches": Object {
-                  "includes": Array [],
-                },
-                "name": "The rule that only has a team",
-                "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule2.json",
-                "teams": Array [
-                  "@someTeam",
-                ],
-                "users": Array [],
               },
             ],
           },

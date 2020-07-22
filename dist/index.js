@@ -24120,7 +24120,7 @@ const getMatchingRules = (rules, files, event) => {
             matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
         }
         matches = Object.assign(Object.assign({}, matches), extraMatches);
-        return Object.values(matches).some((value) => Array.isArray(value) ? value.length : value)
+        return Object.values(matches).some((value) => value === null || value === void 0 ? void 0 : value.length)
             ? [...memo, Object.assign(Object.assign({}, rule), { matches })]
             : memo;
     }, []);

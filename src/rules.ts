@@ -189,9 +189,7 @@ export const getMatchingRules = (
 
     matches = { ...matches, ...extraMatches };
 
-    return Object.values(matches).some((value) =>
-      Array.isArray(value) ? value.length : value
-    )
+    return Object.values(matches).some((value) => value?.length)
       ? [...memo, { ...rule, matches }]
       : memo;
   }, [] as MatchingRule[]);
