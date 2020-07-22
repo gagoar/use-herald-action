@@ -1,0 +1,6 @@
+{
+  "name": "This is a rule to add @cyamonide as a reviewer when workflow changes",
+  "includes": ".github/workflows/*",
+  "action": "review",
+  "users": ["@cyamonide"]
+}

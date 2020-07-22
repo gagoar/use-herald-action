@@ -98,6 +98,8 @@
     "@actions/core": "1.2.4",
     "@astronautlabs/jsonpath": "1.0.6",
     "@octokit/rest": "18.0.1",
+    "@types/debug": "^4.1.5",
+    "debug": "^4.1.1",
     "envalid": "6.0.2",
     "fast-glob": "3.2.4",
     "lodash.groupby": "4.6.0",

@@ -6,11 +6,14 @@ import { composeCommentsForUsers, MatchingRule } from './rules';
 import { maxPerPage } from './util/constants';
 
 import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
+import { logger } from './util/debug';
 type AllCommentsParams = RestEndpointMethodTypes['issues']['listComments']['parameters'];
 
 type AllCommentsResponse = RestEndpointMethodTypes['issues']['listComments']['response'];
 
 type IssueComments = AllCommentsResponse['data'];
+
+const debug = logger('comment');
 
 const getAllComments = async (
   client: InstanceType<typeof Octokit>,
@@ -43,7 +46,7 @@ export const handleComment = async (
   matchingRules: MatchingRule[],
   requestConcurrency = 1
 ) => {
-  console.warn('handleComment called with', matchingRules);
+  debug('handleComment called with:', matchingRules);
 
   const queue = new PQueue({ concurrency: requestConcurrency });
   const commentsFromRules = composeCommentsForUsers(matchingRules);
@@ -52,12 +55,13 @@ export const handleComment = async (
     repo,
     issue_number: prNumber,
   });
-  console.warn('comments on PR currently:', rawComments);
   const comments = rawComments.map(({ body }) => body);
 
   const onlyNewComments = commentsFromRules.filter(
     (comment: string) => !comments.includes(comment)
   );
+
+  debug('comments to add:', onlyNewComments);
 
   return Promise.all(
     onlyNewComments.map((body: string) => {

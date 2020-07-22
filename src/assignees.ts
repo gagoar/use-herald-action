@@ -2,6 +2,9 @@
 import { Octokit } from '@octokit/rest';
 import { MatchingRule } from './rules';
 import PQueue from 'p-queue';
+import { logger } from './util/debug';
+
+const debug = logger('assignees');
 
 export const handleAssignees = async (
   client: InstanceType<typeof Octokit>,
@@ -13,16 +16,21 @@ export const handleAssignees = async (
 ) => {
   const queue = new PQueue({ concurrency: requestConcurrency });
 
-  return Promise.all(
+  debug('handleAssignees called with:', matchingRules);
+
+  const result = await Promise.all(
     matchingRules.map((matchingRule) =>
       queue.add(() =>
         client.issues.addAssignees({
           owner,
           repo,
           issue_number: prNumber,
-          assignees: matchingRule.users,
+          assignees: matchingRule.users.map((user) => user.replace('@', '')),
         })
       )
     )
   );
+
+  debug('handleAssignees result:', result);
+  return result;
 };
