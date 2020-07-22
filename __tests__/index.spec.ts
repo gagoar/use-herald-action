@@ -5,7 +5,6 @@ import { Event } from '../src/util/constants';
 import * as actions from '@actions/core';
 import { env } from '../src/environment';
 import getCompareCommitsResponse from '../__mocks__/scenarios/get_compare_commits.json';
-import { mockConsole } from './helpers';
 import * as comment from '../src/comment';
 
 jest.mock('@actions/core');
@@ -36,23 +35,22 @@ const mockedInput = {
 };
 
 describe('use-herald-action', () => {
-  let consoleWarnMock: jest.Mock;
-  let consoleInfoMock: jest.Mock;
-  let consoleLogMock: jest.Mock;
-
-  beforeAll(() => {
-    consoleLogMock = mockConsole('log');
-    consoleInfoMock = mockConsole('info');
-    consoleWarnMock = mockConsole('warn');
-  });
   beforeEach(() => {
     getInput.mockClear();
     setFailed.mockClear();
     setOutput.mockClear();
     handleComment.mockClear();
-    consoleInfoMock.mockClear();
-    consoleLogMock.mockClear();
-    consoleWarnMock.mockClear();
+  });
+  it('should fail if rulesLocation is not present', async () => {
+    getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
+      return key === Props.rulesLocation ? undefined : mockedInput[key];
+    });
+
+    const { main } = require('../src') as { main: Function };
+
+    await main();
+
+    expect(setFailed).toHaveBeenCalled();
   });
   it('should run normally (with dryRun: true)', async () => {
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
@@ -69,44 +67,6 @@ describe('use-herald-action', () => {
 
     await main();
 
-    expect(consoleWarnMock.mock.calls[0]).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "rulesLocation": "__mocks__/rules/*.json",
-          "workspace": "${env.GITHUB_WORKSPACE}",
-        },
-      ]
-    `);
-    expect(consoleInfoMock.mock.calls[0]).toMatchInlineSnapshot(`
-      Array [
-        "found rules:",
-        Array [
-          Object {
-            "action": "comment",
-            "customMessage": "This is a custom message for a rule",
-            "includes": "*.ts",
-            "name": "rule1.json",
-            "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
-            "users": Array [
-              "@eeny",
-              "@meeny",
-              "@miny",
-              "@moe",
-            ],
-          },
-          Object {
-            "action": "comment",
-            "customMessage": "This is a custom message for a rule",
-            "includes": "*.js",
-            "name": "The rule that only has a team",
-            "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule2.json",
-            "teams": Array [
-              "@someTeam",
-            ],
-          },
-        ],
-      ]
-    `);
     expect(setFailed).not.toHaveBeenCalled();
     expect(setOutput).toHaveBeenCalled();
     expect(github.isDone()).toBe(true);
@@ -146,6 +106,7 @@ describe('use-herald-action', () => {
                 },
                 "name": "rule1.json",
                 "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
+                "teams": Array [],
                 "users": Array [
                   "@eeny",
                   "@meeny",
@@ -165,6 +126,7 @@ describe('use-herald-action', () => {
                 "teams": Array [
                   "@someTeam",
                 ],
+                "users": Array [],
               },
             ],
           },
@@ -196,7 +158,6 @@ describe('use-herald-action', () => {
     await main();
 
     expect(handleComment).not.toHaveBeenCalled();
-    // expect(setFailed).not.toHaveBeenCalled();
     expect(setFailed.mock.calls).toMatchInlineSnapshot('Array []');
     expect(setOutput.mock.calls).toMatchSnapshot();
     expect(github.isDone()).toBe(true);

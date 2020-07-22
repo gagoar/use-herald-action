@@ -34,16 +34,12 @@ const validRule = {
 };
 
 describe('rules', () => {
-  let consoleInfoMock: jest.Mock;
-  let consoleLogMock: jest.Mock;
-
+  let consoleErrorMock: jest.Mock;
   beforeAll(() => {
-    consoleLogMock = mockConsole('log');
-    consoleInfoMock = mockConsole('info');
+    consoleErrorMock = mockConsole('error');
   });
 
   afterAll(() => {
-    unMockConsole('log');
     unMockConsole('error');
   });
 
@@ -77,7 +73,9 @@ describe('rules', () => {
         ])
       ).toMatchInlineSnapshot(`
         Array [
-          "Hi there, Herald found that given these changes @eeny, @meeny, @miny, @moe might want to take a look!",
+          "Hi there, Herald found that given these changes @eeny, @meeny, @miny, @moe might want to take a look! 
+         
+          <!-- herald-use-action -->",
         ]
       `);
     });
@@ -274,61 +272,26 @@ describe('rules', () => {
     beforeEach(() => {
       sync.mockClear();
       readFileSync.mockClear();
-      consoleInfoMock.mockClear();
-      consoleLogMock.mockClear();
     });
     it('invalid rule: empty array, will be ignored', () => {
       sync.mockReturnValue(['/some/rule.json']);
       readFileSync.mockReturnValue('null');
 
       expect(loadRules('/some/rule.json')).toMatchInlineSnapshot('Array []');
-
-      expect(consoleLogMock.mock.calls).toMatchInlineSnapshot('Array []');
-      expect(consoleInfoMock.mock.calls).toMatchInlineSnapshot(`
-        Array [
-          Array [
-            "found rules:",
-            Array [],
-          ],
-        ]
-      `);
+      expect(consoleErrorMock).not.toHaveBeenCalled();
     });
     it("invalid rule file: file can't be parse", () => {
       sync.mockReturnValue(['/some/rule.json']);
       readFileSync.mockReturnValue('');
 
       expect(loadRules('/some/rule.json')).toMatchInlineSnapshot('Array []');
-
-      expect(consoleLogMock.mock.calls).toMatchInlineSnapshot(`
-        Array [
-          Array [
-            "/some/rule.json can't be parsed, it will be ignored",
-          ],
-        ]
-      `);
-      expect(consoleInfoMock.mock.calls).toMatchInlineSnapshot(`
-        Array [
-          Array [
-            "found rules:",
-            Array [],
-          ],
-        ]
-      `);
+      expect(consoleErrorMock).toHaveBeenCalled();
     });
     it('invalid rule will be ignored', () => {
       sync.mockReturnValue(['/some/rule.json']);
       readFileSync.mockReturnValue(JSON.stringify(invalidRule));
 
       expect(loadRules('/some/rule.json')).toMatchInlineSnapshot('Array []');
-      expect(consoleLogMock.mock.calls).toMatchInlineSnapshot('Array []');
-      expect(consoleInfoMock.mock.calls).toMatchInlineSnapshot(`
-        Array [
-          Array [
-            "found rules:",
-            Array [],
-          ],
-        ]
-      `);
     });
     it('loads rules successfully', () => {
       // rule coming from the rules.json  is called rawRule.
@@ -358,6 +321,7 @@ describe('rules', () => {
             "includes": "*.ts",
             "name": "rule1.json",
             "path": "/some/rule1.json",
+            "teams": Array [],
             "users": Array [
               "@eeny",
               "@meeny",
@@ -374,6 +338,7 @@ describe('rules', () => {
             "teams": Array [
               "@someTeam",
             ],
+            "users": Array [],
           },
         ]
       `);

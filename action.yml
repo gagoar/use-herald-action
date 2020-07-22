@@ -16,6 +16,8 @@ inputs:
   dryRun:
     description: 'It will evaluate the rules but not perform the actions, the output will be available'
     default: false
+  DEBUG:
+    description: 'following https://www.npmjs.com/package/debug it will use the value to increase or decrease logging'
 outputs:
   appliedRules:
     description: 'It will report back what rules have been applied'

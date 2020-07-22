@@ -9,11 +9,15 @@ import { RestEndpointMethodTypes } from '@octokit/rest';
 
 import { JSONPath } from '@astronautlabs/jsonpath';
 import { loadJSONFile } from './util/loadJSONFile';
+import { logger } from './util/debug';
+
+const debug = logger('rules');
 
 const commentTemplate = (users: string[]): string =>
   `Hi there, Herald found that given these changes ${users.join(
     ', '
-  )} might want to take a look!`;
+  )} might want to take a look! \n 
+  <!-- herald-use-action -->`;
 
 enum RuleActors {
   users = 'users',
@@ -62,8 +66,11 @@ const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
   const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
     return content[attr] ? { ...memo, [attr]: content[attr] } : memo;
   }, {} as RawRule);
-
-  return { ...rule };
+  return {
+    ...rule,
+    users: rule.users ? rule.users : [],
+    teams: rule.teams ? rule.teams : [],
+  };
 };
 
 const hasAttribute = <Attr extends string>(
@@ -88,18 +95,26 @@ const isValidRawRule = (content: unknown): content is RawRule => {
 
   const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
 
+  debug(
+    `validation: ${{
+      rule: content,
+      hasActors,
+      hasValidActionValues,
+      matchers,
+    }}`
+  );
+
   return hasValidActionValues && hasActors && matchers;
 };
 
 export const loadRules = (rulesLocation: string): Rule[] => {
-  console.warn({ rulesLocation, workspace: env.GITHUB_WORKSPACE });
-
   const matches = sync(rulesLocation, {
     onlyFiles: true,
     cwd: env.GITHUB_WORKSPACE,
     absolute: true,
   });
 
+  debug(`files found: ${matches}`);
   const rules = matches.reduce((memo, filePath) => {
     try {
       const rule = loadJSONFile(filePath);
@@ -111,12 +126,10 @@ export const loadRules = (rulesLocation: string): Rule[] => {
           ]
         : memo;
     } catch (e) {
-      console.log(`${filePath} can't be parsed, it will be ignored`);
+      console.error(`${filePath} can't be parsed, it will be ignored`);
       return memo;
     }
   }, [] as Rule[]);
-
-  console.info('found rules:', rules);
 
   return rules;
 };
@@ -147,6 +160,7 @@ const includeExcludeFiles = ({
       const toExclude = minimatch.match(results, excludes, { matchBase: true });
       results = results.filter((filename) => !toExclude.includes(filename));
     }
+    debug('evaluating includes:', matches);
   }
 
   if (includes && excludes) {
@@ -181,8 +195,6 @@ export const getMatchingRules = (
       ? [...memo, { ...rule, matches }]
       : memo;
   }, [] as MatchingRule[]);
-
-  console.info('matching rules:', matchingRules);
 
   return matchingRules;
 };

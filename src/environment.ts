@@ -16,6 +16,7 @@ const environment = () =>
       GITHUB_SHA: str({
         devDefault: testOnly('ffac537e6cbbf934b08745a378932722df287a53'),
       }),
+      TASK_ID: str({ default: 'use-herald-action' }),
     },
     { dotEnvPath: null }
   );

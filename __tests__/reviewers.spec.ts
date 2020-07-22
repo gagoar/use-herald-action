@@ -14,7 +14,7 @@ describe('handleReviewers', () => {
     action: RuleActions.review,
     path: 'rules/rule.json',
     customMessage: 'Custom message',
-    teams: [],
+    teams: ['@myTeam'],
     matches: { glob: ['fileChanged.ts'] },
   };
   beforeEach(() => {
