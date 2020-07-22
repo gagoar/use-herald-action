@@ -95,14 +95,12 @@ const isValidRawRule = (content: unknown): content is RawRule => {
 
   const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
 
-  debug(
-    `validation: ${{
-      rule: content,
-      hasActors,
-      hasValidActionValues,
-      matchers,
-    }}`
-  );
+  debug('validation:', {
+    rule: content,
+    hasActors,
+    hasValidActionValues,
+    matchers,
+  });
 
   return hasValidActionValues && hasActors && matchers;
 };
@@ -114,7 +112,7 @@ export const loadRules = (rulesLocation: string): Rule[] => {
     absolute: true,
   });
 
-  debug(`files found: ${matches}`);
+  debug('files found:', matches);
   const rules = matches.reduce((memo, filePath) => {
     try {
       const rule = loadJSONFile(filePath);
@@ -191,7 +189,9 @@ export const getMatchingRules = (
 
     matches = { ...matches, ...extraMatches };
 
-    return Object.values(matches).length
+    return Object.values(matches).some((value) =>
+      Array.isArray(value) ? value.length : value
+    )
       ? [...memo, { ...rule, matches }]
       : memo;
   }, [] as MatchingRule[]);

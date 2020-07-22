@@ -24058,12 +24058,12 @@ const isValidRawRule = (content) => {
     const hasUsers = hasAttribute('users', content) && Array.isArray(content.users);
     const hasActors = hasTeams || hasUsers;
     const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
-    debug(`validation: ${{
+    debug('validation:', {
         rule: content,
         hasActors,
         hasValidActionValues,
         matchers,
-    }}`);
+    });
     return hasValidActionValues && hasActors && matchers;
 };
 const loadRules = (rulesLocation) => {
@@ -24072,7 +24072,7 @@ const loadRules = (rulesLocation) => {
         cwd: env.GITHUB_WORKSPACE,
         absolute: true,
     });
-    debug(`files found: ${matches}`);
+    debug('files found:', matches);
     const rules = matches.reduce((memo, filePath) => {
         try {
             const rule = loadJSONFile(filePath);
@@ -24120,7 +24120,7 @@ const getMatchingRules = (rules, files, event) => {
             matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
         }
         matches = Object.assign(Object.assign({}, matches), extraMatches);
-        return Object.values(matches).length
+        return Object.values(matches).some((value) => Array.isArray(value) ? value.length : value)
             ? [...memo, Object.assign(Object.assign({}, rule), { matches })]
             : memo;
     }, []);
@@ -33438,6 +33438,7 @@ class PQueue extends EventEmitter {
     _next() {
         this._pendingCount--;
         this._tryToStartAnother();
+        this.emit('next');
     }
     _resolvePromises() {
         this._resolveEmpty();
@@ -33556,6 +33557,7 @@ class PQueue extends EventEmitter {
             };
             this._queue.enqueue(run, options);
             this._tryToStartAnother();
+            this.emit('add');
         });
     }
     /**
