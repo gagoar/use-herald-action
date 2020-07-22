@@ -25,12 +25,13 @@ export const handleReviewers = async (
           repo,
           pull_number: prNumber,
           reviewers: matchingRule.users.map((user) => user.replace('@', '')),
-          team_reviewers: matchingRule.teams.map((user) =>
-            user.replace('@', '')
+          team_reviewers: matchingRule.teams.map((team) =>
+            team.replace('@', '')
           ),
         })
       )
     )
   );
   debug('result:', result);
+  return result;
 };

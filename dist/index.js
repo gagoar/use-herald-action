@@ -24207,9 +24207,10 @@ const handleReviewers = async (client, owner, repo, prNumber, matchingRules, req
         repo,
         pull_number: prNumber,
         reviewers: matchingRule.users.map((user) => user.replace('@', '')),
-        team_reviewers: matchingRule.teams.map((user) => user.replace('@', '')),
+        team_reviewers: matchingRule.teams.map((team) => team.replace('@', '')),
     }))));
     reviewers_debug('result:', result);
+    return result;
 };
 
 // CONCATENATED MODULE: ./src/util/isEventSupported.ts
@@ -24261,7 +24262,9 @@ const main = async () => {
             const { GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun, } = getParams();
             src_debug('params:', { rulesLocation, base, dryRun });
             if (!rulesLocation) {
-                throw new Error(`${Props.rulesLocation} is required`);
+                const message = `${Props.rulesLocation} is required`;
+                Object(core.setFailed)(message);
+                throw new Error(message);
             }
             const rules = loadRules(rulesLocation);
             src_debug('loaded rules and locations', {
@@ -24296,7 +24299,7 @@ const main = async () => {
         }
         else {
             Object(core.setOutput)(OUTPUT_NAME, []);
-            throw new Error(`use - herald - action only supports[${Object.values(SUPPORTED_EVENT_TYPES).join(', ')} ]events for now, event found: ${env.GITHUB_EVENT_NAME} `);
+            throw new Error(`use-herald-action only supports [${Object.values(SUPPORTED_EVENT_TYPES).join(', ')}] events for now, event found: ${env.GITHUB_EVENT_NAME}`);
         }
     }
     catch (e) {

@@ -67,7 +67,9 @@ export const main = async () => {
       debug('params:', { rulesLocation, base, dryRun });
 
       if (!rulesLocation) {
-        throw new Error(`${Props.rulesLocation} is required`);
+        const message = `${Props.rulesLocation} is required`;
+        setFailed(message);
+        throw new Error(message);
       }
 
       const rules = loadRules(rulesLocation);
@@ -125,9 +127,9 @@ export const main = async () => {
     } else {
       setOutput(OUTPUT_NAME, []);
       throw new Error(
-        `use - herald - action only supports[${Object.values(
+        `use-herald-action only supports [${Object.values(
           SUPPORTED_EVENT_TYPES
-        ).join(', ')} ]events for now, event found: ${env.GITHUB_EVENT_NAME} `
+        ).join(', ')}] events for now, event found: ${env.GITHUB_EVENT_NAME}`
       );
     }
   } catch (e) {

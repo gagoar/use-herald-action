@@ -41,6 +41,17 @@ describe('use-herald-action', () => {
     setOutput.mockClear();
     handleComment.mockClear();
   });
+  it('should fail if rulesLocation is not present', async () => {
+    getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
+      return key === Props.rulesLocation ? undefined : mockedInput[key];
+    });
+
+    const { main } = require('../src') as { main: Function };
+
+    await main();
+
+    expect(setFailed).toHaveBeenCalled();
+  });
   it('should run normally (with dryRun: true)', async () => {
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
       return mockedInput[key];
