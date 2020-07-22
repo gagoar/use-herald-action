@@ -2,7 +2,7 @@
   "name": "use-herald-action",
   "repository": "git@github.com:gagoar/use-herald-action.git",
   "license": "MIT",
-  "version": "3.4.0",
+  "version": "1.0.0",
   "description": "add subscribers, assignees and reviewers to your pull request",
   "main": "index.ts",
   "husky": {
