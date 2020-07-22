@@ -19,15 +19,15 @@ This action allows you to add comments, reviewers and assignees to a pull reques
 
 ## Table of contents
 
-  - [What is `use-herald-action`?](#what-is-use-herald-action)
-    - [Motivation](#motivation)
-  - [How to create a rule](#how-to-create-a-rule)
-  - [Rule Examples](#rule-examples)
-  - [Input parameters](#input-parameters)
-  - [Output](#output)
-  - [Examples](#examples)
-    - [Basic example](#basic-example)
-    - [Using output](#using-output)
+- [What is `use-herald-action`?](#what-is-use-herald-action)
+  - [Motivation](#motivation)
+- [How to create a rule](#how-to-create-a-rule)
+- [Rule Examples](#rule-examples)
+- [Input parameters](#input-parameters)
+- [Output](#output)
+- [Examples](#examples)
+  - [Basic example](#basic-example)
+  - [Using output](#using-output)
 
 <hr>
 
@@ -39,6 +39,7 @@ A **rule** is a way of defining an action that is to be performed once a certain
 For example, you might want to get notified every time somebody opens a pull request that affects some file you're interested in, even if they didn't add you as a reviewer and you are not a [codeowner](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners).
 
 Working with a more concrete example, we have the power to create a rule that:
+
 - Has conditions:
   - { `pull_request` `title` contains `node`}
   - { files matching `*.ts` are changed }
@@ -116,8 +117,8 @@ Every rule can be written in JSON with the following key-value pairs:
 | `GITHUB_TOKEN`  | `string`  |   Yes    | [GitHub token](https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token#using-the-github_token-in-a-workflow), necessary for adding reviewers, assignees or comments on the PR |
 | `rulesLocation` | `string`  |   Yes    | Directory where the rules can be found                                                                                                                                                                                           |
 | `base`          | `string`  |    No    | Fixed base - tag/branch against which to always compare changes (more info on [base](https://docs.github.com/en/github/committing-changes-to-your-project/comparing-commits)                                                     |
-| `DEBUG`         | `string`  |    No    | Provide to enable verbose logging (ex: `DEBUG: "\*"`)
-| `dryRun`        | `boolean` |    No    | Evaluate rule conditions but do not execute actions - [see output for results](#output)                                                                                                                                   |
+| `DEBUG`         | `string`  |    No    | Provide to enable verbose logging (ex: `DEBUG: "*"`)                                                                                                                                                                             |
+| `dryRun`        | `boolean` |    No    | Evaluate rule conditions but do not execute actions - [see output for results](#output)                                                                                                                                          |
 
 <hr>
 
