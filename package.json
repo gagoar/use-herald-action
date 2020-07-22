@@ -35,7 +35,8 @@
   },
   "prettier": {
     "singleQuote": true,
-    "semi": true
+    "semi": true,
+    "printWidth": 120
   },
   "eslintConfig": {
     "ignorePatterns": "dist/*",

@@ -14,9 +14,7 @@ import { logger } from './util/debug';
 const debug = logger('rules');
 
 const commentTemplate = (users: string[]): string =>
-  `Hi there, Herald found that given these changes ${users.join(
-    ', '
-  )} might want to take a look! \n 
+  `Hi there, Herald found that given these changes ${users.join(', ')} might want to take a look! \n 
   <!-- herald-use-action -->`;
 
 enum RuleActors {
@@ -73,10 +71,8 @@ const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
   };
 };
 
-const hasAttribute = <Attr extends string>(
-  attr: string,
-  content: object
-): content is Record<Attr, string> => attr in content;
+const hasAttribute = <Attr extends string>(attr: string, content: object): content is Record<Attr, string> =>
+  attr in content;
 
 const isValidRawRule = (content: unknown): content is RawRule => {
   if (typeof content !== 'object' || content === null) {
@@ -84,13 +80,10 @@ const isValidRawRule = (content: unknown): content is RawRule => {
   }
 
   const hasValidActionValues =
-    hasAttribute<'action'>('action', content) &&
-    Object.keys(RuleActions).includes(content.action);
+    hasAttribute<'action'>('action', content) && Object.keys(RuleActions).includes(content.action);
 
-  const hasTeams =
-    hasAttribute('teams', content) && Array.isArray(content.teams);
-  const hasUsers =
-    hasAttribute('users', content) && Array.isArray(content.users);
+  const hasTeams = hasAttribute('teams', content) && Array.isArray(content.teams);
+  const hasUsers = hasAttribute('users', content) && Array.isArray(content.users);
   const hasActors = hasTeams || hasUsers;
 
   const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
@@ -117,12 +110,7 @@ export const loadRules = (rulesLocation: string): Rule[] => {
     try {
       const rule = loadJSONFile(filePath);
 
-      return isValidRawRule(rule)
-        ? [
-            ...memo,
-            { name: basename(filePath), ...sanitize(rule), path: filePath },
-          ]
-        : memo;
+      return isValidRawRule(rule) ? [...memo, { name: basename(filePath), ...sanitize(rule), path: filePath }] : memo;
     } catch (e) {
       console.error(`${filePath} can't be parsed, it will be ignored`);
       return memo;
@@ -142,11 +130,7 @@ type IncludeExcludeFilesParams = {
   fileNames: string[];
 };
 
-const includeExcludeFiles = ({
-  includes,
-  excludes,
-  fileNames,
-}: IncludeExcludeFilesParams) => {
+const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFilesParams) => {
   const matches = {} as MatchingRule['matches'];
 
   let results = [] as string[];
@@ -189,21 +173,14 @@ export const getMatchingRules = (
 
     matches = { ...matches, ...extraMatches };
 
-    return Object.values(matches).some((value) => value?.length)
-      ? [...memo, { ...rule, matches }]
-      : memo;
+    return Object.values(matches).some((value) => value?.length) ? [...memo, { ...rule, matches }] : memo;
   }, [] as MatchingRule[]);
 
   return matchingRules;
 };
 
-export const composeCommentsForUsers = (
-  matchingRules: MatchingRule[]
-): string[] => {
+export const composeCommentsForUsers = (matchingRules: MatchingRule[]): string[] => {
   return matchingRules.reduce((comments, { teams, users, customMessage }) => {
-    return [
-      ...comments,
-      customMessage ? customMessage : commentTemplate([...users, ...teams]),
-    ];
+    return [...comments, customMessage ? customMessage : commentTemplate([...users, ...teams])];
   }, [] as string[]);
 };
