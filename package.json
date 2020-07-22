@@ -100,7 +100,7 @@
     "@octokit/fixtures": "21.0.7",
     "@octokit/plugin-retry": "3.0.3",
     "@octokit/rest": "18.0.1",
-    "aws-sdk": "2.681.0",
+    "aws-sdk": "2.718.0",
     "envalid": "6.0.2",
     "fast-glob": "3.2.4",
     "lodash.groupby": "4.6.0",
