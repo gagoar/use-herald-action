@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(822);
+/******/ 		return __webpack_require__(134);
 /******/ 	};
 /******/ 	// initialize runtime
 /******/ 	runtime(__webpack_require__);
@@ -3999,41 +3999,421 @@ exports.isEnoentCodeError = isEnoentCodeError;
 /***/ }),
 
 /***/ 134:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
+/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
 
-Object.defineProperty(exports, "__esModule", { value: true });
-const lower_bound_1 = __webpack_require__(59);
-class PriorityQueue {
-    constructor() {
-        this._queue = [];
-    }
-    enqueue(run, options) {
-        options = Object.assign({ priority: 0 }, options);
-        const element = {
-            priority: options.priority,
-            run
-        };
-        if (this.size && this._queue[this.size - 1].priority >= options.priority) {
-            this._queue.push(element);
-            return;
-        }
-        const index = lower_bound_1.default(this._queue, element, (a, b) => b.priority - a.priority);
-        this._queue.splice(index, 0, element);
-    }
-    dequeue() {
-        const item = this._queue.shift();
-        return item === null || item === void 0 ? void 0 : item.run;
-    }
-    filter(options) {
-        return this._queue.filter((element) => element.priority === options.priority).map((element) => element.run);
-    }
-    get size() {
-        return this._queue.length;
-    }
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var core = __webpack_require__(470);
+
+// EXTERNAL MODULE: ./node_modules/lodash.groupby/index.js
+var lodash_groupby = __webpack_require__(604);
+var lodash_groupby_default = /*#__PURE__*/__webpack_require__.n(lodash_groupby);
+
+// EXTERNAL MODULE: ./node_modules/p-queue/dist/index.js
+var dist = __webpack_require__(984);
+var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
+
+// EXTERNAL MODULE: ./node_modules/fast-glob/out/index.js
+var out = __webpack_require__(406);
+
+// EXTERNAL MODULE: external "path"
+var external_path_ = __webpack_require__(622);
+
+// EXTERNAL MODULE: ./node_modules/envalid/src/envalid.js
+var envalid = __webpack_require__(456);
+var envalid_default = /*#__PURE__*/__webpack_require__.n(envalid);
+
+// CONCATENATED MODULE: ./src/environment.ts
+
+
+const environment = () => envalid_default().cleanEnv(process.env, {
+    GITHUB_EVENT_PATH: Object(envalid.str)({
+        devDefault: Object(envalid.testOnly)('__mocks__/event.json'),
+    }),
+    GITHUB_WORKSPACE: Object(envalid.str)({
+        devDefault: Object(envalid.testOnly)(Object(external_path_.join)(__dirname, '..')),
+    }),
+    GITHUB_EVENT_NAME: Object(envalid.str)({ devDefault: 'pull_request' }),
+    GITHUB_REPOSITORY: Object(envalid.str)({ devDefault: Object(envalid.testOnly)('someRepo') }),
+    GITHUB_SHA: Object(envalid.str)({
+        devDefault: Object(envalid.testOnly)('ffac537e6cbbf934b08745a378932722df287a53'),
+    }),
+    TASK_ID: Object(envalid.str)({ default: 'use-herald-action' }),
+}, { dotEnvPath: null });
+const env = environment();
+
+// EXTERNAL MODULE: ./node_modules/minimatch/minimatch.js
+var minimatch = __webpack_require__(93);
+var minimatch_default = /*#__PURE__*/__webpack_require__.n(minimatch);
+
+// EXTERNAL MODULE: ./node_modules/@astronautlabs/jsonpath/dist/index.js
+var jsonpath_dist = __webpack_require__(607);
+
+// CONCATENATED MODULE: ./src/util/constants.ts
+const maxPerPage = 100;
+const OUTPUT_NAME = 'appliedRules';
+const FILE_ENCODING = 'utf8';
+var SUPPORTED_EVENT_TYPES;
+(function (SUPPORTED_EVENT_TYPES) {
+    SUPPORTED_EVENT_TYPES["PULL_REQUEST"] = "pull_request";
+    SUPPORTED_EVENT_TYPES["push"] = "push";
+})(SUPPORTED_EVENT_TYPES || (SUPPORTED_EVENT_TYPES = {}));
+
+// EXTERNAL MODULE: external "fs"
+var external_fs_ = __webpack_require__(747);
+
+// CONCATENATED MODULE: ./src/util/loadJSONFile.ts
+
+
+const loadJSONFile = (filePath) => {
+    const file = Object(external_fs_.readFileSync)(filePath, { encoding: FILE_ENCODING });
+    const content = JSON.parse(file);
+    return content;
+};
+
+// EXTERNAL MODULE: ./node_modules/debug/src/index.js
+var src = __webpack_require__(784);
+var src_default = /*#__PURE__*/__webpack_require__.n(src);
+
+// CONCATENATED MODULE: ./src/util/debug.ts
+var _a;
+
+
+
+const DEBUG = (_a = Object(core.getInput)('DEBUG')) !== null && _a !== void 0 ? _a : false;
+if (DEBUG) {
+    console.log('debug is enabled, provided pattern:', DEBUG);
 }
-exports.default = PriorityQueue;
+function logger(nameSpace) {
+    const { TASK_ID } = env;
+    const log = src_default()(`${TASK_ID}:${nameSpace}`);
+    log.log = console.log.bind(console);
+    if (DEBUG) {
+        log.enabled = true;
+    }
+    return log;
+}
+
+// CONCATENATED MODULE: ./src/util/makeArray.ts
+const makeArray = (field) => (field && Array.isArray(field) ? field : [field].filter(Boolean));
+
+// CONCATENATED MODULE: ./src/rules.ts
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+
+
+
+
+
+
+
+
+const debug = logger('rules');
+const commentTemplate = (users) => `Hi there, Herald found that given these changes ${users.join(', ')} might want to take a look! \n 
+  <!-- herald-use-action -->`;
+var RuleActors;
+(function (RuleActors) {
+    RuleActors["users"] = "users";
+    RuleActors["teams"] = "teams";
+})(RuleActors || (RuleActors = {}));
+var RuleExtras;
+(function (RuleExtras) {
+    RuleExtras["customMessage"] = "customMessage";
+    RuleExtras["name"] = "name";
+})(RuleExtras || (RuleExtras = {}));
+var RuleMatchers;
+(function (RuleMatchers) {
+    RuleMatchers["eventJsonPath"] = "eventJsonPath";
+    RuleMatchers["includes"] = "includes";
+})(RuleMatchers || (RuleMatchers = {}));
+var RuleActions;
+(function (RuleActions) {
+    RuleActions["comment"] = "comment";
+    RuleActions["review"] = "review";
+    RuleActions["assign"] = "assign";
+})(RuleActions || (RuleActions = {}));
+const sanitize = (content) => {
+    const attrs = Object.assign(Object.assign(Object.assign({}, RuleMatchers), RuleActors), RuleExtras);
+    const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
+        return content[attr] ? Object.assign(Object.assign({}, memo), { [attr]: content[attr] }) : memo;
+    }, {});
+    return Object.assign(Object.assign({}, rule), { users: rule.users ? rule.users : [], teams: rule.teams ? rule.teams : [], includes: makeArray(rule.includes), excludes: makeArray(rule.excludes) });
+};
+const hasAttribute = (attr, content) => attr in content;
+const isValidRawRule = (content) => {
+    if (typeof content !== 'object' || content === null) {
+        return false;
+    }
+    const hasValidActionValues = hasAttribute('action', content) && Object.keys(RuleActions).includes(content.action);
+    const hasTeams = hasAttribute('teams', content) && Array.isArray(content.teams);
+    const hasUsers = hasAttribute('users', content) && Array.isArray(content.users);
+    const hasActors = hasTeams || hasUsers;
+    const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
+    debug('validation:', {
+        rule: content,
+        hasActors,
+        hasValidActionValues,
+        matchers,
+    });
+    return hasValidActionValues && hasActors && matchers;
+};
+const loadRules = (rulesLocation) => {
+    const matches = Object(out.sync)(rulesLocation, {
+        onlyFiles: true,
+        cwd: env.GITHUB_WORKSPACE,
+        absolute: true,
+    });
+    debug('files found:', matches);
+    const rules = matches.reduce((memo, filePath) => {
+        try {
+            const rule = loadJSONFile(filePath);
+            return isValidRawRule(rule) ? [...memo, Object.assign(Object.assign({ name: Object(external_path_.basename)(filePath) }, sanitize(rule)), { path: filePath })] : memo;
+        }
+        catch (e) {
+            console.error(`${filePath} can't be parsed, it will be ignored`);
+            return memo;
+        }
+    }, []);
+    return rules;
+};
+const includeExcludeFiles = ({ includes, excludes, fileNames }) => {
+    const matches = {};
+    let results = [];
+    if (includes === null || includes === void 0 ? void 0 : includes.length) {
+        results = includes.reduce((memo, include) => {
+            const matches = minimatch_default().match(fileNames, include, { matchBase: true });
+            return [...memo, ...matches];
+        }, []);
+        matches[RuleMatchers.includes] = [...new Set(results)];
+        if ((excludes === null || excludes === void 0 ? void 0 : excludes.length) && results.length) {
+            const toExclude = excludes.reduce((memo, exclude) => {
+                const matches = minimatch_default().match(results, exclude, { matchBase: true });
+                return [...memo, ...matches];
+            }, []);
+            results = results.filter((filename) => !toExclude.includes(filename));
+        }
+        debug('evaluating includes:', matches);
+    }
+    if ((includes === null || includes === void 0 ? void 0 : includes.length) && (excludes === null || excludes === void 0 ? void 0 : excludes.length)) {
+        return { includeExclude: results };
+    }
+    return matches;
+};
+const getMatchingRules = (rules, files, event) => {
+    const fileNames = files.map(({ filename }) => filename);
+    const matchingRules = rules.reduce((memo, rule) => {
+        let matches = {};
+        const extraMatches = includeExcludeFiles({
+            includes: rule.includes,
+            excludes: rule.excludes,
+            fileNames,
+        });
+        if (rule.eventJsonPath) {
+            matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
+        }
+        matches = Object.assign(Object.assign({}, matches), extraMatches);
+        return Object.values(matches).some((value) => value === null || value === void 0 ? void 0 : value.length) ? [...memo, Object.assign(Object.assign({}, rule), { matches })] : memo;
+    }, []);
+    return matchingRules;
+};
+var TypeOfComments;
+(function (TypeOfComments) {
+    TypeOfComments["standalone"] = "standalone";
+    TypeOfComments["combined"] = "combined";
+})(TypeOfComments || (TypeOfComments = {}));
+const composeCommentsForUsers = (matchingRules) => {
+    const groups = lodash_groupby_default()(matchingRules, (rule) => rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined);
+    let comments = [];
+    if (groups[TypeOfComments.combined]) {
+        const mentions = groups[TypeOfComments.combined].reduce((memo, { users, teams }) => [...memo, ...users, ...teams], []);
+        comments = [...comments, commentTemplate([...new Set(mentions)])];
+    }
+    if (groups[TypeOfComments.standalone]) {
+        const customMessages = groups[TypeOfComments.standalone]
+            .filter((rule) => rule.customMessage)
+            .map(({ customMessage }) => customMessage);
+        comments = [...comments, ...customMessages];
+    }
+    return comments;
+};
+
+// CONCATENATED MODULE: ./src/comment.ts
+/* eslint-disable @typescript-eslint/camelcase */
+
+
+
+
+const comment_debug = logger('comment');
+const getAllComments = async (client, params) => {
+    const page = 1;
+    const { data: comments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { per_page: maxPerPage, page }));
+    if (comments.length < maxPerPage) {
+        return comments;
+    }
+    else {
+        const { data: moreComments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { page: page + 1, per_page: maxPerPage }));
+        return [...comments, ...moreComments];
+    }
+};
+const handleComment = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
+    comment_debug('handleComment called with:', matchingRules);
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
+    const commentsFromRules = composeCommentsForUsers(matchingRules);
+    const rawComments = await getAllComments(client, {
+        owner,
+        repo,
+        issue_number: prNumber,
+    });
+    const comments = rawComments.map(({ body }) => body);
+    const onlyNewComments = commentsFromRules.filter((comment) => !comments.includes(comment));
+    comment_debug('comments to add:', onlyNewComments);
+    return Promise.all(onlyNewComments.map((body) => {
+        return queue.add(() => client.issues.createComment({
+            owner,
+            repo,
+            issue_number: prNumber,
+            body,
+        }));
+    }));
+};
+
+// EXTERNAL MODULE: ./node_modules/@octokit/rest/dist-node/index.js
+var dist_node = __webpack_require__(889);
+
+// CONCATENATED MODULE: ./src/assignees.ts
+
+
+const assignees_debug = logger('assignees');
+const handleAssignees = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
+    assignees_debug('handleAssignees called with:', matchingRules);
+    const result = await Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.issues.addAssignees({
+        owner,
+        repo,
+        issue_number: prNumber,
+        assignees: matchingRule.users.map((user) => user.replace('@', '')),
+    }))));
+    assignees_debug('handleAssignees result:', result);
+    return result;
+};
+
+// CONCATENATED MODULE: ./src/reviewers.ts
+
+
+const reviewers_debug = logger('reviewers');
+const handleReviewers = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
+    reviewers_debug('handleReviewers called with:', matchingRules);
+    const result = await Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.pulls.requestReviewers({
+        owner,
+        repo,
+        pull_number: prNumber,
+        reviewers: matchingRule.users.map((user) => user.replace('@', '')),
+        team_reviewers: matchingRule.teams.map((team) => team.replace('@', '')),
+    }))));
+    reviewers_debug('result:', result);
+    return result;
+};
+
+// CONCATENATED MODULE: ./src/util/isEventSupported.ts
+
+const isEventSupported = (event) => {
+    return Object.values(SUPPORTED_EVENT_TYPES).some((e) => event === e);
+};
+
+// CONCATENATED MODULE: ./src/index.ts
+/* eslint-disable @typescript-eslint/camelcase */
+
+
+
+
+
+
+
+
+// import { retry } from '@octokit/plugin-retry';
+
+
+
+
+const src_debug = logger('index');
+const EnhancedOctokit = dist_node.Octokit;
+var Props;
+(function (Props) {
+    Props["GITHUB_TOKEN"] = "GITHUB_TOKEN";
+    Props["rulesLocation"] = "rulesLocation";
+    Props["dryRun"] = "dryRun";
+    Props["base"] = "base";
+})(Props || (Props = {}));
+const actionsMap = {
+    [RuleActions.comment]: handleComment,
+    [RuleActions.assign]: handleAssignees,
+    [RuleActions.review]: handleReviewers,
+};
+const getParams = () => {
+    return Object.keys(Props).reduce((memo, prop) => {
+        const value = Object(core.getInput)(prop);
+        return value ? Object.assign(Object.assign({}, memo), { [prop]: value }) : memo;
+    }, {});
+};
+const main = async () => {
+    try {
+        if (isEventSupported(env.GITHUB_EVENT_NAME)) {
+            const event = loadJSONFile(env.GITHUB_EVENT_PATH);
+            const { pull_request: { head: { sha: headSha }, base: { sha: baseSha }, }, number: prNumber, repository: { name: repo, owner: { login: owner }, }, } = event;
+            const { GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun, } = getParams();
+            src_debug('params:', { rulesLocation, base, dryRun });
+            if (!rulesLocation) {
+                const message = `${Props.rulesLocation} is required`;
+                Object(core.setFailed)(message);
+                throw new Error(message);
+            }
+            const rules = loadRules(rulesLocation);
+            src_debug('loaded rules and locations', {
+                rules,
+                dir: env.GITHUB_WORKSPACE,
+                rulesLocation,
+            });
+            const client = new EnhancedOctokit({ auth: GITHUB_TOKEN });
+            const { data: { files }, } = await client.repos.compareCommits({
+                base,
+                head: headSha,
+                owner,
+                repo,
+            });
+            const matchingRules = getMatchingRules(rules, files, event);
+            src_debug('matchingRules:', matchingRules);
+            const groupedRulesByAction = lodash_groupby_default()(matchingRules, (rule) => rule.action);
+            if (dryRun !== 'true') {
+                src_debug('not a dry Run');
+                if (matchingRules.length) {
+                    const groupNames = Object.keys(groupedRulesByAction);
+                    src_debug('groupNames', groupNames);
+                    await Promise.all([
+                        groupNames.map((actionName) => {
+                            const action = actionsMap[RuleActions[actionName]];
+                            return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions[actionName]]);
+                        }),
+                    ]);
+                }
+            }
+            Object(core.setOutput)(OUTPUT_NAME, groupedRulesByAction);
+        }
+        else {
+            Object(core.setOutput)(OUTPUT_NAME, []);
+            throw new Error(`use-herald-action only supports [${Object.values(SUPPORTED_EVENT_TYPES).join(', ')}] events for now, event found: ${env.GITHUB_EVENT_NAME}`);
+        }
+    }
+    catch (e) {
+        Object(core.setFailed)(e);
+    }
+};
+
+// CONCATENATED MODULE: ./index.ts
+
+main();
 
 
 /***/ }),
@@ -4179,94 +4559,36 @@ module.exports = {"_args":[["escodegen@1.14.1","/Users/gfrigerio/base/use-herald
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const fsStat = __webpack_require__(231);
-const rpl = __webpack_require__(885);
-const constants_1 = __webpack_require__(171);
-const utils = __webpack_require__(933);
-function read(directory, settings, callback) {
-    if (!settings.stats && constants_1.IS_SUPPORT_READDIR_WITH_FILE_TYPES) {
-        return readdirWithFileTypes(directory, settings, callback);
+const lower_bound_1 = __webpack_require__(59);
+class PriorityQueue {
+    constructor() {
+        this._queue = [];
     }
-    return readdir(directory, settings, callback);
-}
-exports.read = read;
-function readdirWithFileTypes(directory, settings, callback) {
-    settings.fs.readdir(directory, { withFileTypes: true }, (readdirError, dirents) => {
-        if (readdirError !== null) {
-            return callFailureCallback(callback, readdirError);
+    enqueue(run, options) {
+        options = Object.assign({ priority: 0 }, options);
+        const element = {
+            priority: options.priority,
+            run
+        };
+        if (this.size && this._queue[this.size - 1].priority >= options.priority) {
+            this._queue.push(element);
+            return;
         }
-        const entries = dirents.map((dirent) => ({
-            dirent,
-            name: dirent.name,
-            path: `${directory}${settings.pathSegmentSeparator}${dirent.name}`
-        }));
-        if (!settings.followSymbolicLinks) {
-            return callSuccessCallback(callback, entries);
-        }
-        const tasks = entries.map((entry) => makeRplTaskEntry(entry, settings));
-        rpl(tasks, (rplError, rplEntries) => {
-            if (rplError !== null) {
-                return callFailureCallback(callback, rplError);
-            }
-            callSuccessCallback(callback, rplEntries);
-        });
-    });
+        const index = lower_bound_1.default(this._queue, element, (a, b) => b.priority - a.priority);
+        this._queue.splice(index, 0, element);
+    }
+    dequeue() {
+        const item = this._queue.shift();
+        return item === null || item === void 0 ? void 0 : item.run;
+    }
+    filter(options) {
+        return this._queue.filter((element) => element.priority === options.priority).map((element) => element.run);
+    }
+    get size() {
+        return this._queue.length;
+    }
 }
-exports.readdirWithFileTypes = readdirWithFileTypes;
-function makeRplTaskEntry(entry, settings) {
-    return (done) => {
-        if (!entry.dirent.isSymbolicLink()) {
-            return done(null, entry);
-        }
-        settings.fs.stat(entry.path, (statError, stats) => {
-            if (statError !== null) {
-                if (settings.throwErrorOnBrokenSymbolicLink) {
-                    return done(statError);
-                }
-                return done(null, entry);
-            }
-            entry.dirent = utils.fs.createDirentFromStats(entry.name, stats);
-            return done(null, entry);
-        });
-    };
-}
-function readdir(directory, settings, callback) {
-    settings.fs.readdir(directory, (readdirError, names) => {
-        if (readdirError !== null) {
-            return callFailureCallback(callback, readdirError);
-        }
-        const filepaths = names.map((name) => `${directory}${settings.pathSegmentSeparator}${name}`);
-        const tasks = filepaths.map((filepath) => {
-            return (done) => fsStat.stat(filepath, settings.fsStatSettings, done);
-        });
-        rpl(tasks, (rplError, results) => {
-            if (rplError !== null) {
-                return callFailureCallback(callback, rplError);
-            }
-            const entries = [];
-            names.forEach((name, index) => {
-                const stats = results[index];
-                const entry = {
-                    name,
-                    path: filepaths[index],
-                    dirent: utils.fs.createDirentFromStats(name, stats)
-                };
-                if (settings.stats) {
-                    entry.stats = stats;
-                }
-                entries.push(entry);
-            });
-            callSuccessCallback(callback, entries);
-        });
-    });
-}
-exports.readdir = readdir;
-function callFailureCallback(callback, error) {
-    callback(error);
-}
-function callSuccessCallback(callback, result) {
-    callback(null, result);
-}
+exports.default = PriorityQueue;
 
 
 /***/ }),
@@ -19997,7 +20319,7 @@ module.exports.TimeoutError = TimeoutError;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const async = __webpack_require__(182);
+const async = __webpack_require__(662);
 const sync = __webpack_require__(148);
 const settings_1 = __webpack_require__(403);
 exports.Settings = settings_1.default;
@@ -20018,6 +20340,104 @@ function getSettings(settingsOrOptions = {}) {
         return settingsOrOptions;
     }
     return new settings_1.default(settingsOrOptions);
+}
+
+
+/***/ }),
+
+/***/ 662:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const fsStat = __webpack_require__(231);
+const rpl = __webpack_require__(885);
+const constants_1 = __webpack_require__(171);
+const utils = __webpack_require__(933);
+function read(directory, settings, callback) {
+    if (!settings.stats && constants_1.IS_SUPPORT_READDIR_WITH_FILE_TYPES) {
+        return readdirWithFileTypes(directory, settings, callback);
+    }
+    return readdir(directory, settings, callback);
+}
+exports.read = read;
+function readdirWithFileTypes(directory, settings, callback) {
+    settings.fs.readdir(directory, { withFileTypes: true }, (readdirError, dirents) => {
+        if (readdirError !== null) {
+            return callFailureCallback(callback, readdirError);
+        }
+        const entries = dirents.map((dirent) => ({
+            dirent,
+            name: dirent.name,
+            path: `${directory}${settings.pathSegmentSeparator}${dirent.name}`
+        }));
+        if (!settings.followSymbolicLinks) {
+            return callSuccessCallback(callback, entries);
+        }
+        const tasks = entries.map((entry) => makeRplTaskEntry(entry, settings));
+        rpl(tasks, (rplError, rplEntries) => {
+            if (rplError !== null) {
+                return callFailureCallback(callback, rplError);
+            }
+            callSuccessCallback(callback, rplEntries);
+        });
+    });
+}
+exports.readdirWithFileTypes = readdirWithFileTypes;
+function makeRplTaskEntry(entry, settings) {
+    return (done) => {
+        if (!entry.dirent.isSymbolicLink()) {
+            return done(null, entry);
+        }
+        settings.fs.stat(entry.path, (statError, stats) => {
+            if (statError !== null) {
+                if (settings.throwErrorOnBrokenSymbolicLink) {
+                    return done(statError);
+                }
+                return done(null, entry);
+            }
+            entry.dirent = utils.fs.createDirentFromStats(entry.name, stats);
+            return done(null, entry);
+        });
+    };
+}
+function readdir(directory, settings, callback) {
+    settings.fs.readdir(directory, (readdirError, names) => {
+        if (readdirError !== null) {
+            return callFailureCallback(callback, readdirError);
+        }
+        const filepaths = names.map((name) => `${directory}${settings.pathSegmentSeparator}${name}`);
+        const tasks = filepaths.map((filepath) => {
+            return (done) => fsStat.stat(filepath, settings.fsStatSettings, done);
+        });
+        rpl(tasks, (rplError, results) => {
+            if (rplError !== null) {
+                return callFailureCallback(callback, rplError);
+            }
+            const entries = [];
+            names.forEach((name, index) => {
+                const stats = results[index];
+                const entry = {
+                    name,
+                    path: filepaths[index],
+                    dirent: utils.fs.createDirentFromStats(name, stats)
+                };
+                if (settings.stats) {
+                    entry.stats = stats;
+                }
+                entries.push(entry);
+            });
+            callSuccessCallback(callback, entries);
+        });
+    });
+}
+exports.readdir = readdir;
+function callFailureCallback(callback, error) {
+    callback(error);
+}
+function callSuccessCallback(callback, result) {
+    callback(null, result);
 }
 
 
@@ -23905,424 +24325,6 @@ function slice(arr, start, end, step) {
 }
 exports.slice = slice;
 //# sourceMappingURL=slice.js.map
-
-/***/ }),
-
-/***/ 822:
-/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __webpack_require__(470);
-
-// EXTERNAL MODULE: ./node_modules/lodash.groupby/index.js
-var lodash_groupby = __webpack_require__(604);
-var lodash_groupby_default = /*#__PURE__*/__webpack_require__.n(lodash_groupby);
-
-// EXTERNAL MODULE: ./node_modules/p-queue/dist/index.js
-var dist = __webpack_require__(984);
-var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
-
-// EXTERNAL MODULE: ./node_modules/fast-glob/out/index.js
-var out = __webpack_require__(406);
-
-// EXTERNAL MODULE: external "path"
-var external_path_ = __webpack_require__(622);
-
-// EXTERNAL MODULE: ./node_modules/envalid/src/envalid.js
-var envalid = __webpack_require__(456);
-var envalid_default = /*#__PURE__*/__webpack_require__.n(envalid);
-
-// CONCATENATED MODULE: ./src/environment.ts
-
-
-const environment = () => envalid_default().cleanEnv(process.env, {
-    GITHUB_EVENT_PATH: Object(envalid.str)({
-        devDefault: Object(envalid.testOnly)('__mocks__/event.json'),
-    }),
-    GITHUB_WORKSPACE: Object(envalid.str)({
-        devDefault: Object(envalid.testOnly)(Object(external_path_.join)(__dirname, '..')),
-    }),
-    GITHUB_EVENT_NAME: Object(envalid.str)({ devDefault: 'pull_request' }),
-    GITHUB_REPOSITORY: Object(envalid.str)({ devDefault: Object(envalid.testOnly)('someRepo') }),
-    GITHUB_SHA: Object(envalid.str)({
-        devDefault: Object(envalid.testOnly)('ffac537e6cbbf934b08745a378932722df287a53'),
-    }),
-    TASK_ID: Object(envalid.str)({ default: 'use-herald-action' }),
-}, { dotEnvPath: null });
-const env = environment();
-
-// EXTERNAL MODULE: ./node_modules/minimatch/minimatch.js
-var minimatch = __webpack_require__(93);
-var minimatch_default = /*#__PURE__*/__webpack_require__.n(minimatch);
-
-// EXTERNAL MODULE: ./node_modules/@astronautlabs/jsonpath/dist/index.js
-var jsonpath_dist = __webpack_require__(607);
-
-// CONCATENATED MODULE: ./src/util/constants.ts
-const maxPerPage = 100;
-const OUTPUT_NAME = 'appliedRules';
-const FILE_ENCODING = 'utf8';
-var SUPPORTED_EVENT_TYPES;
-(function (SUPPORTED_EVENT_TYPES) {
-    SUPPORTED_EVENT_TYPES["PULL_REQUEST"] = "pull_request";
-    SUPPORTED_EVENT_TYPES["push"] = "push";
-})(SUPPORTED_EVENT_TYPES || (SUPPORTED_EVENT_TYPES = {}));
-
-// EXTERNAL MODULE: external "fs"
-var external_fs_ = __webpack_require__(747);
-
-// CONCATENATED MODULE: ./src/util/loadJSONFile.ts
-
-
-const loadJSONFile = (filePath) => {
-    const file = Object(external_fs_.readFileSync)(filePath, { encoding: FILE_ENCODING });
-    const content = JSON.parse(file);
-    return content;
-};
-
-// EXTERNAL MODULE: ./node_modules/debug/src/index.js
-var src = __webpack_require__(784);
-var src_default = /*#__PURE__*/__webpack_require__.n(src);
-
-// CONCATENATED MODULE: ./src/util/debug.ts
-var _a;
-
-
-
-const DEBUG = (_a = Object(core.getInput)('DEBUG')) !== null && _a !== void 0 ? _a : false;
-if (DEBUG) {
-    console.log('debug is enabled, provided pattern:', DEBUG);
-}
-function logger(nameSpace) {
-    const { TASK_ID } = env;
-    const log = src_default()(`${TASK_ID}:${nameSpace}`);
-    log.log = console.log.bind(console);
-    if (DEBUG) {
-        log.enabled = true;
-    }
-    return log;
-}
-
-// CONCATENATED MODULE: ./src/rules.ts
-/* eslint-disable @typescript-eslint/no-var-requires */
-
-
-
-
-
-
-
-
-const debug = logger('rules');
-const commentTemplate = (users) => `Hi there, Herald found that given these changes ${users.join(', ')} might want to take a look! \n 
-  <!-- herald-use-action -->`;
-var RuleActors;
-(function (RuleActors) {
-    RuleActors["users"] = "users";
-    RuleActors["teams"] = "teams";
-})(RuleActors || (RuleActors = {}));
-var RuleExtras;
-(function (RuleExtras) {
-    RuleExtras["customMessage"] = "customMessage";
-    RuleExtras["name"] = "name";
-})(RuleExtras || (RuleExtras = {}));
-var RuleMatchers;
-(function (RuleMatchers) {
-    RuleMatchers["eventJsonPath"] = "eventJsonPath";
-    RuleMatchers["includes"] = "includes";
-    RuleMatchers["excludes"] = "excludes";
-})(RuleMatchers || (RuleMatchers = {}));
-var RuleActions;
-(function (RuleActions) {
-    RuleActions["comment"] = "comment";
-    RuleActions["review"] = "review";
-    RuleActions["assign"] = "assign";
-})(RuleActions || (RuleActions = {}));
-const sanitize = (content) => {
-    const attrs = Object.assign(Object.assign(Object.assign({}, RuleMatchers), RuleActors), RuleExtras);
-    const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
-        return content[attr] ? Object.assign(Object.assign({}, memo), { [attr]: content[attr] }) : memo;
-    }, {});
-    let includes = [];
-    if (rule.includes) {
-        includes = rule.includes && Array.isArray(rule.includes) ? rule.includes : [rule.includes];
-    }
-    return Object.assign(Object.assign({}, rule), { users: rule.users ? rule.users : [], teams: rule.teams ? rule.teams : [], includes: rule.includes ? includes : rule.includes });
-};
-const hasAttribute = (attr, content) => attr in content;
-const isValidRawRule = (content) => {
-    if (typeof content !== 'object' || content === null) {
-        return false;
-    }
-    const hasValidActionValues = hasAttribute('action', content) && Object.keys(RuleActions).includes(content.action);
-    const hasTeams = hasAttribute('teams', content) && Array.isArray(content.teams);
-    const hasUsers = hasAttribute('users', content) && Array.isArray(content.users);
-    const hasActors = hasTeams || hasUsers;
-    const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
-    debug('validation:', {
-        rule: content,
-        hasActors,
-        hasValidActionValues,
-        matchers,
-    });
-    return hasValidActionValues && hasActors && matchers;
-};
-const loadRules = (rulesLocation) => {
-    const matches = Object(out.sync)(rulesLocation, {
-        onlyFiles: true,
-        cwd: env.GITHUB_WORKSPACE,
-        absolute: true,
-    });
-    debug('files found:', matches);
-    const rules = matches.reduce((memo, filePath) => {
-        try {
-            const rule = loadJSONFile(filePath);
-            return isValidRawRule(rule) ? [...memo, Object.assign(Object.assign({ name: Object(external_path_.basename)(filePath) }, sanitize(rule)), { path: filePath })] : memo;
-        }
-        catch (e) {
-            console.error(`${filePath} can't be parsed, it will be ignored`);
-            return memo;
-        }
-    }, []);
-    return rules;
-};
-const includeExcludeFiles = ({ includes, excludes, fileNames }) => {
-    const matches = {};
-    let results = [];
-    if (includes && includes.length) {
-        results = includes.reduce((memo, include) => {
-            const matches = minimatch_default().match(fileNames, include, { matchBase: true });
-            return [...memo, ...matches];
-        }, []);
-        matches[RuleMatchers.includes] = [...new Set(results)];
-        if (excludes && results.length) {
-            const toExclude = minimatch_default().match(results, excludes, { matchBase: true });
-            results = results.filter((filename) => !toExclude.includes(filename));
-        }
-        debug('evaluating includes:', matches);
-    }
-    if (includes && excludes) {
-        return { includeExclude: results };
-    }
-    return matches;
-};
-const getMatchingRules = (rules, files, event) => {
-    const fileNames = files.map(({ filename }) => filename);
-    const matchingRules = rules.reduce((memo, rule) => {
-        let matches = {};
-        const extraMatches = includeExcludeFiles({
-            includes: rule.includes,
-            excludes: rule.excludes,
-            fileNames,
-        });
-        if (rule.eventJsonPath) {
-            matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
-        }
-        matches = Object.assign(Object.assign({}, matches), extraMatches);
-        return Object.values(matches).some((value) => value === null || value === void 0 ? void 0 : value.length) ? [...memo, Object.assign(Object.assign({}, rule), { matches })] : memo;
-    }, []);
-    return matchingRules;
-};
-var TypeOfComments;
-(function (TypeOfComments) {
-    TypeOfComments["standalone"] = "standalone";
-    TypeOfComments["combined"] = "combined";
-})(TypeOfComments || (TypeOfComments = {}));
-const composeCommentsForUsers = (matchingRules) => {
-    const groups = lodash_groupby_default()(matchingRules, (rule) => rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined);
-    let comments = [];
-    if (groups[TypeOfComments.combined]) {
-        const mentions = groups[TypeOfComments.combined].reduce((memo, { users, teams }) => [...memo, ...users, ...teams], []);
-        comments = [...comments, commentTemplate([...new Set(mentions)])];
-    }
-    if (groups[TypeOfComments.standalone]) {
-        const customMessages = groups[TypeOfComments.standalone]
-            .filter((rule) => rule.customMessage)
-            .map(({ customMessage }) => customMessage);
-        comments = [...comments, ...customMessages];
-    }
-    return comments;
-};
-
-// CONCATENATED MODULE: ./src/comment.ts
-/* eslint-disable @typescript-eslint/camelcase */
-
-
-
-
-const comment_debug = logger('comment');
-const getAllComments = async (client, params) => {
-    const page = 1;
-    const { data: comments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { per_page: maxPerPage, page }));
-    if (comments.length < maxPerPage) {
-        return comments;
-    }
-    else {
-        const { data: moreComments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { page: page + 1, per_page: maxPerPage }));
-        return [...comments, ...moreComments];
-    }
-};
-const handleComment = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
-    comment_debug('handleComment called with:', matchingRules);
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    const commentsFromRules = composeCommentsForUsers(matchingRules);
-    const rawComments = await getAllComments(client, {
-        owner,
-        repo,
-        issue_number: prNumber,
-    });
-    const comments = rawComments.map(({ body }) => body);
-    const onlyNewComments = commentsFromRules.filter((comment) => !comments.includes(comment));
-    comment_debug('comments to add:', onlyNewComments);
-    return Promise.all(onlyNewComments.map((body) => {
-        return queue.add(() => client.issues.createComment({
-            owner,
-            repo,
-            issue_number: prNumber,
-            body,
-        }));
-    }));
-};
-
-// EXTERNAL MODULE: ./node_modules/@octokit/rest/dist-node/index.js
-var dist_node = __webpack_require__(889);
-
-// CONCATENATED MODULE: ./src/assignees.ts
-
-
-const assignees_debug = logger('assignees');
-const handleAssignees = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    assignees_debug('handleAssignees called with:', matchingRules);
-    const result = await Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.issues.addAssignees({
-        owner,
-        repo,
-        issue_number: prNumber,
-        assignees: matchingRule.users.map((user) => user.replace('@', '')),
-    }))));
-    assignees_debug('handleAssignees result:', result);
-    return result;
-};
-
-// CONCATENATED MODULE: ./src/reviewers.ts
-
-
-const reviewers_debug = logger('reviewers');
-const handleReviewers = async (client, owner, repo, prNumber, matchingRules, requestConcurrency = 1) => {
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    reviewers_debug('handleReviewers called with:', matchingRules);
-    const result = await Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.pulls.requestReviewers({
-        owner,
-        repo,
-        pull_number: prNumber,
-        reviewers: matchingRule.users.map((user) => user.replace('@', '')),
-        team_reviewers: matchingRule.teams.map((team) => team.replace('@', '')),
-    }))));
-    reviewers_debug('result:', result);
-    return result;
-};
-
-// CONCATENATED MODULE: ./src/util/isEventSupported.ts
-
-const isEventSupported = (event) => {
-    return Object.values(SUPPORTED_EVENT_TYPES).some((e) => event === e);
-};
-
-// CONCATENATED MODULE: ./src/index.ts
-/* eslint-disable @typescript-eslint/camelcase */
-
-
-
-
-
-
-
-
-// import { retry } from '@octokit/plugin-retry';
-
-
-
-
-const src_debug = logger('index');
-const EnhancedOctokit = dist_node.Octokit;
-var Props;
-(function (Props) {
-    Props["GITHUB_TOKEN"] = "GITHUB_TOKEN";
-    Props["rulesLocation"] = "rulesLocation";
-    Props["dryRun"] = "dryRun";
-    Props["base"] = "base";
-})(Props || (Props = {}));
-const actionsMap = {
-    [RuleActions.comment]: handleComment,
-    [RuleActions.assign]: handleAssignees,
-    [RuleActions.review]: handleReviewers,
-};
-const getParams = () => {
-    return Object.keys(Props).reduce((memo, prop) => {
-        const value = Object(core.getInput)(prop);
-        return value ? Object.assign(Object.assign({}, memo), { [prop]: value }) : memo;
-    }, {});
-};
-const main = async () => {
-    try {
-        if (isEventSupported(env.GITHUB_EVENT_NAME)) {
-            const event = loadJSONFile(env.GITHUB_EVENT_PATH);
-            const { pull_request: { head: { sha: headSha }, base: { sha: baseSha }, }, number: prNumber, repository: { name: repo, owner: { login: owner }, }, } = event;
-            const { GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun, } = getParams();
-            src_debug('params:', { rulesLocation, base, dryRun });
-            if (!rulesLocation) {
-                const message = `${Props.rulesLocation} is required`;
-                Object(core.setFailed)(message);
-                throw new Error(message);
-            }
-            const rules = loadRules(rulesLocation);
-            src_debug('loaded rules and locations', {
-                rules,
-                dir: env.GITHUB_WORKSPACE,
-                rulesLocation,
-            });
-            const client = new EnhancedOctokit({ auth: GITHUB_TOKEN });
-            const { data: { files }, } = await client.repos.compareCommits({
-                base,
-                head: headSha,
-                owner,
-                repo,
-            });
-            const matchingRules = getMatchingRules(rules, files, event);
-            src_debug('matchingRules:', matchingRules);
-            const groupedRulesByAction = lodash_groupby_default()(matchingRules, (rule) => rule.action);
-            if (dryRun !== 'true') {
-                src_debug('not a dry Run');
-                if (matchingRules.length) {
-                    const groupNames = Object.keys(groupedRulesByAction);
-                    src_debug('groupNames', groupNames);
-                    await Promise.all([
-                        groupNames.map((actionName) => {
-                            const action = actionsMap[RuleActions[actionName]];
-                            return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions[actionName]]);
-                        }),
-                    ]);
-                }
-            }
-            Object(core.setOutput)(OUTPUT_NAME, groupedRulesByAction);
-        }
-        else {
-            Object(core.setOutput)(OUTPUT_NAME, []);
-            throw new Error(`use-herald-action only supports [${Object.values(SUPPORTED_EVENT_TYPES).join(', ')}] events for now, event found: ${env.GITHUB_EVENT_NAME}`);
-        }
-    }
-    catch (e) {
-        Object(core.setFailed)(e);
-    }
-};
-
-// CONCATENATED MODULE: ./index.ts
-
-main();
-
 
 /***/ }),
 
@@ -33406,7 +33408,7 @@ exports.search = function search(aNeedle, aHaystack, aCompare, aBias) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const EventEmitter = __webpack_require__(842);
 const p_timeout_1 = __webpack_require__(654);
-const priority_queue_1 = __webpack_require__(134);
+const priority_queue_1 = __webpack_require__(182);
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const empty = () => { };
 const timeoutError = new p_timeout_1.TimeoutError();

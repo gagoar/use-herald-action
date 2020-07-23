@@ -98,6 +98,7 @@ describe('use-herald-action', () => {
               Object {
                 "action": "comment",
                 "customMessage": "This is a custom message for a rule",
+                "excludes": Array [],
                 "includes": Array [
                   "*.ts",
                 ],

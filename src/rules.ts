@@ -11,6 +11,7 @@ import { RestEndpointMethodTypes } from '@octokit/rest';
 import { JSONPath } from '@astronautlabs/jsonpath';
 import { loadJSONFile } from './util/loadJSONFile';
 import { logger } from './util/debug';
+import { makeArray } from './util/makeArray';
 
 const debug = logger('rules');
 
@@ -30,7 +31,6 @@ enum RuleExtras {
 enum RuleMatchers {
   eventJsonPath = 'eventJsonPath',
   includes = 'includes',
-  excludes = 'excludes',
 }
 
 // Nothings lost, nothings added except string indexes
@@ -50,7 +50,7 @@ export interface Rule {
   teams: string[];
   action: keyof typeof RuleActions;
   includes?: string[];
-  excludes?: string;
+  excludes?: string[];
   eventJsonPath?: string;
   customMessage?: string;
 }
@@ -66,17 +66,12 @@ const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
     return content[attr] ? { ...memo, [attr]: content[attr] } : memo;
   }, {} as RawRule);
 
-  let includes = [] as string[];
-
-  if (rule.includes) {
-    includes = rule.includes && Array.isArray(rule.includes) ? rule.includes : [rule.includes];
-  }
-
   return {
     ...rule,
     users: rule.users ? rule.users : [],
     teams: rule.teams ? rule.teams : [],
-    includes: rule.includes ? includes : rule.includes,
+    includes: makeArray(rule.includes),
+    excludes: makeArray(rule.excludes),
   };
 };
 
@@ -135,7 +130,7 @@ export type MatchingRule = Rule & {
 
 type IncludeExcludeFilesParams = {
   includes?: string[];
-  excludes?: string;
+  excludes?: string[];
   fileNames: string[];
 };
 
@@ -144,7 +139,7 @@ const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFi
 
   let results = [] as string[];
 
-  if (includes && includes.length) {
+  if (includes?.length) {
     results = includes.reduce((memo, include) => {
       const matches = minimatch.match(fileNames, include, { matchBase: true });
       return [...memo, ...matches];
@@ -152,14 +147,17 @@ const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFi
 
     matches[RuleMatchers.includes] = [...new Set(results)];
 
-    if (excludes && results.length) {
-      const toExclude = minimatch.match(results, excludes, { matchBase: true });
+    if (excludes?.length && results.length) {
+      const toExclude = excludes.reduce((memo, exclude) => {
+        const matches = minimatch.match(results, exclude, { matchBase: true });
+        return [...memo, ...matches];
+      }, [] as string[]);
       results = results.filter((filename) => !toExclude.includes(filename));
     }
     debug('evaluating includes:', matches);
   }
 
-  if (includes && excludes) {
+  if (includes?.length && excludes?.length) {
     return { includeExclude: results };
   }
 

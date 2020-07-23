@@ -174,7 +174,7 @@ describe('rules', () => {
           [
             {
               ...validRule,
-              excludes: '/some/uglyFile.ts',
+              excludes: ['/some/uglyFile.ts'],
               teams: [],
               path: '/some/rule.json',
             },
@@ -187,7 +187,9 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "excludes": "/some/uglyFile.ts",
+            "excludes": Array [
+              "/some/uglyFile.ts",
+            ],
             "includes": Array [
               "*.ts",
             ],
@@ -426,6 +428,7 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
+            "excludes": Array [],
             "includes": Array [
               "*.ts",
             ],
@@ -442,6 +445,7 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
+            "excludes": Array [],
             "includes": Array [
               "*.ts",
             ],
@@ -455,6 +459,7 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
+            "excludes": Array [],
             "includes": Array [
               "*.ts",
             ],
@@ -469,7 +474,8 @@ describe('rules', () => {
             "action": "assign",
             "customMessage": "This is a custom message for a rule",
             "eventJsonPath": "$.pull_request[?(@.login==\\"gagoar\\")].login",
-            "includes": undefined,
+            "excludes": Array [],
+            "includes": Array [],
             "name": "rule4.json",
             "path": "/some/rule4.json",
             "teams": Array [],
