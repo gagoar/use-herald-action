@@ -98,14 +98,16 @@ describe('use-herald-action', () => {
               Object {
                 "action": "comment",
                 "customMessage": "This is a custom message for a rule",
-                "includes": "*.ts",
+                "includes": Array [
+                  "*.ts",
+                ],
                 "matches": Object {
                   "includes": Array [
                     "file1.ts",
                   ],
                 },
                 "name": "rule1.json",
-                "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
+                "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule1.json",
                 "teams": Array [],
                 "users": Array [
                   "@eeny",

@@ -16,7 +16,7 @@ export interface Rule {
     users: string[];
     teams: string[];
     action: keyof typeof RuleActions;
-    includes?: string;
+    includes?: string[];
     excludes?: string;
     eventJsonPath?: string;
     customMessage?: string;

@@ -24046,7 +24046,11 @@ const sanitize = (content) => {
     const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
         return content[attr] ? Object.assign(Object.assign({}, memo), { [attr]: content[attr] }) : memo;
     }, {});
-    return Object.assign(Object.assign({}, rule), { users: rule.users ? rule.users : [], teams: rule.teams ? rule.teams : [] });
+    let includes = [];
+    if (rule.includes) {
+        includes = rule.includes && Array.isArray(rule.includes) ? rule.includes : [rule.includes];
+    }
+    return Object.assign(Object.assign({}, rule), { users: rule.users ? rule.users : [], teams: rule.teams ? rule.teams : [], includes: rule.includes ? includes : rule.includes });
 };
 const hasAttribute = (attr, content) => attr in content;
 const isValidRawRule = (content) => {
@@ -24088,9 +24092,12 @@ const loadRules = (rulesLocation) => {
 const includeExcludeFiles = ({ includes, excludes, fileNames }) => {
     const matches = {};
     let results = [];
-    if (includes) {
-        results = minimatch_default().match(fileNames, includes, { matchBase: true });
-        matches[RuleMatchers.includes] = results;
+    if (includes && includes.length) {
+        results = includes.reduce((memo, include) => {
+            const matches = minimatch_default().match(fileNames, include, { matchBase: true });
+            return [...memo, ...matches];
+        }, []);
+        matches[RuleMatchers.includes] = [...new Set(results)];
         if (excludes && results.length) {
             const toExclude = minimatch_default().match(results, excludes, { matchBase: true });
             results = results.filter((filename) => !toExclude.includes(filename));

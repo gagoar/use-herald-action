@@ -49,7 +49,7 @@ export interface Rule {
   users: string[];
   teams: string[];
   action: keyof typeof RuleActions;
-  includes?: string;
+  includes?: string[];
   excludes?: string;
   eventJsonPath?: string;
   customMessage?: string;
@@ -65,10 +65,18 @@ const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
   const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
     return content[attr] ? { ...memo, [attr]: content[attr] } : memo;
   }, {} as RawRule);
+
+  let includes = [] as string[];
+
+  if (rule.includes) {
+    includes = rule.includes && Array.isArray(rule.includes) ? rule.includes : [rule.includes];
+  }
+
   return {
     ...rule,
     users: rule.users ? rule.users : [],
     teams: rule.teams ? rule.teams : [],
+    includes: rule.includes ? includes : rule.includes,
   };
 };
 
@@ -126,7 +134,7 @@ export type MatchingRule = Rule & {
 };
 
 type IncludeExcludeFilesParams = {
-  includes?: string;
+  includes?: string[];
   excludes?: string;
   fileNames: string[];
 };
@@ -136,9 +144,14 @@ const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFi
 
   let results = [] as string[];
 
-  if (includes) {
-    results = minimatch.match(fileNames, includes, { matchBase: true });
-    matches[RuleMatchers.includes] = results;
+  if (includes && includes.length) {
+    results = includes.reduce((memo, include) => {
+      const matches = minimatch.match(fileNames, include, { matchBase: true });
+      return [...memo, ...matches];
+    }, [] as string[]);
+
+    matches[RuleMatchers.includes] = [...new Set(results)];
+
     if (excludes && results.length) {
       const toExclude = minimatch.match(results, excludes, { matchBase: true });
       results = results.filter((filename) => !toExclude.includes(filename));
