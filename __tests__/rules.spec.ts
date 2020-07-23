@@ -253,7 +253,14 @@ describe('rules', () => {
       const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }, { filename: '/some/README.md' }];
       expect(
         getMatchingRules(
-          [{ ...validRule, includes: [...validRule.includes, '*.md'], teams: [], path: '/some/rule.json' }],
+          [
+            {
+              ...validRule,
+              includes: [...validRule.includes, '*.md', '.gitignore'],
+              teams: [],
+              path: '/some/rule.json',
+            },
+          ],
           files,
           event
         )
@@ -265,6 +272,7 @@ describe('rules', () => {
             "includes": Array [
               "*.ts",
               "*.md",
+              ".gitignore",
             ],
             "matches": Object {
               "includes": Array [
@@ -284,7 +292,7 @@ describe('rules', () => {
         ]
       `);
     });
-    it('matching includes', () => {
+    it('matching includes (includes as string)', () => {
       const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }];
       expect(getMatchingRules([{ ...validRule, teams: [], path: '/some/rule.json' }], files, event))
         .toMatchInlineSnapshot(`
@@ -390,6 +398,18 @@ describe('rules', () => {
           teams: ['@someTeam'],
           users: undefined,
         },
+        '/some/rule3.json': {
+          ...validRule,
+          includes: validRule.includes.join(''),
+          teams: ['@someTeam'],
+          users: undefined,
+        },
+        '/some/rule4.json': {
+          ...validRule,
+          includes: undefined,
+          action: 'assign',
+          eventJsonPath: '$.pull_request[?(@.login=="gagoar")].login',
+        },
         '/some/badRule.json': {
           ...validRule,
           teams: undefined,
@@ -431,6 +451,34 @@ describe('rules', () => {
               "@someTeam",
             ],
             "users": Array [],
+          },
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "includes": Array [
+              "*.ts",
+            ],
+            "name": "rule3.json",
+            "path": "/some/rule3.json",
+            "teams": Array [
+              "@someTeam",
+            ],
+            "users": Array [],
+          },
+          Object {
+            "action": "assign",
+            "customMessage": "This is a custom message for a rule",
+            "eventJsonPath": "$.pull_request[?(@.login==\\"gagoar\\")].login",
+            "includes": undefined,
+            "name": "rule4.json",
+            "path": "/some/rule4.json",
+            "teams": Array [],
+            "users": Array [
+              "@eeny",
+              "@meeny",
+              "@miny",
+              "@moe",
+            ],
           },
         ]
       `);
