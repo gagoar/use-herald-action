@@ -21,7 +21,7 @@ describe('handleComment', () => {
   it('should publish a comment (pulling 2 pages of comments)', async () => {
     const rule = {
       users: ['@eeny', '@meeny', '@miny', '@moe'],
-      includes: '*.ts',
+      includes: ['*.ts'],
       action: RuleActions.comment,
       path: 'rules/rule.json',
       customMessage: 'Custom message',
@@ -30,20 +30,14 @@ describe('handleComment', () => {
     };
 
     const github = nock('https://api.github.com')
-      .get(
-        `/repos/${owner}/${repo}/issues/${prIssue}/comments?page=1&per_page=2`
-      )
+      .get(`/repos/${owner}/${repo}/issues/${prIssue}/comments?page=1&per_page=2`)
       .reply(200, getCommentsResponse.slice(0, 2));
 
     github
-      .get(
-        `/repos/${owner}/${repo}/issues/${prIssue}/comments?page=2&per_page=2`
-      )
+      .get(`/repos/${owner}/${repo}/issues/${prIssue}/comments?page=2&per_page=2`)
       .reply(200, [getCommentsResponse[2]]);
 
-    github
-      .post(`/repos/${owner}/${repo}/issues/${prIssue}/comments`)
-      .reply(200, createIssueResponse);
+    github.post(`/repos/${owner}/${repo}/issues/${prIssue}/comments`).reply(200, createIssueResponse);
 
     const response = await handleComment(client, owner, repo, 1, [rule]);
 
@@ -92,7 +86,7 @@ describe('handleComment', () => {
   it('should not publish the message because is duplicated', async () => {
     const rule = {
       users: ['@eeny', '@meeny', '@miny', '@moe'],
-      includes: '*.ts',
+      includes: ['*.ts'],
       action: RuleActions.comment,
       path: 'rules/rule.json',
       customMessage: 'Custom message',
@@ -101,14 +95,10 @@ describe('handleComment', () => {
     };
 
     nock('https://api.github.com')
-      .get(
-        `/repos/${owner}/${repo}/issues/${prIssue}/comments?page=1&per_page=2`
-      )
+      .get(`/repos/${owner}/${repo}/issues/${prIssue}/comments?page=1&per_page=2`)
       .reply(200, [getCommentsResponse[0]]);
 
-    const response = await handleComment(client, owner, repo, 1, [
-      { ...rule, customMessage: 'first comment' },
-    ]);
+    const response = await handleComment(client, owner, repo, 1, [{ ...rule, customMessage: 'first comment' }]);
 
     expect(response).toMatchInlineSnapshot('Array []');
   });
