@@ -3,12 +3,7 @@
 import * as fs from 'fs';
 import * as fg from 'fast-glob';
 
-import {
-  loadRules,
-  getMatchingRules,
-  composeCommentsForUsers,
-  RuleActions,
-} from '../src/rules';
+import { loadRules, getMatchingRules, composeCommentsForUsers, RuleActions } from '../src/rules';
 import { mockConsole, unMockConsole } from './helpers';
 import { Event } from '../src/util/constants';
 
@@ -60,6 +55,32 @@ describe('rules', () => {
         ]
       `);
     });
+    it('it combines 2 comments when do not have customMessage', () => {
+      expect(
+        composeCommentsForUsers([
+          {
+            ...validRule,
+            customMessage: undefined,
+            path: '/some/rule.json',
+            matches: { includes: ['/some/file.ts'] },
+            teams: [],
+          },
+          {
+            ...validRule,
+            customMessage: undefined,
+            path: '/some/rule1.json',
+            matches: { includes: ['/some/file.ts'] },
+            teams: ['@awesomeTeam'],
+          },
+        ])
+      ).toMatchInlineSnapshot(`
+        Array [
+          "Hi there, Herald found that given these changes @eeny, @meeny, @miny, @moe, @awesomeTeam might want to take a look! 
+         
+          <!-- herald-use-action -->",
+        ]
+      `);
+    });
     it('compose message', () => {
       expect(
         composeCommentsForUsers([
@@ -101,10 +122,7 @@ describe('rules', () => {
     });
 
     it('Matches includes and eventJsonPath', () => {
-      const files = [
-        { filename: '/some/file.js' },
-        { filename: '/some/file.ts' },
-      ];
+      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }];
 
       expect(
         getMatchingRules(
@@ -148,11 +166,7 @@ describe('rules', () => {
     });
 
     it('matching includes/excludes combined', () => {
-      const files = [
-        { filename: '/some/file.js' },
-        { filename: '/some/file.ts' },
-        { filename: '/some/uglyFile.ts' },
-      ];
+      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }, { filename: '/some/uglyFile.ts' }];
       expect(
         getMatchingRules(
           [
@@ -191,10 +205,7 @@ describe('rules', () => {
       `);
     });
     it('matching includes (and not matching another rule)', () => {
-      const files = [
-        { filename: '/some/file.js' },
-        { filename: '/some/file.ts' },
-      ];
+      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }];
       expect(
         getMatchingRules(
           [
@@ -233,17 +244,9 @@ describe('rules', () => {
       `);
     });
     it('matching includes', () => {
-      const files = [
-        { filename: '/some/file.js' },
-        { filename: '/some/file.ts' },
-      ];
-      expect(
-        getMatchingRules(
-          [{ ...validRule, teams: [], path: '/some/rule.json' }],
-          files,
-          event
-        )
-      ).toMatchInlineSnapshot(`
+      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }];
+      expect(getMatchingRules([{ ...validRule, teams: [], path: '/some/rule.json' }], files, event))
+        .toMatchInlineSnapshot(`
         Array [
           Object {
             "action": "comment",

@@ -4,6 +4,7 @@ import { basename } from 'path';
 import { Event } from './util/constants';
 import { env } from './environment';
 import minimatch from 'minimatch';
+import groupBy from 'lodash.groupby';
 
 import { RestEndpointMethodTypes } from '@octokit/rest';
 
@@ -179,8 +180,32 @@ export const getMatchingRules = (
   return matchingRules;
 };
 
+enum TypeOfComments {
+  standalone = 'standalone',
+  combined = 'combined',
+}
 export const composeCommentsForUsers = (matchingRules: MatchingRule[]): string[] => {
-  return matchingRules.reduce((comments, { teams, users, customMessage }) => {
-    return [...comments, customMessage ? customMessage : commentTemplate([...users, ...teams])];
-  }, [] as string[]);
+  const groups = groupBy(matchingRules, (rule) =>
+    rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined
+  );
+
+  let comments = [] as string[];
+
+  if (groups[TypeOfComments.combined]) {
+    const mentions = groups[TypeOfComments.combined].reduce(
+      (memo, { users, teams }) => [...memo, ...users, ...teams],
+      [] as string[]
+    );
+
+    comments = [...comments, commentTemplate([...new Set(mentions)])];
+  }
+
+  if (groups[TypeOfComments.standalone]) {
+    const customMessages = groups[TypeOfComments.standalone]
+      .filter((rule) => rule.customMessage)
+      .map(({ customMessage }) => customMessage as string);
+    comments = [...comments, ...customMessages];
+  }
+
+  return comments;
 };

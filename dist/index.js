@@ -24015,6 +24015,7 @@ function logger(nameSpace) {
 
 
 
+
 const debug = logger('rules');
 const commentTemplate = (users) => `Hi there, Herald found that given these changes ${users.join(', ')} might want to take a look! \n 
   <!-- herald-use-action -->`;
@@ -24118,10 +24119,25 @@ const getMatchingRules = (rules, files, event) => {
     }, []);
     return matchingRules;
 };
+var TypeOfComments;
+(function (TypeOfComments) {
+    TypeOfComments["standalone"] = "standalone";
+    TypeOfComments["combined"] = "combined";
+})(TypeOfComments || (TypeOfComments = {}));
 const composeCommentsForUsers = (matchingRules) => {
-    return matchingRules.reduce((comments, { teams, users, customMessage }) => {
-        return [...comments, customMessage ? customMessage : commentTemplate([...users, ...teams])];
-    }, []);
+    const groups = lodash_groupby_default()(matchingRules, (rule) => rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined);
+    let comments = [];
+    if (groups[TypeOfComments.combined]) {
+        const mentions = groups[TypeOfComments.combined].reduce((memo, { users, teams }) => [...memo, ...users, ...teams], []);
+        comments = [...comments, commentTemplate([...new Set(mentions)])];
+    }
+    if (groups[TypeOfComments.standalone]) {
+        const customMessages = groups[TypeOfComments.standalone]
+            .filter((rule) => rule.customMessage)
+            .map(({ customMessage }) => customMessage);
+        comments = [...comments, ...customMessages];
+    }
+    return comments;
 };
 
 // CONCATENATED MODULE: ./src/comment.ts
