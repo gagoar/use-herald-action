@@ -29,6 +29,7 @@ enum RuleExtras {
   name = 'name',
 }
 enum RuleMatchers {
+  includesInPatch = 'includesInPatch',
   eventJsonPath = 'eventJsonPath',
   includes = 'includes',
 }
@@ -51,6 +52,7 @@ export interface Rule {
   action: keyof typeof RuleActions;
   includes?: string[];
   excludes?: string[];
+  includesInPatch?: string[];
   eventJsonPath?: string;
   customMessage?: string;
 }
@@ -61,7 +63,6 @@ type RawRule = Rule & { users?: string[]; teams?: string[] };
 
 const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
   const attrs = { ...RuleMatchers, ...RuleActors, ...RuleExtras };
-
   const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
     return content[attr] ? { ...memo, [attr]: content[attr] } : memo;
   }, {} as RawRule);
@@ -72,6 +73,7 @@ const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
     teams: rule.teams ? rule.teams : [],
     includes: makeArray(rule.includes),
     excludes: makeArray(rule.excludes),
+    includesInPatch: makeArray(rule.includesInPatch),
   };
 };
 
@@ -163,10 +165,26 @@ const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFi
 
   return matches;
 };
+const handleIncludesInPath = (patterns: string[], patchContent: string[]): string[] => {
+  const matches = patterns.reduce((memo, pattern) => {
+    try {
+      const rex = new RegExp(pattern);
+      const matches = patchContent.find((content) => content.match(rex));
+
+      return matches ? [...memo, matches] : memo;
+    } catch (e) {
+      debug(`pattern: ${pattern} failed to parse`, e);
+      return memo;
+    }
+  }, [] as string[]);
+
+  return [...new Set(matches)];
+};
 export const getMatchingRules = (
   rules: Rule[],
   files: Partial<File> & Required<Pick<File, 'filename'>>[],
-  event: Event
+  event: Event,
+  patchContent: string[]
 ): MatchingRule[] => {
   const fileNames = files.map(({ filename }) => filename);
 
@@ -181,6 +199,10 @@ export const getMatchingRules = (
 
     if (rule.eventJsonPath) {
       matches.eventJsonPath = JSONPath.query(event, rule.eventJsonPath);
+    }
+
+    if (rule.includesInPatch?.length) {
+      matches.includesInPatch = handleIncludesInPath(rule.includesInPatch, patchContent);
     }
 
     matches = { ...matches, ...extraMatches };

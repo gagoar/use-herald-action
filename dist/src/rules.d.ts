@@ -1,6 +1,7 @@
 import { Event } from './util/constants';
 import { RestEndpointMethodTypes } from '@octokit/rest';
 declare enum RuleMatchers {
+    includesInPatch = "includesInPatch",
     eventJsonPath = "eventJsonPath",
     includes = "includes"
 }
@@ -17,6 +18,7 @@ export interface Rule {
     action: keyof typeof RuleActions;
     includes?: string[];
     excludes?: string[];
+    includesInPatch?: string[];
     eventJsonPath?: string;
     customMessage?: string;
 }
@@ -25,6 +27,6 @@ export declare const loadRules: (rulesLocation: string) => Rule[];
 export declare type MatchingRule = Rule & {
     matches: Partial<Record<RuleMatchers | 'includeExclude', unknown[]>>;
 };
-export declare const getMatchingRules: (rules: Rule[], files: Partial<File> & Required<Pick<File, 'filename'>>[], event: Event) => MatchingRule[];
+export declare const getMatchingRules: (rules: Rule[], files: Partial<File> & Required<Pick<File, 'filename'>>[], event: Event, patchContent: string[]) => MatchingRule[];
 export declare const composeCommentsForUsers: (matchingRules: MatchingRule[]) => string[];
 export {};

@@ -102,6 +102,7 @@ describe('use-herald-action', () => {
                 "includes": Array [
                   "*.ts",
                 ],
+                "includesInPatch": Array [],
                 "matches": Object {
                   "includes": Array [
                     "file1.ts",
