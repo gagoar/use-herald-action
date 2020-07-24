@@ -25,7 +25,7 @@ const invalidRule = {
 const validRule = {
   ...invalidRule,
   action: RuleActions.comment,
-  includes: '*.ts',
+  includes: ['*.ts'],
 };
 
 describe('rules', () => {
@@ -143,7 +143,9 @@ describe('rules', () => {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
             "eventJsonPath": "$.pull_request[?(@.login==\\"gagoar\\")].login",
-            "includes": "*.ts",
+            "includes": Array [
+              "*.ts",
+            ],
             "matches": Object {
               "eventJsonPath": Array [
                 "gagoar",
@@ -172,7 +174,7 @@ describe('rules', () => {
           [
             {
               ...validRule,
-              excludes: '/some/uglyFile.ts',
+              excludes: ['/some/uglyFile.ts'],
               teams: [],
               path: '/some/rule.json',
             },
@@ -185,8 +187,12 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "excludes": "/some/uglyFile.ts",
-            "includes": "*.ts",
+            "excludes": Array [
+              "/some/uglyFile.ts",
+            ],
+            "includes": Array [
+              "*.ts",
+            ],
             "matches": Object {
               "includeExclude": Array [
                 "/some/file.ts",
@@ -212,7 +218,7 @@ describe('rules', () => {
             { ...validRule, teams: [], path: '/some/rule.json' },
             {
               ...validRule,
-              includes: 'src/*.ts',
+              includes: ['src/*.ts'],
               teams: [],
               path: '/some/ruleThatShouldNotMatch.json',
             },
@@ -225,7 +231,9 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "includes": "*.ts",
+            "includes": Array [
+              "*.ts",
+            ],
             "matches": Object {
               "includes": Array [
                 "/some/file.ts",
@@ -243,7 +251,50 @@ describe('rules', () => {
         ]
       `);
     });
-    it('matching includes', () => {
+    it('matching includes (with more than one includes pattern)', () => {
+      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }, { filename: '/some/README.md' }];
+      expect(
+        getMatchingRules(
+          [
+            {
+              ...validRule,
+              includes: [...validRule.includes, '*.md', '.gitignore'],
+              teams: [],
+              path: '/some/rule.json',
+            },
+          ],
+          files,
+          event
+        )
+      ).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "includes": Array [
+              "*.ts",
+              "*.md",
+              ".gitignore",
+            ],
+            "matches": Object {
+              "includes": Array [
+                "/some/file.ts",
+                "/some/README.md",
+              ],
+            },
+            "path": "/some/rule.json",
+            "teams": Array [],
+            "users": Array [
+              "@eeny",
+              "@meeny",
+              "@miny",
+              "@moe",
+            ],
+          },
+        ]
+      `);
+    });
+    it('matching includes (includes as string)', () => {
       const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }];
       expect(getMatchingRules([{ ...validRule, teams: [], path: '/some/rule.json' }], files, event))
         .toMatchInlineSnapshot(`
@@ -251,7 +302,9 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "includes": "*.ts",
+            "includes": Array [
+              "*.ts",
+            ],
             "matches": Object {
               "includes": Array [
                 "/some/file.ts",
@@ -347,6 +400,18 @@ describe('rules', () => {
           teams: ['@someTeam'],
           users: undefined,
         },
+        '/some/rule3.json': {
+          ...validRule,
+          includes: validRule.includes.join(''),
+          teams: ['@someTeam'],
+          users: undefined,
+        },
+        '/some/rule4.json': {
+          ...validRule,
+          includes: undefined,
+          action: 'assign',
+          eventJsonPath: '$.pull_request[?(@.login=="gagoar")].login',
+        },
         '/some/badRule.json': {
           ...validRule,
           teams: undefined,
@@ -363,7 +428,10 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "includes": "*.ts",
+            "excludes": Array [],
+            "includes": Array [
+              "*.ts",
+            ],
             "name": "rule1.json",
             "path": "/some/rule1.json",
             "teams": Array [],
@@ -377,13 +445,46 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "includes": "*.ts",
+            "excludes": Array [],
+            "includes": Array [
+              "*.ts",
+            ],
             "name": "rule2.json",
             "path": "/some/rule2.json",
             "teams": Array [
               "@someTeam",
             ],
             "users": Array [],
+          },
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "excludes": Array [],
+            "includes": Array [
+              "*.ts",
+            ],
+            "name": "rule3.json",
+            "path": "/some/rule3.json",
+            "teams": Array [
+              "@someTeam",
+            ],
+            "users": Array [],
+          },
+          Object {
+            "action": "assign",
+            "customMessage": "This is a custom message for a rule",
+            "eventJsonPath": "$.pull_request[?(@.login==\\"gagoar\\")].login",
+            "excludes": Array [],
+            "includes": Array [],
+            "name": "rule4.json",
+            "path": "/some/rule4.json",
+            "teams": Array [],
+            "users": Array [
+              "@eeny",
+              "@meeny",
+              "@miny",
+              "@moe",
+            ],
           },
         ]
       `);

@@ -2,8 +2,7 @@ import { Event } from './util/constants';
 import { RestEndpointMethodTypes } from '@octokit/rest';
 declare enum RuleMatchers {
     eventJsonPath = "eventJsonPath",
-    includes = "includes",
-    excludes = "excludes"
+    includes = "includes"
 }
 export declare enum RuleActions {
     comment = "comment",
@@ -16,8 +15,8 @@ export interface Rule {
     users: string[];
     teams: string[];
     action: keyof typeof RuleActions;
-    includes?: string;
-    excludes?: string;
+    includes?: string[];
+    excludes?: string[];
     eventJsonPath?: string;
     customMessage?: string;
 }
