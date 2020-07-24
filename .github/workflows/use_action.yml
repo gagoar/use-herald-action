@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@master
       - name: apply herald rules
         id: herald
-        uses: gagoar/use-herald-action@master
+        uses: gagoar/use-herald-action@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           rulesLocation: herald_rules/*.json
