@@ -4078,11 +4078,11 @@ var src = __webpack_require__(784);
 var src_default = /*#__PURE__*/__webpack_require__.n(src);
 
 // CONCATENATED MODULE: ./src/util/debug.ts
-var _a;
+var debug_a;
 
 
 
-const DEBUG = (_a = Object(core.getInput)('DEBUG')) !== null && _a !== void 0 ? _a : false;
+const DEBUG = (debug_a = Object(core.getInput)('DEBUG')) !== null && debug_a !== void 0 ? debug_a : false;
 if (DEBUG) {
     console.log('debug is enabled, provided pattern:', DEBUG);
 }
@@ -4125,6 +4125,7 @@ var RuleExtras;
 })(RuleExtras || (RuleExtras = {}));
 var RuleMatchers;
 (function (RuleMatchers) {
+    RuleMatchers["includesInPatch"] = "includesInPatch";
     RuleMatchers["eventJsonPath"] = "eventJsonPath";
     RuleMatchers["includes"] = "includes";
 })(RuleMatchers || (RuleMatchers = {}));
@@ -4139,7 +4140,7 @@ const sanitize = (content) => {
     const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
         return content[attr] ? Object.assign(Object.assign({}, memo), { [attr]: content[attr] }) : memo;
     }, {});
-    return Object.assign(Object.assign({}, rule), { users: rule.users ? rule.users : [], teams: rule.teams ? rule.teams : [], includes: makeArray(rule.includes), excludes: makeArray(rule.excludes) });
+    return Object.assign(Object.assign({}, rule), { users: rule.users ? rule.users : [], teams: rule.teams ? rule.teams : [], includes: makeArray(rule.includes), excludes: makeArray(rule.excludes), includesInPatch: makeArray(rule.includesInPatch) });
 };
 const hasAttribute = (attr, content) => attr in content;
 const isValidRawRule = (content) => {
@@ -4201,9 +4202,24 @@ const includeExcludeFiles = ({ includes, excludes, fileNames }) => {
     }
     return matches;
 };
-const getMatchingRules = (rules, files, event) => {
+const handleIncludesInPath = (patterns, patchContent) => {
+    const matches = patterns.reduce((memo, pattern) => {
+        try {
+            const rex = new RegExp(pattern);
+            const matches = patchContent.find((content) => content.match(rex));
+            return matches ? [...memo, matches] : memo;
+        }
+        catch (e) {
+            debug(`pattern: ${pattern} failed to parse`, e);
+            return memo;
+        }
+    }, []);
+    return [...new Set(matches)];
+};
+const getMatchingRules = (rules, files, event, patchContent) => {
     const fileNames = files.map(({ filename }) => filename);
     const matchingRules = rules.reduce((memo, rule) => {
+        var _a;
         let matches = {};
         const extraMatches = includeExcludeFiles({
             includes: rule.includes,
@@ -4212,6 +4228,9 @@ const getMatchingRules = (rules, files, event) => {
         });
         if (rule.eventJsonPath) {
             matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
+        }
+        if ((_a = rule.includesInPatch) === null || _a === void 0 ? void 0 : _a.length) {
+            matches.includesInPatch = handleIncludesInPath(rule.includesInPatch, patchContent);
         }
         matches = Object.assign(Object.assign({}, matches), extraMatches);
         return Object.values(matches).some((value) => value === null || value === void 0 ? void 0 : value.length) ? [...memo, Object.assign(Object.assign({}, rule), { matches })] : memo;
@@ -4363,7 +4382,7 @@ const main = async () => {
         if (isEventSupported(env.GITHUB_EVENT_NAME)) {
             const event = loadJSONFile(env.GITHUB_EVENT_PATH);
             const { pull_request: { head: { sha: headSha }, base: { sha: baseSha }, }, number: prNumber, repository: { name: repo, owner: { login: owner }, }, } = event;
-            const { GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun, } = getParams();
+            const { GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun } = getParams();
             src_debug('params:', { rulesLocation, base, dryRun });
             if (!rulesLocation) {
                 const message = `${Props.rulesLocation} is required`;
@@ -4383,7 +4402,7 @@ const main = async () => {
                 owner,
                 repo,
             });
-            const matchingRules = getMatchingRules(rules, files, event);
+            const matchingRules = getMatchingRules(rules, files, event, files.map(({ patch }) => patch));
             src_debug('matchingRules:', matchingRules);
             const groupedRulesByAction = lodash_groupby_default()(matchingRules, (rule) => rule.action);
             if (dryRun !== 'true') {

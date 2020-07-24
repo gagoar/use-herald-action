@@ -116,7 +116,8 @@ describe('rules', () => {
             },
           ],
           files,
-          event
+          event,
+          []
         )
       ).toMatchInlineSnapshot('Array []');
     });
@@ -135,7 +136,8 @@ describe('rules', () => {
             },
           ],
           files,
-          event
+          event,
+          []
         )
       ).toMatchInlineSnapshot(`
         Array [
@@ -180,7 +182,8 @@ describe('rules', () => {
             },
           ],
           files,
-          event
+          event,
+          []
         )
       ).toMatchInlineSnapshot(`
         Array [
@@ -224,7 +227,8 @@ describe('rules', () => {
             },
           ],
           files,
-          event
+          event,
+          []
         )
       ).toMatchInlineSnapshot(`
         Array [
@@ -237,6 +241,55 @@ describe('rules', () => {
             "matches": Object {
               "includes": Array [
                 "/some/file.ts",
+              ],
+            },
+            "path": "/some/rule.json",
+            "teams": Array [],
+            "users": Array [
+              "@eeny",
+              "@meeny",
+              "@miny",
+              "@moe",
+            ],
+          },
+        ]
+      `);
+    });
+    it('matching includesInPatch (with more than one pattern)', () => {
+      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }, { filename: '/some/README.md' }];
+      expect(
+        getMatchingRules(
+          [
+            {
+              ...validRule,
+              includes: undefined,
+              includesInPatch: ['(gag).+', '(sim).+', '/noMatch/', '*'],
+              teams: [],
+              path: '/some/rule.json',
+            },
+          ],
+          files,
+          event,
+          [
+            '@@ -132,7 +132,7 @@ module simon @@ -1000,7 +1000,7 @@ module gago',
+            '@@ -132,7 +132,7 @@ module jon @@ -1000,7 +1000,7 @@ module heart',
+          ]
+        )
+      ).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "includes": undefined,
+            "includesInPatch": Array [
+              "(gag).+",
+              "(sim).+",
+              "/noMatch/",
+              "*",
+            ],
+            "matches": Object {
+              "includesInPatch": Array [
+                "@@ -132,7 +132,7 @@ module simon @@ -1000,7 +1000,7 @@ module gago",
               ],
             },
             "path": "/some/rule.json",
@@ -264,7 +317,8 @@ describe('rules', () => {
             },
           ],
           files,
-          event
+          event,
+          []
         )
       ).toMatchInlineSnapshot(`
         Array [
@@ -296,7 +350,7 @@ describe('rules', () => {
     });
     it('matching includes (includes as string)', () => {
       const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }];
-      expect(getMatchingRules([{ ...validRule, teams: [], path: '/some/rule.json' }], files, event))
+      expect(getMatchingRules([{ ...validRule, teams: [], path: '/some/rule.json' }], files, event, []))
         .toMatchInlineSnapshot(`
         Array [
           Object {
@@ -338,7 +392,8 @@ describe('rules', () => {
             },
           ],
           files,
-          event
+          event,
+          []
         )
       ).toMatchInlineSnapshot(`
         Array [
@@ -432,6 +487,7 @@ describe('rules', () => {
             "includes": Array [
               "*.ts",
             ],
+            "includesInPatch": Array [],
             "name": "rule1.json",
             "path": "/some/rule1.json",
             "teams": Array [],
@@ -449,6 +505,7 @@ describe('rules', () => {
             "includes": Array [
               "*.ts",
             ],
+            "includesInPatch": Array [],
             "name": "rule2.json",
             "path": "/some/rule2.json",
             "teams": Array [
@@ -463,6 +520,7 @@ describe('rules', () => {
             "includes": Array [
               "*.ts",
             ],
+            "includesInPatch": Array [],
             "name": "rule3.json",
             "path": "/some/rule3.json",
             "teams": Array [
@@ -476,6 +534,7 @@ describe('rules', () => {
             "eventJsonPath": "$.pull_request[?(@.login==\\"gagoar\\")].login",
             "excludes": Array [],
             "includes": Array [],
+            "includesInPatch": Array [],
             "name": "rule4.json",
             "path": "/some/rule4.json",
             "teams": Array [],

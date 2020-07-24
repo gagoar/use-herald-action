@@ -57,12 +57,7 @@ export const main = async () => {
         },
       } = event;
 
-      const {
-        GITHUB_TOKEN,
-        rulesLocation,
-        base = baseSha,
-        dryRun,
-      } = getParams();
+      const { GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun } = getParams();
 
       debug('params:', { rulesLocation, base, dryRun });
 
@@ -90,14 +85,16 @@ export const main = async () => {
         repo,
       });
 
-      const matchingRules = getMatchingRules(rules, files, event);
+      const matchingRules = getMatchingRules(
+        rules,
+        files,
+        event,
+        files.map(({ patch }) => patch)
+      );
 
       debug('matchingRules:', matchingRules);
 
-      const groupedRulesByAction = groupBy(
-        matchingRules,
-        (rule) => rule.action
-      );
+      const groupedRulesByAction = groupBy(matchingRules, (rule) => rule.action);
 
       if (dryRun !== 'true') {
         debug('not a dry Run');
@@ -111,13 +108,7 @@ export const main = async () => {
             groupNames.map((actionName: ActionName) => {
               const action = actionsMap[RuleActions[actionName]];
 
-              return action(
-                client,
-                owner,
-                repo,
-                prNumber,
-                groupedRulesByAction[RuleActions[actionName]]
-              );
+              return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions[actionName]]);
             }),
           ]);
         }
@@ -127,9 +118,9 @@ export const main = async () => {
     } else {
       setOutput(OUTPUT_NAME, []);
       throw new Error(
-        `use-herald-action only supports [${Object.values(
-          SUPPORTED_EVENT_TYPES
-        ).join(', ')}] events for now, event found: ${env.GITHUB_EVENT_NAME}`
+        `use-herald-action only supports [${Object.values(SUPPORTED_EVENT_TYPES).join(
+          ', '
+        )}] events for now, event found: ${env.GITHUB_EVENT_NAME}`
       );
     }
   } catch (e) {
