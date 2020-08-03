@@ -118,7 +118,7 @@
     "ajv-keywords": "3.5.2",
     "bufferutil": "4.0.1",
     "canvas": "2.6.1",
-    "eslint": "7.5.0",
+    "eslint": "7.6.0",
     "eslint-config-prettier": "6.11.0",
     "husky": "4.2.5",
     "jest": "26.2.2",
