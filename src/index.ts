@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { getInput, setOutput, setFailed } from '@actions/core';
 import groupBy from 'lodash.groupby';
 import { handleComment } from './comment';
@@ -40,7 +39,7 @@ const getParams = () => {
   }, {} as Partial<Record<keyof typeof Props, string>>);
 };
 
-export const main = async () => {
+export const main = async (): Promise<void> => {
   try {
     if (isEventSupported(env.GITHUB_EVENT_NAME)) {
       const event = loadJSONFile(env.GITHUB_EVENT_PATH) as Event;

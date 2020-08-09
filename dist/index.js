@@ -4343,7 +4343,6 @@ const isEventSupported = (event) => {
 };
 
 // CONCATENATED MODULE: ./src/index.ts
-/* eslint-disable @typescript-eslint/camelcase */
 
 
 
@@ -7100,7 +7099,7 @@ exports.default = AsyncReader;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const VERSION = "2.2.3";
+const VERSION = "2.2.4";
 
 /**
  * Some “list” response that can be paginated have a different response structure
@@ -8703,7 +8702,7 @@ const Endpoints = {
         previews: ["wyandotte"]
       }
     }],
-    listReposForUser: ["GET /user/{migration_id}/repositories", {
+    listReposForUser: ["GET /user/migrations/{migration_id}/repositories", {
       mediaType: {
         previews: ["wyandotte"]
       }
@@ -9356,7 +9355,7 @@ const Endpoints = {
   }
 };
 
-const VERSION = "4.1.0";
+const VERSION = "4.1.2";
 
 function endpointsToMethods(octokit, endpointsMap) {
   const newMethods = {};
@@ -10376,7 +10375,7 @@ function withDefaults(oldDefaults, newDefaults) {
   });
 }
 
-const VERSION = "6.0.4";
+const VERSION = "6.0.5";
 
 const userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`; // DEFAULTS has all properties set that EndpointOptions has, except url.
 // So we use RequestParameters and add method as additional required property.
@@ -21740,7 +21739,7 @@ var isPlainObject = _interopDefault(__webpack_require__(960));
 var nodeFetch = _interopDefault(__webpack_require__(828));
 var requestError = __webpack_require__(463);
 
-const VERSION = "5.4.6";
+const VERSION = "5.4.7";
 
 function getBufferResponse(response) {
   return response.arrayBuffer();
@@ -30395,7 +30394,7 @@ var pluginRequestLog = __webpack_require__(916);
 var pluginPaginateRest = __webpack_require__(299);
 var pluginRestEndpointMethods = __webpack_require__(352);
 
-const VERSION = "18.0.1";
+const VERSION = "18.0.3";
 
 const Octokit = core.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
   userAgent: `octokit-rest.js/${VERSION}`

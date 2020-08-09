@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-var-requires */
 import nock from 'nock';
 import { Props } from '../src';
 import { Event } from '../src/util/constants';
@@ -21,6 +21,7 @@ jest.mock('../src/environment', () => {
   };
 });
 
+type Main = { main: () => Promise<void> };
 const event = require(`../${env.GITHUB_EVENT_PATH}`) as Event;
 
 const handleComment = comment.handleComment as jest.Mock<any>;
@@ -46,7 +47,7 @@ describe('use-herald-action', () => {
       return key === Props.rulesLocation ? undefined : mockedInput[key];
     });
 
-    const { main } = require('../src') as { main: Function };
+    const { main } = require('../src') as { main: () => Promise<void> };
 
     await main();
 
@@ -63,7 +64,7 @@ describe('use-herald-action', () => {
       )
       .reply(200, getCompareCommitsResponse);
 
-    const { main } = require('../src') as { main: Function };
+    const { main } = require('../src') as Main;
 
     await main();
 
@@ -84,7 +85,7 @@ describe('use-herald-action', () => {
       )
       .reply(200, getCompareCommitsResponse);
 
-    const { main } = require('../src') as { main: Function };
+    const { main } = require('../src') as Main;
 
     await main();
 
@@ -143,7 +144,7 @@ describe('use-herald-action', () => {
       )
       .reply(200, getCompareCommitsResponse);
 
-    const { main } = require('../src') as { main: Function };
+    const { main } = require('../src') as Main;
 
     await main();
 

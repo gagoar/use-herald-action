@@ -74,7 +74,7 @@ Every rule can be written in JSON with the following key-value pairs:
 | `includes`        | `string` \| `string[]` |    No    | Glob pattern/s used to match changed filenames in the pull request                                                                                                                        |
 | `excludes`        | `string` \| `string[]` |    No    | Glob pattern/s used to exclude changed filenames (requires `includes` key to be provided)                                                                                                 |
 | `eventJsonPath`   |        `string`        |    No    | [JsonPath expression](https://goessner.net/articles/JsonPath/) used to filter information in the [pull request event](https://developer.github.com/webhooks/event-payloads/#pull_request) |
-| `includesInPatch` | `string` \| `string[]` |    No    | regex to match file content changes (ignored if malformed or invalid)                                                                                                 |
+| `includesInPatch` | `string` \| `string[]` |    No    | regex to match file content changes (ignored if malformed or invalid)                                                                                                                     |
 | `customMessage`   |        `string`        |    No    | Message to be commented on the pull request when the rule is applied (requires `action === comment`)                                                                                      |
 
 ## Rule Examples
@@ -107,7 +107,7 @@ Every rule can be written in JSON with the following key-value pairs:
   "teams": ["@QATeam"],
   "action": "assign",
   "includes": "integration/*.ts",
-  "eventJSONPath": "$[?(@.title =~ /QA/)].title"
+  "eventJSONPath": "$..[?(@.title.match("QA"))]"
 }
 ```
 

@@ -122,6 +122,52 @@ describe('rules', () => {
       ).toMatchInlineSnapshot('Array []');
     });
 
+    it('Matches includes and eventJsonPath (using contains)', () => {
+      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }];
+
+      expect(
+        getMatchingRules(
+          [
+            {
+              ...validRule,
+              teams: [],
+              eventJsonPath: '$..[?(@.title.match("README"))].title',
+              path: '/some/rule.json',
+            },
+          ],
+          files,
+          event,
+          []
+        )
+      ).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "eventJsonPath": "$..[?(@.title.match(\\"README\\"))].title",
+            "includes": Array [
+              "*.ts",
+            ],
+            "matches": Object {
+              "eventJsonPath": Array [
+                "Update the README with new information.",
+              ],
+              "includes": Array [
+                "/some/file.ts",
+              ],
+            },
+            "path": "/some/rule.json",
+            "teams": Array [],
+            "users": Array [
+              "@eeny",
+              "@meeny",
+              "@miny",
+              "@moe",
+            ],
+          },
+        ]
+      `);
+    });
     it('Matches includes and eventJsonPath', () => {
       const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }];
 
@@ -549,4 +595,11 @@ describe('rules', () => {
       `);
     });
   });
+
+  // it.only('trying the jsonPath pattern', () => {
+  //   const pattern = '$[?(@.title.contains("README")].title';
+  //   const response = JSONPath.query(eventJSON, pattern);
+  //   debugger;
+  //   expect(response).toMatchInlineSnapshot();
+  // })
 });
