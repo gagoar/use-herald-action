@@ -149,6 +149,7 @@ type IncludeExcludeFilesParams = {
 };
 
 const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFilesParams) => {
+  debug('includeExcludeFiles...');
   const matches = {} as MatchingRule['matches'];
 
   let results = [] as string[];
@@ -178,6 +179,7 @@ const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFi
   return matches;
 };
 const handleIncludesInPath = (patterns: string[], patchContent: string[]): string[] => {
+  debug('handleIncludesInPath...');
   const matches = patterns.reduce((memo, pattern) => {
     try {
       const rex = new RegExp(pattern);
@@ -222,10 +224,12 @@ export const getMatchingRules = (
     });
 
     if (rule.eventJsonPath) {
+      debug('eventJsonPath');
       matches.eventJsonPath = JSONPath.query(event, rule.eventJsonPath);
     }
 
     if (rule.includesInPatch?.length) {
+      debug('includesInPatch');
       matches.includesInPatch = handleIncludesInPath(rule.includesInPatch, patchContent);
     }
 

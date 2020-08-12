@@ -4187,6 +4187,7 @@ const loadRules = (rulesLocation) => {
     return rules;
 };
 const includeExcludeFiles = ({ includes, excludes, fileNames }) => {
+    debug('includeExcludeFiles...');
     const matches = {};
     let results = [];
     if (includes === null || includes === void 0 ? void 0 : includes.length) {
@@ -4210,6 +4211,7 @@ const includeExcludeFiles = ({ includes, excludes, fileNames }) => {
     return matches;
 };
 const handleIncludesInPath = (patterns, patchContent) => {
+    debug('handleIncludesInPath...');
     const matches = patterns.reduce((memo, pattern) => {
         try {
             const rex = new RegExp(pattern);
@@ -4243,9 +4245,11 @@ const getMatchingRules = (rules, files, event, patchContent) => {
             fileNames,
         });
         if (rule.eventJsonPath) {
+            debug('eventJsonPath');
             matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
         }
         if ((_a = rule.includesInPatch) === null || _a === void 0 ? void 0 : _a.length) {
+            debug('includesInPatch');
             matches.includesInPatch = handleIncludesInPath(rule.includesInPatch, patchContent);
         }
         matches = Object.assign(Object.assign({}, matches), extraMatches);
