@@ -5,17 +5,17 @@ on:
     types: [edited, opened]
 
 jobs:
-  herald:
+  heraldFoo:
     name: Validate Template
     runs-on: ubuntu-latest
     steps:
       - name: event location
         run: |
           echo $GITHUB_EVENT_PATH
-      - uses: actions/upload-artifact@master
-        with:
-          name: event
-          path: /home/runner/work/_temp/_github_workflow/event.json
+      # - uses: actions/upload-artifact@master
+      #   with:
+      #     name: event
+      #     path: /home/runner/work/_temp/_github_workflow/event.json
       - uses: actions/checkout@master
       - name: Validate issue is present
         uses: ./

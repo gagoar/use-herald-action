@@ -8,7 +8,8 @@ import groupBy from 'lodash.groupby';
 
 import { RestEndpointMethodTypes } from '@octokit/rest';
 
-import { JSONPath } from '@astronautlabs/jsonpath';
+// @ts-ignore
+import jp from 'jsonpath';
 import { loadJSONFile } from './util/loadJSONFile';
 import { logger } from './util/debug';
 import { makeArray } from './util/makeArray';
@@ -226,7 +227,7 @@ export const getMatchingRules = (
     if (rule.eventJsonPath) {
       debug('eventJsonPath', rule.eventJsonPath, event.pull_request.body);
       try {
-        matches.eventJsonPath = JSONPath.query(event, rule.eventJsonPath);
+        matches.eventJsonPath = jp.query(event, rule.eventJsonPath);
       } catch (e) {
         debug('something went wrong with the query:Error:', e);
         debug('something went wrong with the query:Stack', e.stack);
