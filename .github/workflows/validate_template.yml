@@ -17,3 +17,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           rulesLocation: .github/template_validation_rules/*.json
           DEBUG: '*'
+      - uses: actions/upload-artifact@master
+        with:
+          name: event
+          path: $GITHUB_EVENT_PATH
