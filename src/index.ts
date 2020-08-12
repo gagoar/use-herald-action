@@ -95,7 +95,8 @@ export const main = async (): Promise<void> => {
 
       if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
         throw new Error(
-          `Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${matchingRules
+          `Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules
+            .filter((rule) => rule.errorLevel && rule.errorLevel === 'error')
             .map((rule) => rule.name)
             .join(', ')}`
         );

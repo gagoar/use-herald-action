@@ -4245,7 +4245,7 @@ const getMatchingRules = (rules, files, event, patchContent) => {
             fileNames,
         });
         if (rule.eventJsonPath) {
-            debug('eventJsonPath');
+            debug('eventJsonPath', rule.eventJsonPath);
             try {
                 matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
             }
@@ -4430,7 +4430,8 @@ const main = async () => {
             const matchingRules = getMatchingRules(rules, files, event, files.map(({ patch }) => patch));
             src_debug('matchingRules:', matchingRules);
             if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
-                throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${matchingRules
+                throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules
+                    .filter((rule) => rule.errorLevel && rule.errorLevel === 'error')
                     .map((rule) => rule.name)
                     .join(', ')}`);
             }
