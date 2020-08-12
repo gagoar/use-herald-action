@@ -1,0 +1,19 @@
+name: Validate Template has an issue in a description
+
+on:
+  pull_request:
+    types: [edited, opened]
+
+jobs:
+  herald:
+    name: apply herald rules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: validate issue is present
+        id: herald
+        uses: gagoar/use-herald-action@master
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          rulesLocation: .github/template_validation_rules/*.json
+          DEBUG: '*'
