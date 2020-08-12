@@ -42,7 +42,7 @@ const getParams = () => {
 export const main = async (): Promise<void> => {
   try {
     if (isEventSupported(env.GITHUB_EVENT_NAME)) {
-      const event = loadJSONFile(env.GITHUB_EVENT_PATH) as Event;
+      const event = loadJSONFile<Event>(env.GITHUB_EVENT_PATH);
 
       const {
         pull_request: {
