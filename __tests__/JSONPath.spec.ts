@@ -4,7 +4,7 @@ import { env } from '../src/environment';
 import { Event } from '../src/util/constants';
 describe('JsonPath', () => {
   it('should match excluding user but matching title', () => {
-    const pattern = "$[?(@.user.login != 'renovate-bot')].user.login";
+    const pattern = "$..[?(@.body.match(/Issue Reference.*: #[0-9]{3}/) && @.user.login != 'renovate-bot')]";
 
     const event = loadJSONFile<Event>(env.GITHUB_EVENT_PATH);
     console.warn(event.pull_request.body);

@@ -224,7 +224,7 @@ export const getMatchingRules = (
     });
 
     if (rule.eventJsonPath) {
-      debug('eventJsonPath', rule.eventJsonPath);
+      debug('eventJsonPath', rule.eventJsonPath, event.pull_request.body);
       try {
         matches.eventJsonPath = JSONPath.query(event, rule.eventJsonPath);
       } catch (e) {
