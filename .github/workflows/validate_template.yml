@@ -12,7 +12,7 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: event
-          path: ${{ env.GITHUB_EVENT_PATH }}
+          path: ${{ GITHUB_EVENT_PATH }}
       - uses: actions/checkout@master
       - name: validate issue is present
         id: herald
