@@ -4245,7 +4245,7 @@ const getMatchingRules = (rules, files, event, patchContent) => {
             fileNames,
         });
         if (rule.eventJsonPath) {
-            debug('eventJsonPath');
+            debug('eventJsonPath', event);
             matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
         }
         if ((_a = rule.includesInPatch) === null || _a === void 0 ? void 0 : _a.length) {
