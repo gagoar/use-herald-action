@@ -30,11 +30,11 @@
         "href": "https://api.github.com/repos/gagoar/use-herald-action/pulls/63"
       },
       "statuses": {
-        "href": "https://api.github.com/repos/gagoar/use-herald-action/statuses/d8a0fe147060e1b8f62bb35e104b96e72c41d234"
+        "href": "https://api.github.com/repos/gagoar/use-herald-action/statuses/504e85fd799f82a8fdeda0577c34e2234934f477"
       }
     },
     "active_lock_reason": null,
-    "additions": 42,
+    "additions": 620,
     "assignee": {
       "avatar_url": "https://avatars2.githubusercontent.com/u/226559?v=4",
       "events_url": "https://api.github.com/users/gagoar/events{/privacy}",
@@ -167,7 +167,7 @@
         },
         "private": false,
         "pulls_url": "https://api.github.com/repos/gagoar/use-herald-action/pulls{/number}",
-        "pushed_at": "2020-08-12T16:43:46Z",
+        "pushed_at": "2020-08-12T17:19:57Z",
         "releases_url": "https://api.github.com/repos/gagoar/use-herald-action/releases{/id}",
         "size": 636,
         "ssh_url": "git@github.com:gagoar/use-herald-action.git",
@@ -207,15 +207,15 @@
         "url": "https://api.github.com/users/gagoar"
       }
     },
-    "body": "<!--- write down the issue related to this  PR-->\r\n\r\n**Issue Reference**\r\n\r\n## Description\r\n\r\nadding rules to validate the PR contains an Issue Reference, so it's always linked. \r\n\r\n## Motivation and Context\r\n\r\nThis is something that will save time when a PR is opened. \r\n\r\n## How Has This Been Tested?\r\n\r\nCreating this PR and editing it. given that it reacts to opened and edited. \r\nsome edit\r\n\r\n## Checklist:\r\n- [x] My code follows the code style of this project.\r\n- [ ] My change requires a change to the documentation.\r\n- [ ] I have updated the documentation accordingly.\r\n",
-    "changed_files": 6,
+    "body": "<!--- write down the issue related to this  PR-->\r\n\r\n**Issue Reference**: #123 \r\n\r\n## Description\r\n\r\nadding rules to validate the PR contains an Issue Reference, so it's always linked. \r\n\r\n## Motivation and Context\r\n\r\nThis is something that will save time when a PR is opened. \r\n\r\n## How Has This Been Tested?\r\n\r\nCreating this PR and editing it. given that it reacts to opened and edited. \r\nsome edit\r\n\r\n## Checklist:\r\n- [x] My code follows the code style of this project.\r\n- [x] My change requires a change to the documentation.\r\n- [ ] I have updated the documentation accordingly.\r\n",
+    "changed_files": 12,
     "closed_at": null,
     "comments": 2,
     "comments_url": "https://api.github.com/repos/gagoar/use-herald-action/issues/63/comments",
-    "commits": 16,
+    "commits": 21,
     "commits_url": "https://api.github.com/repos/gagoar/use-herald-action/pulls/63/commits",
     "created_at": "2020-08-12T05:20:24Z",
-    "deletions": 2,
+    "deletions": 12,
     "diff_url": "https://github.com/gagoar/use-herald-action/pull/63.diff",
     "draft": false,
     "head": {
@@ -307,7 +307,7 @@
         },
         "private": false,
         "pulls_url": "https://api.github.com/repos/gagoar/use-herald-action/pulls{/number}",
-        "pushed_at": "2020-08-12T16:43:46Z",
+        "pushed_at": "2020-08-12T17:19:57Z",
         "releases_url": "https://api.github.com/repos/gagoar/use-herald-action/releases{/id}",
         "size": 636,
         "ssh_url": "git@github.com:gagoar/use-herald-action.git",
@@ -325,7 +325,7 @@
         "watchers": 5,
         "watchers_count": 5
       },
-      "sha": "d8a0fe147060e1b8f62bb35e104b96e72c41d234",
+      "sha": "504e85fd799f82a8fdeda0577c34e2234934f477",
       "user": {
         "avatar_url": "https://avatars2.githubusercontent.com/u/226559?v=4",
         "events_url": "https://api.github.com/users/gagoar/events{/privacy}",
@@ -353,7 +353,7 @@
     "labels": [],
     "locked": false,
     "maintainer_can_modify": false,
-    "merge_commit_sha": "8821eb412eeccdfda7587f952af2d80690e1d6b7",
+    "merge_commit_sha": "3e9830f689755282c5523d916a53917bd8d7be0e",
     "mergeable": true,
     "mergeable_state": "unstable",
     "merged": false,
@@ -391,9 +391,9 @@
     "review_comments": 0,
     "review_comments_url": "https://api.github.com/repos/gagoar/use-herald-action/pulls/63/comments",
     "state": "open",
-    "statuses_url": "https://api.github.com/repos/gagoar/use-herald-action/statuses/d8a0fe147060e1b8f62bb35e104b96e72c41d234",
+    "statuses_url": "https://api.github.com/repos/gagoar/use-herald-action/statuses/504e85fd799f82a8fdeda0577c34e2234934f477",
     "title": "Adding rules for templates",
-    "updated_at": "2020-08-12T16:44:16Z",
+    "updated_at": "2020-08-12T17:22:18Z",
     "url": "https://api.github.com/repos/gagoar/use-herald-action/pulls/63",
     "user": {
       "avatar_url": "https://avatars2.githubusercontent.com/u/226559?v=4",
@@ -498,7 +498,7 @@
     },
     "private": false,
     "pulls_url": "https://api.github.com/repos/gagoar/use-herald-action/pulls{/number}",
-    "pushed_at": "2020-08-12T16:43:46Z",
+    "pushed_at": "2020-08-12T17:19:57Z",
     "releases_url": "https://api.github.com/repos/gagoar/use-herald-action/releases{/id}",
     "size": 636,
     "ssh_url": "git@github.com:gagoar/use-herald-action.git",
