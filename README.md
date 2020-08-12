@@ -28,6 +28,7 @@ This action allows you to add comments, reviewers and assignees to a pull reques
 - [Examples](#examples)
   - [Basic example](#basic-example)
   - [Using output](#using-output)
+  - [Using error levels](#using-error-levels)
 
 <hr>
 
@@ -68,14 +69,15 @@ Every rule can be written in JSON with the following key-value pairs:
 | Key               |          Type          | Required | Description                                                                                                                                                                               |
 | ----------------- | :--------------------: | :------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `name`            |        `string`        |    No    | Friendly name to recognize the rule; defaults to the rule filename                                                                                                                        |
-| `action`          |        `string`        |   Yes    | Currently, supported actions are `comment` `review` and `assign`                                                                                                                          |
-| `users`           |       `string[]`       |    No    | GitHub user handles (or emails) on which the rule will take action                                                                                                                        |
-| `teams`           |       `string[]`       |    No    | GitHub teams on which the rule will take action                                                                                                                                           |
+| `action`          |        `string`        |   Yes    | Currently, supported actions are `comment`, `review` and `assign`                                                                                                                         |
 | `includes`        | `string` \| `string[]` |    No    | Glob pattern/s used to match changed filenames in the pull request                                                                                                                        |
 | `excludes`        | `string` \| `string[]` |    No    | Glob pattern/s used to exclude changed filenames (requires `includes` key to be provided)                                                                                                 |
 | `eventJsonPath`   |        `string`        |    No    | [JsonPath expression](https://goessner.net/articles/JsonPath/) used to filter information in the [pull request event](https://developer.github.com/webhooks/event-payloads/#pull_request) |
-| `includesInPatch` | `string` \| `string[]` |    No    | regex to match file content changes (ignored if malformed or invalid)                                                                                                                     |
+| `includesInPatch` | `string` \| `string[]` |    No    | Regex to match file content changes (ignored if malformed or invalid)                                                                                                                     |
 | `customMessage`   |        `string`        |    No    | Message to be commented on the pull request when the rule is applied (requires `action === comment`)                                                                                      |
+| `users`           |       `string[]`       |    No    | GitHub user handles (or emails) on which the rule will take action. It will not be used when `action` is set to `comment` and `customMessage` field is present                            |
+| `teams`           |       `string[]`       |    No    | GitHub teams on which the rule will take action. It will not be used when `action` is set to `comment` and `customMessage` field is present                                               |
+| `errorLevel`      |        `string`        |    No    | Currently, supported error levels are `none`, `error`, by default is set to `none`, you can read more [here](#error-levels)                                                               |
 
 ## Rule Examples
 
@@ -108,6 +110,21 @@ Every rule can be written in JSON with the following key-value pairs:
   "action": "assign",
   "includes": "integration/*.ts",
   "eventJSONPath": "$..[?(@.title.match("QA"))]"
+}
+```
+
+## Error levels
+
+When creating rules, you can use the `errorLevel` to change how `use-herald-action` will report back when the rule has no matches. This could be useful to make sure a rule is always matching. For example, when trying to validate that a pull request template is respected.
+
+**Add friendly message when a PR is opened, but if is not applied, fail the workflow**
+
+```json
+{
+  "action": "comment",
+  "customMessage": "Thanks for opening a pull request, looks like all is good! Please wait till the checks are all green to merge ",
+  "eventJSONPath": "$..[?(@.body.match("Issue Ticket:"))]",
+  "errorLevel": "error"
 }
 ```
 

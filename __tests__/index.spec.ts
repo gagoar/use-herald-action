@@ -53,6 +53,32 @@ describe('use-herald-action', () => {
 
     expect(setFailed).toHaveBeenCalled();
   });
+
+  it('should fail if rules with errorLevel set to "error" does not match', async () => {
+    const changedRulesDirectory = { ...mockedInput, [Props.rulesLocation]: '__mocks__/required_rules/*.json' };
+    getInput.mockImplementation((key: Partial<keyof typeof changedRulesDirectory>) => {
+      return changedRulesDirectory[key];
+    });
+
+    const github = nock('https://api.github.com')
+      .get(
+        `/repos/${event.repository.owner.login}/${event.repository.name}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`
+      )
+      .reply(200, getCompareCommitsResponse);
+
+    const { main } = require('../src') as Main;
+
+    await main();
+
+    expect(setFailed.mock.calls[0]).toMatchInlineSnapshot(`
+      Array [
+        [Error: Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: rule1.json],
+      ]
+    `);
+    expect(setOutput).not.toHaveBeenCalled();
+    expect(github.isDone()).toBe(true);
+  });
+
   it('should run normally (with dryRun: true)', async () => {
     getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
       return mockedInput[key];
@@ -74,8 +100,8 @@ describe('use-herald-action', () => {
   });
 
   it('should run the entire action', async () => {
-    const input = { ...mockedInput, [Props.dryRun]: false };
-    getInput.mockImplementation((key: Partial<keyof typeof mockedInput>) => {
+    const input = { ...mockedInput, [Props.dryRun]: 'false' };
+    getInput.mockImplementation((key: Partial<keyof typeof input>) => {
       return input[key];
     });
 
@@ -124,6 +150,7 @@ describe('use-herald-action', () => {
         ],
       ]
     `);
+
     expect(github.isDone()).toBe(true);
   });
 

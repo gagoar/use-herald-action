@@ -27,6 +27,7 @@ enum RuleActors {
 enum RuleExtras {
   customMessage = 'customMessage',
   name = 'name',
+  errorLevel = 'errorLevel',
 }
 enum RuleMatchers {
   includesInPatch = 'includesInPatch',
@@ -44,6 +45,11 @@ export enum RuleActions {
   review = 'review',
   assign = 'assign',
 }
+
+enum ErrorLevels {
+  none = 'none',
+  error = 'error',
+}
 export interface Rule {
   name?: string;
   path: string;
@@ -55,6 +61,8 @@ export interface Rule {
   includesInPatch?: string[];
   eventJsonPath?: string;
   customMessage?: string;
+
+  errorLevel?: keyof typeof ErrorLevels;
 }
 
 type File = RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files'][0];
@@ -77,8 +85,11 @@ const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
   };
 };
 
-const hasAttribute = <Attr extends string>(attr: string, content: object): content is Record<Attr, string> =>
-  attr in content;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const hasAttribute = <Attr extends string>(
+  attr: string,
+  content: Record<string, any>
+): content is Record<Attr, string> => attr in content;
 
 const isValidRawRule = (content: unknown): content is RawRule => {
   if (typeof content !== 'object' || content === null) {
@@ -90,7 +101,8 @@ const isValidRawRule = (content: unknown): content is RawRule => {
 
   const hasTeams = hasAttribute('teams', content) && Array.isArray(content.teams);
   const hasUsers = hasAttribute('users', content) && Array.isArray(content.users);
-  const hasActors = hasTeams || hasUsers;
+  const hasActors =
+    hasTeams || hasUsers || (hasAttribute('customMessage', content) && content.action === RuleActions.comment);
 
   const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
 
@@ -179,6 +191,18 @@ const handleIncludesInPath = (patterns: string[], patchContent: string[]): strin
   }, [] as string[]);
 
   return [...new Set(matches)];
+};
+
+export const allRequiredRulesHaveMatched = (rules: Rule[], matchingRules: MatchingRule[]): boolean => {
+  const requiredRules = rules.filter((rule) => rule.errorLevel && rule.errorLevel === ErrorLevels.error);
+
+  // if we don't have any required rule, we assume all required rules have passed.
+  if (!requiredRules.length) {
+    return true;
+  }
+
+  const matchingRulesNames = matchingRules.map((rule) => rule.name);
+  return requiredRules.every((rule) => matchingRulesNames.includes(rule.name));
 };
 export const getMatchingRules = (
   rules: Rule[],

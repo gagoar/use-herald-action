@@ -1,7 +1,7 @@
 import { getInput, setOutput, setFailed } from '@actions/core';
 import groupBy from 'lodash.groupby';
 import { handleComment } from './comment';
-import { loadRules, getMatchingRules, RuleActions } from './rules';
+import { loadRules, getMatchingRules, RuleActions, allRequiredRulesHaveMatched } from './rules';
 import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES } from './util/constants';
 import { logger } from './util/debug';
 import { env } from './environment';
@@ -92,6 +92,14 @@ export const main = async (): Promise<void> => {
       );
 
       debug('matchingRules:', matchingRules);
+
+      if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
+        throw new Error(
+          `Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${matchingRules
+            .map((rule) => rule.name)
+            .join(', ')}`
+        );
+      }
 
       const groupedRulesByAction = groupBy(matchingRules, (rule) => rule.action);
 

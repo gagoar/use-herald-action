@@ -4122,6 +4122,7 @@ var RuleExtras;
 (function (RuleExtras) {
     RuleExtras["customMessage"] = "customMessage";
     RuleExtras["name"] = "name";
+    RuleExtras["errorLevel"] = "errorLevel";
 })(RuleExtras || (RuleExtras = {}));
 var RuleMatchers;
 (function (RuleMatchers) {
@@ -4135,6 +4136,11 @@ var RuleActions;
     RuleActions["review"] = "review";
     RuleActions["assign"] = "assign";
 })(RuleActions || (RuleActions = {}));
+var ErrorLevels;
+(function (ErrorLevels) {
+    ErrorLevels["none"] = "none";
+    ErrorLevels["error"] = "error";
+})(ErrorLevels || (ErrorLevels = {}));
 const sanitize = (content) => {
     const attrs = Object.assign(Object.assign(Object.assign({}, RuleMatchers), RuleActors), RuleExtras);
     const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
@@ -4142,6 +4148,7 @@ const sanitize = (content) => {
     }, {});
     return Object.assign(Object.assign({}, rule), { users: rule.users ? rule.users : [], teams: rule.teams ? rule.teams : [], includes: makeArray(rule.includes), excludes: makeArray(rule.excludes), includesInPatch: makeArray(rule.includesInPatch) });
 };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const hasAttribute = (attr, content) => attr in content;
 const isValidRawRule = (content) => {
     if (typeof content !== 'object' || content === null) {
@@ -4150,7 +4157,7 @@ const isValidRawRule = (content) => {
     const hasValidActionValues = hasAttribute('action', content) && Object.keys(RuleActions).includes(content.action);
     const hasTeams = hasAttribute('teams', content) && Array.isArray(content.teams);
     const hasUsers = hasAttribute('users', content) && Array.isArray(content.users);
-    const hasActors = hasTeams || hasUsers;
+    const hasActors = hasTeams || hasUsers || (hasAttribute('customMessage', content) && content.action === RuleActions.comment);
     const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
     debug('validation:', {
         rule: content,
@@ -4215,6 +4222,15 @@ const handleIncludesInPath = (patterns, patchContent) => {
         }
     }, []);
     return [...new Set(matches)];
+};
+const allRequiredRulesHaveMatched = (rules, matchingRules) => {
+    const requiredRules = rules.filter((rule) => rule.errorLevel && rule.errorLevel === ErrorLevels.error);
+    // if we don't have any required rule, we assume all required rules have passed.
+    if (!requiredRules.length) {
+        return true;
+    }
+    const matchingRulesNames = matchingRules.map((rule) => rule.name);
+    return requiredRules.every((rule) => matchingRulesNames.includes(rule.name));
 };
 const getMatchingRules = (rules, files, event, patchContent) => {
     const fileNames = files.map(({ filename }) => filename);
@@ -4403,6 +4419,11 @@ const main = async () => {
             });
             const matchingRules = getMatchingRules(rules, files, event, files.map(({ patch }) => patch));
             src_debug('matchingRules:', matchingRules);
+            if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
+                throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${matchingRules
+                    .map((rule) => rule.name)
+                    .join(', ')}`);
+            }
             const groupedRulesByAction = lodash_groupby_default()(matchingRules, (rule) => rule.action);
             if (dryRun !== 'true') {
                 src_debug('not a dry Run');

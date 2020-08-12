@@ -515,6 +515,7 @@ describe('rules', () => {
         },
         '/some/badRule.json': {
           ...validRule,
+          customMessage: undefined,
           teams: undefined,
           users: undefined,
         },
@@ -595,11 +596,4 @@ describe('rules', () => {
       `);
     });
   });
-
-  // it.only('trying the jsonPath pattern', () => {
-  //   const pattern = '$[?(@.title.contains("README")].title';
-  //   const response = JSONPath.query(eventJSON, pattern);
-  //   debugger;
-  //   expect(response).toMatchInlineSnapshot();
-  // })
 });
