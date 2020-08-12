@@ -4122,6 +4122,7 @@ var RuleExtras;
 (function (RuleExtras) {
     RuleExtras["customMessage"] = "customMessage";
     RuleExtras["name"] = "name";
+    RuleExtras["errorLevel"] = "errorLevel";
 })(RuleExtras || (RuleExtras = {}));
 var RuleMatchers;
 (function (RuleMatchers) {
@@ -4135,6 +4136,11 @@ var RuleActions;
     RuleActions["review"] = "review";
     RuleActions["assign"] = "assign";
 })(RuleActions || (RuleActions = {}));
+var ErrorLevels;
+(function (ErrorLevels) {
+    ErrorLevels["none"] = "none";
+    ErrorLevels["error"] = "error";
+})(ErrorLevels || (ErrorLevels = {}));
 const sanitize = (content) => {
     const attrs = Object.assign(Object.assign(Object.assign({}, RuleMatchers), RuleActors), RuleExtras);
     const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
@@ -4142,6 +4148,7 @@ const sanitize = (content) => {
     }, {});
     return Object.assign(Object.assign({}, rule), { users: rule.users ? rule.users : [], teams: rule.teams ? rule.teams : [], includes: makeArray(rule.includes), excludes: makeArray(rule.excludes), includesInPatch: makeArray(rule.includesInPatch) });
 };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const hasAttribute = (attr, content) => attr in content;
 const isValidRawRule = (content) => {
     if (typeof content !== 'object' || content === null) {
@@ -4150,7 +4157,7 @@ const isValidRawRule = (content) => {
     const hasValidActionValues = hasAttribute('action', content) && Object.keys(RuleActions).includes(content.action);
     const hasTeams = hasAttribute('teams', content) && Array.isArray(content.teams);
     const hasUsers = hasAttribute('users', content) && Array.isArray(content.users);
-    const hasActors = hasTeams || hasUsers;
+    const hasActors = hasTeams || hasUsers || (hasAttribute('customMessage', content) && content.action === RuleActions.comment);
     const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
     debug('validation:', {
         rule: content,
@@ -4215,6 +4222,15 @@ const handleIncludesInPath = (patterns, patchContent) => {
         }
     }, []);
     return [...new Set(matches)];
+};
+const allRequiredRulesHaveMatched = (rules, matchingRules) => {
+    const requiredRules = rules.filter((rule) => rule.errorLevel && rule.errorLevel === ErrorLevels.error);
+    // if we don't have any required rule, we assume all required rules have passed.
+    if (!requiredRules.length) {
+        return true;
+    }
+    const matchingRulesNames = matchingRules.map((rule) => rule.name);
+    return requiredRules.every((rule) => matchingRulesNames.includes(rule.name));
 };
 const getMatchingRules = (rules, files, event, patchContent) => {
     const fileNames = files.map(({ filename }) => filename);
@@ -4343,7 +4359,6 @@ const isEventSupported = (event) => {
 };
 
 // CONCATENATED MODULE: ./src/index.ts
-/* eslint-disable @typescript-eslint/camelcase */
 
 
 
@@ -4404,6 +4419,11 @@ const main = async () => {
             });
             const matchingRules = getMatchingRules(rules, files, event, files.map(({ patch }) => patch));
             src_debug('matchingRules:', matchingRules);
+            if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
+                throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${matchingRules
+                    .map((rule) => rule.name)
+                    .join(', ')}`);
+            }
             const groupedRulesByAction = lodash_groupby_default()(matchingRules, (rule) => rule.action);
             if (dryRun !== 'true') {
                 src_debug('not a dry Run');
@@ -7100,7 +7120,7 @@ exports.default = AsyncReader;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const VERSION = "2.2.3";
+const VERSION = "2.2.4";
 
 /**
  * Some “list” response that can be paginated have a different response structure
@@ -8703,7 +8723,7 @@ const Endpoints = {
         previews: ["wyandotte"]
       }
     }],
-    listReposForUser: ["GET /user/{migration_id}/repositories", {
+    listReposForUser: ["GET /user/migrations/{migration_id}/repositories", {
       mediaType: {
         previews: ["wyandotte"]
       }
@@ -9356,7 +9376,7 @@ const Endpoints = {
   }
 };
 
-const VERSION = "4.1.0";
+const VERSION = "4.1.2";
 
 function endpointsToMethods(octokit, endpointsMap) {
   const newMethods = {};
@@ -10376,7 +10396,7 @@ function withDefaults(oldDefaults, newDefaults) {
   });
 }
 
-const VERSION = "6.0.4";
+const VERSION = "6.0.5";
 
 const userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`; // DEFAULTS has all properties set that EndpointOptions has, except url.
 // So we use RequestParameters and add method as additional required property.
@@ -21740,7 +21760,7 @@ var isPlainObject = _interopDefault(__webpack_require__(960));
 var nodeFetch = _interopDefault(__webpack_require__(828));
 var requestError = __webpack_require__(463);
 
-const VERSION = "5.4.6";
+const VERSION = "5.4.7";
 
 function getBufferResponse(response) {
   return response.arrayBuffer();
@@ -30395,7 +30415,7 @@ var pluginRequestLog = __webpack_require__(916);
 var pluginPaginateRest = __webpack_require__(299);
 var pluginRestEndpointMethods = __webpack_require__(352);
 
-const VERSION = "18.0.1";
+const VERSION = "18.0.3";
 
 const Octokit = core.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
   userAgent: `octokit-rest.js/${VERSION}`

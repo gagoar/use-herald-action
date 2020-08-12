@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { getInput, setOutput, setFailed } from '@actions/core';
 import groupBy from 'lodash.groupby';
 import { handleComment } from './comment';
-import { loadRules, getMatchingRules, RuleActions } from './rules';
+import { loadRules, getMatchingRules, RuleActions, allRequiredRulesHaveMatched } from './rules';
 import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES } from './util/constants';
 import { logger } from './util/debug';
 import { env } from './environment';
@@ -40,7 +39,7 @@ const getParams = () => {
   }, {} as Partial<Record<keyof typeof Props, string>>);
 };
 
-export const main = async () => {
+export const main = async (): Promise<void> => {
   try {
     if (isEventSupported(env.GITHUB_EVENT_NAME)) {
       const event = loadJSONFile(env.GITHUB_EVENT_PATH) as Event;
@@ -93,6 +92,14 @@ export const main = async () => {
       );
 
       debug('matchingRules:', matchingRules);
+
+      if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
+        throw new Error(
+          `Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${matchingRules
+            .map((rule) => rule.name)
+            .join(', ')}`
+        );
+      }
 
       const groupedRulesByAction = groupBy(matchingRules, (rule) => rule.action);
 
