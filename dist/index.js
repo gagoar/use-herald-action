@@ -4245,8 +4245,14 @@ const getMatchingRules = (rules, files, event, patchContent) => {
             fileNames,
         });
         if (rule.eventJsonPath) {
-            debug('eventJsonPath', event);
-            matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
+            debug('eventJsonPath');
+            try {
+                matches.eventJsonPath = Object(jsonpath_dist.JSONPath.query)(event, rule.eventJsonPath);
+            }
+            catch (e) {
+                debug('something went wrong with the query:Error:', e);
+                debug('something went wrong with the query:Stack', e.stack);
+            }
         }
         if ((_a = rule.includesInPatch) === null || _a === void 0 ? void 0 : _a.length) {
             debug('includesInPatch');

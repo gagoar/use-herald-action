@@ -224,8 +224,13 @@ export const getMatchingRules = (
     });
 
     if (rule.eventJsonPath) {
-      debug('eventJsonPath', event);
-      matches.eventJsonPath = JSONPath.query(event, rule.eventJsonPath);
+      debug('eventJsonPath');
+      try {
+        matches.eventJsonPath = JSONPath.query(event, rule.eventJsonPath);
+      } catch (e) {
+        debug('something went wrong with the query:Error:', e);
+        debug('something went wrong with the query:Stack', e.stack);
+      }
     }
 
     if (rule.includesInPatch?.length) {
