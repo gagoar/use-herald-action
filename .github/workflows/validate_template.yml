@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@master
       - name: validate issue is present
         id: herald
-        uses: gagoar/use-herald-action@master
+        uses: ./
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           rulesLocation: .github/template_validation_rules/*.json
