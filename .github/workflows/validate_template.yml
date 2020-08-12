@@ -9,6 +9,10 @@ jobs:
     name: Validate Template
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/upload-artifact@master
+        with:
+          name: event
+          path: $GITHUB_EVENT_PATH
       - uses: actions/checkout@master
       - name: validate issue is present
         id: herald
@@ -17,7 +21,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           rulesLocation: .github/template_validation_rules/*.json
           DEBUG: '*'
-      - uses: actions/upload-artifact@master
-        with:
-          name: event
-          path: $GITHUB_EVENT_PATH
