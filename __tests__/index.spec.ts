@@ -47,7 +47,7 @@ describe('use-herald-action', () => {
       return key === Props.rulesLocation ? undefined : mockedInput[key];
     });
 
-    const { main } = require('../src') as { main: () => Promise<void> };
+    const { main } = require('../src') as Main;
 
     await main();
 
