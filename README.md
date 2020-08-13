@@ -12,6 +12,14 @@
       <img src="https://img.shields.io/npm/l/alohomora.svg?style=flat-square" alt="MIT license" />
     </a>
 </p>
+<p align="center">
+  <a href="https://github.com/gagoar/use-herald-action">
+    <img src="images/logo.png" alt="Logo" width="128" height="128">
+  </a>
+
+  <h3 align="center">use herald action</h3>
+
+  </p>
 
 # Use Herald Action
 
