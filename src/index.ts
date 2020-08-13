@@ -7,7 +7,6 @@ import { logger } from './util/debug';
 import { env } from './environment';
 
 import { Octokit } from '@octokit/rest';
-// import { retry } from '@octokit/plugin-retry';
 import { handleAssignees } from './assignees';
 import { handleReviewers } from './reviewers';
 import { loadJSONFile } from './util/loadJSONFile';

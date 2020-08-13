@@ -72,7 +72,7 @@ describe('use-herald-action', () => {
 
     expect(setFailed.mock.calls[0]).toMatchInlineSnapshot(`
       Array [
-        [Error: Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: rule1.json],
+        [Error: Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: rule2.json, this rules should fail because the pattern is malformed],
       ]
     `);
     expect(setOutput).not.toHaveBeenCalled();
@@ -136,7 +136,7 @@ describe('use-herald-action', () => {
                   ],
                 },
                 "name": "rule1.json",
-                "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
+                "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule1.json",
                 "teams": Array [],
                 "users": Array [
                   "@eeny",
