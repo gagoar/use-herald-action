@@ -7,6 +7,7 @@ import { unMockConsole, mockConsole } from './helpers';
 import { Event } from '../src/util/constants';
 
 import eventJSON from '../__mocks__/event.json';
+import alterEventJSON from '../__mocks__/event_should_work.json';
 import * as loadJSON from '../src/util/loadJSONFile';
 
 jest.mock('fast-glob');
@@ -30,6 +31,7 @@ const validRule = {
 
 describe('rules', () => {
   const event = (eventJSON as unknown) as Event;
+  const alterEvent = (alterEventJSON as unknown) as Event;
 
   afterAll(() => {
     unMockConsole('error');
@@ -128,12 +130,12 @@ describe('rules', () => {
             {
               ...validRule,
               teams: [],
-              eventJsonPath: '$..[?(@.title.match("README"))].title',
+              eventJsonPath: '$[?(@.body.match(/Issue Reference.+#[0-9]+/))].body',
               path: '/some/rule.json',
             },
           ],
           files,
-          event,
+          alterEvent,
           []
         )
       ).toMatchInlineSnapshot(`
@@ -141,13 +143,34 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "eventJsonPath": "$..[?(@.title.match(\\"README\\"))].title",
+            "eventJsonPath": "$[?(@.body.match(/Issue Reference.+#[0-9]+/))].body",
             "includes": Array [
               "*.ts",
             ],
             "matches": Object {
               "eventJsonPath": Array [
-                "Update the README with new information.",
+                "<!--- write down the issue related to this  PR-->
+
+        **Issue Reference**:  #66 
+
+        ## Description
+
+        adding rules to validate the PR contains an Issue Reference, so it's always linked. 
+
+        ## Motivation and Context
+
+        This is something that will save time when a PR is opened. 
+
+        ## How Has This Been Tested?
+
+        Creating this PR and editing it. given that it reacts to opened and edited. 
+        some edit
+
+        ## Checklist:
+        - [x] My code follows the code style of this project.
+        - [ ] My change requires a change to the documentation.
+        - [ ] I have updated the documentation accordingly.
+        ",
               ],
               "includes": Array [
                 "/some/file.ts",
