@@ -17,8 +17,6 @@
     <img src="images/logo.png" alt="Logo" width="128" height="128">
   </a>
 
-  <h3 align="center">use herald action</h3>
-
   </p>
 
 # Use Herald Action
