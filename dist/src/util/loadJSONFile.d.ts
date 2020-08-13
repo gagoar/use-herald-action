@@ -1,1 +1,1 @@
-export declare const loadJSONFile: (filePath: string) => unknown;
+export declare const loadJSONFile: <T>(filePath: string) => T;

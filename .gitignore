@@ -3,3 +3,4 @@ node_modules
 # ignore codecoverage output
 coverage/
 dist/__mocks__/
+.DS_Store

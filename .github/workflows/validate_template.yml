@@ -1,0 +1,24 @@
+name: Validate Template
+
+on:
+  pull_request:
+    types: [edited, opened, synchronize, reopened]
+
+jobs:
+  validateTemplate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: event location
+        run: |
+          echo $GITHUB_EVENT_PATH
+      - uses: actions/upload-artifact@master
+        with:
+          name: event
+          path: ${{ github.event_path }}
+      - uses: actions/checkout@master
+      - name: Validate issue number is present
+        uses: ./
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          rulesLocation: .github/template_validation_rules/*.json
+          DEBUG: '*'

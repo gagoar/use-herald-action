@@ -1,6 +1,7 @@
 {
+  "name": "this rules should fail because the pattern is malformed",
   "customMessage": "Thanks for contributing, everything looks good in your PR description, please give us some time to review.",
   "action": "comment",
-  "eventJsonPath": "$..[?(@.body.match(/Issue Reference.*: #[0-9]{4}/) && @.user.login != 'renovate-bot')]",
+  "eventJsonPath": "$..[?(@.body.match(/Issue Reference.*: #[0-9]{4}/ && @.user.login != 'renovate-bot')]",
   "errorLevel": "error"
 }

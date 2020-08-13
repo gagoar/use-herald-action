@@ -7,7 +7,6 @@ import { logger } from './util/debug';
 import { env } from './environment';
 
 import { Octokit } from '@octokit/rest';
-// import { retry } from '@octokit/plugin-retry';
 import { handleAssignees } from './assignees';
 import { handleReviewers } from './reviewers';
 import { loadJSONFile } from './util/loadJSONFile';
@@ -42,7 +41,7 @@ const getParams = () => {
 export const main = async (): Promise<void> => {
   try {
     if (isEventSupported(env.GITHUB_EVENT_NAME)) {
-      const event = loadJSONFile(env.GITHUB_EVENT_PATH) as Event;
+      const event = loadJSONFile<Event>(env.GITHUB_EVENT_PATH);
 
       const {
         pull_request: {
@@ -95,7 +94,8 @@ export const main = async (): Promise<void> => {
 
       if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
         throw new Error(
-          `Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${matchingRules
+          `Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules
+            .filter((rule) => rule.errorLevel && rule.errorLevel === 'error')
             .map((rule) => rule.name)
             .join(', ')}`
         );

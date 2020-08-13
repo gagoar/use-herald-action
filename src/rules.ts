@@ -8,7 +8,7 @@ import groupBy from 'lodash.groupby';
 
 import { RestEndpointMethodTypes } from '@octokit/rest';
 
-import { JSONPath } from '@astronautlabs/jsonpath';
+import JSONPath from 'jsonpath';
 import { loadJSONFile } from './util/loadJSONFile';
 import { logger } from './util/debug';
 import { makeArray } from './util/makeArray';
@@ -85,9 +85,9 @@ const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const hasAttribute = <Attr extends string>(
   attr: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: Record<string, any>
 ): content is Record<Attr, string> => attr in content;
 
@@ -102,7 +102,9 @@ const isValidRawRule = (content: unknown): content is RawRule => {
   const hasTeams = hasAttribute('teams', content) && Array.isArray(content.teams);
   const hasUsers = hasAttribute('users', content) && Array.isArray(content.users);
   const hasActors =
-    hasTeams || hasUsers || (hasAttribute('customMessage', content) && content.action === RuleActions.comment);
+    hasTeams ||
+    hasUsers ||
+    (hasAttribute('customMessage', content) && !!content.customMessage && content.action === RuleActions.comment);
 
   const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
 
@@ -149,6 +151,7 @@ type IncludeExcludeFilesParams = {
 };
 
 const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFilesParams) => {
+  debug('includeExcludeFiles...');
   const matches = {} as MatchingRule['matches'];
 
   let results = [] as string[];
@@ -178,6 +181,7 @@ const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFi
   return matches;
 };
 const handleIncludesInPath = (patterns: string[], patchContent: string[]): string[] => {
+  debug('handleIncludesInPath...');
   const matches = patterns.reduce((memo, pattern) => {
     try {
       const rex = new RegExp(pattern);
@@ -222,10 +226,16 @@ export const getMatchingRules = (
     });
 
     if (rule.eventJsonPath) {
-      matches.eventJsonPath = JSONPath.query(event, rule.eventJsonPath);
+      debug('eventJsonPath', rule.eventJsonPath, event.pull_request.body);
+      try {
+        matches.eventJsonPath = JSONPath.query(event, rule.eventJsonPath);
+      } catch (e) {
+        debug('something went wrong with the query:Error:', e);
+      }
     }
 
     if (rule.includesInPatch?.length) {
+      debug('includesInPatch');
       matches.includesInPatch = handleIncludesInPath(rule.includesInPatch, patchContent);
     }
 

@@ -1,4 +1,4 @@
-IMPORTANT: Please do not create a Pull Request without [creating an issue first](https://github.com/gagoar/use-herald-action/issues/new).
+<!--- IMPORTANT: Please do not create a Pull Request without [creating an issue first](https://github.com/gagoar/use-herald-action/issues/new) -->
 
 <!--- write down the issue related to this  PR-->
 

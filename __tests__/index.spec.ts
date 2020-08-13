@@ -72,7 +72,7 @@ describe('use-herald-action', () => {
 
     expect(setFailed.mock.calls[0]).toMatchInlineSnapshot(`
       Array [
-        [Error: Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: rule1.json],
+        [Error: Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: rule2.json, this rules should fail because the pattern is malformed],
       ]
     `);
     expect(setOutput).not.toHaveBeenCalled();

@@ -19,6 +19,7 @@ interface Repository {
 interface PullRequest {
     head: Commit;
     base: Commit;
+    body: string;
     organization: string;
 }
 export interface Event {
