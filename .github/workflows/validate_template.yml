@@ -14,7 +14,7 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: event
-          path: /home/runner/work/_temp/_github_workflow/event.json
+          path: ${{ env.GITHUB_EVENT_PATH }}
       - uses: actions/checkout@master
       - name: Validate issue number is present
         uses: ./
