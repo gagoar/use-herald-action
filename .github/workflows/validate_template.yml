@@ -5,7 +5,7 @@ on:
     types: [edited, opened, synchronize, reopened]
 
 jobs:
-  heraldFoo:
+  validateTemplate:
     runs-on: ubuntu-latest
     steps:
       - name: event location
