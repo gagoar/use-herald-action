@@ -1,7 +1,7 @@
 {
   "name": "Rule to validate the the template has an issue attached",
   "action": "comment",
-  "eventJsonPath": "$[?(@.body.match(/Issue Reference.+#[0-9]+/) && @.user.login != 'renovate[bot]')]",
+  "eventJsonPath": "$[?(!@.body.match(/Issue Reference.+:/i) || @.body.match(/Issue Reference.+#[0-9]+/))].body",
   "customMessage": "Thanks for contributing!. The pull request description looks good. Please give us some time to review!",
   "errorLevel": "error"
 }
