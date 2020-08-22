@@ -4079,11 +4079,11 @@ var src = __webpack_require__(784);
 var src_default = /*#__PURE__*/__webpack_require__.n(src);
 
 // CONCATENATED MODULE: ./src/util/debug.ts
-var debug_a;
+var _a;
 
 
 
-const DEBUG = (debug_a = Object(core.getInput)('DEBUG')) !== null && debug_a !== void 0 ? debug_a : false;
+const DEBUG = (_a = Object(core.getInput)('DEBUG')) !== null && _a !== void 0 ? _a : false;
 if (DEBUG) {
     console.log('debug is enabled, provided pattern:', DEBUG);
 }
@@ -4147,7 +4147,7 @@ const sanitize = (content) => {
     const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
         return content[attr] ? Object.assign(Object.assign({}, memo), { [attr]: content[attr] }) : memo;
     }, {});
-    return Object.assign(Object.assign({}, rule), { users: rule.users ? rule.users : [], teams: rule.teams ? rule.teams : [], includes: makeArray(rule.includes), excludes: makeArray(rule.excludes), includesInPatch: makeArray(rule.includesInPatch) });
+    return Object.assign(Object.assign({}, rule), { users: rule.users ? rule.users : [], teams: rule.teams ? rule.teams : [], includes: makeArray(rule.includes), excludes: makeArray(rule.excludes), includesInPatch: makeArray(rule.includesInPatch), eventJsonPath: makeArray(rule.eventJsonPath) });
 };
 const hasAttribute = (attr, 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -4238,26 +4238,37 @@ const allRequiredRulesHaveMatched = (rules, matchingRules) => {
     const matchingRulesNames = matchingRules.map((rule) => rule.name);
     return requiredRules.every((rule) => matchingRulesNames.includes(rule.name));
 };
+const handleEventJsonPath = (event, patterns) => {
+    let results;
+    patterns.find((pattern) => {
+        const matches = jsonpath_default().query(event, pattern);
+        if (matches.length) {
+            results = matches;
+        }
+        return matches.length;
+    });
+    return results;
+};
 const getMatchingRules = (rules, files, event, patchContent) => {
     const fileNames = files.map(({ filename }) => filename);
     const matchingRules = rules.reduce((memo, rule) => {
-        var _a;
+        var _a, _b;
         let matches = {};
         const extraMatches = includeExcludeFiles({
             includes: rule.includes,
             excludes: rule.excludes,
             fileNames,
         });
-        if (rule.eventJsonPath) {
+        if ((_a = rule.eventJsonPath) === null || _a === void 0 ? void 0 : _a.length) {
             debug('eventJsonPath', rule.eventJsonPath, event.pull_request.body);
             try {
-                matches.eventJsonPath = jsonpath_default().query(event, rule.eventJsonPath);
+                matches.eventJsonPath = handleEventJsonPath(event, rule.eventJsonPath);
             }
             catch (e) {
                 debug('something went wrong with the query:Error:', e);
             }
         }
-        if ((_a = rule.includesInPatch) === null || _a === void 0 ? void 0 : _a.length) {
+        if ((_b = rule.includesInPatch) === null || _b === void 0 ? void 0 : _b.length) {
             debug('includesInPatch');
             matches.includesInPatch = handleIncludesInPath(rule.includesInPatch, patchContent);
         }

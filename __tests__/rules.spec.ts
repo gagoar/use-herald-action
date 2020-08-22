@@ -130,7 +130,7 @@ describe('rules', () => {
             {
               ...validRule,
               teams: [],
-              eventJsonPath: '$[?(@.body.match(/Issue Reference.+#[0-9]+/))].body',
+              eventJsonPath: ['$[?(@.body.match(/Issue Reference.+#[0-9]+/))].body'],
               path: '/some/rule.json',
             },
           ],
@@ -143,7 +143,9 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "eventJsonPath": "$[?(@.body.match(/Issue Reference.+#[0-9]+/))].body",
+            "eventJsonPath": Array [
+              "$[?(@.body.match(/Issue Reference.+#[0-9]+/))].body",
+            ],
             "includes": Array [
               "*.ts",
             ],
@@ -197,7 +199,7 @@ describe('rules', () => {
             {
               ...validRule,
               teams: [],
-              eventJsonPath: '$.pull_request[?(@.login=="gagoar")].login',
+              eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
               path: '/some/rule.json',
             },
           ],
@@ -210,7 +212,9 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "eventJsonPath": "$.pull_request[?(@.login==\\"gagoar\\")].login",
+            "eventJsonPath": Array [
+              "$.pull_request[?(@.login==\\"gagoar\\")].login",
+            ],
             "includes": Array [
               "*.ts",
             ],
@@ -453,7 +457,7 @@ describe('rules', () => {
               ...validRule,
               includes: undefined,
               teams: [],
-              eventJsonPath: '$.pull_request[?(@.login=="gagoar")].login',
+              eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
               path: '/some/rule.json',
             },
           ],
@@ -466,7 +470,9 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
-            "eventJsonPath": "$.pull_request[?(@.login==\\"gagoar\\")].login",
+            "eventJsonPath": Array [
+              "$.pull_request[?(@.login==\\"gagoar\\")].login",
+            ],
             "includes": undefined,
             "matches": Object {
               "eventJsonPath": Array [
@@ -534,7 +540,7 @@ describe('rules', () => {
           ...validRule,
           includes: undefined,
           action: 'assign',
-          eventJsonPath: '$.pull_request[?(@.login=="gagoar")].login',
+          eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
         },
         '/some/badRule.json': {
           ...validRule,
@@ -553,6 +559,7 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
+            "eventJsonPath": Array [],
             "excludes": Array [],
             "includes": Array [
               "*.ts",
@@ -571,6 +578,7 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
+            "eventJsonPath": Array [],
             "excludes": Array [],
             "includes": Array [
               "*.ts",
@@ -586,6 +594,7 @@ describe('rules', () => {
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
+            "eventJsonPath": Array [],
             "excludes": Array [],
             "includes": Array [
               "*.ts",
@@ -601,7 +610,9 @@ describe('rules', () => {
           Object {
             "action": "assign",
             "customMessage": "This is a custom message for a rule",
-            "eventJsonPath": "$.pull_request[?(@.login==\\"gagoar\\")].login",
+            "eventJsonPath": Array [
+              "$.pull_request[?(@.login==\\"gagoar\\")].login",
+            ],
             "excludes": Array [],
             "includes": Array [],
             "includesInPatch": Array [],

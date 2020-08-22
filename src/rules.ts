@@ -59,7 +59,7 @@ export interface Rule {
   includes?: string[];
   excludes?: string[];
   includesInPatch?: string[];
-  eventJsonPath?: string;
+  eventJsonPath?: string[];
   customMessage?: string;
 
   errorLevel?: keyof typeof ErrorLevels;
@@ -82,6 +82,7 @@ const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
     includes: makeArray(rule.includes),
     excludes: makeArray(rule.excludes),
     includesInPatch: makeArray(rule.includesInPatch),
+    eventJsonPath: makeArray(rule.eventJsonPath),
   };
 };
 
@@ -208,6 +209,20 @@ export const allRequiredRulesHaveMatched = (rules: Rule[], matchingRules: Matchi
   const matchingRulesNames = matchingRules.map((rule) => rule.name);
   return requiredRules.every((rule) => matchingRulesNames.includes(rule.name));
 };
+const handleEventJsonPath = (event: Event, patterns: string[]) => {
+  let results;
+
+  patterns.find((pattern) => {
+    const matches = JSONPath.query(event, pattern);
+
+    if (matches.length) {
+      results = matches;
+    }
+
+    return matches.length;
+  });
+  return results;
+};
 export const getMatchingRules = (
   rules: Rule[],
   files: Partial<File> & Required<Pick<File, 'filename'>>[],
@@ -225,10 +240,10 @@ export const getMatchingRules = (
       fileNames,
     });
 
-    if (rule.eventJsonPath) {
+    if (rule.eventJsonPath?.length) {
       debug('eventJsonPath', rule.eventJsonPath, event.pull_request.body);
       try {
-        matches.eventJsonPath = JSONPath.query(event, rule.eventJsonPath);
+        matches.eventJsonPath = handleEventJsonPath(event, rule.eventJsonPath);
       } catch (e) {
         debug('something went wrong with the query:Error:', e);
       }

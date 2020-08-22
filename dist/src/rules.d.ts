@@ -23,7 +23,7 @@ export interface Rule {
     includes?: string[];
     excludes?: string[];
     includesInPatch?: string[];
-    eventJsonPath?: string;
+    eventJsonPath?: string[];
     customMessage?: string;
     errorLevel?: keyof typeof ErrorLevels;
 }
