@@ -1,5 +1,5 @@
 {
   "name": "This rule should not work, because is missing action",
   "customMessage": "This is a custom message for a rule",
-  "users": ["@eeny", "@meeny", "@miny", "@moe"]
+  "users": ["eeny", "meeny", "miny", "moe"]
 }

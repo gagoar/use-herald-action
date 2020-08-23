@@ -20,7 +20,7 @@ describe('handleComment', () => {
 
   it('should publish a comment (pulling 2 pages of comments)', async () => {
     const rule = {
-      users: ['@eeny', '@meeny', '@miny', '@moe'],
+      users: ['eeny', 'meeny', 'miny', 'moe'],
       includes: ['*.ts'],
       action: RuleActions.comment,
       path: 'rules/rule.json',
@@ -85,7 +85,7 @@ describe('handleComment', () => {
 
   it('should not publish the message because is duplicated', async () => {
     const rule = {
-      users: ['@eeny', '@meeny', '@miny', '@moe'],
+      users: ['eeny', 'meeny', 'miny', 'moe'],
       includes: ['*.ts'],
       action: RuleActions.comment,
       path: 'rules/rule.json',

@@ -25,16 +25,18 @@ This action allows you to add comments, reviewers and assignees to a pull reques
 
 ## Table of contents
 
-- [What is `use-herald-action`?](#what-is-use-herald-action)
-  - [Motivation](#motivation)
-- [How to create a rule](#how-to-create-a-rule)
-- [Rule Examples](#rule-examples)
-- [Input parameters](#input-parameters)
-- [Output](#output)
-- [Examples](#examples)
-  - [Basic example](#basic-example)
-  - [Using output](#using-output)
-  - [Using error levels](#using-error-levels)
+- [Use Herald Action](#use-herald-action)
+  - [Table of contents](#table-of-contents)
+  - [What is `use-herald-action`?](#what-is-use-herald-action)
+    - [Motivation](#motivation)
+  - [How to create a rule](#how-to-create-a-rule)
+  - [Rule Examples](#rule-examples)
+  - [Error levels](#error-levels)
+  - [Input parameters](#input-parameters)
+  - [Output](#output)
+  - [Examples](#examples)
+    - [Basic example](#basic-example)
+    - [Using output](#using-output)
 
 <hr>
 
@@ -91,7 +93,7 @@ Every rule can be written in JSON with the following key-value pairs:
 
 ```json
 {
-  "users": ["@eeny", "@meeny", "@miny", "@moe"],
+  "users": ["eeny", "meeny", "miny", "moe"],
   "action": "comment",
   "includes": "*.ts"
 }
@@ -101,7 +103,7 @@ Every rule can be written in JSON with the following key-value pairs:
 
 ```json
 {
-  "teams": ["@myTeam"],
+  "teams": ["myTeam"],
   "action": "comment",
   "includes": "directory/*.ts",
   "excludes": "directory/notThisFile.js"
@@ -112,7 +114,7 @@ Every rule can be written in JSON with the following key-value pairs:
 
 ```json
 {
-  "teams": ["@QATeam"],
+  "teams": ["QATeam"],
   "action": "assign",
   "includes": "integration/*.ts",
   "eventJSONPath": "$..[?(@.title.match("QA"))]"

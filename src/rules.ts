@@ -16,7 +16,9 @@ import { makeArray } from './util/makeArray';
 const debug = logger('rules');
 
 const commentTemplate = (users: string[]): string =>
-  `Hi there, Herald found that given these changes ${users.join(', ')} might want to take a look! \n 
+  `Hi there, Herald found that given these changes ${users
+    .map((user) => `@${user}`)
+    .join(', ')} might want to take a look! \n 
   <!-- herald-use-action -->`;
 
 enum RuleActors {
