@@ -4256,42 +4256,27 @@ const handleEventJsonPath = ({ event, patterns }) => {
     }
     return false;
 };
-// type Matcher = (rule: Rule, options: { event: Event, patch: string[], fileNames: string[] }) => boolean;
-// const matchers: Record<string, Matcher> = {
-//   [RuleMatchers.includes]: (rule, { fileNames }) => handleIncludeExcludeFiles({ includes: rule.includes, excludes: rule.excludes, fileNames }),
-//   [RuleMatchers.eventJsonPath]: (rule, { event }) => handleEventJsonPath({ patterns: rule.eventJsonPath, event }),
-//   [RuleMatchers.includesInPatch]: (rule, { patch }) => handleIncludesInPatch({ patterns: rule.includesInPatch, patch }),
-// }
-// const isMatch = (rule,): boolean => {
-//   for (const matcher of Object.keys(RuleMatchers)) {
-//     matchers[matcher](rule)
-//   }
-// };
+const matchers = {
+    [RuleMatchers.includes]: (rule, { fileNames }) => handleIncludeExcludeFiles({ includes: rule.includes, excludes: rule.excludes, fileNames }),
+    [RuleMatchers.eventJsonPath]: (rule, { event }) => handleEventJsonPath({ patterns: rule.eventJsonPath, event }),
+    [RuleMatchers.includesInPatch]: (rule, { patch }) => handleIncludesInPatch({ patterns: rule.includesInPatch, patch }),
+};
+const isMatch = (rule, options) => {
+    const keyMatchers = Object.keys(RuleMatchers);
+    const matches = keyMatchers
+        .filter((matcher) => { var _a; return (_a = rule[matcher]) === null || _a === void 0 ? void 0 : _a.length; })
+        .map((matcher) => matchers[matcher](rule, options));
+    return matches.length ? matches.every((match) => match === true) : false;
+};
 const getMatchingRules = (rules, files, event, patchContent) => {
     const fileNames = files.map(({ filename }) => filename);
     const matchingRules = rules.reduce((memo, rule) => {
-        var _a, _b;
-        const extraMatches = handleIncludeExcludeFiles({
-            includes: rule.includes,
-            excludes: rule.excludes,
-            fileNames,
-        });
-        if (extraMatches) {
-            return [...memo, Object.assign(Object.assign({}, rule), { matched: extraMatches })];
+        if (isMatch(rule, { event, patch: patchContent, fileNames })) {
+            return [...memo, Object.assign(Object.assign({}, rule), { matched: true })];
         }
-        if ((_a = rule.eventJsonPath) === null || _a === void 0 ? void 0 : _a.length) {
-            const eventJsonPath = handleEventJsonPath({ event, patterns: rule.eventJsonPath });
-            if (eventJsonPath) {
-                return [...memo, Object.assign(Object.assign({}, rule), { matched: eventJsonPath })];
-            }
+        else {
+            return memo;
         }
-        if ((_b = rule.includesInPatch) === null || _b === void 0 ? void 0 : _b.length) {
-            const includesInPatch = handleIncludesInPatch({ patterns: rule.includesInPatch, patch: patchContent });
-            if (includesInPatch) {
-                return [...memo, Object.assign(Object.assign({}, rule), { matched: includesInPatch })];
-            }
-        }
-        return memo;
     }, []);
     return matchingRules;
 };

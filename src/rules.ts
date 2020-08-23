@@ -236,19 +236,24 @@ const handleEventJsonPath: HandleEventJsonPath = ({ event, patterns }) => {
   return false;
 };
 
-// type Matcher = (rule: Rule, options: { event: Event, patch: string[], fileNames: string[] }) => boolean;
+type Matcher = (rule: Rule, options: { event: Event; patch: string[]; fileNames: string[] }) => boolean;
 
-// const matchers: Record<string, Matcher> = {
-//   [RuleMatchers.includes]: (rule, { fileNames }) => handleIncludeExcludeFiles({ includes: rule.includes, excludes: rule.excludes, fileNames }),
-//   [RuleMatchers.eventJsonPath]: (rule, { event }) => handleEventJsonPath({ patterns: rule.eventJsonPath, event }),
-//   [RuleMatchers.includesInPatch]: (rule, { patch }) => handleIncludesInPatch({ patterns: rule.includesInPatch, patch }),
-// }
+const matchers: Record<string, Matcher> = {
+  [RuleMatchers.includes]: (rule, { fileNames }) =>
+    handleIncludeExcludeFiles({ includes: rule.includes, excludes: rule.excludes, fileNames }),
+  [RuleMatchers.eventJsonPath]: (rule, { event }) => handleEventJsonPath({ patterns: rule.eventJsonPath, event }),
+  [RuleMatchers.includesInPatch]: (rule, { patch }) => handleIncludesInPatch({ patterns: rule.includesInPatch, patch }),
+};
 
-// const isMatch = (rule,): boolean => {
-//   for (const matcher of Object.keys(RuleMatchers)) {
-//     matchers[matcher](rule)
-//   }
-// };
+type KeyMatchers = keyof typeof RuleMatchers;
+
+const isMatch: Matcher = (rule, options) => {
+  const keyMatchers = Object.keys(RuleMatchers) as KeyMatchers[];
+  const matches = keyMatchers
+    .filter((matcher) => rule[matcher]?.length)
+    .map((matcher) => matchers[matcher](rule, options));
+  return matches.length ? matches.every((match) => match === true) : false;
+};
 export const getMatchingRules = (
   rules: Rule[],
   files: Partial<File> & Required<Pick<File, 'filename'>>[],
@@ -258,32 +263,11 @@ export const getMatchingRules = (
   const fileNames = files.map(({ filename }) => filename);
 
   const matchingRules = rules.reduce((memo, rule) => {
-    const extraMatches = handleIncludeExcludeFiles({
-      includes: rule.includes,
-      excludes: rule.excludes,
-      fileNames,
-    });
-
-    if (extraMatches) {
-      return [...memo, { ...rule, matched: extraMatches }];
+    if (isMatch(rule, { event, patch: patchContent, fileNames })) {
+      return [...memo, { ...rule, matched: true }];
+    } else {
+      return memo;
     }
-
-    if (rule.eventJsonPath?.length) {
-      const eventJsonPath = handleEventJsonPath({ event, patterns: rule.eventJsonPath });
-
-      if (eventJsonPath) {
-        return [...memo, { ...rule, matched: eventJsonPath }];
-      }
-    }
-
-    if (rule.includesInPatch?.length) {
-      const includesInPatch = handleIncludesInPatch({ patterns: rule.includesInPatch, patch: patchContent });
-      if (includesInPatch) {
-        return [...memo, { ...rule, matched: includesInPatch }];
-      }
-    }
-
-    return memo;
   }, [] as MatchingRule[]);
 
   return matchingRules;
