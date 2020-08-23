@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import PQueue from 'p-queue';
 
 import { composeCommentsForUsers, MatchingRule } from './rules';
@@ -45,7 +44,7 @@ export const handleComment = async (
   prNumber: number,
   matchingRules: MatchingRule[],
   requestConcurrency = 1
-) => {
+): Promise<unknown> => {
   debug('handleComment called with:', matchingRules);
 
   const queue = new PQueue({ concurrency: requestConcurrency });
@@ -57,9 +56,7 @@ export const handleComment = async (
   });
   const comments = rawComments.map(({ body }) => body);
 
-  const onlyNewComments = commentsFromRules.filter(
-    (comment: string) => !comments.includes(comment)
-  );
+  const onlyNewComments = commentsFromRules.filter((comment: string) => !comments.includes(comment));
 
   debug('comments to add:', onlyNewComments);
 

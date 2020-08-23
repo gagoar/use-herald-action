@@ -15,7 +15,7 @@ describe('handleAssignees', () => {
     path: 'rules/rule.json',
     customMessage: 'Custom message',
     teams: [],
-    matches: { glob: ['fileChanged.ts'] },
+    matched: true,
   };
   beforeEach(() => {
     nock.cleanAll();

@@ -144,7 +144,7 @@ export const loadRules = (rulesLocation: string): Rule[] => {
 };
 
 export type MatchingRule = Rule & {
-  matches: Partial<Record<RuleMatchers | 'includeExclude', unknown[]>>;
+  matched: boolean;
 };
 
 type IncludeExcludeFilesParams = {
@@ -153,9 +153,8 @@ type IncludeExcludeFilesParams = {
   fileNames: string[];
 };
 
-const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFilesParams) => {
+const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFilesParams): boolean => {
   debug('includeExcludeFiles...');
-  const matches = {} as MatchingRule['matches'];
 
   let results = [] as string[];
 
@@ -165,7 +164,9 @@ const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFi
       return [...memo, ...matches];
     }, [] as string[]);
 
-    matches[RuleMatchers.includes] = [...new Set(results)];
+    results = [...new Set(results)];
+
+    debug('includes matches', { results, includes });
 
     if (excludes?.length && results.length) {
       const toExclude = excludes.reduce((memo, exclude) => {
@@ -173,17 +174,15 @@ const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFi
         return [...memo, ...matches];
       }, [] as string[]);
       results = results.filter((filename) => !toExclude.includes(filename));
+
+      debug('excludes matches:', { results, excludes });
     }
-    debug('evaluating includes:', matches);
   }
 
-  if (includes?.length && excludes?.length) {
-    return { includeExclude: results };
-  }
-
-  return matches;
+  return !!results.length;
 };
-const handleIncludesInPath = (patterns: string[], patchContent: string[]): string[] => {
+
+const handleIncludesInPath = (patterns: string[], patchContent: string[]): boolean => {
   debug('handleIncludesInPath...');
   const matches = patterns.reduce((memo, pattern) => {
     try {
@@ -197,7 +196,7 @@ const handleIncludesInPath = (patterns: string[], patchContent: string[]): strin
     }
   }, [] as string[]);
 
-  return [...new Set(matches)];
+  return !![...new Set(matches)].length;
 };
 
 export const allRequiredRulesHaveMatched = (rules: Rule[], matchingRules: MatchingRule[]): boolean => {
@@ -211,7 +210,8 @@ export const allRequiredRulesHaveMatched = (rules: Rule[], matchingRules: Matchi
   const matchingRulesNames = matchingRules.map((rule) => rule.name);
   return requiredRules.every((rule) => matchingRulesNames.includes(rule.name));
 };
-const handleEventJsonPath = (event: Event, patterns: string[]) => {
+const handleEventJsonPath = (event: Event, patterns: string[]): boolean => {
+  debug('eventJsonPath', patterns);
   let results;
 
   patterns.find((pattern) => {
@@ -223,7 +223,9 @@ const handleEventJsonPath = (event: Event, patterns: string[]) => {
 
     return matches.length;
   });
-  return results;
+
+  debug('eventJSONPath matches:', results);
+  return !!results;
 };
 export const getMatchingRules = (
   rules: Rule[],
@@ -234,18 +236,23 @@ export const getMatchingRules = (
   const fileNames = files.map(({ filename }) => filename);
 
   const matchingRules = rules.reduce((memo, rule) => {
-    let matches = {} as MatchingRule['matches'];
-
     const extraMatches = includeExcludeFiles({
       includes: rule.includes,
       excludes: rule.excludes,
       fileNames,
     });
 
+    if (extraMatches) {
+      return [...memo, { ...rule, matched: extraMatches }];
+    }
+
     if (rule.eventJsonPath?.length) {
-      debug('eventJsonPath', rule.eventJsonPath, event.pull_request.body);
       try {
-        matches.eventJsonPath = handleEventJsonPath(event, rule.eventJsonPath);
+        const eventJsonPath = handleEventJsonPath(event, rule.eventJsonPath);
+
+        if (eventJsonPath) {
+          return [...memo, { ...rule, matched: eventJsonPath }];
+        }
       } catch (e) {
         debug('something went wrong with the query:Error:', e);
       }
@@ -253,12 +260,13 @@ export const getMatchingRules = (
 
     if (rule.includesInPatch?.length) {
       debug('includesInPatch');
-      matches.includesInPatch = handleIncludesInPath(rule.includesInPatch, patchContent);
+      const includesInPatch = handleIncludesInPath(rule.includesInPatch, patchContent);
+      if (includesInPatch) {
+        return [...memo, { ...rule, matched: includesInPatch }];
+      }
     }
 
-    matches = { ...matches, ...extraMatches };
-
-    return Object.values(matches).some((value) => value?.length) ? [...memo, { ...rule, matches }] : memo;
+    return memo;
   }, [] as MatchingRule[]);
 
   return matchingRules;
