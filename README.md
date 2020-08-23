@@ -25,18 +25,16 @@ This action allows you to add comments, reviewers and assignees to a pull reques
 
 ## Table of contents
 
-- [Use Herald Action](#use-herald-action)
-  - [Table of contents](#table-of-contents)
-  - [What is `use-herald-action`?](#what-is-use-herald-action)
-    - [Motivation](#motivation)
-  - [How to create a rule](#how-to-create-a-rule)
-  - [Rule Examples](#rule-examples)
-  - [Error levels](#error-levels)
-  - [Input parameters](#input-parameters)
-  - [Output](#output)
-  - [Examples](#examples)
-    - [Basic example](#basic-example)
-    - [Using output](#using-output)
+- [What is `use-herald-action`?](#what-is-use-herald-action)
+  - [Motivation](#motivation)
+- [How to create a rule](#how-to-create-a-rule)
+- [Rule Examples](#rule-examples)
+- [Input parameters](#input-parameters)
+- [Output](#output)
+- [Examples](#examples)
+  - [Basic example](#basic-example)
+  - [Using output](#using-output)
+  - [Using error levels](#using-error-levels)
 
 <hr>
 
