@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { Octokit } from '@octokit/rest';
 import PQueue from 'p-queue';
 
@@ -13,7 +12,7 @@ export const handleReviewers = async (
   prNumber: number,
   matchingRules: MatchingRule[],
   requestConcurrency = 1
-) => {
+): Promise<unknown> => {
   const queue = new PQueue({ concurrency: requestConcurrency });
 
   debug('handleReviewers called with:', matchingRules);
@@ -25,9 +24,7 @@ export const handleReviewers = async (
           repo,
           pull_number: prNumber,
           reviewers: matchingRule.users.map((user) => user.replace('@', '')),
-          team_reviewers: matchingRule.teams.map((team) =>
-            team.replace('@', '')
-          ),
+          team_reviewers: matchingRule.teams.map((team) => team.replace('@', '')),
         })
       )
     )
