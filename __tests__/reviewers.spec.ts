@@ -15,7 +15,7 @@ describe('handleReviewers', () => {
     path: 'rules/rule.json',
     customMessage: 'Custom message',
     teams: ['@myTeam'],
-    matches: { glob: ['fileChanged.ts'] },
+    matched: true,
   };
   beforeEach(() => {
     nock.cleanAll();
@@ -25,9 +25,7 @@ describe('handleReviewers', () => {
       .post(`/repos/${owner}/${repo}/pulls/${prIssue}/requested_reviewers`)
       .reply(201, requestedReviewersResponse);
 
-    const response = await handleReviewers(client, owner, repo, prIssue, [
-      rule,
-    ]);
+    const response = await handleReviewers(client, owner, repo, prIssue, [rule]);
 
     expect(response).toMatchInlineSnapshot(`
       Array [
