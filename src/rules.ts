@@ -153,7 +153,7 @@ type IncludeExcludeFilesParams = {
   fileNames: string[];
 };
 
-const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFilesParams): boolean => {
+const handleIncludeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFilesParams): boolean => {
   debug('includeExcludeFiles...');
 
   let results = [] as string[];
@@ -182,12 +182,14 @@ const includeExcludeFiles = ({ includes, excludes, fileNames }: IncludeExcludeFi
   return !!results.length;
 };
 
-const handleIncludesInPath = (patterns: string[], patchContent: string[]): boolean => {
+type HandleIncludesInPatch = (options: { patterns?: string[]; patch: string[] }) => boolean;
+
+const handleIncludesInPatch: HandleIncludesInPatch = ({ patterns, patch }) => {
   debug('handleIncludesInPath...');
-  const matches = patterns.reduce((memo, pattern) => {
+  const matches = patterns?.reduce((memo, pattern) => {
     try {
       const rex = new RegExp(pattern);
-      const matches = patchContent.find((content) => content.match(rex));
+      const matches = patch?.find((content) => content.match(rex));
 
       return matches ? [...memo, matches] : memo;
     } catch (e) {
@@ -210,23 +212,43 @@ export const allRequiredRulesHaveMatched = (rules: Rule[], matchingRules: Matchi
   const matchingRulesNames = matchingRules.map((rule) => rule.name);
   return requiredRules.every((rule) => matchingRulesNames.includes(rule.name));
 };
-const handleEventJsonPath = (event: Event, patterns: string[]): boolean => {
+type HandleEventJsonPath = (options: { event: Event; patterns?: string[] }) => boolean;
+
+const handleEventJsonPath: HandleEventJsonPath = ({ event, patterns }) => {
   debug('eventJsonPath', patterns);
-  let results;
+  try {
+    let results;
+    patterns?.find((pattern) => {
+      const matches = JSONPath.query(event, pattern);
 
-  patterns.find((pattern) => {
-    const matches = JSONPath.query(event, pattern);
+      if (matches.length) {
+        results = matches;
+      }
 
-    if (matches.length) {
-      results = matches;
-    }
+      return matches.length;
+    });
 
-    return matches.length;
-  });
-
-  debug('eventJSONPath matches:', results);
-  return !!results;
+    debug('eventJSONPath matches:', results);
+    return !!results;
+  } catch (e) {
+    debug('eventJsonPath:Error:', e);
+  }
+  return false;
 };
+
+// type Matcher = (rule: Rule, options: { event: Event, patch: string[], fileNames: string[] }) => boolean;
+
+// const matchers: Record<string, Matcher> = {
+//   [RuleMatchers.includes]: (rule, { fileNames }) => handleIncludeExcludeFiles({ includes: rule.includes, excludes: rule.excludes, fileNames }),
+//   [RuleMatchers.eventJsonPath]: (rule, { event }) => handleEventJsonPath({ patterns: rule.eventJsonPath, event }),
+//   [RuleMatchers.includesInPatch]: (rule, { patch }) => handleIncludesInPatch({ patterns: rule.includesInPatch, patch }),
+// }
+
+// const isMatch = (rule,): boolean => {
+//   for (const matcher of Object.keys(RuleMatchers)) {
+//     matchers[matcher](rule)
+//   }
+// };
 export const getMatchingRules = (
   rules: Rule[],
   files: Partial<File> & Required<Pick<File, 'filename'>>[],
@@ -236,7 +258,7 @@ export const getMatchingRules = (
   const fileNames = files.map(({ filename }) => filename);
 
   const matchingRules = rules.reduce((memo, rule) => {
-    const extraMatches = includeExcludeFiles({
+    const extraMatches = handleIncludeExcludeFiles({
       includes: rule.includes,
       excludes: rule.excludes,
       fileNames,
@@ -247,20 +269,15 @@ export const getMatchingRules = (
     }
 
     if (rule.eventJsonPath?.length) {
-      try {
-        const eventJsonPath = handleEventJsonPath(event, rule.eventJsonPath);
+      const eventJsonPath = handleEventJsonPath({ event, patterns: rule.eventJsonPath });
 
-        if (eventJsonPath) {
-          return [...memo, { ...rule, matched: eventJsonPath }];
-        }
-      } catch (e) {
-        debug('something went wrong with the query:Error:', e);
+      if (eventJsonPath) {
+        return [...memo, { ...rule, matched: eventJsonPath }];
       }
     }
 
     if (rule.includesInPatch?.length) {
-      debug('includesInPatch');
-      const includesInPatch = handleIncludesInPath(rule.includesInPatch, patchContent);
+      const includesInPatch = handleIncludesInPatch({ patterns: rule.includesInPatch, patch: patchContent });
       if (includesInPatch) {
         return [...memo, { ...rule, matched: includesInPatch }];
       }
