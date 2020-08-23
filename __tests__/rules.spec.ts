@@ -413,6 +413,70 @@ describe('rules', () => {
       `);
     });
 
+    it('does not matches eventJsonPath because includes does not match', () => {
+      const files = [{ filename: '/some/file.ts' }];
+
+      expect(
+        getMatchingRules(
+          [
+            {
+              ...validRule,
+              includes: ['*.js'],
+              teams: ['eeny'],
+              eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
+              path: '/some/rule.json',
+            },
+          ],
+          files,
+          event,
+          []
+        )
+      ).toMatchObject([]);
+    });
+    it('matches includes && eventJsonPath in the same rule', () => {
+      const files = [{ filename: '/some/file.js' }];
+
+      expect(
+        getMatchingRules(
+          [
+            {
+              ...validRule,
+              includes: ['*.js'],
+              teams: ['eeny'],
+              eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
+              path: '/some/rule.json',
+            },
+          ],
+          files,
+          event,
+          []
+        )
+      ).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "eventJsonPath": Array [
+              "$.pull_request[?(@.login==\\"gagoar\\")].login",
+            ],
+            "includes": Array [
+              "*.js",
+            ],
+            "matched": true,
+            "path": "/some/rule.json",
+            "teams": Array [
+              "eeny",
+            ],
+            "users": Array [
+              "eeny",
+              "meeny",
+              "miny",
+              "moe",
+            ],
+          },
+        ]
+      `);
+    });
     it('matching eventJsonPath', () => {
       const files = [{ filename: '/some/file.js' }];
 
