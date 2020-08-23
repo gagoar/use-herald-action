@@ -20,7 +20,7 @@ const consoleErrorMock = mockConsole('error');
 
 const invalidRule = {
   customMessage: 'This is a custom message for a rule',
-  users: ['@eeny', '@meeny', '@miny', '@moe'],
+  users: ['eeny', 'meeny', 'miny', 'moe'],
 };
 
 const validRule = {
@@ -74,7 +74,7 @@ describe('rules', () => {
         ])
       ).toMatchInlineSnapshot(`
         Array [
-          "Hi there, Herald found that given these changes @eeny, @meeny, @miny, @moe, @awesomeTeam might want to take a look! 
+          "Hi there, Herald found that given these changes @eeny, @meeny, @miny, @moe, @@awesomeTeam might want to take a look! 
          
           <!-- herald-use-action -->",
         ]
@@ -179,10 +179,10 @@ describe('rules', () => {
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
-              "@eeny",
-              "@meeny",
-              "@miny",
-              "@moe",
+              "eeny",
+              "meeny",
+              "miny",
+              "moe",
             ],
           },
         ]
@@ -225,10 +225,10 @@ describe('rules', () => {
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
-              "@eeny",
-              "@meeny",
-              "@miny",
-              "@moe",
+              "eeny",
+              "meeny",
+              "miny",
+              "moe",
             ],
           },
         ]
@@ -270,10 +270,10 @@ describe('rules', () => {
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
-              "@eeny",
-              "@meeny",
-              "@miny",
-              "@moe",
+              "eeny",
+              "meeny",
+              "miny",
+              "moe",
             ],
           },
         ]
@@ -312,10 +312,10 @@ describe('rules', () => {
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
-              "@eeny",
-              "@meeny",
-              "@miny",
-              "@moe",
+              "eeny",
+              "meeny",
+              "miny",
+              "moe",
             ],
           },
         ]
@@ -361,10 +361,10 @@ describe('rules', () => {
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
-              "@eeny",
-              "@meeny",
-              "@miny",
-              "@moe",
+              "eeny",
+              "meeny",
+              "miny",
+              "moe",
             ],
           },
         ]
@@ -405,10 +405,10 @@ describe('rules', () => {
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
-              "@eeny",
-              "@meeny",
-              "@miny",
-              "@moe",
+              "eeny",
+              "meeny",
+              "miny",
+              "moe",
             ],
           },
         ]
@@ -433,10 +433,10 @@ describe('rules', () => {
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
-              "@eeny",
-              "@meeny",
-              "@miny",
-              "@moe",
+              "eeny",
+              "meeny",
+              "miny",
+              "moe",
             ],
           },
         ]
@@ -476,10 +476,10 @@ describe('rules', () => {
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
-              "@eeny",
-              "@meeny",
-              "@miny",
-              "@moe",
+              "eeny",
+              "meeny",
+              "miny",
+              "moe",
             ],
           },
         ]
@@ -562,10 +562,10 @@ describe('rules', () => {
             "path": "/some/rule1.json",
             "teams": Array [],
             "users": Array [
-              "@eeny",
-              "@meeny",
-              "@miny",
-              "@moe",
+              "eeny",
+              "meeny",
+              "miny",
+              "moe",
             ],
           },
           Object {
@@ -609,10 +609,10 @@ describe('rules', () => {
             "path": "/some/rule4.json",
             "teams": Array [],
             "users": Array [
-              "@eeny",
-              "@meeny",
-              "@miny",
-              "@moe",
+              "eeny",
+              "meeny",
+              "miny",
+              "moe",
             ],
           },
         ]

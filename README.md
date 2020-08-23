@@ -91,7 +91,7 @@ Every rule can be written in JSON with the following key-value pairs:
 
 ```json
 {
-  "users": ["@eeny", "@meeny", "@miny", "@moe"],
+  "users": ["eeny", "meeny", "miny", "moe"],
   "action": "comment",
   "includes": "*.ts"
 }
@@ -101,7 +101,7 @@ Every rule can be written in JSON with the following key-value pairs:
 
 ```json
 {
-  "teams": ["@myTeam"],
+  "teams": ["myTeam"],
   "action": "comment",
   "includes": "directory/*.ts",
   "excludes": "directory/notThisFile.js"
@@ -112,7 +112,7 @@ Every rule can be written in JSON with the following key-value pairs:
 
 ```json
 {
-  "teams": ["@QATeam"],
+  "teams": ["QATeam"],
   "action": "assign",
   "includes": "integration/*.ts",
   "eventJSONPath": "$..[?(@.title.match("QA"))]"

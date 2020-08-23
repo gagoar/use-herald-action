@@ -9,7 +9,7 @@ describe('handleAssignees', () => {
   const repo = 'example_repo';
   const prIssue = 1;
   const rule = {
-    users: ['@eeny', '@meeny', '@miny', '@moe'],
+    users: ['eeny', 'meeny', 'miny', 'moe'],
     glob: '*.ts',
     action: RuleActions.review,
     path: 'rules/rule.json',
@@ -25,9 +25,7 @@ describe('handleAssignees', () => {
       .post(`/repos/${owner}/${repo}/issues/${prIssue}/assignees`)
       .reply(201, createAssigneesResponse);
 
-    const response = await handleAssignees(client, owner, repo, prIssue, [
-      rule,
-    ]);
+    const response = await handleAssignees(client, owner, repo, prIssue, [rule]);
 
     expect(response).toMatchInlineSnapshot(`
       Array [
