@@ -252,6 +252,8 @@ const isMatch: Matcher = (rule, options) => {
   const matches = keyMatchers
     .filter((matcher) => rule[matcher]?.length)
     .map((matcher) => matchers[matcher](rule, options));
+
+  debug('isMatch:', { rule, matches });
   return matches.length ? matches.every((match) => match === true) : false;
 };
 export const getMatchingRules = (

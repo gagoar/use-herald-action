@@ -4266,6 +4266,7 @@ const isMatch = (rule, options) => {
     const matches = keyMatchers
         .filter((matcher) => { var _a; return (_a = rule[matcher]) === null || _a === void 0 ? void 0 : _a.length; })
         .map((matcher) => matchers[matcher](rule, options));
+    debug('isMatch:', { rule, matches });
     return matches.length ? matches.every((match) => match === true) : false;
 };
 const getMatchingRules = (rules, files, event, patchContent) => {
