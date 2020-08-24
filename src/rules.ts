@@ -198,7 +198,7 @@ const handleIncludesInPatch: HandleIncludesInPatch = ({ patterns, patch }) => {
     }
   }, [] as string[]);
 
-  return !![...new Set(matches)].length;
+  return !!matches.length;
 };
 
 export const allRequiredRulesHaveMatched = (rules: Rule[], matchingRules: MatchingRule[]): boolean => {
