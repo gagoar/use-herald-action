@@ -51,4 +51,4 @@ jobs:
       - name: build
         run: npm run build
       - name: check if build is different from the committed changes
-        run: git diff-index --quiet HEAD -- || exit 1
+        run: git diff-index --quiet HEAD -- dist/index.js || exit 1
