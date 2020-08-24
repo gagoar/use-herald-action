@@ -14,7 +14,7 @@
     "test": "jest",
     "build": "ncc build index.ts",
     "lint": "eslint index.ts",
-    "version": "auto-changelog --issue-url https://github.com/gagoar/use-herald-action/issue/{id} --merge-url https://github.com/gagoar/use-herald/action/pull/{id} --compare-url https://github.com/gagoar/use-herald-action/compare/{from}...{to}"
+    "version": "auto-changelog -p --issue-url https://github.com/gagoar/use-herald-action/issue/{id} --merge-url https://github.com/gagoar/use-herald/action/pull/{id} --compare-url https://github.com/gagoar/use-herald-action/compare/{from}...{to} && git add CHANGELOG.md"
   },
   "engines": {
     "node": ">12.0.0"
