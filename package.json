@@ -13,7 +13,8 @@
   "scripts": {
     "test": "jest",
     "build": "ncc build index.ts",
-    "lint": "eslint index.ts"
+    "lint": "eslint index.ts",
+    "version": "auto-changelog -p --issue-url https://github.com/gagoar/use-herald-action/issue/{id} --merge-url https://github.com/gagoar/use-herald/action/pull/{id} --compare-url https://github.com/gagoar/use-herald-action/compare/{from}...{to} && git add CHANGELOG.md"
   },
   "engines": {
     "node": ">12.0.0"
@@ -116,6 +117,7 @@
     "@typescript-eslint/parser": "3.9.1",
     "@zeit/ncc": "0.22.3",
     "ajv-keywords": "3.5.2",
+    "auto-changelog": "2.2.0",
     "bufferutil": "4.0.1",
     "canvas": "2.6.1",
     "eslint": "7.7.0",
