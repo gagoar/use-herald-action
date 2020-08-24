@@ -49,4 +49,7 @@ jobs:
         run: |
           npm install
       - name: Build
-        run: npm run build
+        run: npm run Build
+      - name: Check if build is different from the committed changes
+        run: |
+          git diff-index --quiet HEAD -- || exit 1
