@@ -4226,7 +4226,7 @@ const handleIncludesInPatch = ({ patterns, patch }) => {
             return memo;
         }
     }, []);
-    return !![...new Set(matches)].length;
+    return !!(matches === null || matches === void 0 ? void 0 : matches.length);
 };
 const allRequiredRulesHaveMatched = (rules, matchingRules) => {
     const requiredRules = rules.filter((rule) => rule.errorLevel && rule.errorLevel === ErrorLevels.error);
