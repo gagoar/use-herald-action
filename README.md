@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/marketplace/actions/use-herald-action">
-      <img src="https://img.shields.io/badge/Marketplace-v1-undefined.svg?logo=github&logoColor=white&style=flat" alt="GitHub Marketplace" />
+      <img src="https://img.shields.io/badge/Marketplace-v2-undefined.svg?logo=github&logoColor=white&style=flat" alt="GitHub Marketplace" />
     </a>
     <a href="https://github.com/gagoar/use-herald-action/actions">
       <img src="https://github.com/gagoar/use-herald-action/workflows/validation%20on%20Master/badge.svg" alt="Workflow" />
