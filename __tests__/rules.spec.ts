@@ -20,7 +20,7 @@ const consoleErrorMock = mockConsole('error');
 
 const invalidRule = {
   customMessage: 'This is a custom message for a rule',
-  users: ['eeny', 'meeny', 'miny', 'moe'],
+  users: ['eeny', 'meeny@gmail.com', 'miny', 'moe@coursera.org'],
 };
 
 const validRule = {
@@ -69,12 +69,12 @@ describe('rules', () => {
             customMessage: undefined,
             path: '/some/rule1.json',
             matched: true,
-            teams: ['@awesomeTeam'],
+            teams: ['awesomeTeam'],
           },
         ])
       ).toMatchInlineSnapshot(`
         Array [
-          "Hi there, Herald found that given these changes @eeny, @meeny, @miny, @moe, @@awesomeTeam might want to take a look! 
+          "Hi there, Herald found that given these changes @eeny, meeny@gmail.com, @miny, moe@coursera.org, @awesomeTeam might want to take a look! 
          
           <!-- herald-use-action -->",
         ]
@@ -93,7 +93,7 @@ describe('rules', () => {
         ])
       ).toMatchInlineSnapshot(`
         Array [
-          "Hi there, Herald found that given these changes @eeny, @meeny, @miny, @moe might want to take a look! 
+          "Hi there, Herald found that given these changes @eeny, meeny@gmail.com, @miny, moe@coursera.org might want to take a look! 
          
           <!-- herald-use-action -->",
         ]
@@ -154,9 +154,9 @@ describe('rules', () => {
             "teams": Array [],
             "users": Array [
               "eeny",
-              "meeny",
+              "meeny@gmail.com",
               "miny",
-              "moe",
+              "moe@coursera.org",
             ],
           },
         ]
@@ -195,9 +195,9 @@ describe('rules', () => {
             "teams": Array [],
             "users": Array [
               "eeny",
-              "meeny",
+              "meeny@gmail.com",
               "miny",
-              "moe",
+              "moe@coursera.org",
             ],
           },
         ]
@@ -236,9 +236,9 @@ describe('rules', () => {
             "teams": Array [],
             "users": Array [
               "eeny",
-              "meeny",
+              "meeny@gmail.com",
               "miny",
-              "moe",
+              "moe@coursera.org",
             ],
           },
         ]
@@ -274,9 +274,9 @@ describe('rules', () => {
             "teams": Array [],
             "users": Array [
               "eeny",
-              "meeny",
+              "meeny@gmail.com",
               "miny",
-              "moe",
+              "moe@coursera.org",
             ],
           },
         ]
@@ -341,9 +341,9 @@ describe('rules', () => {
             "teams": Array [],
             "users": Array [
               "eeny",
-              "meeny",
+              "meeny@gmail.com",
               "miny",
-              "moe",
+              "moe@coursera.org",
             ],
           },
         ]
@@ -380,9 +380,9 @@ describe('rules', () => {
             "teams": Array [],
             "users": Array [
               "eeny",
-              "meeny",
+              "meeny@gmail.com",
               "miny",
-              "moe",
+              "moe@coursera.org",
             ],
           },
         ]
@@ -404,9 +404,9 @@ describe('rules', () => {
             "teams": Array [],
             "users": Array [
               "eeny",
-              "meeny",
+              "meeny@gmail.com",
               "miny",
-              "moe",
+              "moe@coursera.org",
             ],
           },
         ]
@@ -469,9 +469,9 @@ describe('rules', () => {
             ],
             "users": Array [
               "eeny",
-              "meeny",
+              "meeny@gmail.com",
               "miny",
-              "moe",
+              "moe@coursera.org",
             ],
           },
         ]
@@ -509,9 +509,9 @@ describe('rules', () => {
             "teams": Array [],
             "users": Array [
               "eeny",
-              "meeny",
+              "meeny@gmail.com",
               "miny",
-              "moe",
+              "moe@coursera.org",
             ],
           },
         ]
@@ -596,9 +596,9 @@ describe('rules', () => {
             "teams": Array [],
             "users": Array [
               "eeny",
-              "meeny",
+              "meeny@gmail.com",
               "miny",
-              "moe",
+              "moe@coursera.org",
             ],
           },
           Object {
@@ -647,9 +647,9 @@ describe('rules', () => {
             "teams": Array [],
             "users": Array [
               "eeny",
-              "meeny",
+              "meeny@gmail.com",
               "miny",
-              "moe",
+              "moe@coursera.org",
             ],
           },
         ]

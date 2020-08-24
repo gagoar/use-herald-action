@@ -15,9 +15,15 @@ import { makeArray } from './util/makeArray';
 
 const debug = logger('rules');
 
+const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+const formatUser = (handleOrEmail: string) => {
+  return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
+};
+
 const commentTemplate = (users: string[]): string =>
   `Hi there, Herald found that given these changes ${users
-    .map((user) => `@${user}`)
+    .map((user) => formatUser(user))
     .join(', ')} might want to take a look! \n 
   <!-- herald-use-action -->`;
 
