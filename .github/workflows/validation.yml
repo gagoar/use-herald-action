@@ -50,7 +50,6 @@ jobs:
           npm install
       - name: build
         run: npm run build
-      - name: event location
       - uses: actions/upload-artifact@master
         with:
           name: binary
