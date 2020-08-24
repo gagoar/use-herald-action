@@ -2,5 +2,5 @@
   "name": "This is a rule to add @gagoar as a assignee when workflow changes",
   "includes": ["src/*.ts"],
   "action": "assign",
-  "users": ["@gagoar"]
+  "users": ["gagoar"]
 }
