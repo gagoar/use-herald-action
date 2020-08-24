@@ -26,7 +26,7 @@ describe('handleComment', () => {
       path: 'rules/rule.json',
       customMessage: 'Custom message',
       teams: [],
-      matches: { includes: ['fileChanged.ts'] },
+      matched: true,
     };
 
     const github = nock('https://api.github.com')
@@ -91,7 +91,7 @@ describe('handleComment', () => {
       path: 'rules/rule.json',
       customMessage: 'Custom message',
       teams: [],
-      matches: { includes: ['fileChanged.ts'] },
+      matched: true,
     };
 
     nock('https://api.github.com')

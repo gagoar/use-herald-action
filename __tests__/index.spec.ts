@@ -131,11 +131,7 @@ describe('use-herald-action', () => {
                   "*.ts",
                 ],
                 "includesInPatch": Array [],
-                "matches": Object {
-                  "includes": Array [
-                    "file1.ts",
-                  ],
-                },
+                "matched": true,
                 "name": "rule1.json",
                 "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
                 "teams": Array [],

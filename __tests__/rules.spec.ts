@@ -44,7 +44,7 @@ describe('rules', () => {
           {
             ...validRule,
             path: '/some/rule.json',
-            matches: { includes: ['/some/file.ts'] },
+            matched: true,
             teams: [],
           },
         ])
@@ -61,14 +61,14 @@ describe('rules', () => {
             ...validRule,
             customMessage: undefined,
             path: '/some/rule.json',
-            matches: { includes: ['/some/file.ts'] },
+            matched: true,
             teams: [],
           },
           {
             ...validRule,
             customMessage: undefined,
             path: '/some/rule1.json',
-            matches: { includes: ['/some/file.ts'] },
+            matched: true,
             teams: ['@awesomeTeam'],
           },
         ])
@@ -87,7 +87,7 @@ describe('rules', () => {
             ...validRule,
             customMessage: undefined,
             path: '/some/rule.json',
-            matches: { includes: ['/some/file.ts'] },
+            matched: true,
             teams: [],
           },
         ])
@@ -149,35 +149,7 @@ describe('rules', () => {
             "includes": Array [
               "*.ts",
             ],
-            "matches": Object {
-              "eventJsonPath": Array [
-                "<!--- write down the issue related to this  PR-->
-
-        **Issue Reference**:  #66 
-
-        ## Description
-
-        adding rules to validate the PR contains an Issue Reference, so it's always linked. 
-
-        ## Motivation and Context
-
-        This is something that will save time when a PR is opened. 
-
-        ## How Has This Been Tested?
-
-        Creating this PR and editing it. given that it reacts to opened and edited. 
-        some edit
-
-        ## Checklist:
-        - [x] My code follows the code style of this project.
-        - [ ] My change requires a change to the documentation.
-        - [ ] I have updated the documentation accordingly.
-        ",
-              ],
-              "includes": Array [
-                "/some/file.ts",
-              ],
-            },
+            "matched": true,
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
@@ -218,14 +190,7 @@ describe('rules', () => {
             "includes": Array [
               "*.ts",
             ],
-            "matches": Object {
-              "eventJsonPath": Array [
-                "gagoar",
-              ],
-              "includes": Array [
-                "/some/file.ts",
-              ],
-            },
+            "matched": true,
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
@@ -266,11 +231,7 @@ describe('rules', () => {
             "includes": Array [
               "*.ts",
             ],
-            "matches": Object {
-              "includeExclude": Array [
-                "/some/file.ts",
-              ],
-            },
+            "matched": true,
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
@@ -308,11 +269,7 @@ describe('rules', () => {
             "includes": Array [
               "*.ts",
             ],
-            "matches": Object {
-              "includes": Array [
-                "/some/file.ts",
-              ],
-            },
+            "matched": true,
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
@@ -324,6 +281,28 @@ describe('rules', () => {
           },
         ]
       `);
+    });
+    it('does not match includesInPatch (with more than one pattern)', () => {
+      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }, { filename: '/some/README.md' }];
+      expect(
+        getMatchingRules(
+          [
+            {
+              ...validRule,
+              includes: undefined,
+              includesInPatch: ['/noMatch/'],
+              teams: [],
+              path: '/some/rule.json',
+            },
+          ],
+          files,
+          event,
+          [
+            '@@ -132,7 +132,7 @@ module simon @@ -1000,7 +1000,7 @@ module gago',
+            '@@ -132,7 +132,7 @@ module jon @@ -1000,7 +1000,7 @@ module heart',
+          ]
+        )
+      ).toMatchObject([]);
     });
     it('matching includesInPatch (with more than one pattern)', () => {
       const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }, { filename: '/some/README.md' }];
@@ -357,11 +336,7 @@ describe('rules', () => {
               "/noMatch/",
               "*",
             ],
-            "matches": Object {
-              "includesInPatch": Array [
-                "@@ -132,7 +132,7 @@ module simon @@ -1000,7 +1000,7 @@ module gago",
-              ],
-            },
+            "matched": true,
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
@@ -400,12 +375,7 @@ describe('rules', () => {
               "*.md",
               ".gitignore",
             ],
-            "matches": Object {
-              "includes": Array [
-                "/some/file.ts",
-                "/some/README.md",
-              ],
-            },
+            "matched": true,
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
@@ -429,11 +399,7 @@ describe('rules', () => {
             "includes": Array [
               "*.ts",
             ],
-            "matches": Object {
-              "includes": Array [
-                "/some/file.ts",
-              ],
-            },
+            "matched": true,
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
@@ -447,6 +413,70 @@ describe('rules', () => {
       `);
     });
 
+    it('does not matches eventJsonPath because includes does not match', () => {
+      const files = [{ filename: '/some/file.ts' }];
+
+      expect(
+        getMatchingRules(
+          [
+            {
+              ...validRule,
+              includes: ['*.js'],
+              teams: ['eeny'],
+              eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
+              path: '/some/rule.json',
+            },
+          ],
+          files,
+          event,
+          []
+        )
+      ).toMatchObject([]);
+    });
+    it('matches includes && eventJsonPath in the same rule', () => {
+      const files = [{ filename: '/some/file.js' }];
+
+      expect(
+        getMatchingRules(
+          [
+            {
+              ...validRule,
+              includes: ['*.js'],
+              teams: ['eeny'],
+              eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
+              path: '/some/rule.json',
+            },
+          ],
+          files,
+          event,
+          []
+        )
+      ).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "eventJsonPath": Array [
+              "$.pull_request[?(@.login==\\"gagoar\\")].login",
+            ],
+            "includes": Array [
+              "*.js",
+            ],
+            "matched": true,
+            "path": "/some/rule.json",
+            "teams": Array [
+              "eeny",
+            ],
+            "users": Array [
+              "eeny",
+              "meeny",
+              "miny",
+              "moe",
+            ],
+          },
+        ]
+      `);
+    });
     it('matching eventJsonPath', () => {
       const files = [{ filename: '/some/file.js' }];
 
@@ -474,11 +504,7 @@ describe('rules', () => {
               "$.pull_request[?(@.login==\\"gagoar\\")].login",
             ],
             "includes": undefined,
-            "matches": Object {
-              "eventJsonPath": Array [
-                "gagoar",
-              ],
-            },
+            "matched": true,
             "path": "/some/rule.json",
             "teams": Array [],
             "users": Array [
