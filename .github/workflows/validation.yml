@@ -50,9 +50,3 @@ jobs:
           npm install
       - name: build
         run: npm run build
-      - uses: actions/upload-artifact@master
-        with:
-          name: binary
-          path: dist/index.js
-      - name: check if build is different from the committed changes
-        run: git diff --exit-code --name-status dist/index.js
