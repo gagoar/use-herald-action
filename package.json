@@ -97,7 +97,7 @@
   },
   "author": "Gago <xeroice@gmail.com>",
   "dependencies": {
-    "@actions/core": "1.2.4",
+    "@actions/core": "1.2.5",
     "@octokit/rest": "18.0.4",
     "debug": "4.1.1",
     "envalid": "6.0.2",
