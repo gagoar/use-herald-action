@@ -3,6 +3,8 @@ export const OUTPUT_NAME = 'appliedRules';
 export const FILE_ENCODING = 'utf8';
 export enum SUPPORTED_EVENT_TYPES {
   PULL_REQUEST = 'pull_request',
+
+  PULL_REQUEST_TARGET = 'pull_request_target',
   push = 'push',
 }
 interface Commit {
