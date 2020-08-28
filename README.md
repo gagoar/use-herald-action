@@ -31,6 +31,7 @@ This action allows you to add comments, reviewers and assignees to a pull reques
 - [Rule Examples](#rule-examples)
 - [Input parameters](#input-parameters)
 - [Output](#output)
+- [Events](#events)
 - [Examples](#examples)
   - [Basic example](#basic-example)
   - [Using output](#using-output)
@@ -155,6 +156,16 @@ Note that you will have to parse the output using the [`fromJSON` function](http
 See the [Using Output](#Using-Output) example for more details.
 
 <hr>
+
+## Events
+
+Use herald action can only be used on the following events:
+
+- `pull_request`
+- `pull_request_target`
+- `push`
+
+Any other event will produce an error in the workflow
 
 ## Examples
 
