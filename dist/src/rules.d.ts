@@ -3,7 +3,8 @@ import { RestEndpointMethodTypes } from '@octokit/rest';
 export declare enum RuleActions {
     comment = "comment",
     review = "review",
-    assign = "assign"
+    assign = "assign",
+    label = "label"
 }
 declare enum ErrorLevels {
     none = "none",
@@ -20,6 +21,7 @@ export interface Rule {
     includesInPatch?: string[];
     eventJsonPath?: string[];
     customMessage?: string;
+    labels?: string[];
     errorLevel?: keyof typeof ErrorLevels;
 }
 declare type File = RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files'][0];

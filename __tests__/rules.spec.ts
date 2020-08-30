@@ -568,11 +568,24 @@ describe('rules', () => {
           action: 'assign',
           eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
         },
+        '/some/rule5.json': {
+          ...validRule,
+          action: 'label',
+          users: undefined,
+          teams: undefined,
+          labels: ['feature-label', 'another-label'],
+        },
         '/some/badRule.json': {
           ...validRule,
           customMessage: undefined,
           teams: undefined,
           users: undefined,
+        },
+        '/some/badLabelRule.json': {
+          ...validRule,
+          action: 'label',
+          users: undefined,
+          teams: undefined,
         },
       };
       sync.mockReturnValue(Object.keys(rawRules));
@@ -651,6 +664,24 @@ describe('rules', () => {
               "miny",
               "moe@coursera.org",
             ],
+          },
+          Object {
+            "action": "label",
+            "customMessage": "This is a custom message for a rule",
+            "eventJsonPath": Array [],
+            "excludes": Array [],
+            "includes": Array [
+              "*.ts",
+            ],
+            "includesInPatch": Array [],
+            "labels": Array [
+              "feature-label",
+              "another-label",
+            ],
+            "name": "rule5.json",
+            "path": "/some/rule5.json",
+            "teams": Array [],
+            "users": Array [],
           },
         ]
       `);

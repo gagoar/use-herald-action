@@ -8,6 +8,7 @@ import { env } from './environment';
 
 import { Octokit } from '@octokit/rest';
 import { handleAssignees } from './assignees';
+import { handleLabels } from './labels';
 import { handleReviewers } from './reviewers';
 import { loadJSONFile } from './util/loadJSONFile';
 import { isEventSupported } from './util/isEventSupported';
@@ -27,6 +28,7 @@ const actionsMap = {
   [RuleActions.comment]: handleComment,
   [RuleActions.assign]: handleAssignees,
   [RuleActions.review]: handleReviewers,
+  [RuleActions.label]: handleLabels,
 };
 
 type ActionName = keyof typeof RuleActions;
