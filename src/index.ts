@@ -115,21 +115,25 @@ export const main = async (): Promise<void> => {
 
           debug('groupNames', groupNames);
 
-          await Promise.all([
-            groupNames.map((actionName: ActionName) => {
-              const action = actionsMap[RuleActions[actionName]];
+          try {
+            await Promise.all([
+              groupNames.map((actionName: ActionName) => {
+                const action = actionsMap[RuleActions[actionName]];
 
-              return action(
-                client,
-                owner,
-                repo,
-                prNumber,
-                groupedRulesByAction[RuleActions[actionName]],
-                rules,
-                headSha
-              );
-            }),
-          ]);
+                return action(
+                  client,
+                  owner,
+                  repo,
+                  prNumber,
+                  groupedRulesByAction[RuleActions[actionName]],
+                  rules,
+                  headSha
+                );
+              }),
+            ]);
+          } catch (e) {
+            debug('Promises Failed', e);
+          }
         }
       }
 

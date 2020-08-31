@@ -20362,12 +20362,17 @@ const main = async () => {
                 if (matchingRules.length) {
                     const groupNames = Object.keys(groupedRulesByAction);
                     src_debug('groupNames', groupNames);
-                    await Promise.all([
-                        groupNames.map((actionName) => {
-                            const action = actionsMap[RuleActions[actionName]];
-                            return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions[actionName]], rules, headSha);
-                        }),
-                    ]);
+                    try {
+                        await Promise.all([
+                            groupNames.map((actionName) => {
+                                const action = actionsMap[RuleActions[actionName]];
+                                return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions[actionName]], rules, headSha);
+                            }),
+                        ]);
+                    }
+                    catch (e) {
+                        src_debug('Promises Failed', e);
+                    }
                 }
             }
             Object(core.setOutput)(OUTPUT_NAME, groupedRulesByAction);
