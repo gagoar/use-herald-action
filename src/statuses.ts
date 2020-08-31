@@ -23,7 +23,7 @@ export const handleStatus = async (
 
   const statusActionRules = rules.filter(({ action }) => action == RuleActions.status);
 
-  const result = await Promise.all(
+  return Promise.all(
     statusActionRules.map((rule) =>
       queue.add(() =>
         client.repos.createCommitStatus({
@@ -40,7 +40,4 @@ export const handleStatus = async (
       )
     )
   );
-
-  debug('result:', result);
-  return result;
 };

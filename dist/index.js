@@ -20228,7 +20228,7 @@ const handleStatus = async (client, owner, repo, _prNumber, matchingRules, rules
     const queue = new dist_default.a({ concurrency: requestConcurrency });
     statuses_debug('called with:', matchingRules);
     const statusActionRules = rules.filter(({ action }) => action == RuleActions.status);
-    const result = await Promise.all(statusActionRules.map((rule) => queue.add(() => client.repos.createCommitStatus({
+    return Promise.all(statusActionRules.map((rule) => queue.add(() => client.repos.createCommitStatus({
         owner,
         repo,
         sha,
@@ -20239,8 +20239,6 @@ const handleStatus = async (client, owner, repo, _prNumber, matchingRules, rules
             ? CommitStatus.SUCCESS
             : CommitStatus.FAILURE,
     }))));
-    statuses_debug('result:', result);
-    return result;
 };
 
 // CONCATENATED MODULE: ./src/comment.ts
