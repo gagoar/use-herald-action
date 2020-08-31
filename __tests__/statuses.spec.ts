@@ -3,6 +3,7 @@ import { Octokit } from '@octokit/rest';
 import nock from 'nock';
 import { RuleActions } from '../src/rules';
 import createStatusRequest from '../__mocks__/scenarios/create_status.json';
+
 describe('handleReviewers', () => {
   const client = new Octokit();
   const owner = 'gagoar';
