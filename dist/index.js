@@ -20233,7 +20233,7 @@ const handleStatus = async (client, owner, repo, _prNumber, matchingRules, rules
         repo,
         sha,
         description: rule.name,
-        context: 'use-herald-action',
+        context: `use-herald-action/${rule.name}`,
         state: matchingRules.find((matchingRule) => lodash_isequal_default()(matchingRule, Object.assign(Object.assign({}, rule), { matched: true })))
             ? CommitStatus.SUCCESS
             : CommitStatus.FAILURE,

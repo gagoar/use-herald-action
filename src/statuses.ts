@@ -28,7 +28,7 @@ export const handleStatus = async (
     repo,
     sha,
     description: rule.name,
-    context: 'use-herald-action',
+    context: `use-herald-action/${rule.name}`,
     state: matchingRules.find((matchingRule) => isEqual(matchingRule, { ...rule, matched: true }))
       ? CommitStatus.SUCCESS
       : CommitStatus.FAILURE,
