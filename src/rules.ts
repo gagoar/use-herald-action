@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { sync } from 'fast-glob';
 import { basename } from 'path';
-import { Event } from './util/constants';
+import { Event, EMAIL_REGEX } from './util/constants';
 import { env } from './environment';
 import minimatch from 'minimatch';
 import groupBy from 'lodash.groupby';
@@ -14,8 +14,6 @@ import { logger } from './util/debug';
 import { makeArray } from './util/makeArray';
 
 const debug = logger('rules');
-
-const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const formatUser = (handleOrEmail: string) => {
   return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
@@ -36,6 +34,8 @@ enum RuleExtras {
   customMessage = 'customMessage',
   name = 'name',
   errorLevel = 'errorLevel',
+
+  labels = 'labels',
 }
 enum RuleMatchers {
   includesInPatch = 'includesInPatch',
@@ -52,6 +52,8 @@ export enum RuleActions {
   comment = 'comment',
   review = 'review',
   assign = 'assign',
+
+  label = 'label',
 }
 
 enum ErrorLevels {
@@ -69,6 +71,8 @@ export interface Rule {
   includesInPatch?: string[];
   eventJsonPath?: string[];
   customMessage?: string;
+
+  labels?: string[];
 
   errorLevel?: keyof typeof ErrorLevels;
 }
@@ -113,8 +117,8 @@ const isValidRawRule = (content: unknown): content is RawRule => {
   const hasActors =
     hasTeams ||
     hasUsers ||
-    (hasAttribute('customMessage', content) && !!content.customMessage && content.action === RuleActions.comment);
-
+    (hasAttribute('customMessage', content) && !!content.customMessage && content.action === RuleActions.comment) ||
+    (hasAttribute('labels', content) && !!content.labels && content.action === RuleActions.label);
   const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
 
   debug('validation:', {

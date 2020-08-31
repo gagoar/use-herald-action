@@ -1,0 +1,6 @@
+{
+  "name": "This is a rule to add a label when herald rules are changed",
+  "includes": ["herald_rules/*"],
+  "action": "label",
+  "labels": ["herald-rules-changed"]
+}
