@@ -3,6 +3,7 @@ import { RestEndpointMethodTypes } from '@octokit/rest';
 export declare enum RuleActions {
     comment = "comment",
     review = "review",
+    status = "status",
     assign = "assign",
     label = "label"
 }

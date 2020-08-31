@@ -1,6 +1,6 @@
 import PQueue from 'p-queue';
 
-import { composeCommentsForUsers, MatchingRule } from './rules';
+import { composeCommentsForUsers, MatchingRule, Rule } from './rules';
 
 import { maxPerPage } from './util/constants';
 
@@ -43,6 +43,8 @@ export const handleComment = async (
   repo: string,
   prNumber: number,
   matchingRules: MatchingRule[],
+  _rules: Rule[],
+  _sha: string,
   requestConcurrency = 1
 ): Promise<unknown> => {
   debug('handleComment called with:', matchingRules);

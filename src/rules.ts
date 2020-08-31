@@ -51,8 +51,8 @@ interface StringIndexSignatureInterface {
 export enum RuleActions {
   comment = 'comment',
   review = 'review',
+  status = 'status',
   assign = 'assign',
-
   label = 'label',
 }
 
@@ -118,7 +118,8 @@ const isValidRawRule = (content: unknown): content is RawRule => {
     hasTeams ||
     hasUsers ||
     (hasAttribute('customMessage', content) && !!content.customMessage && content.action === RuleActions.comment) ||
-    (hasAttribute('labels', content) && !!content.labels && content.action === RuleActions.label);
+    (hasAttribute('labels', content) && !!content.labels && content.action === RuleActions.label) ||
+    (hasAttribute('action', content) && content.action === RuleActions.status);
   const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
 
   debug('validation:', {
@@ -266,6 +267,7 @@ const isMatch: Matcher = (rule, options) => {
   debug('isMatch:', { rule, matches });
   return matches.length ? matches.every((match) => match === true) : false;
 };
+
 export const getMatchingRules = (
   rules: Rule[],
   files: Partial<File> & Required<Pick<File, 'filename'>>[],
@@ -289,6 +291,7 @@ enum TypeOfComments {
   standalone = 'standalone',
   combined = 'combined',
 }
+
 export const composeCommentsForUsers = (matchingRules: MatchingRule[]): string[] => {
   const groups = groupBy(matchingRules, (rule) =>
     rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined

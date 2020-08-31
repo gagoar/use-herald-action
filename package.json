@@ -99,11 +99,13 @@
   "dependencies": {
     "@actions/core": "1.2.5",
     "@octokit/rest": "18.0.4",
+    "@types/lodash.isequal": "^4.5.5",
     "debug": "4.1.1",
     "envalid": "6.0.2",
     "fast-glob": "3.2.4",
     "jsonpath": "1.0.2",
     "lodash.groupby": "4.6.0",
+    "lodash.isequal": "^4.5.0",
     "minimatch": "3.0.4",
     "p-queue": "6.6.1"
   },

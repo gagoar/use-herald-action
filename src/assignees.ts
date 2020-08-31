@@ -1,5 +1,5 @@
 import { Octokit } from '@octokit/rest';
-import { MatchingRule } from './rules';
+import { MatchingRule, Rule } from './rules';
 import PQueue from 'p-queue';
 import { logger } from './util/debug';
 
@@ -11,6 +11,8 @@ export const handleAssignees = async (
   repo: string,
   prNumber: number,
   matchingRules: MatchingRule[],
+  _rules: Rule[],
+  _sha: string,
   requestConcurrency = 1
 ): Promise<unknown> => {
   const queue = new PQueue({ concurrency: requestConcurrency });

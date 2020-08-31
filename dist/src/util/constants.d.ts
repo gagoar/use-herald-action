@@ -2,6 +2,10 @@ export declare const maxPerPage = 100;
 export declare const OUTPUT_NAME = "appliedRules";
 export declare const FILE_ENCODING = "utf8";
 export declare const EMAIL_REGEX: RegExp;
+export declare enum CommitStatus {
+    SUCCESS = "success",
+    FAILURE = "failure"
+}
 export declare enum SUPPORTED_EVENT_TYPES {
     PULL_REQUEST = "pull_request",
     PULL_REQUEST_TARGET = "pull_request_target",

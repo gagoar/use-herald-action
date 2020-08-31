@@ -1,6 +1,5 @@
 import { getInput, setOutput, setFailed } from '@actions/core';
 import groupBy from 'lodash.groupby';
-import { handleComment } from './comment';
 import { loadRules, getMatchingRules, RuleActions, allRequiredRulesHaveMatched } from './rules';
 import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES } from './util/constants';
 import { logger } from './util/debug';
@@ -10,6 +9,8 @@ import { Octokit } from '@octokit/rest';
 import { handleAssignees } from './assignees';
 import { handleLabels } from './labels';
 import { handleReviewers } from './reviewers';
+import { handleStatus } from './statuses';
+import { handleComment } from './comment';
 import { loadJSONFile } from './util/loadJSONFile';
 import { isEventSupported } from './util/isEventSupported';
 
@@ -25,6 +26,7 @@ export enum Props {
 }
 
 const actionsMap = {
+  [RuleActions.status]: handleStatus,
   [RuleActions.comment]: handleComment,
   [RuleActions.assign]: handleAssignees,
   [RuleActions.review]: handleReviewers,
@@ -117,7 +119,15 @@ export const main = async (): Promise<void> => {
             groupNames.map((actionName: ActionName) => {
               const action = actionsMap[RuleActions[actionName]];
 
-              return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions[actionName]]);
+              return action(
+                client,
+                owner,
+                repo,
+                prNumber,
+                groupedRulesByAction[RuleActions[actionName]],
+                rules,
+                headSha
+              );
             }),
           ]);
         }
