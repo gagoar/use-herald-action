@@ -1,6 +1,6 @@
 {
-  "name": "This is a rule adds workflow label when workflows are changed",
-  "includes": [".github/workflows/*"],
+  "name": "This is a rule to add a label when herald rules are changed",
+  "includes": ["herald_rules/*"],
   "action": "label",
-  "labels": ["workflow"]
+  "labels": ["herald-rules-changed"]
 }
