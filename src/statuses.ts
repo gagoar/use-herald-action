@@ -1,6 +1,6 @@
 import { Octokit } from '@octokit/rest';
 import { MatchingRule, Rule, RuleActions } from './rules';
-import isEqual from 'lodash.isEqual';
+import isEqual from 'lodash.isequal';
 import PQueue from 'p-queue';
 import { logger } from './util/debug';
 import { CommitStatus } from './util/constants';
