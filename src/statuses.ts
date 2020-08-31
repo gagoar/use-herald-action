@@ -23,20 +23,17 @@ export const handleStatus = async (
 
   const statusActionRules = rules.filter(({ action }) => action == RuleActions.status);
 
-  return Promise.all(
-    statusActionRules.map((rule) =>
-      queue.add(() =>
-        client.repos.createCommitStatus({
-          owner,
-          repo,
-          sha,
-          description: rule.name,
-          context: 'use-herald-action',
-          state: matchingRules.find((matchingRule) => isEqual(matchingRule, { ...rule, matched: true }))
-            ? CommitStatus.SUCCESS
-            : CommitStatus.FAILURE,
-        })
-      )
-    )
-  );
+  const statuses = statusActionRules.map((rule) => ({
+    owner,
+    repo,
+    sha,
+    description: rule.name,
+    context: 'use-herald-action',
+    state: matchingRules.find((matchingRule) => isEqual(matchingRule, { ...rule, matched: true }))
+      ? CommitStatus.SUCCESS
+      : CommitStatus.FAILURE,
+  }));
+
+  debug('statuses', statuses);
+  return Promise.all(statuses.map((status) => queue.add(() => client.repos.createCommitStatus(status))));
 };
