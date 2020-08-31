@@ -25,7 +25,7 @@ describe('handleAssignees', () => {
       .post(`/repos/${owner}/${repo}/issues/${prIssue}/assignees`)
       .reply(201, createAssigneesResponse);
 
-    const response = await handleAssignees(client, owner, repo, prIssue, [rule]);
+    const response = await handleAssignees(client, owner, repo, prIssue, [rule], [], '');
 
     expect(response).toMatchInlineSnapshot(`
       Array [

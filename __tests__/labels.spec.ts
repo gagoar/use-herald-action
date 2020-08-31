@@ -21,7 +21,7 @@ describe('handleLabels', () => {
     nock.cleanAll();
   });
   it('should skip the api call when no labels are provided', async () => {
-    const response = await handleLabels(client, owner, repo, prIssue, [{ ...rule, labels: [] }]);
+    const response = await handleLabels(client, owner, repo, prIssue, [{ ...rule, labels: [] }], [], '');
     expect(response).toBe(undefined);
   });
 
@@ -30,7 +30,7 @@ describe('handleLabels', () => {
       .post(`/repos/${owner}/${repo}/issues/${prIssue}/labels`)
       .reply(200, createLabelsResponse);
 
-    const response = await handleLabels(client, owner, repo, prIssue, [rule]);
+    const response = await handleLabels(client, owner, repo, prIssue, [rule], [], '');
 
     expect(response).toMatchInlineSnapshot(`
       Object {

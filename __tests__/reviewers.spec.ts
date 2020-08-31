@@ -25,7 +25,7 @@ describe('handleReviewers', () => {
       .post(`/repos/${owner}/${repo}/pulls/${prIssue}/requested_reviewers`)
       .reply(201, requestedReviewersResponse);
 
-    const response = await handleReviewers(client, owner, repo, prIssue, [rule]);
+    const response = await handleReviewers(client, owner, repo, prIssue, [rule], [], '');
 
     expect(response).toMatchInlineSnapshot(`
       Array [
