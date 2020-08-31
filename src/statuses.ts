@@ -30,7 +30,6 @@ export const handleStatus = async (
           owner,
           repo,
           sha,
-          target_url: rule.path,
           description: rule.name,
           context: 'use-herald-action',
           state: matchingRules.find((matchingRule) => isEqual(matchingRule, { ...rule, matched: true }))

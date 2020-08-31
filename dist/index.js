@@ -20232,7 +20232,6 @@ const handleStatus = async (client, owner, repo, _prNumber, matchingRules, rules
         owner,
         repo,
         sha,
-        target_url: rule.path,
         description: rule.name,
         context: 'use-herald-action',
         state: matchingRules.find((matchingRule) => lodash_isequal_default()(matchingRule, Object.assign(Object.assign({}, rule), { matched: true })))
@@ -20362,17 +20361,12 @@ const main = async () => {
                 if (matchingRules.length) {
                     const groupNames = Object.keys(groupedRulesByAction);
                     src_debug('groupNames', groupNames);
-                    try {
-                        await Promise.all([
-                            groupNames.map((actionName) => {
-                                const action = actionsMap[RuleActions[actionName]];
-                                return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions[actionName]], rules, headSha);
-                            }),
-                        ]);
-                    }
-                    catch (e) {
-                        src_debug('Promises Failed', e);
-                    }
+                    await Promise.all([
+                        groupNames.map((actionName) => {
+                            const action = actionsMap[RuleActions[actionName]];
+                            return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions[actionName]], rules, headSha);
+                        }),
+                    ]);
                 }
             }
             Object(core.setOutput)(OUTPUT_NAME, groupedRulesByAction);
