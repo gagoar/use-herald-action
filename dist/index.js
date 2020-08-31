@@ -11533,8 +11533,12 @@ const handleLabels = async (client, owner, repo, prNumber, matchingRules, reques
     labels_debug('called with:', matchingRules);
     const labels = matchingRules
         .filter(({ labels }) => labels)
-        .reduce((memo, labels) => [...memo, ...makeArray(labels)], []);
+        .reduce((memo, { labels }) => [...memo, ...makeArray(labels)], []);
     labels_debug('labels', labels);
+    if (!labels.length) {
+        labels_debug('no labels where found');
+        return undefined;
+    }
     const result = await queue.add(() => client.issues.addLabels({
         owner,
         repo,

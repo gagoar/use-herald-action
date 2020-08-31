@@ -17,11 +17,17 @@ export const handleLabels = async (
   const queue = new PQueue({ concurrency: requestConcurrency });
 
   debug('called with:', matchingRules);
+
   const labels = matchingRules
     .filter(({ labels }) => labels)
-    .reduce((memo, labels) => [...memo, ...makeArray(labels)], [] as string[]);
+    .reduce((memo, { labels }) => [...memo, ...makeArray(labels)], [] as string[]);
 
   debug('labels', labels);
+
+  if (!labels.length) {
+    debug('no labels where found');
+    return undefined;
+  }
   const result = await queue.add(() =>
     client.issues.addLabels({
       owner,

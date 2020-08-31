@@ -1,0 +1,6 @@
+{
+  "name": "This is a rule adds workflow label when workflows are changed",
+  "includes": [".github/workflows/*"],
+  "action": "label",
+  "labels": ["workflow"]
+}
