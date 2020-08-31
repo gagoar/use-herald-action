@@ -130,7 +130,10 @@ describe('rules', () => {
             {
               ...validRule,
               teams: [],
-              eventJsonPath: ['$[?(@.body.match(/Issue Reference.+#[0-9]+/))].body'],
+              eventJsonPath: [
+                '$[?(!@.body.match(/Issue Reference.+:/i))].body',
+                '$[?(@.body.match(/Issue Reference.+#[0-9]+/i))].body',
+              ],
               path: '/some/rule.json',
             },
           ],
@@ -144,7 +147,8 @@ describe('rules', () => {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
             "eventJsonPath": Array [
-              "$[?(@.body.match(/Issue Reference.+#[0-9]+/))].body",
+              "$[?(!@.body.match(/Issue Reference.+:/i))].body",
+              "$[?(@.body.match(/Issue Reference.+#[0-9]+/i))].body",
             ],
             "includes": Array [
               "*.ts",
