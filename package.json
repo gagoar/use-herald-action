@@ -125,7 +125,7 @@
     "husky": "4.2.5",
     "jest": "26.4.2",
     "jest-mock-process": "1.4.0",
-    "lint-staged": "10.2.13",
+    "lint-staged": "10.3.0",
     "ncc": "0.3.6",
     "nock": "13.0.4",
     "prettier": "2.1.1",
