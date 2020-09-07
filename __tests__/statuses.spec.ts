@@ -2,8 +2,19 @@ import { handleStatus } from '../src/statuses';
 import { Octokit } from '@octokit/rest';
 import nock from 'nock';
 import { RuleActions } from '../src/rules';
+import { env } from '../src/environment';
 import createStatusRequest from '../__mocks__/scenarios/create_status.json';
 
+jest.mock('../src/environment', () => {
+  const { env } = jest.requireActual('../src/environment');
+
+  return {
+    env: {
+      ...env,
+      GITHUB_WORKSPACE: '/full/path',
+    },
+  };
+});
 describe('handleReviewers', () => {
   const client = new Octokit();
   const owner = 'gagoar';
@@ -14,12 +25,18 @@ describe('handleReviewers', () => {
     glob: '*.ts',
     action: RuleActions.status,
     blobURL: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/rules/rule.json',
-    path: 'rules/rule.json',
+    path: `${env.GITHUB_WORKSPACE}/rules/rule.json`,
     users: [],
     teams: [],
   };
 
-  const rule2 = { ...rule, name: 'it should have js files in the PR', glob: '*.js' };
+  const rule2 = {
+    ...rule,
+    path: `${env.GITHUB_WORKSPACE}/rules/rule1.json`,
+    name: 'it should have js files in the PR',
+    glob: '*.js',
+  };
+
   beforeEach(() => {
     nock.cleanAll();
   });
@@ -38,6 +55,15 @@ describe('handleReviewers', () => {
         const { target_url, description, state, context } = body;
         cb(null, { ...createStatusRequest, target_url, description, state, context });
       });
+
+    const files = [
+      {
+        filename: 'rules/rule.json',
+        blob_url:
+          'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/rules/rule.json',
+      },
+    ];
+
     const response = await handleStatus(client, {
       owner,
       repo,
@@ -45,8 +71,8 @@ describe('handleReviewers', () => {
       matchingRules: [{ ...rule, matched: true }],
       rules: [rule, rule2],
       sha,
-      base: '',
-      files: [],
+      base: '6dcb09b5b57875f334f61aebed695e2e4193d111',
+      files,
     });
 
     expect(response).toMatchInlineSnapshot(`
@@ -80,6 +106,7 @@ describe('handleReviewers', () => {
             "id": 1,
             "node_id": "MDY6U3RhdHVzMQ==",
             "state": "success",
+            "target_url": "https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/rules/rule.json",
             "updated_at": "2012-07-20T01:19:13Z",
             "url": "https://api.github.com/repos/gagoar/example_repo/statuses/6dcb09b5b57875f334f61aebed695e2e4193db5e",
           },
@@ -118,6 +145,7 @@ describe('handleReviewers', () => {
             "id": 1,
             "node_id": "MDY6U3RhdHVzMQ==",
             "state": "failure",
+            "target_url": "https://github.com/gagoar/example_repo/blob/6dcb09b5b57875f334f61aebed695e2e4193d111/rules/rule1.json",
             "updated_at": "2012-07-20T01:19:13Z",
             "url": "https://api.github.com/repos/gagoar/example_repo/statuses/6dcb09b5b57875f334f61aebed695e2e4193db5e",
           },

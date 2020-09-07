@@ -20228,17 +20228,25 @@ var lodash_isequal_default = /*#__PURE__*/__webpack_require__.n(lodash_isequal);
 
 
 
-const statuses_debug = logger('status');
-const handleStatus = async (client, { owner, repo, matchingRules, rules, sha }, requestConcurrency = 1) => {
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
+
+const statuses_debug = logger('statuses');
+const statuses_getBlobURL = (filename, files, baseBlobPath, base) => {
+    statuses_debug('getBlobURL', filename, files, baseBlobPath, base);
+    const file = files.find((file) => filename.match(file.filename));
+    return file ? file.blob_url : `${baseBlobPath}/${base}/${filename.replace(`${env.GITHUB_WORKSPACE}/`, '')}`;
+};
+const handleStatus = async (client, { owner, repo, matchingRules, rules, base, sha, files }, requestConcurrency = 1) => {
     statuses_debug('called with:', matchingRules);
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
     const statusActionRules = rules.filter(({ action }) => action == RuleActions.status);
+    const baseBlobPath = `https://github.com/${owner}/${repo}/blob`;
     const statuses = statusActionRules.map((rule) => ({
         owner,
         repo,
         sha,
         description: rule.name,
         context: `herald/${rule.name}`,
+        target_url: statuses_getBlobURL(rule.path, files, baseBlobPath, base),
         state: matchingRules.find((matchingRule) => lodash_isequal_default()(matchingRule, Object.assign(Object.assign({}, rule), { matched: true })))
             ? CommitStatus.SUCCESS
             : CommitStatus.FAILURE,

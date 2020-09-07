@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { sync } from 'fast-glob';
 import { basename } from 'path';
-import { Event, EMAIL_REGEX } from './util/constants';
+import { Event, EMAIL_REGEX, RuleFile } from './util/constants';
 import { env } from './environment';
 import minimatch from 'minimatch';
 import groupBy from 'lodash.groupby';
-
-import { RestEndpointMethodTypes } from '@octokit/rest';
 
 import JSONPath from 'jsonpath';
 import { loadJSONFile } from './util/loadJSONFile';
@@ -75,8 +73,6 @@ export interface Rule {
 
   errorLevel?: keyof typeof ErrorLevels;
 }
-
-type File = RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files'][0];
 
 type RawRule = Rule & { users?: string[]; teams?: string[] };
 
@@ -273,8 +269,6 @@ const getBlobURL = (filename: string, files: RuleFile[], baseBlobPath: string) =
 
   return file ? file.blob_url : `${baseBlobPath}/${filename.replace(`${env.GITHUB_WORKSPACE}/`, '')}`;
 };
-
-type RuleFile = Partial<File> & Required<Pick<File, 'filename' | 'blob_url'>>;
 
 export const getMatchingRules = (
   rules: Rule[],

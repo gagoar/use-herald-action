@@ -1,11 +1,11 @@
 import { getInput, setOutput, setFailed } from '@actions/core';
 import groupBy from 'lodash.groupby';
 import { loadRules, getMatchingRules, RuleActions, allRequiredRulesHaveMatched, MatchingRule, Rule } from './rules';
-import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES } from './util/constants';
+import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES, RuleFile } from './util/constants';
 import { logger } from './util/debug';
 import { env } from './environment';
 
-import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
+import { Octokit } from '@octokit/rest';
 import { handleAssignees } from './assignees';
 import { handleLabels } from './labels';
 import { handleReviewers } from './reviewers';
@@ -25,8 +25,7 @@ export enum Props {
   base = 'base',
 }
 
-type OctokitFile = RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files'][0];
-type ActionInput = {
+export type ActionInput = {
   owner: string;
   repo: string;
   prNumber: number;
@@ -34,9 +33,8 @@ type ActionInput = {
   rules: Rule[];
   sha: string;
   base: string;
-  files: OctokitFile[];
+  files: RuleFile[];
 };
-
 export type ActionMapInput = (
   client: InstanceType<typeof Octokit>,
   options: ActionInput,

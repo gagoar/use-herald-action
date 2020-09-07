@@ -1,3 +1,4 @@
+import { RestEndpointMethodTypes } from '@octokit/rest';
 export declare const maxPerPage = 100;
 export declare const OUTPUT_NAME = "appliedRules";
 export declare const FILE_ENCODING = "utf8";
@@ -34,4 +35,6 @@ export interface Event {
     pull_request: PullRequest;
     repository: Repository;
 }
+export declare type OctokitFile = RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files'][0];
+export declare type RuleFile = Partial<OctokitFile> & Required<Pick<OctokitFile, 'filename' | 'blob_url'>>;
 export {};
