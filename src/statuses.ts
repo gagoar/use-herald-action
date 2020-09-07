@@ -1,5 +1,4 @@
 import { RuleActions } from './rules';
-import isEqual from 'lodash.isequal';
 import PQueue from 'p-queue';
 import { logger } from './util/debug';
 import { CommitStatus, RuleFile } from './util/constants';
@@ -20,7 +19,10 @@ export const handleStatus: ActionMapInput = async (
   { owner, repo, matchingRules, rules, base, sha, files },
   requestConcurrency = 1
 ): Promise<unknown> => {
-  debug('called with:', matchingRules);
+  debug(
+    'called with:',
+    matchingRules.map((rule) => rule.path)
+  );
 
   const queue = new PQueue({ concurrency: requestConcurrency });
 
@@ -34,7 +36,7 @@ export const handleStatus: ActionMapInput = async (
     description: rule.name,
     context: `herald/${rule.name}`,
     target_url: getBlobURL(rule.path, files, baseBlobPath, base),
-    state: matchingRules.find((matchingRule) => isEqual(matchingRule, { ...rule, matched: true }))
+    state: matchingRules.find((matchingRule) => matchingRule.path === rule.path)
       ? CommitStatus.SUCCESS
       : CommitStatus.FAILURE,
   }));
