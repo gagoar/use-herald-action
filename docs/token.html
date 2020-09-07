@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<head> </head>
+
+<body>
+  <div id="status">
+    Validating app...
+  </div>
+</body>
+
+<script src="./getParams.js"></script>
+
+<script>
+  // Get URL parameters
+  const { code } = getParams(window.location.href);
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', `https://api.github.com/app-manifests/${code}/conversions`, true);
+  xhr.send();
+
+  xhr.onreadystatechange = () => {
+    console.log('onreadystatechange');
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      document.getElementById('status').innerHTML = 'Your app is now set up!';
+    }
+  };
+</script>
