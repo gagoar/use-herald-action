@@ -1,5 +1,5 @@
 {
-  "name": "Validate that the template has a Description",
+  "name": "The template has a Description",
   "action": "status",
   "eventJsonPath": ["$[?(@.body.match(/## Description/i))].body"]
 }
