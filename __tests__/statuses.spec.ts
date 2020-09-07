@@ -81,7 +81,7 @@ describe('handleReviewers', () => {
         Object {
           "data": Object {
             "avatar_url": "https://github.com/images/error/hubot_happy.gif",
-            "context": "herald/it should have ts files in the PR",
+            "context": "Herald/it should have ts files in the PR",
             "created_at": "2012-07-20T01:19:13Z",
             "creator": Object {
               "avatar_url": "https://github.com/images/error/gagoar_happy.gif",
@@ -120,7 +120,7 @@ describe('handleReviewers', () => {
         Object {
           "data": Object {
             "avatar_url": "https://github.com/images/error/hubot_happy.gif",
-            "context": "herald/it should have js files in the PR",
+            "context": "Herald/it should have js files in the PR",
             "created_at": "2012-07-20T01:19:13Z",
             "creator": Object {
               "avatar_url": "https://github.com/images/error/gagoar_happy.gif",
