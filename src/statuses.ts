@@ -1,7 +1,7 @@
 import { RuleActions } from './rules';
 import PQueue from 'p-queue';
 import { logger } from './util/debug';
-import { CommitStatus, RuleFile } from './util/constants';
+import { CommitStatus, RuleFile, STATUS_DESCRIPTION_COPY } from './util/constants';
 import type { ActionMapInput } from './index';
 import { env } from './environment';
 
@@ -33,7 +33,7 @@ export const handleStatus: ActionMapInput = async (
     owner,
     repo,
     sha,
-    description: rule.name,
+    description: rule.description ? rule.description : STATUS_DESCRIPTION_COPY,
     context: `herald/${rule.name}`,
     target_url: getBlobURL(rule.path, files, baseBlobPath, base),
     state: matchingRules.find((matchingRule) => matchingRule.path === rule.path)

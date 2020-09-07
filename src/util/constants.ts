@@ -3,7 +3,7 @@ import { RestEndpointMethodTypes } from '@octokit/rest';
 export const maxPerPage = 100;
 export const OUTPUT_NAME = 'appliedRules';
 export const FILE_ENCODING = 'utf8';
-
+export const STATUS_DESCRIPTION_COPY = 'You can see the rule by clicking on Details';
 export const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 export enum CommitStatus {
   SUCCESS = 'success',

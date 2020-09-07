@@ -19852,6 +19852,7 @@ var external_path_ = __webpack_require__(622);
 const maxPerPage = 100;
 const OUTPUT_NAME = 'appliedRules';
 const FILE_ENCODING = 'utf8';
+const STATUS_DESCRIPTION_COPY = 'You can see the rule by clicking on Details';
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 var CommitStatus;
 (function (CommitStatus) {
@@ -19965,6 +19966,7 @@ var RuleExtras;
     RuleExtras["name"] = "name";
     RuleExtras["errorLevel"] = "errorLevel";
     RuleExtras["labels"] = "labels";
+    RuleExtras["description"] = "description";
 })(RuleExtras || (RuleExtras = {}));
 var RuleMatchers;
 (function (RuleMatchers) {
@@ -20239,7 +20241,7 @@ const handleStatus = async (client, { owner, repo, matchingRules, rules, base, s
         owner,
         repo,
         sha,
-        description: rule.name,
+        description: rule.description ? rule.description : STATUS_DESCRIPTION_COPY,
         context: `herald/${rule.name}`,
         target_url: statuses_getBlobURL(rule.path, files, baseBlobPath, base),
         state: matchingRules.find((matchingRule) => matchingRule.path === rule.path)

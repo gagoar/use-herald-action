@@ -22,6 +22,7 @@ export interface Rule {
     eventJsonPath?: string[];
     customMessage?: string;
     labels?: string[];
+    description?: string;
     errorLevel?: keyof typeof ErrorLevels;
 }
 export declare const loadRules: (rulesLocation: string) => Rule[];

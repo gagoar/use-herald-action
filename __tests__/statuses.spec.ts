@@ -33,6 +33,7 @@ describe('handleReviewers', () => {
   const rule2 = {
     ...rule,
     path: `${env.GITHUB_WORKSPACE}/rules/rule1.json`,
+    description: 'Description for this rule',
     name: 'it should have js files in the PR',
     glob: '*.js',
   };
@@ -102,7 +103,7 @@ describe('handleReviewers', () => {
               "type": "User",
               "url": "https://api.github.com/users/gagoar",
             },
-            "description": "it should have ts files in the PR",
+            "description": "You can see the rule by clicking on Details",
             "id": 1,
             "node_id": "MDY6U3RhdHVzMQ==",
             "state": "success",
@@ -141,7 +142,7 @@ describe('handleReviewers', () => {
               "type": "User",
               "url": "https://api.github.com/users/gagoar",
             },
-            "description": "it should have js files in the PR",
+            "description": "Description for this rule",
             "id": 1,
             "node_id": "MDY6U3RhdHVzMQ==",
             "state": "failure",

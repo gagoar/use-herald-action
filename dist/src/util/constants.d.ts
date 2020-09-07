@@ -2,6 +2,7 @@ import { RestEndpointMethodTypes } from '@octokit/rest';
 export declare const maxPerPage = 100;
 export declare const OUTPUT_NAME = "appliedRules";
 export declare const FILE_ENCODING = "utf8";
+export declare const STATUS_DESCRIPTION_COPY = "You can see the rule by clicking on Details";
 export declare const EMAIL_REGEX: RegExp;
 export declare enum CommitStatus {
     SUCCESS = "success",

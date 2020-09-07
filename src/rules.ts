@@ -33,6 +33,8 @@ enum RuleExtras {
   errorLevel = 'errorLevel',
 
   labels = 'labels',
+
+  description = 'description',
 }
 enum RuleMatchers {
   includesInPatch = 'includesInPatch',
@@ -70,6 +72,8 @@ export interface Rule {
   customMessage?: string;
 
   labels?: string[];
+
+  description?: string;
 
   errorLevel?: keyof typeof ErrorLevels;
 }
