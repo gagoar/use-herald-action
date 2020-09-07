@@ -1,13 +1,53 @@
 <!DOCTYPE html>
 
 <head>
-  <title>Foobar</title>
+  <title>Create an app for your organization!</title>
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+    crossorigin="anonymous"
+  />
+  <style>
+    #form-container form {
+      text-align: center;
+    }
+
+    #org-name-input {
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
-  Test
-  <form action="https://cyamonide.github.io/use-herald-action/create" method="GET">
-    Name of your organization: <input type="text" name="orgName" value="" />
-    <input type="submit" value="Create my app!" />
-  </form>
+  <div class="container" id="form-container">
+    <h3>Start by entering your organization's name here.</h3>
+    <form action="https://cyamonide.github.io/use-herald-action/create" method="GET">
+      <input
+        id="org-name-input"
+        class="form-control form-control-lg"
+        type="text"
+        name="orgName"
+        placeholder="Organization Name"
+      />
+      <br />
+      <button type="submit" class="btn btn-primary mb-2">Create app</button>
+    </form>
+  </div>
+
+  <script
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"
+  ></script>
 </body>
