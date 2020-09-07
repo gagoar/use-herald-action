@@ -20161,7 +20161,7 @@ var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
 
 
 const assignees_debug = logger('assignees');
-const handleAssignees = async (client, owner, repo, prNumber, matchingRules, _rules, _sha, requestConcurrency = 1) => {
+const handleAssignees = async (client, { owner, repo, prNumber, matchingRules }, requestConcurrency = 1) => {
     const queue = new dist_default.a({ concurrency: requestConcurrency });
     assignees_debug('handleAssignees called with:', matchingRules);
     const result = await Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.issues.addAssignees({
@@ -20179,7 +20179,7 @@ const handleAssignees = async (client, owner, repo, prNumber, matchingRules, _ru
 
 
 const labels_debug = logger('labels');
-const handleLabels = async (client, owner, repo, prNumber, matchingRules, _rules, _sha, requestConcurrency = 1) => {
+const handleLabels = async (client, { owner, repo, prNumber, matchingRules }, requestConcurrency = 1) => {
     const queue = new dist_default.a({ concurrency: requestConcurrency });
     labels_debug('called with:', matchingRules);
     const labels = matchingRules
@@ -20204,7 +20204,7 @@ const handleLabels = async (client, owner, repo, prNumber, matchingRules, _rules
 
 
 const reviewers_debug = logger('reviewers');
-const handleReviewers = async (client, owner, repo, prNumber, matchingRules, _rules, _sha, requestConcurrency = 1) => {
+const handleReviewers = async (client, { owner, repo, prNumber, matchingRules }, requestConcurrency = 1) => {
     const queue = new dist_default.a({ concurrency: requestConcurrency });
     reviewers_debug('handleReviewers called with:', matchingRules);
     const result = await Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.pulls.requestReviewers({
@@ -20229,7 +20229,7 @@ var lodash_isequal_default = /*#__PURE__*/__webpack_require__.n(lodash_isequal);
 
 
 const statuses_debug = logger('status');
-const handleStatus = async (client, owner, repo, _prNumber, matchingRules, rules, sha, requestConcurrency = 1) => {
+const handleStatus = async (client, { owner, repo, matchingRules, rules, sha }, requestConcurrency = 1) => {
     const queue = new dist_default.a({ concurrency: requestConcurrency });
     statuses_debug('called with:', matchingRules);
     const statusActionRules = rules.filter(({ action }) => action == RuleActions.status);
@@ -20238,7 +20238,7 @@ const handleStatus = async (client, owner, repo, _prNumber, matchingRules, rules
         repo,
         sha,
         description: rule.name,
-        context: `use-herald-action/${rule.name}`,
+        context: `herald/${rule.name}`,
         state: matchingRules.find((matchingRule) => lodash_isequal_default()(matchingRule, Object.assign(Object.assign({}, rule), { matched: true })))
             ? CommitStatus.SUCCESS
             : CommitStatus.FAILURE,
@@ -20264,7 +20264,7 @@ const getAllComments = async (client, params) => {
         return [...comments, ...moreComments];
     }
 };
-const handleComment = async (client, owner, repo, prNumber, matchingRules, _rules, _sha, requestConcurrency = 1) => {
+const handleComment = async (client, { owner, repo, prNumber, matchingRules }, requestConcurrency = 1) => {
     comment_debug('handleComment called with:', matchingRules);
     const queue = new dist_default.a({ concurrency: requestConcurrency });
     const commentsFromRules = composeCommentsForUsers(matchingRules);
@@ -20371,7 +20371,17 @@ const main = async () => {
                     await Promise.all([
                         groupNames.map((actionName) => {
                             const action = actionsMap[RuleActions[actionName]];
-                            return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions[actionName]], rules, headSha);
+                            const options = {
+                                owner,
+                                repo,
+                                prNumber,
+                                matchingRules: groupedRulesByAction[RuleActions[actionName]],
+                                rules,
+                                sha: headSha,
+                                base: baseSha,
+                                files,
+                            };
+                            return action(client, options);
                         }),
                     ]);
                 }

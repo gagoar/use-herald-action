@@ -1,11 +1,12 @@
 import PQueue from 'p-queue';
 
-import { composeCommentsForUsers, MatchingRule, Rule } from './rules';
+import { composeCommentsForUsers } from './rules';
 
 import { maxPerPage } from './util/constants';
 
 import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
 import { logger } from './util/debug';
+import { ActionMapInput } from '.';
 type AllCommentsParams = RestEndpointMethodTypes['issues']['listComments']['parameters'];
 
 type AllCommentsResponse = RestEndpointMethodTypes['issues']['listComments']['response'];
@@ -37,14 +38,9 @@ const getAllComments = async (
   }
 };
 
-export const handleComment = async (
-  client: InstanceType<typeof Octokit>,
-  owner: string,
-  repo: string,
-  prNumber: number,
-  matchingRules: MatchingRule[],
-  _rules: Rule[],
-  _sha: string,
+export const handleComment: ActionMapInput = async (
+  client,
+  { owner, repo, prNumber, matchingRules },
   requestConcurrency = 1
 ): Promise<unknown> => {
   debug('handleComment called with:', matchingRules);

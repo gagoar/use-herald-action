@@ -1,19 +1,13 @@
-import { Octokit } from '@octokit/rest';
-import { MatchingRule, Rule } from './rules';
 import PQueue from 'p-queue';
 import { logger } from './util/debug';
 import { makeArray } from './util/makeArray';
+import { ActionMapInput } from '.';
 
 const debug = logger('labels');
 
-export const handleLabels = async (
-  client: InstanceType<typeof Octokit>,
-  owner: string,
-  repo: string,
-  prNumber: number,
-  matchingRules: MatchingRule[],
-  _rules: Rule[],
-  _sha: string,
+export const handleLabels: ActionMapInput = async (
+  client,
+  { owner, repo, prNumber, matchingRules },
   requestConcurrency = 1
 ): Promise<unknown> => {
   const queue = new PQueue({ concurrency: requestConcurrency });

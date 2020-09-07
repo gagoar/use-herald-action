@@ -8,7 +8,7 @@ describe('handleReviewers', () => {
   const client = new Octokit();
   const owner = 'gagoar';
   const repo = 'example_repo';
-  const prIssue = 1;
+  const prNumber = 1;
   const rule = {
     name: 'it should have ts files in the PR',
     glob: '*.ts',
@@ -38,14 +38,23 @@ describe('handleReviewers', () => {
         const { target_url, description, state, context } = body;
         cb(null, { ...createStatusRequest, target_url, description, state, context });
       });
-    const response = await handleStatus(client, owner, repo, prIssue, [{ ...rule, matched: true }], [rule, rule2], sha);
+    const response = await handleStatus(client, {
+      owner,
+      repo,
+      prNumber,
+      matchingRules: [{ ...rule, matched: true }],
+      rules: [rule, rule2],
+      sha,
+      base: '',
+      files: [],
+    });
 
     expect(response).toMatchInlineSnapshot(`
       Array [
         Object {
           "data": Object {
             "avatar_url": "https://github.com/images/error/hubot_happy.gif",
-            "context": "use-herald-action/it should have ts files in the PR",
+            "context": "herald/it should have ts files in the PR",
             "created_at": "2012-07-20T01:19:13Z",
             "creator": Object {
               "avatar_url": "https://github.com/images/error/gagoar_happy.gif",
@@ -83,7 +92,7 @@ describe('handleReviewers', () => {
         Object {
           "data": Object {
             "avatar_url": "https://github.com/images/error/hubot_happy.gif",
-            "context": "use-herald-action/it should have js files in the PR",
+            "context": "herald/it should have js files in the PR",
             "created_at": "2012-07-20T01:19:13Z",
             "creator": Object {
               "avatar_url": "https://github.com/images/error/gagoar_happy.gif",

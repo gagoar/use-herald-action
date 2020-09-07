@@ -7,7 +7,7 @@ describe('handleLabels', () => {
   const client = new Octokit();
   const owner = 'gagoar';
   const repo = 'example_repo';
-  const prIssue = 1;
+  const prNumber = 1;
   const rule = {
     glob: '*.ts',
     action: RuleActions.label,
@@ -22,16 +22,34 @@ describe('handleLabels', () => {
     nock.cleanAll();
   });
   it('should skip the api call when no labels are provided', async () => {
-    const response = await handleLabels(client, owner, repo, prIssue, [{ ...rule, labels: [] }], [], '');
+    const response = await handleLabels(client, {
+      owner,
+      repo,
+      prNumber,
+      matchingRules: [{ ...rule, labels: [] }],
+      rules: [],
+      sha: '',
+      base: '',
+      files: [],
+    });
     expect(response).toBe(undefined);
   });
 
   it('should add labels', async () => {
     const github = nock('https://api.github.com')
-      .post(`/repos/${owner}/${repo}/issues/${prIssue}/labels`)
+      .post(`/repos/${owner}/${repo}/issues/${prNumber}/labels`)
       .reply(200, createLabelsResponse);
 
-    const response = await handleLabels(client, owner, repo, prIssue, [rule], [], '');
+    const response = await handleLabels(client, {
+      owner,
+      repo,
+      prNumber,
+      matchingRules: [rule],
+      rules: [],
+      sha: '',
+      base: '',
+      files: [],
+    });
 
     expect(response).toMatchInlineSnapshot(`
       Object {

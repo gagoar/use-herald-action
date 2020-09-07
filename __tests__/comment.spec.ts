@@ -40,7 +40,16 @@ describe('handleComment', () => {
 
     github.post(`/repos/${owner}/${repo}/issues/${prIssue}/comments`).reply(200, createIssueResponse);
 
-    const response = await handleComment(client, owner, repo, 1, [rule], [], '');
+    const response = await handleComment(client, {
+      owner,
+      repo,
+      prNumber: 1,
+      matchingRules: [rule],
+      rules: [],
+      sha: '',
+      base: '',
+      files: [],
+    });
 
     expect(response).toMatchInlineSnapshot(`
       Array [
@@ -100,7 +109,16 @@ describe('handleComment', () => {
       .get(`/repos/${owner}/${repo}/issues/${prIssue}/comments?page=1&per_page=2`)
       .reply(200, [getCommentsResponse[0]]);
 
-    const response = await handleComment(client, owner, repo, 1, [{ ...rule, customMessage: 'first comment' }], [], '');
+    const response = await handleComment(client, {
+      owner,
+      repo,
+      prNumber: 1,
+      matchingRules: [{ ...rule, customMessage: 'first comment' }],
+      base: '',
+      sha: '',
+      files: [],
+      rules: [],
+    });
 
     expect(response).toMatchInlineSnapshot('Array []');
   });

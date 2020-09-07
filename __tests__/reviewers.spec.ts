@@ -7,7 +7,7 @@ describe('handleReviewers', () => {
   const client = new Octokit();
   const owner = 'gagoar';
   const repo = 'example_repo';
-  const prIssue = 1;
+  const prNumber = 1;
   const rule = {
     users: ['@eeny', '@meeny', '@miny', '@moe'],
     glob: '*.ts',
@@ -23,10 +23,19 @@ describe('handleReviewers', () => {
   });
   it('should add reviewers', async () => {
     const github = nock('https://api.github.com')
-      .post(`/repos/${owner}/${repo}/pulls/${prIssue}/requested_reviewers`)
+      .post(`/repos/${owner}/${repo}/pulls/${prNumber}/requested_reviewers`)
       .reply(201, requestedReviewersResponse);
 
-    const response = await handleReviewers(client, owner, repo, prIssue, [rule], [], '');
+    const response = await handleReviewers(client, {
+      owner,
+      repo,
+      prNumber,
+      matchingRules: [rule],
+      rules: [],
+      base: '',
+      sha: '',
+      files: [],
+    });
 
     expect(response).toMatchInlineSnapshot(`
       Array [

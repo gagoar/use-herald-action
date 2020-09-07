@@ -1,20 +1,15 @@
-import { Octokit } from '@octokit/rest';
-import { MatchingRule, Rule, RuleActions } from './rules';
+import { RuleActions } from './rules';
 import isEqual from 'lodash.isequal';
 import PQueue from 'p-queue';
 import { logger } from './util/debug';
 import { CommitStatus } from './util/constants';
+import type { ActionMapInput } from './index';
 
 const debug = logger('status');
 
-export const handleStatus = async (
-  client: InstanceType<typeof Octokit>,
-  owner: string,
-  repo: string,
-  _prNumber: number,
-  matchingRules: MatchingRule[],
-  rules: Rule[],
-  sha: string,
+export const handleStatus: ActionMapInput = async (
+  client,
+  { owner, repo, matchingRules, rules, sha },
   requestConcurrency = 1
 ): Promise<unknown> => {
   const queue = new PQueue({ concurrency: requestConcurrency });
@@ -28,7 +23,7 @@ export const handleStatus = async (
     repo,
     sha,
     description: rule.name,
-    context: `use-herald-action/${rule.name}`,
+    context: `herald/${rule.name}`,
     state: matchingRules.find((matchingRule) => isEqual(matchingRule, { ...rule, matched: true }))
       ? CommitStatus.SUCCESS
       : CommitStatus.FAILURE,

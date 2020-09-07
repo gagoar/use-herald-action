@@ -1,11 +1,11 @@
 import { getInput, setOutput, setFailed } from '@actions/core';
 import groupBy from 'lodash.groupby';
-import { loadRules, getMatchingRules, RuleActions, allRequiredRulesHaveMatched } from './rules';
+import { loadRules, getMatchingRules, RuleActions, allRequiredRulesHaveMatched, MatchingRule, Rule } from './rules';
 import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES } from './util/constants';
 import { logger } from './util/debug';
 import { env } from './environment';
 
-import { Octokit } from '@octokit/rest';
+import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
 import { handleAssignees } from './assignees';
 import { handleLabels } from './labels';
 import { handleReviewers } from './reviewers';
@@ -25,7 +25,25 @@ export enum Props {
   base = 'base',
 }
 
-const actionsMap = {
+type OctokitFile = RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files'][0];
+type ActionInput = {
+  owner: string;
+  repo: string;
+  prNumber: number;
+  matchingRules: MatchingRule[];
+  rules: Rule[];
+  sha: string;
+  base: string;
+  files: OctokitFile[];
+};
+
+export type ActionMapInput = (
+  client: InstanceType<typeof Octokit>,
+  options: ActionInput,
+  requestConcurrency?: number
+) => Promise<unknown>;
+
+const actionsMap: Record<RuleActions, ActionMapInput> = {
   [RuleActions.status]: handleStatus,
   [RuleActions.comment]: handleComment,
   [RuleActions.assign]: handleAssignees,
@@ -122,15 +140,18 @@ export const main = async (): Promise<void> => {
             groupNames.map((actionName: ActionName) => {
               const action = actionsMap[RuleActions[actionName]];
 
-              return action(
-                client,
+              const options: ActionInput = {
                 owner,
                 repo,
                 prNumber,
-                groupedRulesByAction[RuleActions[actionName]],
+                matchingRules: groupedRulesByAction[RuleActions[actionName]],
                 rules,
-                headSha
-              );
+                sha: headSha,
+                base: baseSha,
+                files,
+              };
+
+              return action(client, options);
             }),
           ]);
         }
