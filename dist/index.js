@@ -20242,7 +20242,7 @@ const handleStatus = async (client, { owner, repo, matchingRules, rules, base, s
         repo,
         sha,
         description: rule.description ? rule.description : STATUS_DESCRIPTION_COPY,
-        context: `herald/${rule.name}`,
+        context: `Herald/${rule.name}`,
         target_url: statuses_getBlobURL(rule.path, files, baseBlobPath, base),
         state: matchingRules.find((matchingRule) => matchingRule.path === rule.path)
             ? CommitStatus.SUCCESS
