@@ -134,7 +134,7 @@ describe('use-herald-action', () => {
                 "includesInPatch": Array [],
                 "matched": true,
                 "name": "rule1.json",
-                "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule1.json",
+                "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
                 "teams": Array [],
                 "users": Array [
                   "eeny",
