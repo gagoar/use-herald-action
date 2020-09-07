@@ -1,5 +1,6 @@
 {
   "name": "The template has an issue attached",
+  "description": "we check if an issue has been added to the PR description",
   "action": "status",
   "eventJsonPath": ["$[?(@.body.match(/Issue Reference.+#[0-9]+/i))].body"]
 }
