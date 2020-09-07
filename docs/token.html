@@ -21,7 +21,7 @@
   xhr.onreadystatechange = () => {
     console.log('onreadystatechange');
     console.log(xhr);
-    if (xhr.readyState == 4 && xhr.status == 200) {
+    if (xhr.readyState == 4 && xhr.status == 201) {
       document.getElementById('status').innerHTML = 'Your app is now set up!';
     }
   };
