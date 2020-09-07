@@ -12,7 +12,6 @@ import JSONPath from 'jsonpath';
 import { loadJSONFile } from './util/loadJSONFile';
 import { logger } from './util/debug';
 import { makeArray } from './util/makeArray';
-
 const debug = logger('rules');
 
 const formatUser = (handleOrEmail: string) => {
@@ -156,6 +155,7 @@ export const loadRules = (rulesLocation: string): Rule[] => {
 
 export type MatchingRule = Rule & {
   matched: boolean;
+  blobURL: string;
 };
 
 type IncludeExcludeFilesParams = {
@@ -268,17 +268,29 @@ const isMatch: Matcher = (rule, options) => {
   return matches.length ? matches.every((match) => match === true) : false;
 };
 
+const getBlobURL = (filename: string, files: RuleFile[], baseBlobPath: string) => {
+  const file = files.find((file) => file.filename.match(filename));
+
+  return file ? file.blob_url : `${baseBlobPath}/${filename.replace(`${env.GITHUB_WORKSPACE}/`, '')}`;
+};
+
+type RuleFile = Partial<File> & Required<Pick<File, 'filename' | 'blob_url'>>;
+
 export const getMatchingRules = (
   rules: Rule[],
-  files: Partial<File> & Required<Pick<File, 'filename'>>[],
+  files: RuleFile[],
   event: Event,
-  patchContent: string[]
+  patchContent: string[],
+  headSha: string,
+  repo: string,
+  owner: string
 ): MatchingRule[] => {
   const fileNames = files.map(({ filename }) => filename);
 
+  const baseBlobPath = `https://github.com/${owner}/${repo}/blob/${headSha}`;
   const matchingRules = rules.reduce((memo, rule) => {
     if (isMatch(rule, { event, patch: patchContent, fileNames })) {
-      return [...memo, { ...rule, matched: true }];
+      return [...memo, { ...rule, blobURL: getBlobURL(rule.path, files, baseBlobPath), matched: true }];
     } else {
       return memo;
     }

@@ -13,6 +13,7 @@ describe('handleLabels', () => {
     action: RuleActions.label,
     labels: ['bug', 'enhancement'],
     path: 'rules/rule.json',
+    blobURL: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/rules/rule.json',
     teams: [],
     users: [],
     matched: true,

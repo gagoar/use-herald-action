@@ -27,6 +27,7 @@ describe('handleComment', () => {
       customMessage: 'Custom message',
       teams: [],
       matched: true,
+      blobURL: 'https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/rules/rule.json',
     };
 
     const github = nock('https://api.github.com')
@@ -92,6 +93,7 @@ describe('handleComment', () => {
       customMessage: 'Custom message',
       teams: [],
       matched: true,
+      blobURL: 'https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/rules/rule.json',
     };
 
     nock('https://api.github.com')

@@ -16,6 +16,7 @@ describe('handleAssignees', () => {
     customMessage: 'Custom message',
     teams: [],
     matched: true,
+    blobURL: 'https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/rules/rule.json',
   };
   beforeEach(() => {
     nock.cleanAll();

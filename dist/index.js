@@ -20112,11 +20112,16 @@ const isMatch = (rule, options) => {
     debug('isMatch:', { rule, matches });
     return matches.length ? matches.every((match) => match === true) : false;
 };
-const getMatchingRules = (rules, files, event, patchContent) => {
+const getBlobURL = (filename, files, baseBlobPath) => {
+    const file = files.find((file) => file.filename.match(filename));
+    return file ? file.blob_url : `${baseBlobPath}/${filename.replace(`${env.GITHUB_WORKSPACE}/`, '')}`;
+};
+const getMatchingRules = (rules, files, event, patchContent, headSha, repo, owner) => {
     const fileNames = files.map(({ filename }) => filename);
+    const baseBlobPath = `https://github.com/${owner}/${repo}/blob/${headSha}`;
     const matchingRules = rules.reduce((memo, rule) => {
         if (isMatch(rule, { event, patch: patchContent, fileNames })) {
-            return [...memo, Object.assign(Object.assign({}, rule), { matched: true })];
+            return [...memo, Object.assign(Object.assign({}, rule), { blobURL: getBlobURL(rule.path, files, baseBlobPath), matched: true })];
         }
         else {
             return memo;
@@ -20349,7 +20354,7 @@ const main = async () => {
                 owner,
                 repo,
             });
-            const matchingRules = getMatchingRules(rules, files, event, files.map(({ patch }) => patch));
+            const matchingRules = getMatchingRules(rules, files, event, files.map(({ patch }) => patch), headSha, repo, owner);
             src_debug('matchingRules:', matchingRules);
             if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
                 throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules

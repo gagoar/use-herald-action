@@ -91,7 +91,10 @@ export const main = async (): Promise<void> => {
         rules,
         files,
         event,
-        files.map(({ patch }) => patch)
+        files.map(({ patch }) => patch),
+        headSha,
+        repo,
+        owner
       );
 
       debug('matchingRules:', matchingRules);

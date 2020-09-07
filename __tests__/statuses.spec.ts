@@ -13,6 +13,7 @@ describe('handleReviewers', () => {
     name: 'it should have ts files in the PR',
     glob: '*.ts',
     action: RuleActions.status,
+    blobURL: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/rules/rule.json',
     path: 'rules/rule.json',
     users: [],
     teams: [],

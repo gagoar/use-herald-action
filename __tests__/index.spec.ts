@@ -124,6 +124,7 @@ describe('use-herald-action', () => {
             "comment": Array [
               Object {
                 "action": "comment",
+                "blobURL": "https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/__mocks__/rules/rule1.json",
                 "customMessage": "This is a custom message for a rule",
                 "eventJsonPath": Array [],
                 "excludes": Array [],
@@ -133,7 +134,7 @@ describe('use-herald-action', () => {
                 "includesInPatch": Array [],
                 "matched": true,
                 "name": "rule1.json",
-                "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
+                "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule1.json",
                 "teams": Array [],
                 "users": Array [
                   "eeny",
