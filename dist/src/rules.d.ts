@@ -28,9 +28,8 @@ export interface Rule {
 export declare const loadRules: (rulesLocation: string) => Rule[];
 export declare type MatchingRule = Rule & {
     matched: boolean;
-    blobURL: string;
 };
 export declare const allRequiredRulesHaveMatched: (rules: Rule[], matchingRules: MatchingRule[]) => boolean;
-export declare const getMatchingRules: (rules: Rule[], files: RuleFile[], event: Event, patchContent: string[], headSha: string, repo: string, owner: string) => MatchingRule[];
+export declare const getMatchingRules: (rules: Rule[], files: RuleFile[], event: Event, patchContent: string[]) => MatchingRule[];
 export declare const composeCommentsForUsers: (matchingRules: MatchingRule[]) => string[];
 export {};

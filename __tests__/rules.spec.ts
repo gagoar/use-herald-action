@@ -37,7 +37,6 @@ const validRule = {
   ...invalidRule,
   action: RuleActions.comment,
   includes: ['*.ts'],
-  blobURL: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/rule.json',
 };
 
 describe('rules', () => {
@@ -56,7 +55,6 @@ describe('rules', () => {
             ...validRule,
             path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
             matched: true,
-            blobURL: 'ec26c3e57ca3a959ca5aad62de7213c562f8c111',
             teams: [],
           },
         ])
@@ -132,10 +130,7 @@ describe('rules', () => {
           ],
           files,
           event,
-          [],
-          'ec26c3e57ca3a959ca5aad62de7213c562f8c111',
-          'example_repo',
-          'gago'
+          []
         )
       ).toMatchInlineSnapshot('Array []');
     });
@@ -167,16 +162,12 @@ describe('rules', () => {
           ],
           files,
           alterEvent,
-          [],
-          'ec26c3e57ca3a959ca5aad62de7213c562f8c111',
-          'example_repo',
-          'gago'
+          []
         )
       ).toMatchInlineSnapshot(`
         Array [
           Object {
             "action": "comment",
-            "blobURL": "https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/some/rule.json",
             "customMessage": "This is a custom message for a rule",
             "eventJsonPath": Array [
               "$[?(!@.body.match(/Issue Reference.+:/i))].body",
@@ -222,16 +213,12 @@ describe('rules', () => {
           ],
           files,
           event,
-          [],
-          'ec26c3e57ca3a959ca5aad62de7213c562f8c111',
-          'example_repo',
-          'gago'
+          []
         )
       ).toMatchInlineSnapshot(`
         Array [
           Object {
             "action": "comment",
-            "blobURL": "https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/some/rule.json",
             "customMessage": "This is a custom message for a rule",
             "eventJsonPath": Array [
               "$.pull_request[?(@.login==\\"gagoar\\")].login",
@@ -281,16 +268,12 @@ describe('rules', () => {
           ],
           files,
           event,
-          [],
-          'ec26c3e57ca3a959ca5aad62de7213c562f8c111',
-          'example_repo',
-          'gago'
+          []
         )
       ).toMatchInlineSnapshot(`
         Array [
           Object {
             "action": "comment",
-            "blobURL": "https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/some/rule.json",
             "customMessage": "This is a custom message for a rule",
             "excludes": Array [
               "/some/uglyFile.ts",
@@ -335,16 +318,12 @@ describe('rules', () => {
           ],
           files,
           event,
-          [],
-          'ec26c3e57ca3a959ca5aad62de7213c562f8c111',
-          'example_repo',
-          'gago'
+          []
         )
       ).toMatchInlineSnapshot(`
         Array [
           Object {
             "action": "comment",
-            "blobURL": "https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/some/rule.json",
             "customMessage": "This is a custom message for a rule",
             "includes": Array [
               "*.ts",
@@ -395,10 +374,7 @@ describe('rules', () => {
           [
             '@@ -132,7 +132,7 @@ module simon @@ -1000,7 +1000,7 @@ module gago',
             '@@ -132,7 +132,7 @@ module jon @@ -1000,7 +1000,7 @@ module heart',
-          ],
-          'ec26c3e57ca3a959ca5aad62de7213c562f8c111',
-          'example_repo',
-          'gago'
+          ]
         )
       ).toMatchObject([]);
     });
@@ -434,16 +410,12 @@ describe('rules', () => {
           [
             '@@ -132,7 +132,7 @@ module simon @@ -1000,7 +1000,7 @@ module gago',
             '@@ -132,7 +132,7 @@ module jon @@ -1000,7 +1000,7 @@ module heart',
-          ],
-          'ec26c3e57ca3a959ca5aad62de7213c562f8c111',
-          'example_repo',
-          'gago'
+          ]
         )
       ).toMatchInlineSnapshot(`
         Array [
           Object {
             "action": "comment",
-            "blobURL": "https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/some/rule.json",
             "customMessage": "This is a custom message for a rule",
             "includes": undefined,
             "includesInPatch": Array [
@@ -494,16 +466,12 @@ describe('rules', () => {
           ],
           files,
           event,
-          [],
-          'ec26c3e57ca3a959ca5aad62de7213c562f8c111',
-          'example_repo',
-          'gago'
+          []
         )
       ).toMatchInlineSnapshot(`
         Array [
           Object {
             "action": "comment",
-            "blobURL": "https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/some/rule.json",
             "customMessage": "This is a custom message for a rule",
             "includes": Array [
               "*.ts",
@@ -539,16 +507,12 @@ describe('rules', () => {
           [{ ...validRule, teams: [], path: `${env.GITHUB_WORKSPACE}/some/rule.json` }],
           files,
           event,
-          [],
-          'ec26c3e57ca3a959ca5aad62de7213c562f8c821',
-          'example_repo',
-          'gago'
+          []
         )
       ).toMatchInlineSnapshot(`
         Array [
           Object {
             "action": "comment",
-            "blobURL": "https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/rule.json",
             "customMessage": "This is a custom message for a rule",
             "includes": Array [
               "*.ts",
@@ -588,10 +552,7 @@ describe('rules', () => {
           ],
           files,
           event,
-          [],
-          'ec26c3e57ca3a959ca5aad62de7213c562f8c111',
-          'example_repo',
-          'gago'
+          []
         )
       ).toMatchObject([]);
     });
@@ -616,16 +577,12 @@ describe('rules', () => {
           ],
           files,
           event,
-          [],
-          'ec26c3e57ca3a959ca5aad62de7213c562f8c111',
-          'example_repo',
-          'gago'
+          []
         )
       ).toMatchInlineSnapshot(`
         Array [
           Object {
             "action": "comment",
-            "blobURL": "https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/some/rule.json",
             "customMessage": "This is a custom message for a rule",
             "eventJsonPath": Array [
               "$.pull_request[?(@.login==\\"gagoar\\")].login",
@@ -669,16 +626,12 @@ describe('rules', () => {
           ],
           files,
           event,
-          [],
-          'ec26c3e57ca3a959ca5aad62de7213c562f8c111',
-          'example_repo',
-          'gago'
+          []
         )
       ).toMatchInlineSnapshot(`
         Array [
           Object {
             "action": "comment",
-            "blobURL": "https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/some/rule.json",
             "customMessage": "This is a custom message for a rule",
             "eventJsonPath": Array [
               "$.pull_request[?(@.login==\\"gagoar\\")].login",

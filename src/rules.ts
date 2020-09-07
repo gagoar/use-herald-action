@@ -155,7 +155,6 @@ export const loadRules = (rulesLocation: string): Rule[] => {
 
 export type MatchingRule = Rule & {
   matched: boolean;
-  blobURL: string;
 };
 
 type IncludeExcludeFilesParams = {
@@ -268,27 +267,17 @@ const isMatch: Matcher = (rule, options) => {
   return matches.length ? matches.every((match) => match === true) : false;
 };
 
-const getBlobURL = (filename: string, files: RuleFile[], baseBlobPath: string) => {
-  const file = files.find((file) => file.filename.match(filename));
-
-  return file ? file.blob_url : `${baseBlobPath}/${filename.replace(`${env.GITHUB_WORKSPACE}/`, '')}`;
-};
-
 export const getMatchingRules = (
   rules: Rule[],
   files: RuleFile[],
   event: Event,
-  patchContent: string[],
-  headSha: string,
-  repo: string,
-  owner: string
+  patchContent: string[]
 ): MatchingRule[] => {
   const fileNames = files.map(({ filename }) => filename);
 
-  const baseBlobPath = `https://github.com/${owner}/${repo}/blob/${headSha}`;
   const matchingRules = rules.reduce((memo, rule) => {
     if (isMatch(rule, { event, patch: patchContent, fileNames })) {
-      return [...memo, { ...rule, blobURL: getBlobURL(rule.path, files, baseBlobPath), matched: true }];
+      return [...memo, { ...rule, matched: true }];
     } else {
       return memo;
     }

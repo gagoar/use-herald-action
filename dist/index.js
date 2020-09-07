@@ -20114,16 +20114,11 @@ const isMatch = (rule, options) => {
     debug('isMatch:', { rule, matches });
     return matches.length ? matches.every((match) => match === true) : false;
 };
-const getBlobURL = (filename, files, baseBlobPath) => {
-    const file = files.find((file) => file.filename.match(filename));
-    return file ? file.blob_url : `${baseBlobPath}/${filename.replace(`${env.GITHUB_WORKSPACE}/`, '')}`;
-};
-const getMatchingRules = (rules, files, event, patchContent, headSha, repo, owner) => {
+const getMatchingRules = (rules, files, event, patchContent) => {
     const fileNames = files.map(({ filename }) => filename);
-    const baseBlobPath = `https://github.com/${owner}/${repo}/blob/${headSha}`;
     const matchingRules = rules.reduce((memo, rule) => {
         if (isMatch(rule, { event, patch: patchContent, fileNames })) {
-            return [...memo, Object.assign(Object.assign({}, rule), { blobURL: getBlobURL(rule.path, files, baseBlobPath), matched: true })];
+            return [...memo, Object.assign(Object.assign({}, rule), { matched: true })];
         }
         else {
             return memo;
@@ -20227,7 +20222,7 @@ const handleReviewers = async (client, { owner, repo, prNumber, matchingRules },
 
 
 const statuses_debug = logger('statuses');
-const statuses_getBlobURL = (filename, files, baseBlobPath, base) => {
+const getBlobURL = (filename, files, baseBlobPath, base) => {
     statuses_debug('getBlobURL', filename, files, baseBlobPath, base);
     const file = files.find((file) => filename.match(file.filename));
     return file ? file.blob_url : `${baseBlobPath}/${base}/${filename.replace(`${env.GITHUB_WORKSPACE}/`, '')}`;
@@ -20243,7 +20238,7 @@ const handleStatus = async (client, { owner, repo, matchingRules, rules, base, s
         sha,
         description: rule.description ? rule.description : STATUS_DESCRIPTION_COPY,
         context: `Herald/${rule.name}`,
-        target_url: statuses_getBlobURL(rule.path, files, baseBlobPath, base),
+        target_url: getBlobURL(rule.path, files, baseBlobPath, base),
         state: matchingRules.find((matchingRule) => matchingRule.path === rule.path)
             ? CommitStatus.SUCCESS
             : CommitStatus.FAILURE,
@@ -20359,7 +20354,7 @@ const main = async () => {
                 owner,
                 repo,
             });
-            const matchingRules = getMatchingRules(rules, files, event, files.map(({ patch }) => patch), headSha, repo, owner);
+            const matchingRules = getMatchingRules(rules, files, event, files.map(({ patch }) => patch));
             src_debug('matchingRules:', matchingRules);
             if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
                 throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules
