@@ -12,10 +12,7 @@
 
 <script>
   // Get URL parameters
-  const { code, appId, isOrg } = getParams(window.location.href);
-
-  const ORG_ENDPOINT = `https://github.com/organizations/${orgName}/settings/apps`;
-  const PERSONAL_ENDPOINT = `https://github.com/settings/apps`;
+  const { code } = getParams(window.location.href);
 
   var xhr = new XMLHttpRequest();
   xhr.open('POST', `https://api.github.com/app-manifests/${code}/conversions`, true);
@@ -24,6 +21,6 @@
   xhr.onreadystatechange = () => {
     console.log('onreadystatechange');
     console.log(xhr);
-    if (xhr.readyState == 4) window.location.replace(isOrg ? ORG_ENDPOINT : PERSONAL_ENDPOINT);
+    // if (xhr.readyState == 4 && xhr.status === 201)
   };
 </script>
