@@ -16,29 +16,23 @@
   // Get URL parameters
   const { orgName } = getParams(window.location.href);
 
-  const repo_permissions = {
-    actions: 'read',
-    administration: 'read',
-    contents: 'read',
-    issues: 'write',
-    metadata: 'read',
-    'pull requests': 'write',
-    statuses: 'write',
-  };
-
-  const org_permissions = {
-    members: 'read',
-    'team discussions': 'read',
-  };
-
   const manifestJSON = {
     name: `[${orgName}] Use Herald Action App`,
     url: 'https://cyamonide.github.io/use-herald-action',
     redirect_url: 'https://cyamonide.github.io/use-herald-action/token',
     public: true,
     default_permissions: {
-      ...repo_permissions,
-      ...org_permissions,
+      // repo permissions
+      actions: 'read',
+      administration: 'read',
+      contents: 'read',
+      issues: 'write',
+      metadata: 'read',
+      'pull requests': 'write',
+      statuses: 'write',
+      // org permissions
+      members: 'read',
+      'team discussions': 'read',
     },
   };
 
