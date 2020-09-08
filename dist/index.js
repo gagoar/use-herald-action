@@ -19967,6 +19967,7 @@ var RuleExtras;
     RuleExtras["errorLevel"] = "errorLevel";
     RuleExtras["labels"] = "labels";
     RuleExtras["description"] = "description";
+    RuleExtras["targetURL"] = "targetURL";
 })(RuleExtras || (RuleExtras = {}));
 var RuleMatchers;
 (function (RuleMatchers) {

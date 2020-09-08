@@ -31,10 +31,9 @@ enum RuleExtras {
   customMessage = 'customMessage',
   name = 'name',
   errorLevel = 'errorLevel',
-
   labels = 'labels',
-
   description = 'description',
+  targetURL = 'targetURL',
 }
 enum RuleMatchers {
   includesInPatch = 'includesInPatch',
