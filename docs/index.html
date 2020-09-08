@@ -2,12 +2,15 @@
 
 <head>
   <title>UHA - Install the App</title>
+
   <link
     rel="stylesheet"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
     crossorigin="anonymous"
   />
+  <link rel="stylesheet" href="./main.css" />
+
   <style>
     #form-container form {
       text-align: center;
@@ -18,24 +21,37 @@
     #manifest-form {
       margin: 20px 0;
     }
+    .card {
+      padding: 20px;
+    }
   </style>
 </head>
 
 <body>
+  <header>
+    <img
+      src="https://raw.githubusercontent.com/gagoar/use-herald-action/master/images/logo.png"
+      alt="Use Herald Action logo"
+    />
+    <h1>Setting up the app</h1>
+  </header>
+
   <div id="form-container" class="container">
-    <h3>Start by entering your organization's name here.</h3>
-    <form id="manifest-form" action="https://cyamonide.github.io/use-herald-action/create" method="GET">
-      <input
-        id="org-name-input"
-        class="form-control form-control-lg"
-        autocomplete="off"
-        type="text"
-        name="orgName"
-        placeholder="Organization Name"
-      />
-      <br />
-      <button type="submit" class="btn btn-primary mb-2">Create app</button>
-    </form>
+    <div class="card">
+      <h2>Start by entering your organization's name here.</h2>
+      <form id="manifest-form" action="https://cyamonide.github.io/use-herald-action/create" method="GET">
+        <input
+          id="org-name-input"
+          class="form-control form-control-lg"
+          autocomplete="off"
+          type="text"
+          name="orgName"
+          placeholder="Organization Name"
+        />
+        <br />
+        <button type="submit" class="btn btn-primary mb-2">Create app</button>
+      </form>
+    </div>
   </div>
 
   <script
