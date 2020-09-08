@@ -16,8 +16,9 @@
   // Get URL parameters
   const { appId, isOrg } = getParams(window.location.href);
 
-  const ORG_ENDPOINT = `https://github.com/organizations/${appId}/settings/apps/new`;
-  const PERSONAL_ENDPOINT = `https://github.com/settings/apps/new`;
+  const manifestEndpoint = `https://github.com/${
+    isOrg ? `organizations/${appId}/` : ''
+  }/settings/apps/new?status=use-herald-action`;
 
   /*
    * For information on which permissions can be modified, refer to the docs:
@@ -25,20 +26,18 @@
    */
 
   const repo_permissions = {
+    actions: 'read',
+    administration: 'read',
+    contents: 'read',
     issues: 'write',
-    checks: 'write',
-    // actions: 'read',
-    // administration: 'read',
-    // contents: 'read',
-    // issues: 'write',
-    // metadata: 'read',
-    // pull_requests: 'write',
-    // statuses: 'write',
+    metadata: 'read',
+    pull_requests: 'write',
+    statuses: 'write',
   };
 
   const org_permissions = {
-    // members: 'read',
-    // team_discussions: 'read',
+    members: 'read',
+    team_discussions: 'read',
   };
 
   // This is the JSON payload that gets sent to GitHub to create the app
@@ -57,7 +56,7 @@
   document.getElementById('manifest').value = JSON.stringify(manifestJSON);
 
   // Customize form action
-  document.getElementById('manifestForm').action = isOrg ? ORG_ENDPOINT : PERSONAL_ENDPOINT;
+  document.getElementById('manifestForm').action = manifestEndpoint;
 
   // Submit form
   document.getElementById('manifestForm').submit();
