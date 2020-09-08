@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 
-<head></head>
+<head>
+  <title>UHA - Creating the App...</title>
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+    crossorigin="anonymous"
+  />
+  <script src="./utils.js"></script>
+</head>
 
 <body>
   <form action="" method="post" id="manifestForm">
@@ -10,15 +19,11 @@
   Hold on tight... we're setting up your app...
 </body>
 
-<script src="./getParams.js"></script>
-
 <script>
   // Get URL parameters
-  const { appId, isOrg } = getParams(window.location.href);
+  const { orgName } = getParams(window.location.href);
 
-  const manifestEndpoint = `https://github.com/${
-    isOrg ? `organizations/${appId}/` : ''
-  }/settings/apps/new?status=use-herald-action`;
+  const manifestEndpoint = `https://github.com/organizations/${orgName}/settings/apps/new?status=use-herald-action`;
 
   /*
    * For information on which permissions can be modified, refer to the docs:
@@ -42,9 +47,9 @@
 
   // This is the JSON payload that gets sent to GitHub to create the app
   const manifestJSON = {
-    name: `[${appId}] Use Herald Action App`,
+    name: `[${orgName}] Use Herald Action App`,
     url: 'https://cyamonide.github.io/use-herald-action',
-    redirect_url: 'https://cyamonide.github.io/use-herald-action/token',
+    redirect_url: `https://cyamonide.github.io/use-herald-action/token?orgName=${orgName}`,
     public: true,
     default_permissions: {
       ...repo_permissions,

@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 
-<head> </head>
+<head>
+  <title>UHA - Completing Handshake...</title>
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+    crossorigin="anonymous"
+  />
+  <script src="./utils.js"></script>
+</head>
 
 <body>
   <div>
-    <p id="status">Validating app...</p>
+    <p id="status">Validating your app...</p>
   </div>
 </body>
 
-<script src="./getParams.js"></script>
-
 <script>
   // Get URL parameters
-  const { code } = getParams(window.location.href);
+  const { code, orgName } = getParams(window.location.href);
 
   var xhr = new XMLHttpRequest();
   xhr.open('POST', `https://api.github.com/app-manifests/${code}/conversions`, true);
@@ -21,6 +28,9 @@
   xhr.onreadystatechange = () => {
     console.log('onreadystatechange');
     console.log(xhr);
+    if (xhr.readyState === 4) {
+      window.location.replace(`https://cyamonide.github.io/use-herald-action/post-install?orgName=${orgName}`);
+    }
     // if (xhr.readyState == 4 && xhr.status === 201)
   };
 </script>

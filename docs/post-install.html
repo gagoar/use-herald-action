@@ -1,42 +1,29 @@
 <!DOCTYPE html>
 
 <head>
-  <title>UHA - Install the App</title>
+  <title>UHA - Post Installation</title>
   <link
     rel="stylesheet"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
     crossorigin="anonymous"
   />
-  <style>
-    #form-container form {
-      text-align: center;
-    }
-    #org-name-input {
-      text-align: center;
-    }
-    #manifest-form {
-      margin: 20px 0;
-    }
-  </style>
+  <script src="./utils.js"></script>
 </head>
 
 <body>
   <div id="form-container" class="container">
-    <h3>Start by entering your organization's name here.</h3>
-    <form id="manifest-form" action="https://cyamonide.github.io/use-herald-action/create" method="GET">
-      <input
-        id="org-name-input"
-        class="form-control form-control-lg"
-        autocomplete="off"
-        type="text"
-        name="orgName"
-        placeholder="Organization Name"
-      />
-      <br />
-      <button type="submit" class="btn btn-primary mb-2">Create app</button>
-    </form>
+    <h3>Your app has been installed!</h3>
+    Here are some next steps.
+    <br />
+    Go here to view your thing
   </div>
+
+  <script>
+    // Get URL parameters
+    const { orgName } = getParams(window.location.href);
+    console.log(orgName);
+  </script>
 
   <script
     src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
