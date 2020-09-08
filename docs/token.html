@@ -16,8 +16,7 @@
 
   var xhr = new XMLHttpRequest();
   xhr.open('POST', `https://api.github.com/app-manifests/${code}/conversions`, true);
-
-  setTimeout(() => xhr.send(), 5000);
+  xhr.send();
 
   xhr.onreadystatechange = () => {
     console.log('onreadystatechange');
