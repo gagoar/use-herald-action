@@ -14,7 +14,10 @@
 
 <script>
   // Get URL parameters
-  const { orgName } = getParams(window.location.href);
+  const { orgName, type } = getParams(window.location.href);
+
+  const ORG_ENDPOINT = `https://github.com/organizations/${orgName}/settings/apps/new`;
+  const PERSONAL_ENDPOINT = `https://github.com/settings/apps/new`;
 
   /*
    * For information on which permissions can be modified, refer to the docs:
@@ -52,7 +55,7 @@
   document.getElementById('manifest').value = JSON.stringify(manifestJSON);
 
   // Customize form action
-  document.getElementById('manifestForm').action = `https://github.com/organizations/${orgName}/settings/apps/new`;
+  document.getElementById('manifestForm').action = type === 'org' ? ORG_ENDPOINT : PERSONAL_ENDPOINT;
 
   // Submit form
   document.getElementById('manifestForm').submit();
