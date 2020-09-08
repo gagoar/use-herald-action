@@ -16,29 +16,40 @@
   // Get URL parameters
   const { orgName } = getParams(window.location.href);
 
+  /*
+   * For information on which permissions can be modified, refer to the docs:
+   * https://docs.github.com/en/rest/reference/permissions-required-for-github-apps
+   */
+
+  const repo_permissions = {
+    actions: 'read',
+    administration: 'read',
+    contents: 'read',
+    issues: 'write',
+    metadata: 'read',
+    pull_requests: 'write',
+    statuses: 'write',
+  };
+
+  const org_permissions = {
+    members: 'read',
+    team_discussions: 'read',
+  };
+
+  // This is the JSON payload that gets sent to GitHub to create the app
   const manifestJSON = {
     name: `[${orgName}] Use Herald Action App`,
     url: 'https://cyamonide.github.io/use-herald-action',
     redirect_url: 'https://cyamonide.github.io/use-herald-action/token',
     public: true,
     default_permissions: {
-      // repo permissions
-      actions: 'read',
-      administration: 'read',
-      contents: 'read',
-      issues: 'write',
-      metadata: 'read',
-      'pull requests': 'write',
-      statuses: 'write',
-      // org permissions
-      members: 'read',
-      'team discussions': 'read',
+      ...repo_permissions,
+      ...org_permissions,
     },
   };
 
-  // Set up manifest
-  input = document.getElementById('manifest');
-  input.value = JSON.stringify(manifestJSON);
+  // Inject manifest JSON into form
+  document.getElementById('manifest').value = JSON.stringify(manifestJSON);
 
   // Customize form action
   document.getElementById('manifestForm').action = `https://github.com/organizations/${orgName}/settings/apps/new`;
