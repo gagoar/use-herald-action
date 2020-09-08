@@ -5,6 +5,8 @@
 <body>
   <form action="" method="post" id="manifestForm">
     <input type="hidden" name="manifest" id="manifest" />
+    <input type="hidden" name="appId" id="appId" />
+    <input type="hidden" name="isOrg" id="isOrg" />
   </form>
 
   Hold on tight... we're setting up your app...
@@ -14,9 +16,9 @@
 
 <script>
   // Get URL parameters
-  const { orgName, type } = getParams(window.location.href);
+  const { appId, isOrg } = getParams(window.location.href);
 
-  const ORG_ENDPOINT = `https://github.com/organizations/${orgName}/settings/apps/new`;
+  const ORG_ENDPOINT = `https://github.com/organizations/${appId}/settings/apps/new`;
   const PERSONAL_ENDPOINT = `https://github.com/settings/apps/new`;
 
   /*
@@ -41,7 +43,7 @@
 
   // This is the JSON payload that gets sent to GitHub to create the app
   const manifestJSON = {
-    name: `[${orgName}] Use Herald Action App`,
+    name: `[${appId}] Use Herald Action App`,
     url: 'https://cyamonide.github.io/use-herald-action',
     redirect_url: 'https://cyamonide.github.io/use-herald-action/token',
     public: true,
@@ -53,9 +55,11 @@
 
   // Inject manifest JSON into form
   document.getElementById('manifest').value = JSON.stringify(manifestJSON);
+  document.getElementById('appId').value = appId;
+  document.getElementById('isOrg').value = isOrg;
 
   // Customize form action
-  document.getElementById('manifestForm').action = type === 'org' ? ORG_ENDPOINT : PERSONAL_ENDPOINT;
+  document.getElementById('manifestForm').action = isOrg ? ORG_ENDPOINT : PERSONAL_ENDPOINT;
 
   // Submit form
   document.getElementById('manifestForm').submit();
