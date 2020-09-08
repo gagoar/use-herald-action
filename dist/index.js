@@ -20236,9 +20236,9 @@ const handleStatus = async (client, { owner, repo, matchingRules, rules, base, s
         owner,
         repo,
         sha,
-        description: rule.description ? rule.description : STATUS_DESCRIPTION_COPY,
         context: `Herald/${rule.name}`,
-        target_url: getBlobURL(rule.path, files, baseBlobPath, base),
+        description: rule.description ? rule.description : STATUS_DESCRIPTION_COPY,
+        target_url: rule.targetURL ? rule.targetURL : getBlobURL(rule.path, files, baseBlobPath, base),
         state: matchingRules.find((matchingRule) => matchingRule.path === rule.path)
             ? CommitStatus.SUCCESS
             : CommitStatus.FAILURE,

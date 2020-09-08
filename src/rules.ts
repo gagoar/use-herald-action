@@ -70,11 +70,9 @@ export interface Rule {
   includesInPatch?: string[];
   eventJsonPath?: string[];
   customMessage?: string;
-
   labels?: string[];
-
   description?: string;
-
+  targetURL?: string;
   errorLevel?: keyof typeof ErrorLevels;
 }
 

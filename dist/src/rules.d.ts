@@ -23,6 +23,7 @@ export interface Rule {
     customMessage?: string;
     labels?: string[];
     description?: string;
+    targetURL?: string;
     errorLevel?: keyof typeof ErrorLevels;
 }
 export declare const loadRules: (rulesLocation: string) => Rule[];
