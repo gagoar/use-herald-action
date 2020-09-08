@@ -10,21 +10,7 @@
     crossorigin="anonymous"
   />
   <link rel="stylesheet" href="./main.css" />
-
-  <style>
-    #form-container form {
-      text-align: center;
-    }
-    #org-name-input {
-      text-align: center;
-    }
-    #manifest-form {
-      margin: 20px 0;
-    }
-    .card {
-      padding: 20px;
-    }
-  </style>
+  <link rel="stylesheet" href="./index.css" />
 </head>
 
 <body>
@@ -36,21 +22,185 @@
     <h1>Setting up the app</h1>
   </header>
 
-  <div id="form-container" class="container">
+  <div class="container" id="intro-parent">
+    <p>
+      If you're using <code>use-herald-action</code> in a private organization, you'll need to follow additional
+      instructions to install a GitHub App in your organization.
+    </p>
+    <p>
+      This app itself doesn't actually do anything. It exists only so that we can generate a <b>client secret</b> with
+      permissions that enable <code>use-herald-action</code> to do things like
+      <b>mention private teams and team members</b> within your organization.
+    </p>
+
+    <hr />
+  </div>
+
+  <div id="steps-parent">
     <div class="card">
-      <h2>Start by entering your organization's name here.</h2>
-      <form id="manifest-form" action="https://cyamonide.github.io/use-herald-action/create" method="GET">
-        <input
-          id="org-name-input"
-          class="form-control form-control-lg"
-          autocomplete="off"
-          type="text"
-          name="orgName"
-          placeholder="Organization Name"
-        />
-        <br />
-        <button type="submit" class="btn btn-primary mb-2">Create app</button>
-      </form>
+      <div class="container step-header">
+        <div class="row">
+          <div class="col-9">
+            <h2>
+              Find your GitHub organization's name
+            </h2>
+          </div>
+          <div class="col-3">
+            <h2>
+              1
+            </h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="container step-content">
+        <div class="d-flex flex-row align-items-center">
+          <div class="p-2">
+            <p>
+              Determine the name of the organization in which you want to install this app by going to
+              <code> Settings > Organizations </code> in the GitHub UI.
+            </p>
+            <p>
+              At the bottom of this page, you'll be able to enter the name of your organization to kick off the
+              installation flow.
+            </p>
+          </div>
+          <div class="p-2">
+            <img src="./settings.jpg" alt="GitHub settings graphic" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="container step-header">
+        <div class="row">
+          <div class="col-9">
+            <h2>
+              Enter your password
+            </h2>
+          </div>
+          <div class="col-3">
+            <h2>
+              2
+            </h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="container step-content">
+        <div class="d-flex flex-row align-items-center">
+          <div class="p-2">
+            <p>
+              Once you've submitted your organization name, you'll be redirected to GitHub.
+            </p>
+            <p>There, you might be asked to provide your password to verify that it's actually you.</p>
+          </div>
+          <div class="p-2">
+            <img src="./login.jpg" alt="GitHub password graphic" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="container step-header">
+        <div class="row">
+          <div class="col-9">
+            <h2>
+              Name and create the app
+            </h2>
+          </div>
+          <div class="col-3">
+            <h2>
+              3
+            </h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="container step-content">
+        <div class="d-flex flex-column align-items-center">
+          <div class="p-2">
+            <p>
+              Here, we've filled in the app name for you with <code>[&lt;org-name&gt;] Use Herald Action App</code>.
+            </p>
+            <p>
+              Of course, you have the option to name it whatever you like, as long as it's unique.<br />
+              GitHub will let you know if another app has the same name as what you want.
+            </p>
+          </div>
+          <div class="p-2">
+            <img src="./create.jpg" alt="GitHub app creation graphic" />
+          </div>
+          <div class="p-2">
+            <p>
+              Look out for the error message:
+              <code>
+                You don't have permission to create apps for &lt;org-name&gt;. You may still create this app for your
+                own account.
+              </code>
+            </p>
+            <p>
+              If this happens, double check that you both spelled your organization correctly and have the necessary
+              permissions to install apps in your organization.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="container step-header">
+        <div class="row">
+          <div class="col-9">
+            <h2>
+              Follow post-install instructions
+            </h2>
+          </div>
+          <div class="col-3">
+            <h2>
+              4
+            </h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="container step-content">
+        <div class="row">
+          <div class="col">
+            <p>
+              If all goes well, you should be directed to a set of post-install instructions.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="form-card">
+      <div class="container step-header">
+        <div class="row">
+          <div class="col">
+            <h2>Ready?</h2>
+            <h3>Start by entering your organization's name here!</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="container step-content">
+        <form id="manifest-form" action="https://cyamonide.github.io/use-herald-action/create" method="GET">
+          <input
+            id="org-name-input"
+            class="form-control form-control-lg"
+            autocomplete="off"
+            type="text"
+            name="orgName"
+            placeholder="Organization Name"
+          />
+          <br />
+          <button type="submit" class="btn btn-primary mb-2">Create app</button>
+        </form>
+      </div>
     </div>
   </div>
 

@@ -1,0 +1,31 @@
+hr {
+  margin: 40px 0;
+}
+
+#form-card {
+  background-color: rgb(204, 242, 255);
+}
+
+#form-card * {
+  text-align: center;
+}
+
+.card {
+  padding: 20px;
+  margin: 10px 0;
+}
+
+.step-header {
+  padding-bottom: 20px;
+}
+
+.step-header .col-3 {
+  text-align: right;
+  color: #777;
+}
+
+#intro-parent,
+#steps-parent {
+  margin: 0 auto;
+  max-width: 800px;
+}
