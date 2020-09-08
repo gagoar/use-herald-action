@@ -26,11 +26,11 @@
   xhr.send();
 
   xhr.onreadystatechange = () => {
-    console.log('onreadystatechange');
-    console.log(xhr);
+    // We're not checking for a 2xx response code because GitHub's endpoint started returning 500s
+    //  a few days into development. Unable to repro 2xxs. Despite the bad status codes, the app
+    //  in question is still getting created, and that's all we care about here.
     if (xhr.readyState === 4) {
-      // window.location.replace(`https://cyamonide.github.io/use-herald-action/post-install?orgName=${orgName}`);
+      window.location.replace(`https://cyamonide.github.io/use-herald-action/post-install`);
     }
-    // if (xhr.readyState == 4 && xhr.status === 201)
   };
 </script>
