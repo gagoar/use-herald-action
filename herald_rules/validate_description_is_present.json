@@ -1,5 +1,6 @@
 {
   "name": "The template has a Description",
+  "targetURL": "https://github.com/gagoar/use-herald-action/wiki/Pr-Validations/_edit#validate-description-title-is-present",
   "action": "status",
   "eventJsonPath": ["$[?(@.body.match(/## Description/i))].body"]
 }
