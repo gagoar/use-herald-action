@@ -31,10 +31,9 @@ enum RuleExtras {
   customMessage = 'customMessage',
   name = 'name',
   errorLevel = 'errorLevel',
-
   labels = 'labels',
-
   description = 'description',
+  targetURL = 'targetURL',
 }
 enum RuleMatchers {
   includesInPatch = 'includesInPatch',
@@ -70,11 +69,9 @@ export interface Rule {
   includesInPatch?: string[];
   eventJsonPath?: string[];
   customMessage?: string;
-
   labels?: string[];
-
   description?: string;
-
+  targetURL?: string;
   errorLevel?: keyof typeof ErrorLevels;
 }
 
