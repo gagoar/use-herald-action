@@ -5,9 +5,6 @@
 <body>
   <form action="" method="post" id="manifestForm">
     <input type="hidden" name="manifest" id="manifest" />
-    <input type="hidden" name="appId" id="appId" />
-    <input type="hidden" name="isOrg" id="isOrg" />
-    <button type="submit" class="btn btn-primary mb-2">Submit</button>
   </form>
 
   Hold on tight... we're setting up your app...
@@ -56,12 +53,10 @@
 
   // Inject manifest JSON into form
   document.getElementById('manifest').value = JSON.stringify(manifestJSON);
-  document.getElementById('appId').value = appId;
-  document.getElementById('isOrg').value = isOrg;
 
   // Customize form action
   document.getElementById('manifestForm').action = isOrg ? ORG_ENDPOINT : PERSONAL_ENDPOINT;
 
   // Submit form
-  // document.getElementById('manifestForm').submit();
+  document.getElementById('manifestForm').submit();
 </script>
