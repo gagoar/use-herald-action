@@ -3,7 +3,7 @@
 <head></head>
 
 <body>
-  <form action="https://github.com/settings/apps/new" method="post" id="manifestForm">
+  <form action="" method="post" id="manifestForm">
     <input type="hidden" name="manifest" id="manifest" />
   </form>
 
@@ -17,7 +17,7 @@
   const { orgName } = getParams(window.location.href);
 
   const manifestJSON = {
-    name: `[${orgName}] Use Herald Action App`,
+    name: `Use Herald Action App`,
     url: 'https://cyamonide.github.io/use-herald-action',
     hook_attributes: {
       url: 'https://example.com/github/events',
@@ -34,6 +34,9 @@
   // Set up manifest
   input = document.getElementById('manifest');
   input.value = JSON.stringify(manifestJSON);
+
+  // Customize form action
+  document.getElementById('manifestForm').action = `https://github.com/organizations/${orgName}/settings/apps/new`;
 
   // Submit form
   document.getElementById('manifestForm').submit();

@@ -12,20 +12,23 @@
     #form-container form {
       text-align: center;
     }
-
     #org-name-input {
       text-align: center;
+    }
+    #manifest-form {
+      margin: 20px 0;
     }
   </style>
 </head>
 
 <body>
-  <div class="container" id="form-container">
+  <div id="form-container" class="container">
     <h3>Start by entering your organization's name here.</h3>
-    <form action="https://cyamonide.github.io/use-herald-action/create" method="GET">
+    <form id="manifest-form" action="https://cyamonide.github.io/use-herald-action/create" method="GET">
       <input
         id="org-name-input"
         class="form-control form-control-lg"
+        autocomplete="off"
         type="text"
         name="orgName"
         placeholder="Organization Name"
