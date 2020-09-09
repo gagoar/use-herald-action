@@ -29,3 +29,7 @@ hr {
   margin: 0 auto;
   max-width: 800px;
 }
+
+#steps-parent img {
+  max-width: 700px;
+}
