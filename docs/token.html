@@ -31,7 +31,7 @@
 
   var xhr = new XMLHttpRequest();
   xhr.open('POST', `https://api.github.com/app-manifests/${code}/conversions`, true);
-  xhr.send();
+  // xhr.send();
 
   xhr.onreadystatechange = () => {
     // We're not checking for a 2xx response code because GitHub's endpoint started returning 500s
