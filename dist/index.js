@@ -1169,7 +1169,7 @@ function onceStrict (fn) {
 /***/ 53:
 /***/ (function(module) {
 
-module.exports = {"_args":[["estraverse@4.3.0","/Users/gfrigerio/base/use-herald"]],"_from":"estraverse@4.3.0","_id":"estraverse@4.3.0","_inBundle":false,"_integrity":"sha512-39nnKffWz8xN1BU/2c79n9nB9HDzo0niYUqx6xyqUnyoAnQyyWpOTdZEeiCch8BBu515t4wp9ZmgVfVhn9EBpw==","_location":"/estraverse","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"estraverse@4.3.0","name":"estraverse","escapedName":"estraverse","rawSpec":"4.3.0","saveSpec":null,"fetchSpec":"4.3.0"},"_requiredBy":["/@typescript-eslint/experimental-utils/eslint-scope","/escodegen","/eslint-scope","/eslint/eslint-scope","/esrecurse","/prettier-eslint-cli/eslint/eslint-scope","/vue-eslint-parser/eslint-scope"],"_resolved":"https://registry.npmjs.org/estraverse/-/estraverse-4.3.0.tgz","_spec":"4.3.0","_where":"/Users/gfrigerio/base/use-herald","bugs":{"url":"https://github.com/estools/estraverse/issues"},"description":"ECMAScript JS AST traversal functions","devDependencies":{"babel-preset-env":"^1.6.1","babel-register":"^6.3.13","chai":"^2.1.1","espree":"^1.11.0","gulp":"^3.8.10","gulp-bump":"^0.2.2","gulp-filter":"^2.0.0","gulp-git":"^1.0.1","gulp-tag-version":"^1.3.0","jshint":"^2.5.6","mocha":"^2.1.0"},"engines":{"node":">=4.0"},"homepage":"https://github.com/estools/estraverse","license":"BSD-2-Clause","main":"estraverse.js","maintainers":[{"name":"Yusuke Suzuki","email":"utatane.tea@gmail.com","url":"http://github.com/Constellation"}],"name":"estraverse","repository":{"type":"git","url":"git+ssh://git@github.com/estools/estraverse.git"},"scripts":{"lint":"jshint estraverse.js","test":"npm run-script lint && npm run-script unit-test","unit-test":"mocha --compilers js:babel-register"},"version":"4.3.0"};
+module.exports = {"_args":[["estraverse@4.3.0","/Users/ppaskaris/base/coursera/use-herald-action"]],"_from":"estraverse@4.3.0","_id":"estraverse@4.3.0","_inBundle":false,"_integrity":"sha512-39nnKffWz8xN1BU/2c79n9nB9HDzo0niYUqx6xyqUnyoAnQyyWpOTdZEeiCch8BBu515t4wp9ZmgVfVhn9EBpw==","_location":"/estraverse","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"estraverse@4.3.0","name":"estraverse","escapedName":"estraverse","rawSpec":"4.3.0","saveSpec":null,"fetchSpec":"4.3.0"},"_requiredBy":["/escodegen","/eslint-scope","/esrecurse","/prettier-eslint-cli/eslint-scope","/prettier-eslint-cli/eslint/eslint-scope","/prettier-eslint-cli/vue-eslint-parser/eslint-scope"],"_resolved":"https://registry.npmjs.org/estraverse/-/estraverse-4.3.0.tgz","_spec":"4.3.0","_where":"/Users/ppaskaris/base/coursera/use-herald-action","bugs":{"url":"https://github.com/estools/estraverse/issues"},"description":"ECMAScript JS AST traversal functions","devDependencies":{"babel-preset-env":"^1.6.1","babel-register":"^6.3.13","chai":"^2.1.1","espree":"^1.11.0","gulp":"^3.8.10","gulp-bump":"^0.2.2","gulp-filter":"^2.0.0","gulp-git":"^1.0.1","gulp-tag-version":"^1.3.0","jshint":"^2.5.6","mocha":"^2.1.0"},"engines":{"node":">=4.0"},"homepage":"https://github.com/estools/estraverse","license":"BSD-2-Clause","main":"estraverse.js","maintainers":[{"name":"Yusuke Suzuki","email":"utatane.tea@gmail.com","url":"http://github.com/Constellation"}],"name":"estraverse","repository":{"type":"git","url":"git+ssh://git@github.com/estools/estraverse.git"},"scripts":{"lint":"jshint estraverse.js","test":"npm run-script lint && npm run-script unit-test","unit-test":"mocha --compilers js:babel-register"},"version":"4.3.0"};
 
 /***/ }),
 
@@ -4076,7 +4076,7 @@ exports.IS_SUPPORT_READDIR_WITH_FILE_TYPES = IS_MATCHED_BY_MAJOR || IS_MATCHED_B
 /***/ 175:
 /***/ (function(module) {
 
-module.exports = {"_args":[["escodegen@1.14.1","/Users/gfrigerio/base/use-herald"]],"_from":"escodegen@1.14.1","_id":"escodegen@1.14.1","_inBundle":false,"_integrity":"sha512-Bmt7NcRySdIfNPfU2ZoXDrrXsG9ZjvDxcAlMfDUgRBjLOWTuIACXPBFJH7Z+cLb40JeQco5toikyc9t9P8E9SQ==","_location":"/escodegen","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"escodegen@1.14.1","name":"escodegen","escapedName":"escodegen","rawSpec":"1.14.1","saveSpec":null,"fetchSpec":"1.14.1"},"_requiredBy":["/jsdom","/static-eval"],"_resolved":"https://registry.npmjs.org/escodegen/-/escodegen-1.14.1.tgz","_spec":"1.14.1","_where":"/Users/gfrigerio/base/use-herald","bin":{"esgenerate":"bin/esgenerate.js","escodegen":"bin/escodegen.js"},"bugs":{"url":"https://github.com/estools/escodegen/issues"},"dependencies":{"esprima":"^4.0.1","estraverse":"^4.2.0","esutils":"^2.0.2","optionator":"^0.8.1","source-map":"~0.6.1"},"description":"ECMAScript code generator","devDependencies":{"acorn":"^7.1.0","bluebird":"^3.4.7","bower-registry-client":"^1.0.0","chai":"^3.5.0","commonjs-everywhere":"^0.9.7","gulp":"^3.8.10","gulp-eslint":"^3.0.1","gulp-mocha":"^3.0.1","semver":"^5.1.0"},"engines":{"node":">=4.0"},"files":["LICENSE.BSD","README.md","bin","escodegen.js","package.json"],"homepage":"http://github.com/estools/escodegen","license":"BSD-2-Clause","main":"escodegen.js","maintainers":[{"name":"Yusuke Suzuki","email":"utatane.tea@gmail.com","url":"http://github.com/Constellation"}],"name":"escodegen","optionalDependencies":{"source-map":"~0.6.1"},"repository":{"type":"git","url":"git+ssh://git@github.com/estools/escodegen.git"},"scripts":{"build":"cjsify -a path: tools/entry-point.js > escodegen.browser.js","build-min":"cjsify -ma path: tools/entry-point.js > escodegen.browser.min.js","lint":"gulp lint","release":"node tools/release.js","test":"gulp travis","unit-test":"gulp test"},"version":"1.14.1"};
+module.exports = {"_args":[["escodegen@1.14.1","/Users/ppaskaris/base/coursera/use-herald-action"]],"_from":"escodegen@1.14.1","_id":"escodegen@1.14.1","_inBundle":false,"_integrity":"sha512-Bmt7NcRySdIfNPfU2ZoXDrrXsG9ZjvDxcAlMfDUgRBjLOWTuIACXPBFJH7Z+cLb40JeQco5toikyc9t9P8E9SQ==","_location":"/escodegen","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"escodegen@1.14.1","name":"escodegen","escapedName":"escodegen","rawSpec":"1.14.1","saveSpec":null,"fetchSpec":"1.14.1"},"_requiredBy":["/jsdom","/static-eval"],"_resolved":"https://registry.npmjs.org/escodegen/-/escodegen-1.14.1.tgz","_spec":"1.14.1","_where":"/Users/ppaskaris/base/coursera/use-herald-action","bin":{"esgenerate":"bin/esgenerate.js","escodegen":"bin/escodegen.js"},"bugs":{"url":"https://github.com/estools/escodegen/issues"},"dependencies":{"esprima":"^4.0.1","estraverse":"^4.2.0","esutils":"^2.0.2","optionator":"^0.8.1","source-map":"~0.6.1"},"description":"ECMAScript code generator","devDependencies":{"acorn":"^7.1.0","bluebird":"^3.4.7","bower-registry-client":"^1.0.0","chai":"^3.5.0","commonjs-everywhere":"^0.9.7","gulp":"^3.8.10","gulp-eslint":"^3.0.1","gulp-mocha":"^3.0.1","semver":"^5.1.0"},"engines":{"node":">=4.0"},"files":["LICENSE.BSD","README.md","bin","escodegen.js","package.json"],"homepage":"http://github.com/estools/escodegen","license":"BSD-2-Clause","main":"escodegen.js","maintainers":[{"name":"Yusuke Suzuki","email":"utatane.tea@gmail.com","url":"http://github.com/Constellation"}],"name":"escodegen","optionalDependencies":{"source-map":"~0.6.1"},"repository":{"type":"git","url":"git+ssh://git@github.com/estools/escodegen.git"},"scripts":{"build":"cjsify -a path: tools/entry-point.js > escodegen.browser.js","build-min":"cjsify -ma path: tools/entry-point.js > escodegen.browser.min.js","lint":"gulp lint","release":"node tools/release.js","test":"gulp travis","unit-test":"gulp test"},"version":"1.14.1"};
 
 /***/ }),
 
@@ -20237,7 +20237,7 @@ const handleStatus = async (client, { owner, repo, matchingRules, rules, base, s
         owner,
         repo,
         sha,
-        context: `Herald/${rule.name}`,
+        context: `Herald › ${rule.name}`,
         description: rule.description ? rule.description : STATUS_DESCRIPTION_COPY,
         target_url: rule.targetURL ? rule.targetURL : getBlobURL(rule.path, files, baseBlobPath, base),
         state: matchingRules.find((matchingRule) => matchingRule.path === rule.path)
@@ -25124,6 +25124,12 @@ function convertBody(buffer, headers) {
 	// html4
 	if (!res && str) {
 		res = /<meta[\s]+?http-equiv=(['"])content-type\1[\s]+?content=(['"])(.+?)\2/i.exec(str);
+		if (!res) {
+			res = /<meta[\s]+?content=(['"])(.+?)\1[\s]+?http-equiv=(['"])content-type\3/i.exec(str);
+			if (res) {
+				res.pop(); // drop last quote
+			}
+		}
 
 		if (res) {
 			res = /charset=(.*)/i.exec(res.pop());
@@ -26131,7 +26137,7 @@ function fetch(url, opts) {
 				// HTTP fetch step 5.5
 				switch (request.redirect) {
 					case 'error':
-						reject(new FetchError(`redirect mode is set to error: ${request.url}`, 'no-redirect'));
+						reject(new FetchError(`uri requested responds with a redirect, redirect mode is set to error: ${request.url}`, 'no-redirect'));
 						finalize();
 						return;
 					case 'manual':
@@ -26170,7 +26176,8 @@ function fetch(url, opts) {
 							method: request.method,
 							body: request.body,
 							signal: request.signal,
-							timeout: request.timeout
+							timeout: request.timeout,
+							size: request.size
 						};
 
 						// HTTP-redirect fetch step 9
