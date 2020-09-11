@@ -33,7 +33,7 @@ export const handleStatus: ActionMapInput = async (
     owner,
     repo,
     sha,
-    context: `Herald/${rule.name}`,
+    context: `Herald › ${rule.name}`,
     description: rule.description ? rule.description : STATUS_DESCRIPTION_COPY,
     target_url: rule.targetURL ? rule.targetURL : getBlobURL(rule.path, files, baseBlobPath, base),
     state: matchingRules.find((matchingRule) => matchingRule.path === rule.path)
