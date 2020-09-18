@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - name: Install packages
+        run: npm install
+      - name: Build binary
+        run: npm run build
       - name: apply herald rules
         id: herald
         uses: ./
