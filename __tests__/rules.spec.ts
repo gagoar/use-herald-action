@@ -8,6 +8,7 @@ import { Event } from '../src/util/constants';
 
 import eventJSON from '../__mocks__/event.json';
 import alterEventJSON from '../__mocks__/event_should_work.json';
+import botEventJSON from '../__mocks__/event_bot.json';
 import * as loadJSON from '../src/util/loadJSONFile';
 import { env } from '../src/environment';
 
@@ -42,6 +43,7 @@ const validRule = {
 describe('rules', () => {
   const event = (eventJSON as unknown) as Event;
   const alterEvent = (alterEventJSON as unknown) as Event;
+  const botEvent = (botEventJSON as unknown) as Event;
 
   afterAll(() => {
     unMockConsole('error');
@@ -531,6 +533,52 @@ describe('rules', () => {
       `);
     });
 
+    it('does matches eventJsonPath when sender.type is Bot', () => {
+      const files = [
+        {
+          filename: '/some/file.ts',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.ts',
+        },
+      ];
+
+      expect(
+        getMatchingRules(
+          [
+            {
+              ...validRule,
+              teams: [],
+              eventJsonPath: ['$[?(@.type.match(/Bot/))]'],
+              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
+            },
+          ],
+          files,
+          botEvent,
+          []
+        )
+      ).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "action": "comment",
+            "customMessage": "This is a custom message for a rule",
+            "eventJsonPath": Array [
+              "$[?(@.type.match(/Bot/))]",
+            ],
+            "includes": Array [
+              "*.ts",
+            ],
+            "matched": true,
+            "path": "/full/path/some/rule.json",
+            "teams": Array [],
+            "users": Array [
+              "eeny",
+              "meeny@gmail.com",
+              "miny",
+              "moe@coursera.org",
+            ],
+          },
+        ]
+      `);
+    });
     it('does not matches eventJsonPath because includes does not match', () => {
       const files = [
         {
