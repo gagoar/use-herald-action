@@ -27,15 +27,17 @@ This action allows you to add comments, reviewers and assignees to a pull reques
 
 - [What is `use-herald-action`?](#what-is-use-herald-action)
   - [Motivation](#motivation)
+- [Additional setup](#additional-setup)
+  - [Context](#context)
 - [How to create a rule](#how-to-create-a-rule)
 - [Rule Examples](#rule-examples)
+- [Error levels](#error-levels)
 - [Input parameters](#input-parameters)
 - [Output](#output)
 - [Events](#events)
 - [Examples](#examples)
   - [Basic example](#basic-example)
   - [Using output](#using-output)
-  - [Using error levels](#using-error-levels)
 
 <hr>
 
@@ -66,6 +68,16 @@ However, no equivalent exists for [assigning](https://docs.github.com/en/github/
 Nor does there exist a method to automatically subscribe to said pull requests (without being a reviewer).
 
 Although the main motivation behind this GitHub Action is to bridge the gap described above, this can be extended to many different use cases.
+
+<hr>
+
+## Additional setup
+
+Are you looking to use `use-herald-action` in a **private organization's repository**? If so, you wil need to do some [additional setup here](https://gagoar.github.io/use-herald-action) prior to using the action in your workflow.
+
+### Context
+
+The secret `secrets.GITHUB_TOKEN` provided in a workflow does not have sufficient permissions to mention users and teams that belong to private organizations. This is a problem because `use-herald-action` will create a comment with mentions of private users and teams (prepended with an `@`), but Github will not notify the users because of the lack of permissions. To solve this, we generate a token _with_ sufficient permissions by installing a GitHub App in your private organization. For more information, see [this issue](https://github.com/gagoar/use-herald-action/issues/83).
 
 <hr>
 
