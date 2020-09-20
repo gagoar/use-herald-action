@@ -195,6 +195,32 @@
       </div>
     </div>
 
+    <div class="card">
+      <div class="container step-header">
+        <div class="row">
+          <div class="col-9"><h2>Add an image (optional)</h2></div>
+          <div class="col-3"><h2>6</h2></div>
+        </div>
+      </div>
+
+      <div class="container step-content">
+        <div class="d-flex flex-column align-items-center">
+          <div class="p-2">
+            <p>
+              If you want to add an icon to the Use Herald Action App you just created,
+              <a id="logo-upload" href="" target="_blank">upload the logo</a> below!
+            </p>
+          </div>
+          <div class="p-2">
+            <img
+              src="https://raw.githubusercontent.com/gagoar/use-herald-action/master/images/logo.png"
+              alt="Use Herald Action logo"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="container parting">
       <hr />
       <p>
@@ -269,8 +295,11 @@
         owner: { login },
       } = JSON.parse(xhr.response);
 
+      const logoUploadLink = `https://github.com/organizations/${login}/settings/apps/${appSlug}#integration_hook_attributes_secret:~:text=Display%20information`;
+
       document.getElementById('app-id-data').innerHTML = appId;
       document.getElementById('pem-data').innerHTML = pem;
+      document.getElementById('logo-upload').href = logoUploadLink;
 
       // get organization ID and create link
       const xhr1 = new XMLHttpRequest();
