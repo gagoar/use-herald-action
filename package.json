@@ -117,7 +117,7 @@
     "@typescript-eslint/parser": "4.1.1",
     "@zeit/ncc": "0.22.3",
     "ajv-keywords": "3.5.2",
-    "auto-changelog": "2.2.0",
+    "auto-changelog": "2.2.1",
     "bufferutil": "4.0.1",
     "eslint": "7.9.0",
     "eslint-config-prettier": "6.11.0",
