@@ -2,7 +2,7 @@
   "name": "use-herald-action",
   "repository": "git@github.com:gagoar/use-herald-action.git",
   "license": "MIT",
-  "version": "2.0.1",
+  "version": "2.1.1",
   "description": "add subscribers, assignees and reviewers to your pull request",
   "main": "index.ts",
   "husky": {
@@ -14,7 +14,7 @@
     "test": "jest",
     "build": "ncc build index.ts",
     "lint": "eslint index.ts",
-    "version": "auto-changelog -p --issue-url https://github.com/gagoar/use-herald-action/issue/{id} --merge-url https://github.com/gagoar/use-herald/action/pull/{id} --compare-url https://github.com/gagoar/use-herald-action/compare/{from}...{to} && git add CHANGELOG.md"
+    "version": "auto-changelog -p --issue-url https://github.com/gagoar/use-herald-action/issue/{id} --merge-url https://github.com/gagoar/use-herald-action/pull/{id} --compare-url https://github.com/gagoar/use-herald-action/compare/{from}...{to} && git add CHANGELOG.md"
   },
   "engines": {
     "node": ">12.0.0"
@@ -109,34 +109,32 @@
   },
   "devDependencies": {
     "@types/debug": "4.1.5",
-    "@types/jest": "26.0.13",
+    "@types/jest": "26.0.14",
     "@types/jsonpath": "0.2.0",
     "@types/lodash.groupby": "4.6.6",
-    "@types/node": "13.13.16",
-    "@typescript-eslint/eslint-plugin": "4.0.1",
-    "@typescript-eslint/parser": "4.0.1",
+    "@types/node": "13.13.21",
+    "@typescript-eslint/eslint-plugin": "4.1.1",
+    "@typescript-eslint/parser": "4.1.1",
     "@zeit/ncc": "0.22.3",
     "ajv-keywords": "3.5.2",
     "auto-changelog": "2.2.0",
     "bufferutil": "4.0.1",
-    "canvas": "2.6.1",
-    "eslint": "7.8.1",
+    "eslint": "7.9.0",
     "eslint-config-prettier": "6.11.0",
-    "husky": "4.2.5",
+    "husky": "4.3.0",
     "jest": "26.4.2",
     "jest-mock-process": "1.4.0",
-    "lint-staged": "10.3.0",
+    "lint-staged": "10.4.0",
     "ncc": "0.3.6",
     "nock": "13.0.4",
-    "prettier": "2.1.1",
+    "prettier": "2.1.2",
     "prettier-eslint": "11.0.0",
     "prettier-eslint-cli": "5.0.0",
-    "pretty-quick": "3.0.0",
+    "pretty-quick": "3.0.2",
     "ts-jest": "26.3.0",
     "ts-node": "9.0.0",
     "tslib": "2.0.1",
     "typescript": "4.0.2",
-    "utf-8-validate": "5.0.2",
-    "ws": "7.3.1"
+    "utf-8-validate": "5.0.2"
   }
 }

@@ -1,0 +1,7 @@
+{
+  "name": "The template has an issue attached",
+  "description": "Check if an issue is present on PR",
+  "targetURL": "https://github.com/gagoar/use-herald-action/wiki/PR-Validations#validate-if-the-issue-is-present-in-the-prs-description",
+  "action": "status",
+  "eventJsonPath": ["$[?(!@.body.match(/Issue Reference.+:/i) || @.body.match(/Issue Reference.+#[0-9]+/i))].body"]
+}

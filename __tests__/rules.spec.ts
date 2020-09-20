@@ -9,10 +9,20 @@ import { Event } from '../src/util/constants';
 import eventJSON from '../__mocks__/event.json';
 import alterEventJSON from '../__mocks__/event_should_work.json';
 import * as loadJSON from '../src/util/loadJSONFile';
+import { env } from '../src/environment';
 
 jest.mock('fast-glob');
 jest.mock('../src/util/loadJSONFile');
+jest.mock('../src/environment', () => {
+  const { env } = jest.requireActual('../src/environment');
 
+  return {
+    env: {
+      ...env,
+      GITHUB_WORKSPACE: '/full/path',
+    },
+  };
+});
 const sync = fg.sync as jest.Mock<any>;
 const loadJSONFile = (loadJSON.loadJSONFile as unknown) as jest.Mock<any>;
 
@@ -43,7 +53,7 @@ describe('rules', () => {
         composeCommentsForUsers([
           {
             ...validRule,
-            path: '/some/rule.json',
+            path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
             matched: true,
             teams: [],
           },
@@ -60,14 +70,14 @@ describe('rules', () => {
           {
             ...validRule,
             customMessage: undefined,
-            path: '/some/rule.json',
+            path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
             matched: true,
             teams: [],
           },
           {
             ...validRule,
             customMessage: undefined,
-            path: '/some/rule1.json',
+            path: `${env.GITHUB_WORKSPACE}/some/rule1.json`,
             matched: true,
             teams: ['awesomeTeam'],
           },
@@ -86,7 +96,7 @@ describe('rules', () => {
           {
             ...validRule,
             customMessage: undefined,
-            path: '/some/rule.json',
+            path: `${env.GITHUB_WORKSPACE}/some/rule1.json`,
             matched: true,
             teams: [],
           },
@@ -102,8 +112,12 @@ describe('rules', () => {
   });
   describe('getMatchingRules', () => {
     it('no matches', () => {
-      const files = [{ filename: '/some/file.js' }];
-
+      const files = [
+        {
+          filename: '/some/file.js',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.js',
+        },
+      ];
       expect(
         getMatchingRules(
           [
@@ -111,7 +125,7 @@ describe('rules', () => {
               ...validRule,
               includes: undefined,
               teams: [],
-              path: '/some/rule.json',
+              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
             },
           ],
           files,
@@ -122,7 +136,16 @@ describe('rules', () => {
     });
 
     it('Matches includes and eventJsonPath (using contains)', () => {
-      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }];
+      const files = [
+        {
+          filename: '/some/file.js',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.js',
+        },
+        {
+          filename: '/some/file.ts',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.ts',
+        },
+      ];
 
       expect(
         getMatchingRules(
@@ -130,8 +153,11 @@ describe('rules', () => {
             {
               ...validRule,
               teams: [],
-              eventJsonPath: ['$[?(@.body.match(/Issue Reference.+#[0-9]+/))].body'],
-              path: '/some/rule.json',
+              eventJsonPath: [
+                '$[?(!@.body.match(/Issue Reference.+:/i))].body',
+                '$[?(@.body.match(/Issue Reference.+#[0-9]+/i))].body',
+              ],
+              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
             },
           ],
           files,
@@ -144,13 +170,14 @@ describe('rules', () => {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
             "eventJsonPath": Array [
-              "$[?(@.body.match(/Issue Reference.+#[0-9]+/))].body",
+              "$[?(!@.body.match(/Issue Reference.+:/i))].body",
+              "$[?(@.body.match(/Issue Reference.+#[0-9]+/i))].body",
             ],
             "includes": Array [
               "*.ts",
             ],
             "matched": true,
-            "path": "/some/rule.json",
+            "path": "/full/path/some/rule.json",
             "teams": Array [],
             "users": Array [
               "eeny",
@@ -163,7 +190,16 @@ describe('rules', () => {
       `);
     });
     it('Matches includes and eventJsonPath', () => {
-      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }];
+      const files = [
+        {
+          filename: '/some/file.js',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.js',
+        },
+        {
+          filename: '/some/file.ts',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.ts',
+        },
+      ];
 
       expect(
         getMatchingRules(
@@ -172,7 +208,7 @@ describe('rules', () => {
               ...validRule,
               teams: [],
               eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
-              path: '/some/rule.json',
+              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
             },
           ],
           files,
@@ -191,7 +227,7 @@ describe('rules', () => {
               "*.ts",
             ],
             "matched": true,
-            "path": "/some/rule.json",
+            "path": "/full/path/some/rule.json",
             "teams": Array [],
             "users": Array [
               "eeny",
@@ -205,7 +241,21 @@ describe('rules', () => {
     });
 
     it('matching includes/excludes combined', () => {
-      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }, { filename: '/some/uglyFile.ts' }];
+      const files = [
+        {
+          filename: '/some/file.js',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.js',
+        },
+        {
+          filename: '/some/file.ts',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.ts',
+        },
+        {
+          filename: '/some/uglyfile.ts',
+          blob_url:
+            'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/uglyfile.ts',
+        },
+      ];
       expect(
         getMatchingRules(
           [
@@ -213,7 +263,7 @@ describe('rules', () => {
               ...validRule,
               excludes: ['/some/uglyFile.ts'],
               teams: [],
-              path: '/some/rule.json',
+              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
             },
           ],
           files,
@@ -232,7 +282,7 @@ describe('rules', () => {
               "*.ts",
             ],
             "matched": true,
-            "path": "/some/rule.json",
+            "path": "/full/path/some/rule.json",
             "teams": Array [],
             "users": Array [
               "eeny",
@@ -245,16 +295,25 @@ describe('rules', () => {
       `);
     });
     it('matching includes (and not matching another rule)', () => {
-      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }];
+      const files = [
+        {
+          filename: '/some/file.js',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.js',
+        },
+        {
+          filename: '/some/file.ts',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.ts',
+        },
+      ];
       expect(
         getMatchingRules(
           [
-            { ...validRule, teams: [], path: '/some/rule.json' },
+            { ...validRule, teams: [], path: `${env.GITHUB_WORKSPACE}/some/rule.json` },
             {
               ...validRule,
               includes: ['src/*.ts'],
               teams: [],
-              path: '/some/ruleThatShouldNotMatch.json',
+              path: `${env.GITHUB_WORKSPACE}/some/ruleThatShouldNotMatch.json`,
             },
           ],
           files,
@@ -270,7 +329,7 @@ describe('rules', () => {
               "*.ts",
             ],
             "matched": true,
-            "path": "/some/rule.json",
+            "path": "/full/path/some/rule.json",
             "teams": Array [],
             "users": Array [
               "eeny",
@@ -283,7 +342,22 @@ describe('rules', () => {
       `);
     });
     it('does not match includesInPatch (with more than one pattern)', () => {
-      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }, { filename: '/some/README.md' }];
+      const files = [
+        {
+          filename: '/some/file.js',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.js',
+        },
+        {
+          filename: '/some/file.ts',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.ts',
+        },
+        {
+          filename: '/some/README.md',
+          blob_url:
+            'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/README.md',
+        },
+      ];
+
       expect(
         getMatchingRules(
           [
@@ -292,7 +366,7 @@ describe('rules', () => {
               includes: undefined,
               includesInPatch: ['/noMatch/'],
               teams: [],
-              path: '/some/rule.json',
+              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
             },
           ],
           files,
@@ -305,7 +379,21 @@ describe('rules', () => {
       ).toMatchObject([]);
     });
     it('matching includesInPatch (with more than one pattern)', () => {
-      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }, { filename: '/some/README.md' }];
+      const files = [
+        {
+          filename: '/some/file.js',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.js',
+        },
+        {
+          filename: '/some/file.ts',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.ts',
+        },
+        {
+          filename: '/some/README.md',
+          blob_url:
+            'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/README.md',
+        },
+      ];
       expect(
         getMatchingRules(
           [
@@ -314,7 +402,7 @@ describe('rules', () => {
               includes: undefined,
               includesInPatch: ['(gag).+', '(sim).+', '/noMatch/', '*'],
               teams: [],
-              path: '/some/rule.json',
+              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
             },
           ],
           files,
@@ -337,7 +425,7 @@ describe('rules', () => {
               "*",
             ],
             "matched": true,
-            "path": "/some/rule.json",
+            "path": "/full/path/some/rule.json",
             "teams": Array [],
             "users": Array [
               "eeny",
@@ -350,7 +438,22 @@ describe('rules', () => {
       `);
     });
     it('matching includes (with more than one includes pattern)', () => {
-      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }, { filename: '/some/README.md' }];
+      const files = [
+        {
+          filename: '/some/file.js',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.js',
+        },
+        {
+          filename: '/some/file.ts',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.ts',
+        },
+        {
+          filename: '/some/README.md',
+          blob_url:
+            'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/README.md',
+        },
+      ];
+
       expect(
         getMatchingRules(
           [
@@ -358,7 +461,7 @@ describe('rules', () => {
               ...validRule,
               includes: [...validRule.includes, '*.md', '.gitignore'],
               teams: [],
-              path: '/some/rule.json',
+              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
             },
           ],
           files,
@@ -376,7 +479,7 @@ describe('rules', () => {
               ".gitignore",
             ],
             "matched": true,
-            "path": "/some/rule.json",
+            "path": "/full/path/some/rule.json",
             "teams": Array [],
             "users": Array [
               "eeny",
@@ -389,9 +492,24 @@ describe('rules', () => {
       `);
     });
     it('matching includes (includes as string)', () => {
-      const files = [{ filename: '/some/file.js' }, { filename: '/some/file.ts' }];
-      expect(getMatchingRules([{ ...validRule, teams: [], path: '/some/rule.json' }], files, event, []))
-        .toMatchInlineSnapshot(`
+      const files = [
+        {
+          filename: '/some/file.js',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.js',
+        },
+        {
+          filename: '/some/file.ts',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.ts',
+        },
+      ];
+      expect(
+        getMatchingRules(
+          [{ ...validRule, teams: [], path: `${env.GITHUB_WORKSPACE}/some/rule.json` }],
+          files,
+          event,
+          []
+        )
+      ).toMatchInlineSnapshot(`
         Array [
           Object {
             "action": "comment",
@@ -400,7 +518,7 @@ describe('rules', () => {
               "*.ts",
             ],
             "matched": true,
-            "path": "/some/rule.json",
+            "path": "/full/path/some/rule.json",
             "teams": Array [],
             "users": Array [
               "eeny",
@@ -414,7 +532,12 @@ describe('rules', () => {
     });
 
     it('does not matches eventJsonPath because includes does not match', () => {
-      const files = [{ filename: '/some/file.ts' }];
+      const files = [
+        {
+          filename: '/some/file.ts',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.ts',
+        },
+      ];
 
       expect(
         getMatchingRules(
@@ -424,7 +547,7 @@ describe('rules', () => {
               includes: ['*.js'],
               teams: ['eeny'],
               eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
-              path: '/some/rule.json',
+              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
             },
           ],
           files,
@@ -434,7 +557,12 @@ describe('rules', () => {
       ).toMatchObject([]);
     });
     it('matches includes && eventJsonPath in the same rule', () => {
-      const files = [{ filename: '/some/file.js' }];
+      const files = [
+        {
+          filename: '/some/file.js',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.js',
+        },
+      ];
 
       expect(
         getMatchingRules(
@@ -444,7 +572,7 @@ describe('rules', () => {
               includes: ['*.js'],
               teams: ['eeny'],
               eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
-              path: '/some/rule.json',
+              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
             },
           ],
           files,
@@ -463,7 +591,7 @@ describe('rules', () => {
               "*.js",
             ],
             "matched": true,
-            "path": "/some/rule.json",
+            "path": "/full/path/some/rule.json",
             "teams": Array [
               "eeny",
             ],
@@ -478,7 +606,12 @@ describe('rules', () => {
       `);
     });
     it('matching eventJsonPath', () => {
-      const files = [{ filename: '/some/file.js' }];
+      const files = [
+        {
+          filename: '/some/file.js',
+          blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.js',
+        },
+      ];
 
       expect(
         getMatchingRules(
@@ -488,7 +621,7 @@ describe('rules', () => {
               includes: undefined,
               teams: [],
               eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
-              path: '/some/rule.json',
+              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
             },
           ],
           files,
@@ -505,7 +638,7 @@ describe('rules', () => {
             ],
             "includes": undefined,
             "matched": true,
-            "path": "/some/rule.json",
+            "path": "/full/path/some/rule.json",
             "teams": Array [],
             "users": Array [
               "eeny",

@@ -1,6 +1,8 @@
 name: use herald
 
-on: pull_request
+on:
+  pull_request:
+    types: [edited, opened, synchronize, reopened]
 
 jobs:
   herald:
@@ -8,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - name: Install packages
+        run: npm install
+      - name: Build binary
+        run: npm run build
       - name: apply herald rules
         id: herald
         uses: ./

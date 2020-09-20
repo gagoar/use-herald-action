@@ -1,18 +1,15 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { sync } from 'fast-glob';
 import { basename } from 'path';
-import { Event, EMAIL_REGEX } from './util/constants';
+import { Event, EMAIL_REGEX, RuleFile } from './util/constants';
 import { env } from './environment';
 import minimatch from 'minimatch';
 import groupBy from 'lodash.groupby';
-
-import { RestEndpointMethodTypes } from '@octokit/rest';
 
 import JSONPath from 'jsonpath';
 import { loadJSONFile } from './util/loadJSONFile';
 import { logger } from './util/debug';
 import { makeArray } from './util/makeArray';
-
 const debug = logger('rules');
 
 const formatUser = (handleOrEmail: string) => {
@@ -34,8 +31,9 @@ enum RuleExtras {
   customMessage = 'customMessage',
   name = 'name',
   errorLevel = 'errorLevel',
-
   labels = 'labels',
+  description = 'description',
+  targetURL = 'targetURL',
 }
 enum RuleMatchers {
   includesInPatch = 'includesInPatch',
@@ -51,8 +49,8 @@ interface StringIndexSignatureInterface {
 export enum RuleActions {
   comment = 'comment',
   review = 'review',
+  status = 'status',
   assign = 'assign',
-
   label = 'label',
 }
 
@@ -71,13 +69,11 @@ export interface Rule {
   includesInPatch?: string[];
   eventJsonPath?: string[];
   customMessage?: string;
-
   labels?: string[];
-
+  description?: string;
+  targetURL?: string;
   errorLevel?: keyof typeof ErrorLevels;
 }
-
-type File = RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files'][0];
 
 type RawRule = Rule & { users?: string[]; teams?: string[] };
 
@@ -118,7 +114,8 @@ const isValidRawRule = (content: unknown): content is RawRule => {
     hasTeams ||
     hasUsers ||
     (hasAttribute('customMessage', content) && !!content.customMessage && content.action === RuleActions.comment) ||
-    (hasAttribute('labels', content) && !!content.labels && content.action === RuleActions.label);
+    (hasAttribute('labels', content) && !!content.labels && content.action === RuleActions.label) ||
+    (hasAttribute('action', content) && content.action === RuleActions.status);
   const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
 
   debug('validation:', {
@@ -266,9 +263,10 @@ const isMatch: Matcher = (rule, options) => {
   debug('isMatch:', { rule, matches });
   return matches.length ? matches.every((match) => match === true) : false;
 };
+
 export const getMatchingRules = (
   rules: Rule[],
-  files: Partial<File> & Required<Pick<File, 'filename'>>[],
+  files: RuleFile[],
   event: Event,
   patchContent: string[]
 ): MatchingRule[] => {
@@ -289,6 +287,7 @@ enum TypeOfComments {
   standalone = 'standalone',
   combined = 'combined',
 }
+
 export const composeCommentsForUsers = (matchingRules: MatchingRule[]): string[] => {
   const groups = groupBy(matchingRules, (rule) =>
     rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined
