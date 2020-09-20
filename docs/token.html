@@ -238,11 +238,15 @@
     setTimeout(() => {
       document.getElementById('steps-parent').style.opacity = '1';
     }, 100);
+
+    document.title = 'UHA - Post-setup instructions';
   };
 
   // Function to transition the page to a failed state
   const pageFailed = () => {
     document.getElementById('header-text').innerHTML = 'Something went wrong...<br />Give that another go, will ya?';
+
+    document.title = 'UHA - Validation failed';
   };
 
   document.getElementById('steps-parent').style.display = 'none';
