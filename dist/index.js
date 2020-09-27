@@ -27464,14 +27464,14 @@ const formatUser = (handleOrEmail) => {
     return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
 };
 const commentTemplate = (mentions) => `Hi there, given these changes, Herald things that these users should take a look!
-   <details open>
+   <details open>\n
    ${markdown_table_default()([
     ['Rule', 'Mention'],
     ...mentions.map(({ rule, mentions }) => [
         rule.replace(`${env.GITHUB_WORKSPACE}/`, ''),
         mentions.map((user) => formatUser(user)).join('<br/>\n'),
     ]),
-], { align: ['l', 'c'] })}
+], { align: ['l', 'c'] })}\n
   </details>
   <!--herald-use-action-->
   `;
