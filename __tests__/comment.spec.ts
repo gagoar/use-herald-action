@@ -64,17 +64,12 @@ describe('composeCommentsForUsers', () => {
       Array [
         "Hi there, given these changes, Herald things that these users should take a look!
          <details open>
-         | Rule            |                                    Mention                                    |
-      | :-------------- | :---------------------------------------------------------------------------: |
-      | some/rule.json  |          @eeny<br/>
-      meeny@gmail.com<br/>
-      @miny<br/>
-      moe@coursera.org          |
-      | some/rule1.json | @eeny<br/>
-      meeny@gmail.com<br/>
-      @miny<br/>
-      moe@coursera.org<br/>
-      @awesomeTeam |
+
+         | Rule            |                                  Mention                                  |
+      | :-------------- | :-----------------------------------------------------------------------: |
+      | some/rule.json  |          @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org         |
+      | some/rule1.json | @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org<br/>@awesomeTeam |
+
         </details>
         <!--herald-use-action-->
         ",
@@ -96,12 +91,11 @@ describe('composeCommentsForUsers', () => {
       Array [
         "Hi there, given these changes, Herald things that these users should take a look!
          <details open>
-         | Rule            |                           Mention                           |
-      | :-------------- | :---------------------------------------------------------: |
-      | some/rule1.json | @eeny<br/>
-      meeny@gmail.com<br/>
-      @miny<br/>
-      moe@coursera.org |
+
+         | Rule            |                          Mention                         |
+      | :-------------- | :------------------------------------------------------: |
+      | some/rule1.json | @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org |
+
         </details>
         <!--herald-use-action-->
         ",

@@ -27460,6 +27460,7 @@ var TypeOfComments;
     TypeOfComments["standalone"] = "standalone";
     TypeOfComments["combined"] = "combined";
 })(TypeOfComments || (TypeOfComments = {}));
+const LINE_BREAK = '<br/>';
 const formatUser = (handleOrEmail) => {
     return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
 };
@@ -27469,7 +27470,7 @@ const commentTemplate = (mentions) => `Hi there, given these changes, Herald thi
     ['Rule', 'Mention'],
     ...mentions.map(({ rule, mentions }) => [
         rule.replace(`${env.GITHUB_WORKSPACE}/`, ''),
-        mentions.map((user) => formatUser(user)).join('<br/>\n'),
+        mentions.map((user) => formatUser(user)).join(LINE_BREAK),
     ]),
 ], { align: ['l', 'c'] })}\n
   </details>
