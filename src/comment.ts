@@ -31,8 +31,9 @@ const formatUser = (handleOrEmail: string) => {
 };
 
 const commentTemplate = (mentions: Mention[]): string =>
-  `Hi there, given these changes, Herald things that these users should take a look!
+  `
    <details open>\n
+   <summary>Hi there, given these changes, Herald thinks that these users should take a look! </summary>\n
    ${table(
      [
        ['Rule', 'Mention'],

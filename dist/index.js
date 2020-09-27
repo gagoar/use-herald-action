@@ -24560,8 +24560,9 @@ const LINE_BREAK = '<br/>';
 const formatUser = (handleOrEmail) => {
     return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
 };
-const commentTemplate = (mentions) => `Hi there, given these changes, Herald things that these users should take a look!
+const commentTemplate = (mentions) => `
    <details open>\n
+   <summary>Hi there, given these changes, Herald thinks that these users should take a look! </summary>\n
    ${markdown_table_default()([
     ['Rule', 'Mention'],
     ...mentions.map(({ rule, mentions }) => [
