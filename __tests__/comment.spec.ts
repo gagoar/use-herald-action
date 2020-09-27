@@ -32,6 +32,7 @@ describe('composeCommentsForUsers', () => {
           ...validRule,
           path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
           matched: true,
+          blobURL: 'MOCKED_BLOB_URL',
           teams: [],
         },
       ])
@@ -50,6 +51,7 @@ describe('composeCommentsForUsers', () => {
           customMessage: undefined,
           path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
           matched: true,
+          blobURL: 'MOCKED_BLOB_URL',
           teams: [],
         },
         {
@@ -57,18 +59,21 @@ describe('composeCommentsForUsers', () => {
           customMessage: undefined,
           path: `${env.GITHUB_WORKSPACE}/some/rule1.json`,
           matched: true,
+          blobURL: 'MOCKED_BLOB_URL',
           teams: ['awesomeTeam'],
         },
       ])
     ).toMatchInlineSnapshot(`
       Array [
-        "Hi there, given these changes, Herald things that these users should take a look!
+        "
          <details open>
 
-         | Rule            |                                  Mention                                  |
-      | :-------------- | :-----------------------------------------------------------------------: |
-      | some/rule.json  |          @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org         |
-      | some/rule1.json | @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org<br/>@awesomeTeam |
+         <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>
+
+         | Rule                               |                                  Mention                                  |
+      | :--------------------------------- | :-----------------------------------------------------------------------: |
+      | [some/rule.json](MOCKED_BLOB_URL)  |          @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org         |
+      | [some/rule1.json](MOCKED_BLOB_URL) | @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org<br/>@awesomeTeam |
 
         </details>
         <!--herald-use-action-->
@@ -83,18 +88,21 @@ describe('composeCommentsForUsers', () => {
           ...validRule,
           customMessage: undefined,
           path: `${env.GITHUB_WORKSPACE}/some/rule1.json`,
+          blobURL: 'MOCKED_BLOB_URL',
           matched: true,
           teams: [],
         },
       ])
     ).toMatchInlineSnapshot(`
       Array [
-        "Hi there, given these changes, Herald things that these users should take a look!
+        "
          <details open>
 
-         | Rule            |                          Mention                         |
-      | :-------------- | :------------------------------------------------------: |
-      | some/rule1.json | @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org |
+         <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>
+
+         | Rule                               |                          Mention                         |
+      | :--------------------------------- | :------------------------------------------------------: |
+      | [some/rule1.json](MOCKED_BLOB_URL) | @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org |
 
         </details>
         <!--herald-use-action-->

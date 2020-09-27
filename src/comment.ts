@@ -9,6 +9,7 @@ import { logger } from './util/debug';
 import { ActionMapInput } from '.';
 import { MatchingRule } from './rules';
 import { env } from './environment';
+import { getBlobURL } from './util/getBlobURL';
 
 type AllCommentsParams = RestEndpointMethodTypes['issues']['listComments']['parameters'];
 
@@ -23,7 +24,7 @@ enum TypeOfComments {
   combined = 'combined',
 }
 
-type Mention = { rule: string; mentions: string[] };
+type Mention = { rule: string; mentions: string[]; URL: string };
 
 const LINE_BREAK = '<br/>';
 const formatUser = (handleOrEmail: string) => {
@@ -33,12 +34,12 @@ const formatUser = (handleOrEmail: string) => {
 const commentTemplate = (mentions: Mention[]): string =>
   `
    <details open>\n
-   <summary>Hi there, given these changes, Herald thinks that these users should take a look! </summary>\n
+   <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>\n
    ${table(
      [
        ['Rule', 'Mention'],
-       ...mentions.map(({ rule, mentions }) => [
-         rule.replace(`${env.GITHUB_WORKSPACE}/`, ''),
+       ...mentions.map(({ rule, URL, mentions }) => [
+         `[${rule.replace(`${env.GITHUB_WORKSPACE}/`, '')}](${URL})`,
          mentions.map((user) => formatUser(user)).join(LINE_BREAK),
        ]),
      ],
@@ -48,7 +49,7 @@ const commentTemplate = (mentions: Mention[]): string =>
   <!--herald-use-action-->
   `;
 
-export const composeCommentsForUsers = (matchingRules: MatchingRule[]): string[] => {
+export const composeCommentsForUsers = (matchingRules: (MatchingRule & { blobURL: string })[]): string[] => {
   const groups = groupBy(matchingRules, (rule) =>
     rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined
   );
@@ -57,7 +58,10 @@ export const composeCommentsForUsers = (matchingRules: MatchingRule[]): string[]
 
   if (groups[TypeOfComments.combined]) {
     const mentions = groups[TypeOfComments.combined].reduce(
-      (memo, { name, path, users, teams }) => [...memo, { rule: name || path, mentions: [...users, ...teams] }],
+      (memo, { name, path, users, teams, blobURL }) => [
+        ...memo,
+        { URL: blobURL, rule: name || path, mentions: [...users, ...teams] },
+      ],
       [] as Mention[]
     );
 
@@ -98,13 +102,18 @@ const getAllComments = async (
 
 export const handleComment: ActionMapInput = async (
   client,
-  { owner, repo, prNumber, matchingRules },
+  { owner, repo, prNumber, matchingRules, files, base },
   requestConcurrency = 1
 ): Promise<unknown> => {
   debug('handleComment called with:', matchingRules);
 
   const queue = new PQueue({ concurrency: requestConcurrency });
-  const commentsFromRules = composeCommentsForUsers(matchingRules);
+
+  const rulesWithBlobURL = matchingRules.map((mRule) => ({
+    ...mRule,
+    blobURL: getBlobURL(mRule.path, files, owner, repo, base),
+  }));
+  const commentsFromRules = composeCommentsForUsers(rulesWithBlobURL);
   const rawComments = await getAllComments(client, {
     owner,
     repo,

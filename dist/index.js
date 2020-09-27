@@ -24550,6 +24550,7 @@ var markdown_table_default = /*#__PURE__*/__webpack_require__.n(markdown_table);
 
 
 
+
 const comment_debug = logger('comment');
 var TypeOfComments;
 (function (TypeOfComments) {
@@ -24562,11 +24563,11 @@ const formatUser = (handleOrEmail) => {
 };
 const commentTemplate = (mentions) => `
    <details open>\n
-   <summary>Hi there, given these changes, Herald thinks that these users should take a look! </summary>\n
+   <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>\n
    ${markdown_table_default()([
     ['Rule', 'Mention'],
-    ...mentions.map(({ rule, mentions }) => [
-        rule.replace(`${env.GITHUB_WORKSPACE}/`, ''),
+    ...mentions.map(({ rule, URL, mentions }) => [
+        `[${rule.replace(`${env.GITHUB_WORKSPACE}/`, '')}](${URL})`,
         mentions.map((user) => formatUser(user)).join(LINE_BREAK),
     ]),
 ], { align: ['l', 'c'] })}\n
@@ -24577,7 +24578,10 @@ const composeCommentsForUsers = (matchingRules) => {
     const groups = lodash_groupby_default()(matchingRules, (rule) => rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined);
     let comments = [];
     if (groups[TypeOfComments.combined]) {
-        const mentions = groups[TypeOfComments.combined].reduce((memo, { name, path, users, teams }) => [...memo, { rule: name || path, mentions: [...users, ...teams] }], []);
+        const mentions = groups[TypeOfComments.combined].reduce((memo, { name, path, users, teams, blobURL }) => [
+            ...memo,
+            { URL: blobURL, rule: name || path, mentions: [...users, ...teams] },
+        ], []);
         comments = [...comments, commentTemplate([...new Set(mentions)])];
     }
     if (groups[TypeOfComments.standalone]) {
@@ -24599,10 +24603,11 @@ const getAllComments = async (client, params) => {
         return [...comments, ...moreComments];
     }
 };
-const handleComment = async (client, { owner, repo, prNumber, matchingRules }, requestConcurrency = 1) => {
+const handleComment = async (client, { owner, repo, prNumber, matchingRules, files, base }, requestConcurrency = 1) => {
     comment_debug('handleComment called with:', matchingRules);
     const queue = new dist_default.a({ concurrency: requestConcurrency });
-    const commentsFromRules = composeCommentsForUsers(matchingRules);
+    const rulesWithBlobURL = matchingRules.map((mRule) => (Object.assign(Object.assign({}, mRule), { blobURL: getBlobURL(mRule.path, files, owner, repo, base) })));
+    const commentsFromRules = composeCommentsForUsers(rulesWithBlobURL);
     const rawComments = await getAllComments(client, {
         owner,
         repo,
