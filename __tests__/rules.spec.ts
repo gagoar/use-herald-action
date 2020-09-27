@@ -2,7 +2,7 @@
 
 import * as fg from 'fast-glob';
 
-import { loadRules, getMatchingRules, composeCommentsForUsers, RuleActions } from '../src/rules';
+import { loadRules, getMatchingRules, RuleActions } from '../src/rules';
 import { unMockConsole, mockConsole } from './helpers';
 import { Event } from '../src/util/constants';
 
@@ -49,69 +49,6 @@ describe('rules', () => {
     unMockConsole('error');
   });
 
-  describe('composeCommentsForUsers', () => {
-    it('uses the customMessage in the rule', () => {
-      expect(
-        composeCommentsForUsers([
-          {
-            ...validRule,
-            path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
-            matched: true,
-            teams: [],
-          },
-        ])
-      ).toMatchInlineSnapshot(`
-        Array [
-          "This is a custom message for a rule",
-        ]
-      `);
-    });
-    it('it combines 2 comments when do not have customMessage', () => {
-      expect(
-        composeCommentsForUsers([
-          {
-            ...validRule,
-            customMessage: undefined,
-            path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
-            matched: true,
-            teams: [],
-          },
-          {
-            ...validRule,
-            customMessage: undefined,
-            path: `${env.GITHUB_WORKSPACE}/some/rule1.json`,
-            matched: true,
-            teams: ['awesomeTeam'],
-          },
-        ])
-      ).toMatchInlineSnapshot(`
-        Array [
-          "Hi there, Herald found that given these changes @eeny, meeny@gmail.com, @miny, moe@coursera.org, @awesomeTeam might want to take a look! 
-         
-          <!-- herald-use-action -->",
-        ]
-      `);
-    });
-    it('compose message', () => {
-      expect(
-        composeCommentsForUsers([
-          {
-            ...validRule,
-            customMessage: undefined,
-            path: `${env.GITHUB_WORKSPACE}/some/rule1.json`,
-            matched: true,
-            teams: [],
-          },
-        ])
-      ).toMatchInlineSnapshot(`
-        Array [
-          "Hi there, Herald found that given these changes @eeny, meeny@gmail.com, @miny, moe@coursera.org might want to take a look! 
-         
-          <!-- herald-use-action -->",
-        ]
-      `);
-    });
-  });
   describe('getMatchingRules', () => {
     it('no matches', () => {
       const files = [

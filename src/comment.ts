@@ -1,12 +1,15 @@
 import PQueue from 'p-queue';
+import groupBy from 'lodash.groupby';
+import table from 'markdown-table';
 
-import { composeCommentsForUsers } from './rules';
-
-import { maxPerPage } from './util/constants';
+import { EMAIL_REGEX, maxPerPage } from './util/constants';
 
 import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
 import { logger } from './util/debug';
 import { ActionMapInput } from '.';
+import { MatchingRule } from './rules';
+import { env } from './environment';
+
 type AllCommentsParams = RestEndpointMethodTypes['issues']['listComments']['parameters'];
 
 type AllCommentsResponse = RestEndpointMethodTypes['issues']['listComments']['response'];
@@ -15,6 +18,59 @@ type IssueComments = AllCommentsResponse['data'];
 
 const debug = logger('comment');
 
+enum TypeOfComments {
+  standalone = 'standalone',
+  combined = 'combined',
+}
+
+type Mention = { rule: string; mentions: string[] };
+
+const formatUser = (handleOrEmail: string) => {
+  return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
+};
+
+const commentTemplate = (mentions: Mention[]): string =>
+  `Hi there, given these changes, Herald things that these users should take a look!
+   <details open>
+   ${table(
+     [
+       ['Rule', 'Mention'],
+       ...mentions.map(({ rule, mentions }) => [
+         rule.replace(`${env.GITHUB_WORKSPACE}/`, ''),
+         mentions.map((user) => formatUser(user)).join('<br/>\n'),
+       ]),
+     ],
+     { align: ['l', 'c'] }
+   )}
+  </details>
+  <!--herald-use-action-->
+  `;
+
+export const composeCommentsForUsers = (matchingRules: MatchingRule[]): string[] => {
+  const groups = groupBy(matchingRules, (rule) =>
+    rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined
+  );
+
+  let comments = [] as string[];
+
+  if (groups[TypeOfComments.combined]) {
+    const mentions = groups[TypeOfComments.combined].reduce(
+      (memo, { name, path, users, teams }) => [...memo, { rule: name || path, mentions: [...users, ...teams] }],
+      [] as Mention[]
+    );
+
+    comments = [...comments, commentTemplate([...new Set(mentions)])];
+  }
+
+  if (groups[TypeOfComments.standalone]) {
+    const customMessages = groups[TypeOfComments.standalone]
+      .filter((rule) => rule.customMessage)
+      .map(({ customMessage }) => customMessage as string);
+    comments = [...comments, ...customMessages];
+  }
+
+  return comments;
+};
 const getAllComments = async (
   client: InstanceType<typeof Octokit>,
   params: AllCommentsParams

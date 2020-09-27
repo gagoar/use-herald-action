@@ -104,6 +104,7 @@
     "fast-glob": "3.2.4",
     "jsonpath": "1.0.2",
     "lodash.groupby": "4.6.0",
+    "markdown-table": "^2.0.0",
     "minimatch": "3.0.4",
     "p-queue": "6.6.1"
   },
@@ -112,6 +113,7 @@
     "@types/jest": "26.0.14",
     "@types/jsonpath": "0.2.0",
     "@types/lodash.groupby": "4.6.6",
+    "@types/markdown-table": "^2.0.0",
     "@types/node": "13.13.21",
     "@typescript-eslint/eslint-plugin": "4.2.0",
     "@typescript-eslint/parser": "4.2.0",
