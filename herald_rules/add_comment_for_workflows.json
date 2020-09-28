@@ -1,6 +1,6 @@
 {
   "name": "This is a rule to attach @gagoar when workflow changes",
-  "includes": ["src/*"],
+  "includes": [".github/workflows/*"],
   "action": "comment",
-  "users": ["gagoar", "cyamonide", "jnwng"]
+  "users": ["gagoar"]
 }
