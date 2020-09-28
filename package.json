@@ -113,7 +113,7 @@
     "@types/jest": "26.0.14",
     "@types/jsonpath": "0.2.0",
     "@types/lodash.groupby": "4.6.6",
-    "@types/markdown-table": "^2.0.0",
+    "@types/markdown-table": "2.0.0",
     "@types/node": "13.13.21",
     "@typescript-eslint/eslint-plugin": "4.2.0",
     "@typescript-eslint/parser": "4.2.0",
