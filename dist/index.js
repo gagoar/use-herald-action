@@ -24506,6 +24506,10 @@ const handleReviewers = async (client, { owner, repo, prNumber, matchingRules },
 
 
 const getBlobURL_debug = logger('getBlobURL');
+/**
+ * getBlobURL will return a URL for the provided fileName.
+ * It will figure out if the file is part of the changeSet or not and return the correct URL for it.
+ */
 const getBlobURL = (filename, files, owner, repo, base) => {
     const baseBlobPath = `https://github.com/${owner}/${repo}/blob`;
     getBlobURL_debug('getBlobURL', filename, files, baseBlobPath, base);

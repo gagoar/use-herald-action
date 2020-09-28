@@ -4,6 +4,10 @@ import { logger } from './debug';
 
 const debug = logger('getBlobURL');
 
+/**
+ * getBlobURL will return a URL for the provided fileName.
+ * It will figure out if the file is part of the changeSet or not and return the correct URL for it.
+ */
 export const getBlobURL = (filename: string, files: RuleFile[], owner: string, repo: string, base: string): string => {
   const baseBlobPath = `https://github.com/${owner}/${repo}/blob`;
 
