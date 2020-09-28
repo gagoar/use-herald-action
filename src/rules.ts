@@ -1,26 +1,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { sync } from 'fast-glob';
 import { basename } from 'path';
-import { Event, EMAIL_REGEX, RuleFile } from './util/constants';
+import { Event, RuleFile } from './util/constants';
 import { env } from './environment';
 import minimatch from 'minimatch';
-import groupBy from 'lodash.groupby';
 
 import JSONPath from 'jsonpath';
 import { loadJSONFile } from './util/loadJSONFile';
 import { logger } from './util/debug';
 import { makeArray } from './util/makeArray';
+
 const debug = logger('rules');
-
-const formatUser = (handleOrEmail: string) => {
-  return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
-};
-
-const commentTemplate = (users: string[]): string =>
-  `Hi there, Herald found that given these changes ${users
-    .map((user) => formatUser(user))
-    .join(', ')} might want to take a look! \n 
-  <!-- herald-use-action -->`;
 
 enum RuleActors {
   users = 'users',
@@ -281,35 +271,4 @@ export const getMatchingRules = (
   }, [] as MatchingRule[]);
 
   return matchingRules;
-};
-
-enum TypeOfComments {
-  standalone = 'standalone',
-  combined = 'combined',
-}
-
-export const composeCommentsForUsers = (matchingRules: MatchingRule[]): string[] => {
-  const groups = groupBy(matchingRules, (rule) =>
-    rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined
-  );
-
-  let comments = [] as string[];
-
-  if (groups[TypeOfComments.combined]) {
-    const mentions = groups[TypeOfComments.combined].reduce(
-      (memo, { users, teams }) => [...memo, ...users, ...teams],
-      [] as string[]
-    );
-
-    comments = [...comments, commentTemplate([...new Set(mentions)])];
-  }
-
-  if (groups[TypeOfComments.standalone]) {
-    const customMessages = groups[TypeOfComments.standalone]
-      .filter((rule) => rule.customMessage)
-      .map(({ customMessage }) => customMessage as string);
-    comments = [...comments, ...customMessages];
-  }
-
-  return comments;
 };

@@ -1,14 +1,116 @@
-import { handleComment } from '../src/comment';
+import { composeCommentsForUsers, handleComment } from '../src/comment';
 import { Octokit } from '@octokit/rest';
 import nock from 'nock';
 import { RuleActions } from '../src/rules';
 import getCommentsResponse from '../__mocks__/scenarios/get_comments.json';
 import createIssueResponse from '../__mocks__/scenarios/create_comment.json';
+import { env } from '../src/environment';
+jest.mock('../src/util/constants', () => {
+  const constants = jest.requireActual('../src/util/constants');
 
-jest.mock('../src/util/constants', () => ({
-  maxPerPage: 2,
-}));
+  return {
+    ...constants,
+    maxPerPage: 2,
+  };
+});
 
+describe('composeCommentsForUsers', () => {
+  const invalidRule = {
+    customMessage: 'This is a custom message for a rule',
+    users: ['eeny', 'meeny@gmail.com', 'miny', 'moe@coursera.org'],
+  };
+
+  const validRule = {
+    ...invalidRule,
+    action: RuleActions.comment,
+    includes: ['*.ts'],
+  };
+  it('uses the customMessage in the rule', () => {
+    expect(
+      composeCommentsForUsers([
+        {
+          ...validRule,
+          path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
+          matched: true,
+          blobURL: 'MOCKED_BLOB_URL',
+          teams: [],
+        },
+      ])
+    ).toMatchInlineSnapshot(`
+        Array [
+          "This is a custom message for a rule",
+        ]
+      `);
+  });
+
+  it('it combines 2 comments when do not have customMessage', () => {
+    expect(
+      composeCommentsForUsers([
+        {
+          ...validRule,
+          customMessage: undefined,
+          path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
+          matched: true,
+          blobURL: 'MOCKED_BLOB_URL',
+          teams: [],
+        },
+        {
+          ...validRule,
+          customMessage: undefined,
+          path: `${env.GITHUB_WORKSPACE}/some/rule1.json`,
+          matched: true,
+          blobURL: 'MOCKED_BLOB_URL',
+          teams: ['awesomeTeam'],
+        },
+      ])
+    ).toMatchInlineSnapshot(`
+      Array [
+        "
+         <details open>
+
+         <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>
+
+         | Rule                               |                                  Mention                                  |
+      | :--------------------------------- | :-----------------------------------------------------------------------: |
+      | [some/rule.json](MOCKED_BLOB_URL)  |          @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org         |
+      | [some/rule1.json](MOCKED_BLOB_URL) | @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org<br/>@awesomeTeam |
+
+        </details>
+        <!--herald-use-action-->
+        ",
+      ]
+    `);
+  });
+  it('compose message', () => {
+    expect(
+      composeCommentsForUsers([
+        {
+          ...validRule,
+          customMessage: undefined,
+          path: `${env.GITHUB_WORKSPACE}/some/rule1.json`,
+          blobURL: 'MOCKED_BLOB_URL',
+          matched: true,
+          teams: [],
+        },
+      ])
+    ).toMatchInlineSnapshot(`
+      Array [
+        "
+         <details open>
+
+         <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>
+
+         | Rule                               |                          Mention                         |
+      | :--------------------------------- | :------------------------------------------------------: |
+      | [some/rule1.json](MOCKED_BLOB_URL) | @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org |
+
+        </details>
+        <!--herald-use-action-->
+        ",
+      ]
+    `);
+  });
+});
 describe('handleComment', () => {
   const client = new Octokit();
   const owner = 'gagoar';
