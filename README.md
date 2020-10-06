@@ -192,7 +192,7 @@ This step runs the action without regard for output:
 - name: Apply Herald rules
   uses: gagoar/use-herald-action@master
   with:
-    GITHUB_ACTION: ${{ secrets.GITHUB_ACTION }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     rulesLocation: 'rules/*.json'
     dryRun: true
 ```
@@ -206,7 +206,7 @@ These steps stores the action's outputs into a JSON file:
   uses: gagoar/use-herald-action@master
   id: foobar
   with:
-    GITHUB_ACTION: ${{ secrets.GITHUB_ACTION }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     rulesLocation: 'rules/*.json'
     dryRun: true
 - name: Store applied rules to file
