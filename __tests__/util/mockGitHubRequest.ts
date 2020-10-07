@@ -10,8 +10,18 @@ type mockRequest = (
   action: 'post' | 'get',
   url: string,
   exitCode: number,
-  response: Record<string, unknown> | Record<string, unknown>[] | CallbackRequest
+  response: Record<string, unknown> | Record<string, unknown>[] | CallbackRequest,
+  times?: number
 ) => ReturnType<typeof nock>;
 
-export const mockRequest: mockRequest = (action, url, exitCode, response) =>
-  nock(GITHUB_URL)[action](url).reply(exitCode, response);
+export const mockRequest: mockRequest = (action, url, exitCode, response, times = 1) => {
+  const client = nock(GITHUB_URL)[action](url).reply(exitCode, response);
+
+  if (times > 1) {
+    for (let i = 1; i < times; i++) {
+      client[action](url).reply(exitCode, response);
+    }
+  }
+
+  return client;
+};

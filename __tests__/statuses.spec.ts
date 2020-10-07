@@ -56,11 +56,7 @@ describe('handleReviewers', () => {
   it('should add status', async () => {
     const sha = '6dcb09b5b57875f334f61aebed695e2e4193db5e';
     const url = `/repos/${owner}/${repo}/statuses/${sha}`;
-    const github = mockRequest('post', url, 201, requestCallback);
-
-    github.post(`/repos/${owner}/${repo}/statuses/${sha}`).reply(201, requestCallback);
-
-    github.post(`/repos/${owner}/${repo}/statuses/${sha}`).reply(201, requestCallback);
+    const github = mockRequest('post', url, 201, requestCallback, 3);
 
     const files = [
       {
