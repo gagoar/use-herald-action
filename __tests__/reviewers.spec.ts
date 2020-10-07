@@ -1,5 +1,6 @@
 import { handleReviewers } from '../src/reviewers';
 import { Octokit } from '@octokit/rest';
+import { mockRequest } from './util/mockGitHubRequest';
 import nock from 'nock';
 import { RuleActions } from '../src/rules';
 import requestedReviewersResponse from '../__mocks__/scenarios/create_requested_reviewers.json';
@@ -22,9 +23,12 @@ describe('handleReviewers', () => {
     nock.cleanAll();
   });
   it('should add reviewers', async () => {
-    const github = nock('https://api.github.com')
-      .post(`/repos/${owner}/${repo}/pulls/${prNumber}/requested_reviewers`)
-      .reply(201, requestedReviewersResponse);
+    const github = mockRequest(
+      'post',
+      `/repos/${owner}/${repo}/pulls/${prNumber}/requested_reviewers`,
+      201,
+      requestedReviewersResponse
+    );
 
     const response = await handleReviewers(client, {
       owner,

@@ -1,8 +1,8 @@
 import { handleLabels } from '../src/labels';
 import { Octokit } from '@octokit/rest';
-import nock from 'nock';
 import { RuleActions } from '../src/rules';
 import createLabelsResponse from '../__mocks__/scenarios/create_labels.json';
+import { mockRequest } from './util/mockGitHubRequest';
 describe('handleLabels', () => {
   const client = new Octokit();
   const owner = 'gagoar';
@@ -18,9 +18,6 @@ describe('handleLabels', () => {
     users: [],
     matched: true,
   };
-  beforeEach(() => {
-    nock.cleanAll();
-  });
   it('should skip the api call when no labels are provided', async () => {
     const response = await handleLabels(client, {
       owner,
@@ -36,9 +33,7 @@ describe('handleLabels', () => {
   });
 
   it('should add labels', async () => {
-    const github = nock('https://api.github.com')
-      .post(`/repos/${owner}/${repo}/issues/${prNumber}/labels`)
-      .reply(200, createLabelsResponse);
+    const github = mockRequest('post', `/repos/${owner}/${repo}/issues/${prNumber}/labels`, 200, createLabelsResponse);
 
     const response = await handleLabels(client, {
       owner,

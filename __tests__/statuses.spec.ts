@@ -4,6 +4,7 @@ import nock from 'nock';
 import { RuleActions } from '../src/rules';
 import { env } from '../src/environment';
 import createStatusRequest from '../__mocks__/scenarios/create_status.json';
+import { mockRequest, CallbackRequest } from './util/mockGitHubRequest';
 
 jest.mock('../src/environment', () => {
   const { env } = jest.requireActual('../src/environment');
@@ -38,6 +39,10 @@ describe('handleReviewers', () => {
     glob: '*.js',
   };
 
+  const requestCallback: CallbackRequest = (_uri, body, cb) => {
+    const { target_url, description, state, context } = body;
+    cb(null, { ...createStatusRequest, target_url, description, state, context });
+  };
   const rule3 = {
     ...rule,
     path: `${env.GITHUB_WORKSPACE}/rules/rule2.json`,
@@ -50,26 +55,8 @@ describe('handleReviewers', () => {
   });
   it('should add status', async () => {
     const sha = '6dcb09b5b57875f334f61aebed695e2e4193db5e';
-    const github = nock('https://api.github.com')
-      .post(`/repos/${owner}/${repo}/statuses/${sha}`)
-      .reply(201, (_uri, body: { target_url: string; description: string; state: string; context: string }, cb) => {
-        const { target_url, description, state, context } = body;
-        cb(null, { ...createStatusRequest, target_url, description, state, context });
-      });
-
-    github
-      .post(`/repos/${owner}/${repo}/statuses/${sha}`)
-      .reply(201, (_uri, body: { target_url: string; description: string; state: string; context: string }, cb) => {
-        const { target_url, description, state, context } = body;
-        cb(null, { ...createStatusRequest, target_url, description, state, context });
-      });
-
-    github
-      .post(`/repos/${owner}/${repo}/statuses/${sha}`)
-      .reply(201, (_uri, body: { target_url: string; description: string; state: string; context: string }, cb) => {
-        const { target_url, description, state, context } = body;
-        cb(null, { ...createStatusRequest, target_url, description, state, context });
-      });
+    const url = `/repos/${owner}/${repo}/statuses/${sha}`;
+    const github = mockRequest('post', url, 201, requestCallback, 3);
 
     const files = [
       {
