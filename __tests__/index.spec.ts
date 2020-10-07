@@ -5,7 +5,7 @@ import * as actions from '@actions/core';
 import { env } from '../src/environment';
 import getCompareCommitsResponse from '../__mocks__/scenarios/get_compare_commits.json';
 import * as comment from '../src/comment';
-import { mockGet } from './util/mockGitHubRequest';
+import { mockRequest } from './util/mockGitHubRequest';
 
 jest.mock('@actions/core');
 jest.mock('../src/comment');
@@ -36,7 +36,8 @@ const mockedInput = {
 };
 
 const getGithubMock = () =>
-  mockGet(
+  mockRequest(
+    'get',
     `/repos/${event.repository.owner.login}/${event.repository.name}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`,
     200,
     getCompareCommitsResponse
