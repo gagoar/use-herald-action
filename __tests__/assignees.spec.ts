@@ -1,8 +1,8 @@
 import { handleAssignees } from '../src/assignees';
 import { Octokit } from '@octokit/rest';
-import nock from 'nock';
 import { RuleActions } from '../src/rules';
 import createAssigneesResponse from '../__mocks__/scenarios/create_assignees.json';
+import { mockRequest } from './util/mockGitHubRequest';
 describe('handleAssignees', () => {
   const client = new Octokit();
   const owner = 'gagoar';
@@ -18,13 +18,13 @@ describe('handleAssignees', () => {
     matched: true,
     blobURL: 'https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/rules/rule.json',
   };
-  beforeEach(() => {
-    nock.cleanAll();
-  });
   it('should add reviewers', async () => {
-    const github = nock('https://api.github.com')
-      .post(`/repos/${owner}/${repo}/issues/${prNumber}/assignees`)
-      .reply(201, createAssigneesResponse);
+    const github = mockRequest(
+      'post',
+      `/repos/${owner}/${repo}/issues/${prNumber}/assignees`,
+      201,
+      createAssigneesResponse
+    );
 
     const response = await handleAssignees(client, {
       owner,
