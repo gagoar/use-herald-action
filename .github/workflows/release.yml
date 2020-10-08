@@ -17,6 +17,7 @@ jobs:
       - name: Get release notes
         id: release_notes
         run: echo ::set-output name=notes::$(git log -1 --pretty=format:"%b")
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
