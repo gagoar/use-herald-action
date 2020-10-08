@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-var-requires */
-import nock from 'nock';
 import { Props } from '../src';
 import { Event } from '../src/util/constants';
 import * as actions from '@actions/core';
 import { env } from '../src/environment';
 import getCompareCommitsResponse from '../__mocks__/scenarios/get_compare_commits.json';
 import * as comment from '../src/comment';
+import { mockRequest } from './util/mockGitHubRequest';
 
 jest.mock('@actions/core');
 jest.mock('../src/comment');
@@ -35,6 +35,13 @@ const mockedInput = {
   [Props.rulesLocation]: '__mocks__/rules/*.json',
 };
 
+const getGithubMock = () =>
+  mockRequest(
+    'get',
+    `/repos/${event.repository.owner.login}/${event.repository.name}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`,
+    200,
+    getCompareCommitsResponse
+  );
 describe('use-herald-action', () => {
   beforeEach(() => {
     getInput.mockClear();
@@ -60,11 +67,7 @@ describe('use-herald-action', () => {
       return changedRulesDirectory[key];
     });
 
-    const github = nock('https://api.github.com')
-      .get(
-        `/repos/${event.repository.owner.login}/${event.repository.name}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`
-      )
-      .reply(200, getCompareCommitsResponse);
+    const github = getGithubMock();
 
     const { main } = require('../src') as Main;
 
@@ -84,11 +87,7 @@ describe('use-herald-action', () => {
       return mockedInput[key];
     });
 
-    const github = nock('https://api.github.com')
-      .get(
-        `/repos/${event.repository.owner.login}/${event.repository.name}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`
-      )
-      .reply(200, getCompareCommitsResponse);
+    const github = getGithubMock();
 
     const { main } = require('../src') as Main;
 
@@ -105,11 +104,7 @@ describe('use-herald-action', () => {
       return input[key];
     });
 
-    const github = nock('https://api.github.com')
-      .get(
-        `/repos/${event.repository.owner.login}/${event.repository.name}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`
-      )
-      .reply(200, getCompareCommitsResponse);
+    const github = getGithubMock();
 
     const { main } = require('../src') as Main;
 
@@ -162,12 +157,7 @@ describe('use-herald-action', () => {
       return input[key];
     });
 
-    const github = nock('https://api.github.com')
-      .get(
-        `/repos/${event.repository.owner.login}/${event.repository.name}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`
-      )
-      .reply(200, getCompareCommitsResponse);
-
+    const github = getGithubMock();
     const { main } = require('../src') as Main;
 
     await main();
