@@ -1,3 +1,6 @@
+import { ActionMapInput } from '.';
 import { MatchingRule } from './rules';
-import { Octokit } from '@octokit/rest';
-export declare const handleComment: (client: InstanceType<typeof Octokit>, owner: string, repo: string, prNumber: number, matchingRules: MatchingRule[], requestConcurrency?: number) => Promise<unknown>;
+export declare const composeCommentsForUsers: (matchingRules: (MatchingRule & {
+    blobURL: string;
+})[]) => string[];
+export declare const handleComment: ActionMapInput;

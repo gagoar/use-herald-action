@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<head>
+  <title>Use Herald Action - Completing Handshake...</title>
+
+  <link rel="icon" type="image/ico" href="favicon.ico" />
+
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+    crossorigin="anonymous"
+  />
+  <link rel="stylesheet" href="./main.css" />
+
+  <script src="./utils.js"></script>
+</head>
+
+<body>
+  <header>
+    <img
+      src="https://raw.githubusercontent.com/gagoar/use-herald-action/master/images/logo.png"
+      alt="Use Herald Action logo"
+    />
+    <h1 id="header-text">
+      Hold on tight...<br />
+      We're validating up your app...
+    </h1>
+  </header>
+
+  <div id="steps-parent">
+    <div class="container" id="intro-parent">
+      <p>
+        Now that you've set up your app, you have two of the three necessary credentials that you'll need to
+        <a href="https://docs.github.com/en/actions/reference/encrypted-secrets" target="_blank"
+          >store as encrypted secrets</a
+        >. These secrets will be referenced in your GitHub Actions workflow, and can be stored at either the
+        organization or repository level.
+      </p>
+
+      <p>
+        The three secrets below will be used in the GitHub Action
+        <a href="https://github.com/jnwng/github-app-installation-token-action" target="_blank"
+          ><code>jnwng/github-app-installation-token-action</code></a
+        >, which is required for `use-herald-action` to work to its fullest ability.
+      </p>
+      <hr />
+    </div>
+
+    <div class="card">
+      <div class="container step-header">
+        <div class="row">
+          <div class="col-9"><h2>Store the app ID as a secret</h2></div>
+          <div class="col-3"><h2>1</h2></div>
+        </div>
+      </div>
+
+      <div class="container step-content">
+        <div class="d-flex flex-column align-items-center">
+          <div class="p-2">
+            <p>
+              Copy the app ID below and store it as an encrypted secret. You may name it whatever you like, but we
+              recommend
+              <code>UHA_APP_ID</code>.
+            </p>
+          </div>
+          <div class="p-2 full-width">
+            <div id="app-id" class="copy card" onclick="copy('app-id-data', 'app-id')">
+              <span class="badge badge-info">Click to copy</span>
+              <samp><span id="app-id-data"></span></samp>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="container step-header">
+        <div class="row">
+          <div class="col-9"><h2>Store the private key as a secret</h2></div>
+          <div class="col-3"><h2>2</h2></div>
+        </div>
+      </div>
+
+      <div class="container step-content">
+        <div class="d-flex flex-column align-items-center">
+          <div class="p-2">
+            <p>
+              Copy the private key below and store it as an encrypted secret. You may name it whatever you like, but we
+              recommend
+              <code>UHA_PRIVATE_KEY</code>.
+            </p>
+          </div>
+          <div class="p-2 full-width">
+            <div id="pem" class="copy card" onclick="copy('pem-data', 'pem')">
+              <span class="badge badge-info">Click to copy</span>
+              <samp><span id="pem-data"></span></samp>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="container step-header">
+        <div class="row">
+          <div class="col-9"><h2>Install the app to a repository (or multiple!)</h2></div>
+          <div class="col-3"><h2>3</h2></div>
+        </div>
+      </div>
+
+      <div class="container step-content">
+        <div class="d-flex flex-column align-items-center">
+          <div class="p-2">
+            <p>
+              The third and final credential needed is generated after you install the app to the repositories in which
+              you require <code>use-herald-action</code>. After you successfully install the app, don't close the page
+              yet - you'll need to grab an ID from the URL.
+            </p>
+          </div>
+          <div class="p-2">
+            <img src="./install.jpg" alt="GitHub app installation graphic" />
+          </div>
+          <div class="p-2">
+            <p>
+              Ready? <a id="install-link" href="#" target="_blank">Click here</a> to install the app, and come back when
+              you're done.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="container step-header">
+        <div class="row">
+          <div class="col-9"><h2>Store the installation ID as a secret</h2></div>
+          <div class="col-3"><h2>4</h2></div>
+        </div>
+      </div>
+
+      <div class="container step-content">
+        <div class="d-flex flex-column align-items-center">
+          <div class="p-2">
+            <p>
+              Find the installation ID as shown below, and store it as an encrypted secret. You may name it whatever you
+              like, but we recommend <code>UHA_INSTALLATION_ID</code>.
+            </p>
+          </div>
+          <div class="p-2">
+            <img src="./install-id.jpg" alt="GitHub URL installation ID graphic" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="container step-header">
+        <div class="row">
+          <div class="col-9"><h2>Put it all together</h2></div>
+          <div class="col-3"><h2>5</h2></div>
+        </div>
+      </div>
+
+      <div class="container step-content">
+        <div class="d-flex flex-column align-items-center">
+          <div class="p-2">
+            <p>
+              Now that you have the app installed and secrets stored, you can start using
+              <code>use-herald-action</code> in your workflows.
+            </p>
+            <p>
+              Whenever you use <code>use-herald-action</code>, make sure you add a
+              <code>github-app-installation-token-action</code> step at the beginning of your workflow, as shown in this
+              example.
+            </p>
+          </div>
+          <div class="p-2 full-width">
+            <div id="example" class="card">
+              <pre id="example-data">
+- id: auth
+  uses: jnwng/github-app-installation-token-action@v1
+  with:
+    appId: ${{ secrets.UHA_APP_ID }}
+    installationId: ${{ secrets.UHA_INSTALLATION_ID }}
+    privateKey: ${{ secrets.UHA_PRIVATE_KEY }}
+- uses: actions/checkout@master
+- name: Apply herald rules
+  uses: gagoar/use-herald-action@v2.0.0
+  with:
+    GITHUB_TOKEN: ${{ steps.auth.outputs.token }}
+    rulesLocation: herald_rules/*.json</pre
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="container step-header">
+        <div class="row">
+          <div class="col-9"><h2>Add an image (optional)</h2></div>
+          <div class="col-3"><h2>6</h2></div>
+        </div>
+      </div>
+
+      <div class="container step-content">
+        <div class="d-flex flex-column align-items-center">
+          <div class="p-2">
+            <p>
+              If you want to add an icon to the Use Herald Action App you just created,
+              <a id="logo-upload" href="" target="_blank">upload the logo</a> below!
+            </p>
+          </div>
+          <div class="p-2">
+            <img
+              src="https://raw.githubusercontent.com/gagoar/use-herald-action/master/images/logo.png"
+              alt="Use Herald Action logo"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container parting">
+      <hr />
+      <p>
+        That's it!<br />
+        Go make amazing things in your organization,<br />
+        with the help of <code>use-herald-action</code>!
+      </p>
+      <p>
+        Have feedback or questions about this installation flow?<br />
+        Open an issue <a href="https://github.com/gagoar/use-herald-action/issues">here</a>!
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    This site was made with &lt;3 by <a href="https://github.com/cyamonide" target="_blank">cyamonide</a>.
+  </footer>
+
+  <script
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"
+  ></script>
+</body>
+
+<script>
+  // Function to transition the page to a validated state
+  const pageValidated = () => {
+    document.getElementById('header-text').innerHTML = 'Your app has been validated!';
+    document.getElementById('steps-parent').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('steps-parent').style.opacity = '1';
+    }, 100);
+
+    document.title = 'Use Herald Action - Post-setup instructions';
+  };
+
+  // Function to transition the page to a failed state
+  const pageFailed = () => {
+    document.getElementById('header-text').innerHTML = 'Something went wrong...<br />Give that another go, will ya?';
+
+    document.title = 'Use Herald Action - Validation failed';
+  };
+
+  document.getElementById('steps-parent').style.display = 'none';
+  document.getElementById('steps-parent').style.opacity = '0';
+
+  // Get URL parameters
+  const { code } = getParams(window.location.href);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', `https://api.github.com/app-manifests/${code}/conversions`, true);
+  xhr.send();
+
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState !== 4) return;
+    if (xhr.status === 201) {
+      const {
+        id: appId,
+        slug: appSlug,
+        pem,
+        owner: { login },
+      } = JSON.parse(xhr.response);
+
+      const logoUploadLink = `https://github.com/organizations/${login}/settings/apps/${appSlug}#integration_hook_attributes_secret:~:text=Display%20information`;
+
+      document.getElementById('app-id-data').innerHTML = appId;
+      document.getElementById('pem-data').innerHTML = pem;
+      document.getElementById('logo-upload').href = logoUploadLink;
+
+      // get organization ID and create link
+      const xhr1 = new XMLHttpRequest();
+      xhr1.open('GET', `https://api.github.com/orgs/${login}`, true);
+      xhr1.send();
+
+      xhr1.onreadystatechange = () => {
+        if (xhr.readyState !== 4) return;
+        if (xhr1.status === 200) {
+          const { id: orgId } = JSON.parse(xhr1.response);
+
+          const installLink = `https://github.com/apps/${appSlug}/installations/new/permissions?target_id=${orgId}`;
+          document.getElementById('install-link').href = installLink;
+
+          // Transition page to validated state
+          pageValidated();
+        } else {
+          console.log(xhr);
+          pageFailed();
+        }
+      };
+    } else {
+      console.log(xhr);
+      pageFailed();
+    }
+  };
+</script>

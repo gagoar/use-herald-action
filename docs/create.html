@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<head>
+  <title>Use Herald Action - Creating the App...</title>
+
+  <link rel="icon" type="image/ico" href="favicon.ico" />
+
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+    crossorigin="anonymous"
+  />
+  <link rel="stylesheet" href="./main.css" />
+
+  <script src="./utils.js"></script>
+</head>
+
+<body>
+  <form action="" method="post" id="manifestForm">
+    <input type="hidden" name="manifest" id="manifest" />
+  </form>
+
+  <header>
+    <img
+      src="https://raw.githubusercontent.com/gagoar/use-herald-action/master/images/logo.png"
+      alt="Use Herald Action logo"
+    />
+    <h1>Hold on tight...</h1>
+    <h1>We're setting up your app...</h1>
+  </header>
+
+  <footer>
+    This site was made with &lt;3 by <a href="https://github.com/cyamonide" target="_blank">cyamonide</a>.
+  </footer>
+</body>
+
+<script>
+  // Get URL parameters
+  const { orgName } = getParams(window.location.href);
+
+  const manifestEndpoint = `https://github.com/organizations/${orgName}/settings/apps/new?status=use-herald-action`;
+
+  /*
+   * For information on which permissions can be modified, refer to the docs:
+   * https://docs.github.com/en/rest/reference/permissions-required-for-github-apps
+   */
+
+  const repo_permissions = {
+    actions: 'read',
+    administration: 'read',
+    contents: 'read',
+    issues: 'write',
+    metadata: 'read',
+    pull_requests: 'write',
+    statuses: 'write',
+  };
+
+  const org_permissions = {
+    members: 'read',
+    team_discussions: 'read',
+  };
+
+  // This is the JSON payload that gets sent to GitHub to create the app
+  const manifestJSON = {
+    name: `[${orgName}] Use Herald Action App`,
+    url: 'https://gagoar.github.io/use-herald-action',
+    redirect_url: `https://gagoar.github.io/use-herald-action/token`,
+    public: true,
+    default_permissions: {
+      ...repo_permissions,
+      ...org_permissions,
+    },
+  };
+
+  // Inject manifest JSON into form
+  document.getElementById('manifest').value = JSON.stringify(manifestJSON);
+
+  // Customize form action
+  document.getElementById('manifestForm').action = manifestEndpoint;
+
+  // Submit form
+  document.getElementById('manifestForm').submit();
+</script>

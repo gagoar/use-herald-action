@@ -1,14 +1,16 @@
 import { getInput, setOutput, setFailed } from '@actions/core';
 import groupBy from 'lodash.groupby';
-import { handleComment } from './comment';
-import { loadRules, getMatchingRules, RuleActions, allRequiredRulesHaveMatched } from './rules';
-import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES } from './util/constants';
+import { loadRules, getMatchingRules, RuleActions, allRequiredRulesHaveMatched, MatchingRule, Rule } from './rules';
+import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES, RuleFile } from './util/constants';
 import { logger } from './util/debug';
 import { env } from './environment';
 
 import { Octokit } from '@octokit/rest';
 import { handleAssignees } from './assignees';
+import { handleLabels } from './labels';
 import { handleReviewers } from './reviewers';
+import { handleStatus } from './statuses';
+import { handleComment } from './comment';
 import { loadJSONFile } from './util/loadJSONFile';
 import { isEventSupported } from './util/isEventSupported';
 
@@ -23,10 +25,28 @@ export enum Props {
   base = 'base',
 }
 
-const actionsMap = {
+export type ActionInput = {
+  owner: string;
+  repo: string;
+  prNumber: number;
+  matchingRules: MatchingRule[];
+  rules: Rule[];
+  sha: string;
+  base: string;
+  files: RuleFile[];
+};
+export type ActionMapInput = (
+  client: InstanceType<typeof Octokit>,
+  options: ActionInput,
+  requestConcurrency?: number
+) => Promise<unknown>;
+
+const actionsMap: Record<RuleActions, ActionMapInput> = {
+  [RuleActions.status]: handleStatus,
   [RuleActions.comment]: handleComment,
   [RuleActions.assign]: handleAssignees,
   [RuleActions.review]: handleReviewers,
+  [RuleActions.label]: handleLabels,
 };
 
 type ActionName = keyof typeof RuleActions;
@@ -115,7 +135,18 @@ export const main = async (): Promise<void> => {
             groupNames.map((actionName: ActionName) => {
               const action = actionsMap[RuleActions[actionName]];
 
-              return action(client, owner, repo, prNumber, groupedRulesByAction[RuleActions[actionName]]);
+              const options: ActionInput = {
+                owner,
+                repo,
+                prNumber,
+                matchingRules: groupedRulesByAction[RuleActions[actionName]],
+                rules,
+                sha: headSha,
+                base: baseSha,
+                files,
+              };
+
+              return action(client, options);
             }),
           ]);
         }

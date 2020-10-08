@@ -1,16 +1,12 @@
-import { Octokit } from '@octokit/rest';
 import PQueue from 'p-queue';
 
-import { MatchingRule } from './rules';
 import { logger } from './util/debug';
+import { ActionMapInput } from '.';
 
 const debug = logger('reviewers');
-export const handleReviewers = async (
-  client: InstanceType<typeof Octokit>,
-  owner: string,
-  repo: string,
-  prNumber: number,
-  matchingRules: MatchingRule[],
+export const handleReviewers: ActionMapInput = async (
+  client,
+  { owner, repo, prNumber, matchingRules },
   requestConcurrency = 1
 ): Promise<unknown> => {
   const queue = new PQueue({ concurrency: requestConcurrency });

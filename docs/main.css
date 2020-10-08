@@ -1,0 +1,129 @@
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+
+body {
+  margin-bottom: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+header > img {
+  height: 120px;
+  margin: 20px;
+}
+
+footer {
+  padding: 0 30px;
+  text-align: right;
+  font-family: 'Courier New';
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.6em;
+}
+
+h3 {
+  font-size: 1.3em;
+}
+
+hr {
+  margin: 40px 0;
+}
+
+#form-card {
+  background-color: rgb(204, 242, 255);
+}
+
+#form-card * {
+  text-align: center;
+}
+
+.card {
+  padding: 20px;
+  margin: 10px 0;
+}
+
+.step-header {
+  padding-bottom: 20px;
+}
+
+.step-header .col-3 {
+  text-align: right;
+  color: #777;
+}
+
+#intro-parent,
+#steps-parent {
+  margin: 0 auto;
+  max-width: 800px;
+
+  -webkit-transition: opacity 0.5s;
+  -moz-transition: opacity 0.5s;
+  -ms-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+}
+
+#steps-parent img {
+  max-width: 700px;
+}
+
+.badge {
+  opacity: 0;
+
+  -webkit-transition: opacity 0.5s;
+  -moz-transition: opacity 0.5s;
+  -ms-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+
+  width: fit-content;
+  position: absolute;
+  right: 20px;
+}
+
+.copy {
+  cursor: copy;
+}
+
+.copy:hover .badge {
+  opacity: 1;
+}
+
+samp {
+  font-size: 0.9em;
+  text-align: center;
+}
+
+.p-2.full-width {
+  width: 100%;
+}
+
+#pem > samp {
+  font-size: 0.5em;
+}
+
+#pem-data {
+  word-break: break-all;
+}
+
+.parting > p {
+  text-align: center;
+  font-size: 1.5em;
+}
