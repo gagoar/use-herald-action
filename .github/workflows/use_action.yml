@@ -16,7 +16,7 @@ jobs:
         run: npm run build
       - name: apply herald rules
         id: herald
-        uses: ./
+        uses: gagoar/use-herald-action@v2.2.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           rulesLocation: herald_rules/*.json
