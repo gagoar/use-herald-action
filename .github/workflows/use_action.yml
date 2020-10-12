@@ -18,7 +18,7 @@ jobs:
         id: herald
         uses: ./
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_STATUS }}
           rulesLocation: herald_rules/*.json
           DEBUG: '*'
 
