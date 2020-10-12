@@ -1,30 +1,34 @@
-import PQueue from 'p-queue';
-
 import { logger } from './util/debug';
 import { ActionMapInput } from '.';
+import { catchHandler } from './util/catchHandler';
 
 const debug = logger('reviewers');
 export const handleReviewers: ActionMapInput = async (
   client,
-  { owner, repo, prNumber, matchingRules },
-  requestConcurrency = 1
+  { owner, repo, prNumber, matchingRules }
 ): Promise<unknown> => {
-  const queue = new PQueue({ concurrency: requestConcurrency });
-
   debug('handleReviewers called with:', matchingRules);
-  const result = await Promise.all(
-    matchingRules.map((matchingRule) =>
-      queue.add(() =>
-        client.pulls.requestReviewers({
-          owner,
-          repo,
-          pull_number: prNumber,
-          reviewers: matchingRule.users.map((user) => user.replace('@', '')),
-          team_reviewers: matchingRule.teams.map((team) => team.replace('@', '')),
-        })
-      )
-    )
+
+  const { reviewers, teamReviewers } = matchingRules.reduce(
+    (memo, rule) => {
+      const reviewers = [...memo.reviewers, ...rule.users.map((user) => user.replace('@', ''))];
+      const teamReviewers = [...memo.teamReviewers, ...rule.teams.map((team) => team.replace('@', ''))];
+
+      return { reviewers, teamReviewers };
+    },
+    { reviewers: [], teamReviewers: [] } as { reviewers: string[]; teamReviewers: string[] }
   );
+
+  const result = await client.pulls
+    .requestReviewers({
+      owner,
+      repo,
+      pull_number: prNumber,
+      reviewers,
+      team_reviewers: teamReviewers,
+    })
+    .catch(catchHandler(debug));
+
   debug('result:', result);
   return result;
 };

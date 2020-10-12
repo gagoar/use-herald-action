@@ -4,6 +4,7 @@ import { logger } from './util/debug';
 import { CommitStatus, STATUS_DESCRIPTION_COPY } from './util/constants';
 import type { ActionMapInput } from './index';
 import { getBlobURL } from './util/getBlobURL';
+import { catchHandler } from './util/catchHandler';
 
 const debug = logger('statuses');
 
@@ -34,5 +35,10 @@ export const handleStatus: ActionMapInput = async (
   }));
 
   debug('statuses', statuses);
-  return Promise.all(statuses.map((status) => queue.add(() => client.repos.createCommitStatus(status))));
+  const result = await Promise.all(
+    statuses.map((status) => queue.add(() => client.repos.createCommitStatus(status)))
+  ).catch(catchHandler(debug));
+
+  debug('result:', result);
+  return result;
 };

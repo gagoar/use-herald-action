@@ -3,7 +3,7 @@
 import * as fg from 'fast-glob';
 
 import { loadRules, getMatchingRules, RuleActions } from '../src/rules';
-import { unMockConsole, mockConsole } from './helpers';
+import { unMockConsole, mockConsole } from './util/helpers';
 import { Event } from '../src/util/constants';
 
 import eventJSON from '../__mocks__/event.json';

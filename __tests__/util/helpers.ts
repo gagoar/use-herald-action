@@ -1,3 +1,5 @@
+import { Props } from '../../src';
+
 const ORIGINALS = {
   log: global.console.log,
   error: global.console.error,
@@ -14,3 +16,11 @@ export const mockConsole = (method: METHODS): jest.Mock => {
 export const unMockConsole = (method: METHODS): void => {
   global.console[method] = ORIGINALS[method];
 };
+
+export const mockedInput = {
+  [Props.GITHUB_TOKEN]: 'TOKEN',
+  [Props.dryRun]: true,
+  [Props.rulesLocation]: '__mocks__/rules/*.json',
+};
+
+export type Main = { main: () => Promise<void> };
