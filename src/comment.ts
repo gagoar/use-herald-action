@@ -39,7 +39,7 @@ const tagComment = (body: string, path: string) => `<!-- USE_HERALD_ACTION ${pat
 const commentTemplate = (mentions: Mention[]): string =>
   `
    <details open>\n
-   <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>\n
+   <summary> Hi there, given these changes, Herald thinks that these users should take a look! </summary>\n
    ${table(
      [
        ['Rule', 'Mention'],
@@ -156,8 +156,8 @@ export const handleComment: ActionMapInput = async (
       return { ...memo, [path]: comment };
     }, {} as Record<string, IssueComment>);
 
-  console.log('SL_DEBUG: comments from rules');
-  console.log(commentsFromRules);
+  debug('comments from matching rules:', commentsFromRules);
+  debug('existing UHA comments:', useHeraldActionComments);
 
   // Update existing comments
   const updateCommentPromises = Object.keys(commentsFromRules)

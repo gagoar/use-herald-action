@@ -24705,7 +24705,7 @@ const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION .* -->$/;
 const tagComment = (body, path) => `<!-- USE_HERALD_ACTION ${path} -->\n${body}`;
 const commentTemplate = (mentions) => `
    <details open>\n
-   <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>\n
+   <summary> Hi there, given these changes, Herald thinks that these users should take a look! </summary>\n
    ${markdown_table_default()([
     ['Rule', 'Mention'],
     ...mentions.map(({ rule, URL, mentions }) => [
@@ -24771,8 +24771,8 @@ const handleComment = async (client, { owner, repo, prNumber, matchingRules, fil
         const path = bodyFirstLine.replace('<!-- USE_HERALD_ACTION ', '').replace(' -->', '');
         return Object.assign(Object.assign({}, memo), { [path]: comment });
     }, {});
-    console.log('SL_DEBUG: comments from rules');
-    console.log(commentsFromRules);
+    comment_debug('comments from matching rules:', commentsFromRules);
+    comment_debug('existing UHA comments:', useHeraldActionComments);
     // Update existing comments
     const updateCommentPromises = Object.keys(commentsFromRules)
         .filter((key) => key in useHeraldActionComments)
