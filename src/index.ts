@@ -131,7 +131,7 @@ export const main = async (): Promise<void> => {
 
           debug('groupNames', groupNames);
 
-          await Promise.all([
+          await Promise.all(
             groupNames.map((actionName: ActionName) => {
               const action = actionsMap[RuleActions[actionName]];
 
@@ -147,8 +147,11 @@ export const main = async (): Promise<void> => {
               };
 
               return action(client, options);
-            }),
-          ]);
+            })
+          ).catch((error: Error) => {
+            debug('We found an error calling GitHub:', error);
+            throw error;
+          });
         }
       }
 
@@ -162,6 +165,6 @@ export const main = async (): Promise<void> => {
       );
     }
   } catch (e) {
-    setFailed(e);
+    setFailed(e.message);
   }
 };

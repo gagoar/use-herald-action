@@ -1,4 +1,3 @@
-import PQueue from 'p-queue';
 import groupBy from 'lodash.groupby';
 import table from 'markdown-table';
 
@@ -10,6 +9,7 @@ import { ActionMapInput } from '.';
 import { MatchingRule } from './rules';
 import { env } from './environment';
 import { getBlobURL } from './util/getBlobURL';
+import { catchHandler } from './util/catchHandler';
 
 type AllCommentsParams = RestEndpointMethodTypes['issues']['listComments']['parameters'];
 
@@ -102,12 +102,11 @@ const getAllComments = async (
 
 export const handleComment: ActionMapInput = async (
   client,
-  { owner, repo, prNumber, matchingRules, files, base },
-  requestConcurrency = 1
+  { owner, repo, prNumber, matchingRules, files, base }
 ): Promise<unknown> => {
   debug('handleComment called with:', matchingRules);
 
-  const queue = new PQueue({ concurrency: requestConcurrency });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
   const rulesWithBlobURL = matchingRules.map((mRule) => ({
     ...mRule,
@@ -125,16 +124,16 @@ export const handleComment: ActionMapInput = async (
 
   debug('comments to add:', onlyNewComments);
 
-  return Promise.all(
+  const calls = await Promise.all(
     onlyNewComments.map((body: string) => {
-      return queue.add(() =>
-        client.issues.createComment({
-          owner,
-          repo,
-          issue_number: prNumber,
-          body,
-        })
-      );
+      return client.issues.createComment({
+        owner,
+        repo,
+        issue_number: prNumber,
+        body,
+      });
     })
-  );
+  ).catch(catchHandler(debug));
+
+  return calls;
 };
