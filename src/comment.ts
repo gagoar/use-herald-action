@@ -156,6 +156,9 @@ export const handleComment: ActionMapInput = async (
       return { ...memo, [path]: comment };
     }, {} as Record<string, IssueComment>);
 
+  console.log('SL_DEBUG: comments from rules');
+  console.log(commentsFromRules);
+
   // Update existing comments
   const updateCommentPromises = Object.keys(commentsFromRules)
     .filter((key) => key in useHeraldActionComments)

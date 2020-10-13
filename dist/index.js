@@ -24771,6 +24771,8 @@ const handleComment = async (client, { owner, repo, prNumber, matchingRules, fil
         const path = bodyFirstLine.replace('<!-- USE_HERALD_ACTION ', '').replace(' -->', '');
         return Object.assign(Object.assign({}, memo), { [path]: comment });
     }, {});
+    console.log('SL_DEBUG: comments from rules');
+    console.log(commentsFromRules);
     // Update existing comments
     const updateCommentPromises = Object.keys(commentsFromRules)
         .filter((key) => key in useHeraldActionComments)

@@ -37,10 +37,10 @@ describe('composeCommentsForUsers', () => {
         },
       ])
     ).toMatchInlineSnapshot(`
-        Array [
-          "This is a custom message for a rule",
-        ]
-      `);
+      Object {
+        "/Users/cyamonide/GitHub/use-herald-action/some/rule.json": "This is a custom message for a rule",
+      }
+    `);
   });
 
   it('it combines 2 comments when do not have customMessage', () => {
@@ -64,8 +64,8 @@ describe('composeCommentsForUsers', () => {
         },
       ])
     ).toMatchInlineSnapshot(`
-      Array [
-        "
+      Object {
+        "_combined": "
          <details open>
 
          <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>
@@ -76,9 +76,8 @@ describe('composeCommentsForUsers', () => {
       | [some/rule1.json](MOCKED_BLOB_URL) | @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org<br/>@awesomeTeam |
 
         </details>
-        <!--herald-use-action-->
         ",
-      ]
+      }
     `);
   });
   it('compose message', () => {
@@ -94,8 +93,8 @@ describe('composeCommentsForUsers', () => {
         },
       ])
     ).toMatchInlineSnapshot(`
-      Array [
-        "
+      Object {
+        "_combined": "
          <details open>
 
          <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>
@@ -105,9 +104,8 @@ describe('composeCommentsForUsers', () => {
       | [some/rule1.json](MOCKED_BLOB_URL) | @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org |
 
         </details>
-        <!--herald-use-action-->
         ",
-      ]
+      }
     `);
   });
 });
@@ -125,7 +123,7 @@ describe('handleComment', () => {
       users: ['eeny', 'meeny', 'miny', 'moe'],
       includes: ['*.ts'],
       action: RuleActions.comment,
-      path: 'rules/rule.json',
+      path: 'rules/new-rule.json',
       customMessage: 'Custom message',
       teams: [],
       matched: true,
@@ -195,7 +193,8 @@ describe('handleComment', () => {
     `);
   });
 
-  it('should not publish the message because is duplicated', async () => {
+  // TODO: (siliu) rework this test
+  it('should not edit the message if it already exists', async () => {
     const rule = {
       users: ['eeny', 'meeny', 'miny', 'moe'],
       includes: ['*.ts'],
@@ -211,17 +210,63 @@ describe('handleComment', () => {
       .get(`/repos/${owner}/${repo}/issues/${prIssue}/comments?page=1&per_page=2`)
       .reply(200, [getCommentsResponse[0]]);
 
+    nock('https://api.github.com')
+      .patch(`/repos/${owner}/${repo}/issues/comments/1`)
+      .reply(200, [getCommentsResponse[0]]);
+
     const response = await handleComment(client, {
       owner,
       repo,
       prNumber: 1,
-      matchingRules: [{ ...rule, customMessage: 'first comment' }],
+      matchingRules: [{ ...rule, customMessage: 'new comment that should be updated' }],
       base: '',
       sha: '',
       files: [],
       rules: [],
     });
 
-    expect(response).toMatchInlineSnapshot('Array []');
+    expect(response).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "data": Array [
+            Object {
+              "body": "<!-- USE_HERALD_ACTION rules/rule.json -->
+      first comment",
+              "created_at": "2011-04-14T16:00:49Z",
+              "html_url": "https://github.com/gagoar/example_repo/issues/1#issuecomment-1",
+              "id": 1,
+              "node_id": "MDEyOklzc3VlQ29tbWVudDE=",
+              "updated_at": "2011-04-14T16:00:49Z",
+              "url": "https://api.github.com/repos/gagoar/example_repo/issues/comments/1",
+              "user": Object {
+                "avatar_url": "https://github.com/images/error/gagoar_happy.gif",
+                "events_url": "https://api.github.com/users/gagoar/events{/privacy}",
+                "followers_url": "https://api.github.com/users/gagoar/followers",
+                "following_url": "https://api.github.com/users/gagoar/following{/other_user}",
+                "gists_url": "https://api.github.com/users/gagoar/gists{/gist_id}",
+                "gravatar_id": "",
+                "html_url": "https://github.com/gagoar",
+                "id": 1,
+                "login": "gagoar",
+                "node_id": "MDQ6VXNlcjE=",
+                "organizations_url": "https://api.github.com/users/gagoar/orgs",
+                "received_events_url": "https://api.github.com/users/gagoar/received_events",
+                "repos_url": "https://api.github.com/users/gagoar/repos",
+                "site_admin": false,
+                "starred_url": "https://api.github.com/users/gagoar/starred{/owner}{/repo}",
+                "subscriptions_url": "https://api.github.com/users/gagoar/subscriptions",
+                "type": "User",
+                "url": "https://api.github.com/users/gagoar",
+              },
+            },
+          ],
+          "headers": Object {
+            "content-type": "application/json",
+          },
+          "status": 200,
+          "url": "https://api.github.com/repos/gagoar/example_repo/issues/comments/1",
+        },
+      ]
+    `);
   });
 });

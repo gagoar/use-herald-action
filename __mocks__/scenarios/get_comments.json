@@ -4,7 +4,7 @@
     "node_id": "MDEyOklzc3VlQ29tbWVudDE=",
     "url": "https://api.github.com/repos/gagoar/example_repo/issues/comments/1",
     "html_url": "https://github.com/gagoar/example_repo/issues/1#issuecomment-1",
-    "body": "first comment",
+    "body": "<!-- USE_HERALD_ACTION rules/rule.json -->\nfirst comment",
     "user": {
       "login": "gagoar",
       "id": 1,
