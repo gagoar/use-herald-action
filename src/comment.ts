@@ -17,6 +17,8 @@ type AllCommentsResponse = RestEndpointMethodTypes['issues']['listComments']['re
 
 type IssueComments = AllCommentsResponse['data'];
 
+type IssueComment = IssueComments[0];
+
 const debug = logger('comment');
 
 enum TypeOfComments {
@@ -30,6 +32,9 @@ const LINE_BREAK = '<br/>';
 const formatUser = (handleOrEmail: string) => {
   return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
 };
+const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION .* -->$/;
+
+const tagComment = (body: string, path: string) => `<!-- USE_HERALD_ACTION ${path} -->\n${body}`;
 
 const commentTemplate = (mentions: Mention[]): string =>
   `
@@ -46,15 +51,23 @@ const commentTemplate = (mentions: Mention[]): string =>
      { align: ['l', 'c'] }
    )}\n
   </details>
-  <!--herald-use-action-->
   `;
 
-export const composeCommentsForUsers = (matchingRules: (MatchingRule & { blobURL: string })[]): string[] => {
+/**
+ * This function takes a list of mathcing rules, and returns a map with rule name/path as keys, and
+ *  the comment body as values. We return a map instead of an array so we can determine which
+ *  comments we can skip reposting to avoid repeition, and which we can edit to update. We rely on
+ *  the fact that no two matching rules share the same path.
+ * @param matchingRules List of matching rules
+ */
+export const composeCommentsForUsers = (
+  matchingRules: (MatchingRule & { blobURL: string })[]
+): Record<string, string> => {
   const groups = groupBy(matchingRules, (rule) =>
     rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined
   );
 
-  let comments = [] as string[];
+  let comments = {} as Record<string, string>;
 
   if (groups[TypeOfComments.combined]) {
     const mentions = groups[TypeOfComments.combined].reduce(
@@ -65,18 +78,30 @@ export const composeCommentsForUsers = (matchingRules: (MatchingRule & { blobURL
       [] as Mention[]
     );
 
-    comments = [...comments, commentTemplate([...new Set(mentions)])];
+    // Since combined comments may originate from multiple rules/teams, we use _combined as the key
+    //  to this comment by convention.
+    comments = {
+      ...comments,
+      _combined: commentTemplate([...new Set(mentions)]),
+    };
   }
 
   if (groups[TypeOfComments.standalone]) {
     const customMessages = groups[TypeOfComments.standalone]
       .filter((rule) => rule.customMessage)
-      .map(({ customMessage }) => customMessage as string);
-    comments = [...comments, ...customMessages];
+      .reduce(
+        (memo, { path, customMessage }) => ({
+          ...memo,
+          [path]: customMessage as string,
+        }),
+        {} as Record<string, string>
+      );
+    comments = { ...comments, ...customMessages };
   }
 
   return comments;
 };
+
 const getAllComments = async (
   client: InstanceType<typeof Octokit>,
   params: AllCommentsParams
@@ -113,20 +138,46 @@ export const handleComment: ActionMapInput = async (
     ...mRule,
     blobURL: getBlobURL(mRule.path, files, owner, repo, base),
   }));
+
   const commentsFromRules = composeCommentsForUsers(rulesWithBlobURL);
+
   const rawComments = await getAllComments(client, {
     owner,
     repo,
     issue_number: prNumber,
   });
-  const comments = rawComments.map(({ body }) => body);
 
-  const onlyNewComments = commentsFromRules.filter((comment: string) => !comments.includes(comment));
+  // Filter existing comments by USE_HERALD_ACTION tag (HTML comment) and key by path
+  const useHeraldActionComments = rawComments
+    .filter(({ body }) => USE_HERALD_ACTION_TAG_REGEX.test(body.split('\n')[0]))
+    .reduce((memo, comment) => {
+      const bodyFirstLine = comment.body.split('\n')[0];
+      const path = bodyFirstLine.replace('<!-- USE_HERALD_ACTION ', '').replace(' -->', '');
+      return { ...memo, [path]: comment };
+    }, {} as Record<string, IssueComment>);
 
-  debug('comments to add:', onlyNewComments);
+  // Update existing comments
+  const updateCommentPromises = Object.keys(commentsFromRules)
+    .filter((key) => key in useHeraldActionComments)
+    .map((key) => {
+      // get comment number
+      const comment_id = useHeraldActionComments[key].id;
+      const body = tagComment(commentsFromRules[key], key);
+      return queue.add(() =>
+        client.issues.updateComment({
+          owner,
+          repo,
+          comment_id,
+          body,
+        })
+      );
+    });
 
-  return Promise.all(
-    onlyNewComments.map((body: string) => {
+  // Add new comments
+  const createCommentPromises = Object.keys(commentsFromRules)
+    .filter((key) => !(key in useHeraldActionComments))
+    .map((key) => {
+      const body = tagComment(commentsFromRules[key], key);
       return queue.add(() =>
         client.issues.createComment({
           owner,
@@ -135,6 +186,7 @@ export const handleComment: ActionMapInput = async (
           body,
         })
       );
-    })
-  );
+    });
+
+  return Promise.all([...updateCommentPromises, ...createCommentPromises]);
 };
