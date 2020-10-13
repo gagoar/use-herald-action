@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-
       - name: Install packages
         run: npm install
       - name: Build binary
