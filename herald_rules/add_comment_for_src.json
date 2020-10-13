@@ -1,6 +1,0 @@
-{
-  "name": "This is a rule to attach @cyamonide when src changes",
-  "includes": ["src/*"],
-  "action": "comment",
-  "users": ["cyamonide"]
-}
