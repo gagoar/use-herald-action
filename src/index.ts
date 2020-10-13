@@ -149,7 +149,7 @@ export const main = async (): Promise<void> => {
               return action(client, options);
             })
           ).catch((error: Error) => {
-            debug('We found and error calling GitHub:', error);
+            debug('We found an error calling GitHub:', error);
             throw error;
           });
         }
