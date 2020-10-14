@@ -3,9 +3,9 @@ import { Props } from '../src';
 import { Event } from '../src/util/constants';
 import * as actions from '@actions/core';
 import { env } from '../src/environment';
-import getCompareCommitsResponse from '../__mocks__/scenarios/get_compare_commits.json';
 import * as comment from '../src/comment';
-import { mockRequest } from './util/mockGitHubRequest';
+import { mockCompareCommits } from './util/mockGitHubRequest';
+import { Main, mockedInput } from './util/helpers';
 
 jest.mock('@actions/core');
 jest.mock('../src/comment');
@@ -21,7 +21,6 @@ jest.mock('../src/environment', () => {
   };
 });
 
-type Main = { main: () => Promise<void> };
 const event = require(`../${env.GITHUB_EVENT_PATH}`) as Event;
 
 const handleComment = comment.handleComment as jest.Mock<any>;
@@ -29,19 +28,14 @@ const setOutput = actions.setOutput as jest.Mock<any>;
 const setFailed = actions.setFailed as jest.Mock<any>;
 const getInput = actions.getInput as jest.Mock<any>;
 
-const mockedInput = {
-  [Props.GITHUB_TOKEN]: 'TOKEN',
-  [Props.dryRun]: true,
-  [Props.rulesLocation]: '__mocks__/rules/*.json',
-};
-
 const getGithubMock = () =>
-  mockRequest(
-    'get',
-    `/repos/${event.repository.owner.login}/${event.repository.name}/compare/${event.pull_request.base.sha}...${event.pull_request.head.sha}`,
-    200,
-    getCompareCommitsResponse
-  );
+  mockCompareCommits({
+    login: event.repository.owner.login,
+    name: event.repository.name,
+    base: event.pull_request.base.sha,
+    head: event.pull_request.head.sha,
+  });
+
 describe('use-herald-action', () => {
   beforeEach(() => {
     getInput.mockClear();
@@ -75,7 +69,7 @@ describe('use-herald-action', () => {
 
     expect(setFailed.mock.calls[0]).toMatchInlineSnapshot(`
       Array [
-        [Error: Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: rule2.json, this rules should fail because the pattern is malformed],
+        "Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: rule2.json, this rules should fail because the pattern is malformed",
       ]
     `);
     expect(setOutput).not.toHaveBeenCalled();

@@ -1,31 +1,27 @@
-import PQueue from 'p-queue';
 import { logger } from './util/debug';
 import { ActionMapInput } from '.';
+import { catchHandler } from './util/catchHandler';
 
 const debug = logger('assignees');
 
 export const handleAssignees: ActionMapInput = async (
   client,
-  { owner, repo, prNumber, matchingRules },
-  requestConcurrency = 1
+  { owner, repo, prNumber, matchingRules }
 ): Promise<unknown> => {
-  const queue = new PQueue({ concurrency: requestConcurrency });
-
   debug('handleAssignees called with:', matchingRules);
 
-  const result = await Promise.all(
-    matchingRules.map((matchingRule) =>
-      queue.add(() =>
-        client.issues.addAssignees({
-          owner,
-          repo,
-          issue_number: prNumber,
-          assignees: matchingRule.users.map((user) => user.replace('@', '')),
-        })
-      )
-    )
-  );
+  const assignees = matchingRules.reduce((memo, rule) => {
+    return [...memo, ...rule.users.map((user) => user.replace('@', ''))];
+  }, [] as string[]);
 
-  debug('handleAssignees result:', result);
-  return result;
+  debug('assignees found:', assignees);
+
+  return client.issues
+    .addAssignees({
+      owner,
+      repo,
+      issue_number: prNumber,
+      assignees,
+    })
+    .catch(catchHandler(debug));
 };

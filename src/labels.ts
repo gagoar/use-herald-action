@@ -1,17 +1,14 @@
-import PQueue from 'p-queue';
 import { logger } from './util/debug';
 import { makeArray } from './util/makeArray';
 import { ActionMapInput } from '.';
+import { catchHandler } from './util/catchHandler';
 
 const debug = logger('labels');
 
 export const handleLabels: ActionMapInput = async (
   client,
-  { owner, repo, prNumber, matchingRules },
-  requestConcurrency = 1
+  { owner, repo, prNumber, matchingRules }
 ): Promise<unknown> => {
-  const queue = new PQueue({ concurrency: requestConcurrency });
-
   debug('called with:', matchingRules);
 
   const labels = matchingRules
@@ -24,14 +21,14 @@ export const handleLabels: ActionMapInput = async (
     debug('no labels where found');
     return undefined;
   }
-  const result = await queue.add(() =>
-    client.issues.addLabels({
+  const result = client.issues
+    .addLabels({
       owner,
       repo,
       issue_number: prNumber,
       labels,
     })
-  );
+    .catch(catchHandler(debug));
 
   debug('result:', result);
   return result;

@@ -1,4 +1,3 @@
-import PQueue from 'p-queue';
 import groupBy from 'lodash.groupby';
 import table from 'markdown-table';
 
@@ -10,6 +9,8 @@ import { ActionMapInput } from '.';
 import { MatchingRule } from './rules';
 import { env } from './environment';
 import { getBlobURL } from './util/getBlobURL';
+import { catchHandler } from './util/catchHandler';
+import PQueue from 'p-queue';
 
 type AllCommentsParams = RestEndpointMethodTypes['issues']['listComments']['parameters'];
 
@@ -187,5 +188,5 @@ export const handleComment: ActionMapInput = async (
       );
     });
 
-  return Promise.all([...updateCommentPromises, ...createCommentPromises]);
+  return Promise.all([...updateCommentPromises, ...createCommentPromises]).catch(catchHandler(debug));
 };

@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(809);
+/******/ 		return __webpack_require__(774);
 /******/ 	};
 /******/ 	// initialize runtime
 /******/ 	runtime(__webpack_require__);
@@ -22209,6 +22209,666 @@ module.exports.default = exports.default;
 
 /***/ }),
 
+/***/ 774:
+/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var core = __webpack_require__(470);
+
+// EXTERNAL MODULE: ./node_modules/lodash.groupby/index.js
+var lodash_groupby = __webpack_require__(604);
+var lodash_groupby_default = /*#__PURE__*/__webpack_require__.n(lodash_groupby);
+
+// EXTERNAL MODULE: ./node_modules/fast-glob/out/index.js
+var out = __webpack_require__(406);
+
+// EXTERNAL MODULE: external "path"
+var external_path_ = __webpack_require__(622);
+
+// EXTERNAL MODULE: ./node_modules/envalid/src/envalid.js
+var envalid = __webpack_require__(456);
+var envalid_default = /*#__PURE__*/__webpack_require__.n(envalid);
+
+// CONCATENATED MODULE: ./src/environment.ts
+
+
+const environment = () => envalid_default().cleanEnv(process.env, {
+    GITHUB_EVENT_PATH: Object(envalid.str)({
+        devDefault: Object(envalid.testOnly)('__mocks__/event.json'),
+    }),
+    GITHUB_WORKSPACE: Object(envalid.str)({
+        devDefault: Object(envalid.testOnly)(Object(external_path_.join)(__dirname, '..')),
+    }),
+    GITHUB_EVENT_NAME: Object(envalid.str)({ devDefault: 'pull_request' }),
+    GITHUB_REPOSITORY: Object(envalid.str)({ devDefault: Object(envalid.testOnly)('someRepo') }),
+    GITHUB_SHA: Object(envalid.str)({
+        devDefault: Object(envalid.testOnly)('ffac537e6cbbf934b08745a378932722df287a53'),
+    }),
+    TASK_ID: Object(envalid.str)({ default: 'use-herald-action' }),
+}, { dotEnvPath: null });
+const env = environment();
+
+// EXTERNAL MODULE: ./node_modules/minimatch/minimatch.js
+var minimatch = __webpack_require__(93);
+var minimatch_default = /*#__PURE__*/__webpack_require__.n(minimatch);
+
+// EXTERNAL MODULE: ./node_modules/jsonpath/index.js
+var jsonpath = __webpack_require__(374);
+var jsonpath_default = /*#__PURE__*/__webpack_require__.n(jsonpath);
+
+// CONCATENATED MODULE: ./src/util/constants.ts
+const maxPerPage = 100;
+const OUTPUT_NAME = 'appliedRules';
+const FILE_ENCODING = 'utf8';
+const STATUS_DESCRIPTION_COPY = 'You can see the rule by clicking on Details';
+const COMBINED_TAG_KEY = '_combined';
+const LINE_BREAK = '<br/>';
+const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION (.*) -->$/;
+const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+var CommitStatus;
+(function (CommitStatus) {
+    CommitStatus["SUCCESS"] = "success";
+    CommitStatus["FAILURE"] = "failure";
+})(CommitStatus || (CommitStatus = {}));
+var SUPPORTED_EVENT_TYPES;
+(function (SUPPORTED_EVENT_TYPES) {
+    SUPPORTED_EVENT_TYPES["PULL_REQUEST"] = "pull_request";
+    SUPPORTED_EVENT_TYPES["PULL_REQUEST_TARGET"] = "pull_request_target";
+    SUPPORTED_EVENT_TYPES["push"] = "push";
+})(SUPPORTED_EVENT_TYPES || (SUPPORTED_EVENT_TYPES = {}));
+
+// EXTERNAL MODULE: external "fs"
+var external_fs_ = __webpack_require__(747);
+
+// CONCATENATED MODULE: ./src/util/loadJSONFile.ts
+
+
+const loadJSONFile = (filePath) => {
+    const file = Object(external_fs_.readFileSync)(filePath, { encoding: FILE_ENCODING });
+    const content = JSON.parse(file);
+    return content;
+};
+
+// EXTERNAL MODULE: ./node_modules/debug/src/index.js
+var src = __webpack_require__(784);
+var src_default = /*#__PURE__*/__webpack_require__.n(src);
+
+// CONCATENATED MODULE: ./src/util/debug.ts
+var _a;
+
+
+
+const DEBUG = (_a = Object(core.getInput)('DEBUG')) !== null && _a !== void 0 ? _a : false;
+if (DEBUG) {
+    console.log('debug is enabled, provided pattern:', DEBUG);
+}
+function logger(nameSpace) {
+    const { TASK_ID } = env;
+    const log = src_default()(`${TASK_ID}:${nameSpace}`);
+    log.log = console.log.bind(console);
+    if (DEBUG) {
+        log.enabled = true;
+    }
+    return log;
+}
+
+// CONCATENATED MODULE: ./src/util/makeArray.ts
+const makeArray = (field) => (field && Array.isArray(field) ? field : [field].filter(Boolean));
+
+// CONCATENATED MODULE: ./src/rules.ts
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+
+
+
+
+
+
+
+const debug = logger('rules');
+var RuleActors;
+(function (RuleActors) {
+    RuleActors["users"] = "users";
+    RuleActors["teams"] = "teams";
+})(RuleActors || (RuleActors = {}));
+var RuleExtras;
+(function (RuleExtras) {
+    RuleExtras["customMessage"] = "customMessage";
+    RuleExtras["name"] = "name";
+    RuleExtras["errorLevel"] = "errorLevel";
+    RuleExtras["labels"] = "labels";
+    RuleExtras["description"] = "description";
+    RuleExtras["targetURL"] = "targetURL";
+})(RuleExtras || (RuleExtras = {}));
+var RuleMatchers;
+(function (RuleMatchers) {
+    RuleMatchers["includesInPatch"] = "includesInPatch";
+    RuleMatchers["eventJsonPath"] = "eventJsonPath";
+    RuleMatchers["includes"] = "includes";
+})(RuleMatchers || (RuleMatchers = {}));
+var RuleActions;
+(function (RuleActions) {
+    RuleActions["comment"] = "comment";
+    RuleActions["review"] = "review";
+    RuleActions["status"] = "status";
+    RuleActions["assign"] = "assign";
+    RuleActions["label"] = "label";
+})(RuleActions || (RuleActions = {}));
+var ErrorLevels;
+(function (ErrorLevels) {
+    ErrorLevels["none"] = "none";
+    ErrorLevels["error"] = "error";
+})(ErrorLevels || (ErrorLevels = {}));
+const sanitize = (content) => {
+    const attrs = Object.assign(Object.assign(Object.assign({}, RuleMatchers), RuleActors), RuleExtras);
+    const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
+        return content[attr] ? Object.assign(Object.assign({}, memo), { [attr]: content[attr] }) : memo;
+    }, {});
+    return Object.assign(Object.assign({}, rule), { users: rule.users ? rule.users : [], teams: rule.teams ? rule.teams : [], includes: makeArray(rule.includes), excludes: makeArray(rule.excludes), includesInPatch: makeArray(rule.includesInPatch), eventJsonPath: makeArray(rule.eventJsonPath) });
+};
+const hasAttribute = (attr, 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+content) => attr in content;
+const isValidRawRule = (content) => {
+    if (typeof content !== 'object' || content === null) {
+        return false;
+    }
+    const hasValidActionValues = hasAttribute('action', content) && Object.keys(RuleActions).includes(content.action);
+    const hasTeams = hasAttribute('teams', content) && Array.isArray(content.teams);
+    const hasUsers = hasAttribute('users', content) && Array.isArray(content.users);
+    const hasActors = hasTeams ||
+        hasUsers ||
+        (hasAttribute('customMessage', content) && !!content.customMessage && content.action === RuleActions.comment) ||
+        (hasAttribute('labels', content) && !!content.labels && content.action === RuleActions.label) ||
+        (hasAttribute('action', content) && content.action === RuleActions.status);
+    const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
+    debug('validation:', {
+        rule: content,
+        hasActors,
+        hasValidActionValues,
+        matchers,
+    });
+    return hasValidActionValues && hasActors && matchers;
+};
+const loadRules = (rulesLocation) => {
+    const matches = Object(out.sync)(rulesLocation, {
+        onlyFiles: true,
+        cwd: env.GITHUB_WORKSPACE,
+        absolute: true,
+    });
+    debug('files found:', matches);
+    const rules = matches.reduce((memo, filePath) => {
+        try {
+            const rule = loadJSONFile(filePath);
+            return isValidRawRule(rule) ? [...memo, Object.assign(Object.assign({ name: Object(external_path_.basename)(filePath) }, sanitize(rule)), { path: filePath })] : memo;
+        }
+        catch (e) {
+            console.error(`${filePath} can't be parsed, it will be ignored`);
+            return memo;
+        }
+    }, []);
+    return rules;
+};
+const handleIncludeExcludeFiles = ({ includes, excludes, fileNames }) => {
+    debug('includeExcludeFiles...');
+    let results = [];
+    if (includes === null || includes === void 0 ? void 0 : includes.length) {
+        results = includes.reduce((memo, include) => {
+            const matches = minimatch_default().match(fileNames, include, { matchBase: true });
+            return [...memo, ...matches];
+        }, []);
+        results = [...new Set(results)];
+        debug('includes matches', { results, includes });
+        if ((excludes === null || excludes === void 0 ? void 0 : excludes.length) && results.length) {
+            const toExclude = excludes.reduce((memo, exclude) => {
+                const matches = minimatch_default().match(results, exclude, { matchBase: true });
+                return [...memo, ...matches];
+            }, []);
+            results = results.filter((filename) => !toExclude.includes(filename));
+            debug('excludes matches:', { results, excludes });
+        }
+    }
+    return !!results.length;
+};
+const handleIncludesInPatch = ({ patterns, patch }) => {
+    debug('handleIncludesInPath...');
+    const matches = patterns === null || patterns === void 0 ? void 0 : patterns.reduce((memo, pattern) => {
+        try {
+            const rex = new RegExp(pattern);
+            const matches = patch === null || patch === void 0 ? void 0 : patch.find((content) => content.match(rex));
+            return matches ? [...memo, matches] : memo;
+        }
+        catch (e) {
+            debug(`pattern: ${pattern} failed to parse`, e);
+            return memo;
+        }
+    }, []);
+    return !!(matches === null || matches === void 0 ? void 0 : matches.length);
+};
+const allRequiredRulesHaveMatched = (rules, matchingRules) => {
+    const requiredRules = rules.filter((rule) => rule.errorLevel && rule.errorLevel === ErrorLevels.error);
+    // if we don't have any required rule, we assume all required rules have passed.
+    if (!requiredRules.length) {
+        return true;
+    }
+    const matchingRulesNames = matchingRules.map((rule) => rule.name);
+    return requiredRules.every((rule) => matchingRulesNames.includes(rule.name));
+};
+const handleEventJsonPath = ({ event, patterns }) => {
+    debug('eventJsonPath', patterns);
+    try {
+        let results;
+        patterns === null || patterns === void 0 ? void 0 : patterns.find((pattern) => {
+            const matches = jsonpath_default().query(event, pattern);
+            if (matches.length) {
+                results = matches;
+            }
+            return matches.length;
+        });
+        debug('eventJSONPath matches:', results);
+        return !!results;
+    }
+    catch (e) {
+        debug('eventJsonPath:Error:', e);
+    }
+    return false;
+};
+const matchers = {
+    [RuleMatchers.includes]: (rule, { fileNames }) => handleIncludeExcludeFiles({ includes: rule.includes, excludes: rule.excludes, fileNames }),
+    [RuleMatchers.eventJsonPath]: (rule, { event }) => handleEventJsonPath({ patterns: rule.eventJsonPath, event }),
+    [RuleMatchers.includesInPatch]: (rule, { patch }) => handleIncludesInPatch({ patterns: rule.includesInPatch, patch }),
+};
+const isMatch = (rule, options) => {
+    const keyMatchers = Object.keys(RuleMatchers);
+    const matches = keyMatchers
+        .filter((matcher) => { var _a; return (_a = rule[matcher]) === null || _a === void 0 ? void 0 : _a.length; })
+        .map((matcher) => matchers[matcher](rule, options));
+    debug('isMatch:', { rule, matches });
+    return matches.length ? matches.every((match) => match === true) : false;
+};
+const getMatchingRules = (rules, files, event, patchContent) => {
+    const fileNames = files.map(({ filename }) => filename);
+    const matchingRules = rules.reduce((memo, rule) => {
+        if (isMatch(rule, { event, patch: patchContent, fileNames })) {
+            return [...memo, Object.assign(Object.assign({}, rule), { matched: true })];
+        }
+        else {
+            return memo;
+        }
+    }, []);
+    return matchingRules;
+};
+
+// EXTERNAL MODULE: ./node_modules/@octokit/rest/dist-node/index.js
+var dist_node = __webpack_require__(889);
+
+// CONCATENATED MODULE: ./src/util/catchHandler.ts
+const catchHandler = (debug) => (error) => {
+    debug('Request Failed', error);
+    return Promise.reject(error);
+};
+
+// CONCATENATED MODULE: ./src/assignees.ts
+
+
+const assignees_debug = logger('assignees');
+const handleAssignees = async (client, { owner, repo, prNumber, matchingRules }) => {
+    assignees_debug('handleAssignees called with:', matchingRules);
+    const assignees = matchingRules.reduce((memo, rule) => {
+        return [...memo, ...rule.users.map((user) => user.replace('@', ''))];
+    }, []);
+    assignees_debug('assignees found:', assignees);
+    return client.issues
+        .addAssignees({
+        owner,
+        repo,
+        issue_number: prNumber,
+        assignees,
+    })
+        .catch(catchHandler(assignees_debug));
+};
+
+// CONCATENATED MODULE: ./src/labels.ts
+
+
+
+const labels_debug = logger('labels');
+const handleLabels = async (client, { owner, repo, prNumber, matchingRules }) => {
+    labels_debug('called with:', matchingRules);
+    const labels = matchingRules
+        .filter(({ labels }) => labels)
+        .reduce((memo, { labels }) => [...memo, ...makeArray(labels)], []);
+    labels_debug('labels', labels);
+    if (!labels.length) {
+        labels_debug('no labels where found');
+        return undefined;
+    }
+    const result = client.issues
+        .addLabels({
+        owner,
+        repo,
+        issue_number: prNumber,
+        labels,
+    })
+        .catch(catchHandler(labels_debug));
+    labels_debug('result:', result);
+    return result;
+};
+
+// CONCATENATED MODULE: ./src/reviewers.ts
+
+
+const reviewers_debug = logger('reviewers');
+const handleReviewers = async (client, { owner, repo, prNumber, matchingRules }) => {
+    reviewers_debug('handleReviewers called with:', matchingRules);
+    const { reviewers, teamReviewers } = matchingRules.reduce((memo, rule) => {
+        const reviewers = [...memo.reviewers, ...rule.users.map((user) => user.replace('@', ''))];
+        const teamReviewers = [...memo.teamReviewers, ...rule.teams.map((team) => team.replace('@', ''))];
+        return { reviewers, teamReviewers };
+    }, { reviewers: [], teamReviewers: [] });
+    const result = await client.pulls
+        .requestReviewers({
+        owner,
+        repo,
+        pull_number: prNumber,
+        reviewers,
+        team_reviewers: teamReviewers,
+    })
+        .catch(catchHandler(reviewers_debug));
+    reviewers_debug('result:', result);
+    return result;
+};
+
+// EXTERNAL MODULE: ./node_modules/p-queue/dist/index.js
+var dist = __webpack_require__(186);
+var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
+
+// CONCATENATED MODULE: ./src/util/getBlobURL.ts
+
+
+const getBlobURL_debug = logger('getBlobURL');
+/**
+ * getBlobURL will return a URL for the provided fileName.
+ * It will figure out if the file is part of the changeSet or not and return the correct URL for it.
+ */
+const getBlobURL = (filename, files, owner, repo, base) => {
+    const baseBlobPath = `https://github.com/${owner}/${repo}/blob`;
+    getBlobURL_debug('getBlobURL', filename, files, baseBlobPath, base);
+    const file = files.find((file) => filename.match(file.filename));
+    return file ? file.blob_url : `${baseBlobPath}/${base}/${filename.replace(`${env.GITHUB_WORKSPACE}/`, '')}`;
+};
+
+// CONCATENATED MODULE: ./src/statuses.ts
+
+
+
+
+
+
+const statuses_debug = logger('statuses');
+const handleStatus = async (client, { owner, repo, matchingRules, rules, base, sha, files }, requestConcurrency = 1) => {
+    statuses_debug('called with:', matchingRules.map((rule) => rule.path));
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
+    const statusActionRules = rules.filter(({ action }) => action == RuleActions.status);
+    const statuses = statusActionRules.map((rule) => ({
+        owner,
+        repo,
+        sha,
+        context: `Herald › ${rule.name}`,
+        description: rule.description ? rule.description : STATUS_DESCRIPTION_COPY,
+        target_url: rule.targetURL ? rule.targetURL : getBlobURL(rule.path, files, owner, repo, base),
+        state: matchingRules.find((matchingRule) => matchingRule.path === rule.path)
+            ? CommitStatus.SUCCESS
+            : CommitStatus.FAILURE,
+    }));
+    statuses_debug('statuses', statuses);
+    const result = await Promise.all(statuses.map((status) => queue.add(() => client.repos.createCommitStatus(status)))).catch(catchHandler(statuses_debug));
+    statuses_debug('result:', result);
+    return result;
+};
+
+// EXTERNAL MODULE: ./node_modules/markdown-table/index.js
+var markdown_table = __webpack_require__(930);
+var markdown_table_default = /*#__PURE__*/__webpack_require__.n(markdown_table);
+
+// CONCATENATED MODULE: ./src/comment.ts
+
+
+
+
+
+
+
+
+const comment_debug = logger('comment');
+var TypeOfComments;
+(function (TypeOfComments) {
+    TypeOfComments["standalone"] = "standalone";
+    TypeOfComments["combined"] = "combined";
+})(TypeOfComments || (TypeOfComments = {}));
+const formatUser = (handleOrEmail) => {
+    return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
+};
+const tagComment = (body, path) => `<!-- USE_HERALD_ACTION ${path} -->\n${body}`;
+const commentTemplate = (mentions) => `
+   <details open>\n
+   <summary> Hi there, given these changes, Herald thinks that these users should take a look! </summary>\n
+   ${markdown_table_default()([
+    ['Rule', 'Mention'],
+    ...mentions.map(({ rule, URL, mentions }) => [
+        `[${rule.replace(`${env.GITHUB_WORKSPACE}/`, '')}](${URL})`,
+        mentions.map((user) => formatUser(user)).join(LINE_BREAK),
+    ]),
+], { align: ['l', 'c'] })}\n
+  </details>
+  `;
+/**
+ * This function takes a list of mathcing rules, and returns a map with rule name/path as keys, and
+ *  the comment body as values. We return a map instead of an array so we can determine which
+ *  comments we can skip reposting to avoid repeition, and which we can edit to update. We rely on
+ *  the fact that no two matching rules share the same path.
+ * @param matchingRules List of matching rules
+ */
+const composeCommentsForUsers = (matchingRules) => {
+    const groups = lodash_groupby_default()(matchingRules, (rule) => rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined);
+    let comments = {};
+    if (groups[TypeOfComments.combined]) {
+        const mentions = groups[TypeOfComments.combined].reduce((memo, { name, path, users, teams, blobURL }) => [
+            ...memo,
+            { URL: blobURL, rule: name || path, mentions: [...users, ...teams] },
+        ], []);
+        // Since combined comments may originate from multiple rules/teams, we use COMBINED_TAG_KEY as the key
+        //  to this comment by convention.
+        comments = Object.assign(Object.assign({}, comments), { [COMBINED_TAG_KEY]: commentTemplate([...new Set(mentions)]) });
+    }
+    if (groups[TypeOfComments.standalone]) {
+        const customMessages = groups[TypeOfComments.standalone]
+            .filter((rule) => rule.customMessage)
+            .reduce((memo, { path, customMessage }) => (Object.assign(Object.assign({}, memo), { [path]: customMessage })), {});
+        comments = Object.assign(Object.assign({}, comments), customMessages);
+    }
+    return comments;
+};
+const getAllComments = async (client, params) => {
+    const page = 1;
+    const { data: comments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { per_page: maxPerPage, page }));
+    if (comments.length < maxPerPage) {
+        return comments;
+    }
+    else {
+        const { data: moreComments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { page: page + 1, per_page: maxPerPage }));
+        return [...comments, ...moreComments];
+    }
+};
+const handleComment = async (client, { owner, repo, prNumber, matchingRules, files, base }, requestConcurrency = 1) => {
+    comment_debug('handleComment called with:', matchingRules);
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
+    const rulesWithBlobURL = matchingRules.map((mRule) => (Object.assign(Object.assign({}, mRule), { blobURL: getBlobURL(mRule.path, files, owner, repo, base) })));
+    const commentsFromRules = composeCommentsForUsers(rulesWithBlobURL);
+    comment_debug('comments from matching rules:', commentsFromRules);
+    const rawComments = await getAllComments(client, {
+        owner,
+        repo,
+        issue_number: prNumber,
+    });
+    // Filter existing comments by USE_HERALD_ACTION tag (HTML comment) and key by path
+    const useHeraldActionComments = rawComments.reduce((memo, comment) => {
+        const pathMatch = USE_HERALD_ACTION_TAG_REGEX.exec(comment.body.split('\n')[0]);
+        return pathMatch ? Object.assign(Object.assign({}, memo), { [pathMatch[1]]: comment }) : memo;
+    }, {});
+    comment_debug('existing UHA comments:', useHeraldActionComments);
+    // Update existing comments
+    const updateCommentPromises = Object.keys(commentsFromRules)
+        .filter((key) => key in useHeraldActionComments)
+        .map((key) => {
+        // get comment number
+        const comment_id = useHeraldActionComments[key].id;
+        const body = tagComment(commentsFromRules[key], key);
+        return queue.add(() => client.issues.updateComment({
+            owner,
+            repo,
+            comment_id,
+            body,
+        }));
+    });
+    // Add new comments
+    const createCommentPromises = Object.keys(commentsFromRules)
+        .filter((key) => !(key in useHeraldActionComments))
+        .map((key) => {
+        const body = tagComment(commentsFromRules[key], key);
+        return queue.add(() => client.issues.createComment({
+            owner,
+            repo,
+            issue_number: prNumber,
+            body,
+        }));
+    });
+    return Promise.all([...updateCommentPromises, ...createCommentPromises]).catch(catchHandler(comment_debug));
+};
+
+// CONCATENATED MODULE: ./src/util/isEventSupported.ts
+
+const isEventSupported = (event) => {
+    return Object.values(SUPPORTED_EVENT_TYPES).some((e) => event === e);
+};
+
+// CONCATENATED MODULE: ./src/index.ts
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const src_debug = logger('index');
+const EnhancedOctokit = dist_node.Octokit;
+var Props;
+(function (Props) {
+    Props["GITHUB_TOKEN"] = "GITHUB_TOKEN";
+    Props["rulesLocation"] = "rulesLocation";
+    Props["dryRun"] = "dryRun";
+    Props["base"] = "base";
+})(Props || (Props = {}));
+const actionsMap = {
+    [RuleActions.status]: handleStatus,
+    [RuleActions.comment]: handleComment,
+    [RuleActions.assign]: handleAssignees,
+    [RuleActions.review]: handleReviewers,
+    [RuleActions.label]: handleLabels,
+};
+const getParams = () => {
+    return Object.keys(Props).reduce((memo, prop) => {
+        const value = Object(core.getInput)(prop);
+        return value ? Object.assign(Object.assign({}, memo), { [prop]: value }) : memo;
+    }, {});
+};
+const main = async () => {
+    try {
+        if (isEventSupported(env.GITHUB_EVENT_NAME)) {
+            const event = loadJSONFile(env.GITHUB_EVENT_PATH);
+            const { pull_request: { head: { sha: headSha }, base: { sha: baseSha }, }, number: prNumber, repository: { name: repo, owner: { login: owner }, }, } = event;
+            const { GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun } = getParams();
+            src_debug('params:', { rulesLocation, base, dryRun });
+            if (!rulesLocation) {
+                const message = `${Props.rulesLocation} is required`;
+                Object(core.setFailed)(message);
+                throw new Error(message);
+            }
+            const rules = loadRules(rulesLocation);
+            src_debug('loaded rules and locations', {
+                rules,
+                dir: env.GITHUB_WORKSPACE,
+                rulesLocation,
+            });
+            const client = new EnhancedOctokit({ auth: GITHUB_TOKEN });
+            const { data: { files }, } = await client.repos.compareCommits({
+                base,
+                head: headSha,
+                owner,
+                repo,
+            });
+            const matchingRules = getMatchingRules(rules, files, event, files.map(({ patch }) => patch));
+            src_debug('matchingRules:', matchingRules);
+            if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
+                throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules
+                    .filter((rule) => rule.errorLevel && rule.errorLevel === 'error')
+                    .map((rule) => rule.name)
+                    .join(', ')}`);
+            }
+            const groupedRulesByAction = lodash_groupby_default()(matchingRules, (rule) => rule.action);
+            if (dryRun !== 'true') {
+                src_debug('not a dry Run');
+                if (matchingRules.length) {
+                    const groupNames = Object.keys(groupedRulesByAction);
+                    src_debug('groupNames', groupNames);
+                    await Promise.all(groupNames.map((actionName) => {
+                        const action = actionsMap[RuleActions[actionName]];
+                        const options = {
+                            owner,
+                            repo,
+                            prNumber,
+                            matchingRules: groupedRulesByAction[RuleActions[actionName]],
+                            rules,
+                            sha: headSha,
+                            base: baseSha,
+                            files,
+                        };
+                        return action(client, options);
+                    })).catch((error) => {
+                        src_debug('We found an error calling GitHub:', error);
+                        throw error;
+                    });
+                }
+            }
+            Object(core.setOutput)(OUTPUT_NAME, groupedRulesByAction);
+        }
+        else {
+            Object(core.setOutput)(OUTPUT_NAME, []);
+            throw new Error(`use-herald-action only supports [${Object.values(SUPPORTED_EVENT_TYPES).join(', ')}] events for now, event found: ${env.GITHUB_EVENT_NAME}`);
+        }
+    }
+    catch (e) {
+        Object(core.setFailed)(e.message);
+    }
+};
+
+// CONCATENATED MODULE: ./index.ts
+
+main();
+
+
+/***/ }),
+
 /***/ 775:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -24276,645 +24936,6 @@ module.exports = {
   CHAR_VERTICAL_LINE: '|', /* | */
   CHAR_ZERO_WIDTH_NOBREAK_SPACE: '\uFEFF' /* \uFEFF */
 };
-
-
-/***/ }),
-
-/***/ 809:
-/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __webpack_require__(470);
-
-// EXTERNAL MODULE: ./node_modules/lodash.groupby/index.js
-var lodash_groupby = __webpack_require__(604);
-var lodash_groupby_default = /*#__PURE__*/__webpack_require__.n(lodash_groupby);
-
-// EXTERNAL MODULE: ./node_modules/fast-glob/out/index.js
-var out = __webpack_require__(406);
-
-// EXTERNAL MODULE: external "path"
-var external_path_ = __webpack_require__(622);
-
-// EXTERNAL MODULE: ./node_modules/envalid/src/envalid.js
-var envalid = __webpack_require__(456);
-var envalid_default = /*#__PURE__*/__webpack_require__.n(envalid);
-
-// CONCATENATED MODULE: ./src/environment.ts
-
-
-const environment = () => envalid_default().cleanEnv(process.env, {
-    GITHUB_EVENT_PATH: Object(envalid.str)({
-        devDefault: Object(envalid.testOnly)('__mocks__/event.json'),
-    }),
-    GITHUB_WORKSPACE: Object(envalid.str)({
-        devDefault: Object(envalid.testOnly)(Object(external_path_.join)(__dirname, '..')),
-    }),
-    GITHUB_EVENT_NAME: Object(envalid.str)({ devDefault: 'pull_request' }),
-    GITHUB_REPOSITORY: Object(envalid.str)({ devDefault: Object(envalid.testOnly)('someRepo') }),
-    GITHUB_SHA: Object(envalid.str)({
-        devDefault: Object(envalid.testOnly)('ffac537e6cbbf934b08745a378932722df287a53'),
-    }),
-    TASK_ID: Object(envalid.str)({ default: 'use-herald-action' }),
-}, { dotEnvPath: null });
-const env = environment();
-
-// EXTERNAL MODULE: ./node_modules/minimatch/minimatch.js
-var minimatch = __webpack_require__(93);
-var minimatch_default = /*#__PURE__*/__webpack_require__.n(minimatch);
-
-// EXTERNAL MODULE: ./node_modules/jsonpath/index.js
-var jsonpath = __webpack_require__(374);
-var jsonpath_default = /*#__PURE__*/__webpack_require__.n(jsonpath);
-
-// CONCATENATED MODULE: ./src/util/constants.ts
-const maxPerPage = 100;
-const OUTPUT_NAME = 'appliedRules';
-const FILE_ENCODING = 'utf8';
-const STATUS_DESCRIPTION_COPY = 'You can see the rule by clicking on Details';
-const COMBINED_TAG_KEY = '_combined';
-const LINE_BREAK = '<br/>';
-const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION (.*) -->$/;
-const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-var CommitStatus;
-(function (CommitStatus) {
-    CommitStatus["SUCCESS"] = "success";
-    CommitStatus["FAILURE"] = "failure";
-})(CommitStatus || (CommitStatus = {}));
-var SUPPORTED_EVENT_TYPES;
-(function (SUPPORTED_EVENT_TYPES) {
-    SUPPORTED_EVENT_TYPES["PULL_REQUEST"] = "pull_request";
-    SUPPORTED_EVENT_TYPES["PULL_REQUEST_TARGET"] = "pull_request_target";
-    SUPPORTED_EVENT_TYPES["push"] = "push";
-})(SUPPORTED_EVENT_TYPES || (SUPPORTED_EVENT_TYPES = {}));
-
-// EXTERNAL MODULE: external "fs"
-var external_fs_ = __webpack_require__(747);
-
-// CONCATENATED MODULE: ./src/util/loadJSONFile.ts
-
-
-const loadJSONFile = (filePath) => {
-    const file = Object(external_fs_.readFileSync)(filePath, { encoding: FILE_ENCODING });
-    const content = JSON.parse(file);
-    return content;
-};
-
-// EXTERNAL MODULE: ./node_modules/debug/src/index.js
-var src = __webpack_require__(784);
-var src_default = /*#__PURE__*/__webpack_require__.n(src);
-
-// CONCATENATED MODULE: ./src/util/debug.ts
-var _a;
-
-
-
-const DEBUG = (_a = Object(core.getInput)('DEBUG')) !== null && _a !== void 0 ? _a : false;
-if (DEBUG) {
-    console.log('debug is enabled, provided pattern:', DEBUG);
-}
-function logger(nameSpace) {
-    const { TASK_ID } = env;
-    const log = src_default()(`${TASK_ID}:${nameSpace}`);
-    log.log = console.log.bind(console);
-    if (DEBUG) {
-        log.enabled = true;
-    }
-    return log;
-}
-
-// CONCATENATED MODULE: ./src/util/makeArray.ts
-const makeArray = (field) => (field && Array.isArray(field) ? field : [field].filter(Boolean));
-
-// CONCATENATED MODULE: ./src/rules.ts
-/* eslint-disable @typescript-eslint/no-var-requires */
-
-
-
-
-
-
-
-
-const debug = logger('rules');
-var RuleActors;
-(function (RuleActors) {
-    RuleActors["users"] = "users";
-    RuleActors["teams"] = "teams";
-})(RuleActors || (RuleActors = {}));
-var RuleExtras;
-(function (RuleExtras) {
-    RuleExtras["customMessage"] = "customMessage";
-    RuleExtras["name"] = "name";
-    RuleExtras["errorLevel"] = "errorLevel";
-    RuleExtras["labels"] = "labels";
-    RuleExtras["description"] = "description";
-    RuleExtras["targetURL"] = "targetURL";
-})(RuleExtras || (RuleExtras = {}));
-var RuleMatchers;
-(function (RuleMatchers) {
-    RuleMatchers["includesInPatch"] = "includesInPatch";
-    RuleMatchers["eventJsonPath"] = "eventJsonPath";
-    RuleMatchers["includes"] = "includes";
-})(RuleMatchers || (RuleMatchers = {}));
-var RuleActions;
-(function (RuleActions) {
-    RuleActions["comment"] = "comment";
-    RuleActions["review"] = "review";
-    RuleActions["status"] = "status";
-    RuleActions["assign"] = "assign";
-    RuleActions["label"] = "label";
-})(RuleActions || (RuleActions = {}));
-var ErrorLevels;
-(function (ErrorLevels) {
-    ErrorLevels["none"] = "none";
-    ErrorLevels["error"] = "error";
-})(ErrorLevels || (ErrorLevels = {}));
-const sanitize = (content) => {
-    const attrs = Object.assign(Object.assign(Object.assign({}, RuleMatchers), RuleActors), RuleExtras);
-    const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
-        return content[attr] ? Object.assign(Object.assign({}, memo), { [attr]: content[attr] }) : memo;
-    }, {});
-    return Object.assign(Object.assign({}, rule), { users: rule.users ? rule.users : [], teams: rule.teams ? rule.teams : [], includes: makeArray(rule.includes), excludes: makeArray(rule.excludes), includesInPatch: makeArray(rule.includesInPatch), eventJsonPath: makeArray(rule.eventJsonPath) });
-};
-const hasAttribute = (attr, 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-content) => attr in content;
-const isValidRawRule = (content) => {
-    if (typeof content !== 'object' || content === null) {
-        return false;
-    }
-    const hasValidActionValues = hasAttribute('action', content) && Object.keys(RuleActions).includes(content.action);
-    const hasTeams = hasAttribute('teams', content) && Array.isArray(content.teams);
-    const hasUsers = hasAttribute('users', content) && Array.isArray(content.users);
-    const hasActors = hasTeams ||
-        hasUsers ||
-        (hasAttribute('customMessage', content) && !!content.customMessage && content.action === RuleActions.comment) ||
-        (hasAttribute('labels', content) && !!content.labels && content.action === RuleActions.label) ||
-        (hasAttribute('action', content) && content.action === RuleActions.status);
-    const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
-    debug('validation:', {
-        rule: content,
-        hasActors,
-        hasValidActionValues,
-        matchers,
-    });
-    return hasValidActionValues && hasActors && matchers;
-};
-const loadRules = (rulesLocation) => {
-    const matches = Object(out.sync)(rulesLocation, {
-        onlyFiles: true,
-        cwd: env.GITHUB_WORKSPACE,
-        absolute: true,
-    });
-    debug('files found:', matches);
-    const rules = matches.reduce((memo, filePath) => {
-        try {
-            const rule = loadJSONFile(filePath);
-            return isValidRawRule(rule) ? [...memo, Object.assign(Object.assign({ name: Object(external_path_.basename)(filePath) }, sanitize(rule)), { path: filePath })] : memo;
-        }
-        catch (e) {
-            console.error(`${filePath} can't be parsed, it will be ignored`);
-            return memo;
-        }
-    }, []);
-    return rules;
-};
-const handleIncludeExcludeFiles = ({ includes, excludes, fileNames }) => {
-    debug('includeExcludeFiles...');
-    let results = [];
-    if (includes === null || includes === void 0 ? void 0 : includes.length) {
-        results = includes.reduce((memo, include) => {
-            const matches = minimatch_default().match(fileNames, include, { matchBase: true });
-            return [...memo, ...matches];
-        }, []);
-        results = [...new Set(results)];
-        debug('includes matches', { results, includes });
-        if ((excludes === null || excludes === void 0 ? void 0 : excludes.length) && results.length) {
-            const toExclude = excludes.reduce((memo, exclude) => {
-                const matches = minimatch_default().match(results, exclude, { matchBase: true });
-                return [...memo, ...matches];
-            }, []);
-            results = results.filter((filename) => !toExclude.includes(filename));
-            debug('excludes matches:', { results, excludes });
-        }
-    }
-    return !!results.length;
-};
-const handleIncludesInPatch = ({ patterns, patch }) => {
-    debug('handleIncludesInPath...');
-    const matches = patterns === null || patterns === void 0 ? void 0 : patterns.reduce((memo, pattern) => {
-        try {
-            const rex = new RegExp(pattern);
-            const matches = patch === null || patch === void 0 ? void 0 : patch.find((content) => content.match(rex));
-            return matches ? [...memo, matches] : memo;
-        }
-        catch (e) {
-            debug(`pattern: ${pattern} failed to parse`, e);
-            return memo;
-        }
-    }, []);
-    return !!(matches === null || matches === void 0 ? void 0 : matches.length);
-};
-const allRequiredRulesHaveMatched = (rules, matchingRules) => {
-    const requiredRules = rules.filter((rule) => rule.errorLevel && rule.errorLevel === ErrorLevels.error);
-    // if we don't have any required rule, we assume all required rules have passed.
-    if (!requiredRules.length) {
-        return true;
-    }
-    const matchingRulesNames = matchingRules.map((rule) => rule.name);
-    return requiredRules.every((rule) => matchingRulesNames.includes(rule.name));
-};
-const handleEventJsonPath = ({ event, patterns }) => {
-    debug('eventJsonPath', patterns);
-    try {
-        let results;
-        patterns === null || patterns === void 0 ? void 0 : patterns.find((pattern) => {
-            const matches = jsonpath_default().query(event, pattern);
-            if (matches.length) {
-                results = matches;
-            }
-            return matches.length;
-        });
-        debug('eventJSONPath matches:', results);
-        return !!results;
-    }
-    catch (e) {
-        debug('eventJsonPath:Error:', e);
-    }
-    return false;
-};
-const matchers = {
-    [RuleMatchers.includes]: (rule, { fileNames }) => handleIncludeExcludeFiles({ includes: rule.includes, excludes: rule.excludes, fileNames }),
-    [RuleMatchers.eventJsonPath]: (rule, { event }) => handleEventJsonPath({ patterns: rule.eventJsonPath, event }),
-    [RuleMatchers.includesInPatch]: (rule, { patch }) => handleIncludesInPatch({ patterns: rule.includesInPatch, patch }),
-};
-const isMatch = (rule, options) => {
-    const keyMatchers = Object.keys(RuleMatchers);
-    const matches = keyMatchers
-        .filter((matcher) => { var _a; return (_a = rule[matcher]) === null || _a === void 0 ? void 0 : _a.length; })
-        .map((matcher) => matchers[matcher](rule, options));
-    debug('isMatch:', { rule, matches });
-    return matches.length ? matches.every((match) => match === true) : false;
-};
-const getMatchingRules = (rules, files, event, patchContent) => {
-    const fileNames = files.map(({ filename }) => filename);
-    const matchingRules = rules.reduce((memo, rule) => {
-        if (isMatch(rule, { event, patch: patchContent, fileNames })) {
-            return [...memo, Object.assign(Object.assign({}, rule), { matched: true })];
-        }
-        else {
-            return memo;
-        }
-    }, []);
-    return matchingRules;
-};
-
-// EXTERNAL MODULE: ./node_modules/@octokit/rest/dist-node/index.js
-var dist_node = __webpack_require__(889);
-
-// EXTERNAL MODULE: ./node_modules/p-queue/dist/index.js
-var dist = __webpack_require__(186);
-var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
-
-// CONCATENATED MODULE: ./src/assignees.ts
-
-
-const assignees_debug = logger('assignees');
-const handleAssignees = async (client, { owner, repo, prNumber, matchingRules }, requestConcurrency = 1) => {
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    assignees_debug('handleAssignees called with:', matchingRules);
-    const result = await Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.issues.addAssignees({
-        owner,
-        repo,
-        issue_number: prNumber,
-        assignees: matchingRule.users.map((user) => user.replace('@', '')),
-    }))));
-    assignees_debug('handleAssignees result:', result);
-    return result;
-};
-
-// CONCATENATED MODULE: ./src/labels.ts
-
-
-
-const labels_debug = logger('labels');
-const handleLabels = async (client, { owner, repo, prNumber, matchingRules }, requestConcurrency = 1) => {
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    labels_debug('called with:', matchingRules);
-    const labels = matchingRules
-        .filter(({ labels }) => labels)
-        .reduce((memo, { labels }) => [...memo, ...makeArray(labels)], []);
-    labels_debug('labels', labels);
-    if (!labels.length) {
-        labels_debug('no labels where found');
-        return undefined;
-    }
-    const result = await queue.add(() => client.issues.addLabels({
-        owner,
-        repo,
-        issue_number: prNumber,
-        labels,
-    }));
-    labels_debug('result:', result);
-    return result;
-};
-
-// CONCATENATED MODULE: ./src/reviewers.ts
-
-
-const reviewers_debug = logger('reviewers');
-const handleReviewers = async (client, { owner, repo, prNumber, matchingRules }, requestConcurrency = 1) => {
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    reviewers_debug('handleReviewers called with:', matchingRules);
-    const result = await Promise.all(matchingRules.map((matchingRule) => queue.add(() => client.pulls.requestReviewers({
-        owner,
-        repo,
-        pull_number: prNumber,
-        reviewers: matchingRule.users.map((user) => user.replace('@', '')),
-        team_reviewers: matchingRule.teams.map((team) => team.replace('@', '')),
-    }))));
-    reviewers_debug('result:', result);
-    return result;
-};
-
-// CONCATENATED MODULE: ./src/util/getBlobURL.ts
-
-
-const getBlobURL_debug = logger('getBlobURL');
-/**
- * getBlobURL will return a URL for the provided fileName.
- * It will figure out if the file is part of the changeSet or not and return the correct URL for it.
- */
-const getBlobURL = (filename, files, owner, repo, base) => {
-    const baseBlobPath = `https://github.com/${owner}/${repo}/blob`;
-    getBlobURL_debug('getBlobURL', filename, files, baseBlobPath, base);
-    const file = files.find((file) => filename.match(file.filename));
-    return file ? file.blob_url : `${baseBlobPath}/${base}/${filename.replace(`${env.GITHUB_WORKSPACE}/`, '')}`;
-};
-
-// CONCATENATED MODULE: ./src/statuses.ts
-
-
-
-
-
-const statuses_debug = logger('statuses');
-const handleStatus = async (client, { owner, repo, matchingRules, rules, base, sha, files }, requestConcurrency = 1) => {
-    statuses_debug('called with:', matchingRules.map((rule) => rule.path));
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    const statusActionRules = rules.filter(({ action }) => action == RuleActions.status);
-    const statuses = statusActionRules.map((rule) => ({
-        owner,
-        repo,
-        sha,
-        context: `Herald › ${rule.name}`,
-        description: rule.description ? rule.description : STATUS_DESCRIPTION_COPY,
-        target_url: rule.targetURL ? rule.targetURL : getBlobURL(rule.path, files, owner, repo, base),
-        state: matchingRules.find((matchingRule) => matchingRule.path === rule.path)
-            ? CommitStatus.SUCCESS
-            : CommitStatus.FAILURE,
-    }));
-    statuses_debug('statuses', statuses);
-    return Promise.all(statuses.map((status) => queue.add(() => client.repos.createCommitStatus(status))));
-};
-
-// EXTERNAL MODULE: ./node_modules/markdown-table/index.js
-var markdown_table = __webpack_require__(930);
-var markdown_table_default = /*#__PURE__*/__webpack_require__.n(markdown_table);
-
-// CONCATENATED MODULE: ./src/comment.ts
-
-
-
-
-
-
-
-const comment_debug = logger('comment');
-var TypeOfComments;
-(function (TypeOfComments) {
-    TypeOfComments["standalone"] = "standalone";
-    TypeOfComments["combined"] = "combined";
-})(TypeOfComments || (TypeOfComments = {}));
-const formatUser = (handleOrEmail) => {
-    return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
-};
-const tagComment = (body, path) => `<!-- USE_HERALD_ACTION ${path} -->\n${body}`;
-const commentTemplate = (mentions) => `
-   <details open>\n
-   <summary> Hi there, given these changes, Herald thinks that these users should take a look! </summary>\n
-   ${markdown_table_default()([
-    ['Rule', 'Mention'],
-    ...mentions.map(({ rule, URL, mentions }) => [
-        `[${rule.replace(`${env.GITHUB_WORKSPACE}/`, '')}](${URL})`,
-        mentions.map((user) => formatUser(user)).join(LINE_BREAK),
-    ]),
-], { align: ['l', 'c'] })}\n
-  </details>
-  `;
-/**
- * This function takes a list of mathcing rules, and returns a map with rule name/path as keys, and
- *  the comment body as values. We return a map instead of an array so we can determine which
- *  comments we can skip reposting to avoid repeition, and which we can edit to update. We rely on
- *  the fact that no two matching rules share the same path.
- * @param matchingRules List of matching rules
- */
-const composeCommentsForUsers = (matchingRules) => {
-    const groups = lodash_groupby_default()(matchingRules, (rule) => rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined);
-    let comments = {};
-    if (groups[TypeOfComments.combined]) {
-        const mentions = groups[TypeOfComments.combined].reduce((memo, { name, path, users, teams, blobURL }) => [
-            ...memo,
-            { URL: blobURL, rule: name || path, mentions: [...users, ...teams] },
-        ], []);
-        // Since combined comments may originate from multiple rules/teams, we use COMBINED_TAG_KEY as the key
-        //  to this comment by convention.
-        comments = Object.assign(Object.assign({}, comments), { [COMBINED_TAG_KEY]: commentTemplate([...new Set(mentions)]) });
-    }
-    if (groups[TypeOfComments.standalone]) {
-        const customMessages = groups[TypeOfComments.standalone]
-            .filter((rule) => rule.customMessage)
-            .reduce((memo, { path, customMessage }) => (Object.assign(Object.assign({}, memo), { [path]: customMessage })), {});
-        comments = Object.assign(Object.assign({}, comments), customMessages);
-    }
-    return comments;
-};
-const getAllComments = async (client, params) => {
-    const page = 1;
-    const { data: comments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { per_page: maxPerPage, page }));
-    if (comments.length < maxPerPage) {
-        return comments;
-    }
-    else {
-        const { data: moreComments } = await client.issues.listComments(Object.assign(Object.assign({}, params), { page: page + 1, per_page: maxPerPage }));
-        return [...comments, ...moreComments];
-    }
-};
-const handleComment = async (client, { owner, repo, prNumber, matchingRules, files, base }, requestConcurrency = 1) => {
-    comment_debug('handleComment called with:', matchingRules);
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    const rulesWithBlobURL = matchingRules.map((mRule) => (Object.assign(Object.assign({}, mRule), { blobURL: getBlobURL(mRule.path, files, owner, repo, base) })));
-    const commentsFromRules = composeCommentsForUsers(rulesWithBlobURL);
-    comment_debug('comments from matching rules:', commentsFromRules);
-    const rawComments = await getAllComments(client, {
-        owner,
-        repo,
-        issue_number: prNumber,
-    });
-    // Filter existing comments by USE_HERALD_ACTION tag (HTML comment) and key by path
-    const useHeraldActionComments = rawComments.reduce((memo, comment) => {
-        const pathMatch = USE_HERALD_ACTION_TAG_REGEX.exec(comment.body.split('\n')[0]);
-        return pathMatch ? Object.assign(Object.assign({}, memo), { [pathMatch[1]]: comment }) : memo;
-    }, {});
-    comment_debug('existing UHA comments:', useHeraldActionComments);
-    // Update existing comments
-    const updateCommentPromises = Object.keys(commentsFromRules)
-        .filter((key) => key in useHeraldActionComments)
-        .map((key) => {
-        // get comment number
-        const comment_id = useHeraldActionComments[key].id;
-        const body = tagComment(commentsFromRules[key], key);
-        return queue.add(() => client.issues.updateComment({
-            owner,
-            repo,
-            comment_id,
-            body,
-        }));
-    });
-    // Add new comments
-    const createCommentPromises = Object.keys(commentsFromRules)
-        .filter((key) => !(key in useHeraldActionComments))
-        .map((key) => {
-        const body = tagComment(commentsFromRules[key], key);
-        return queue.add(() => client.issues.createComment({
-            owner,
-            repo,
-            issue_number: prNumber,
-            body,
-        }));
-    });
-    return Promise.all([...updateCommentPromises, ...createCommentPromises]);
-};
-
-// CONCATENATED MODULE: ./src/util/isEventSupported.ts
-
-const isEventSupported = (event) => {
-    return Object.values(SUPPORTED_EVENT_TYPES).some((e) => event === e);
-};
-
-// CONCATENATED MODULE: ./src/index.ts
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const src_debug = logger('index');
-const EnhancedOctokit = dist_node.Octokit;
-var Props;
-(function (Props) {
-    Props["GITHUB_TOKEN"] = "GITHUB_TOKEN";
-    Props["rulesLocation"] = "rulesLocation";
-    Props["dryRun"] = "dryRun";
-    Props["base"] = "base";
-})(Props || (Props = {}));
-const actionsMap = {
-    [RuleActions.status]: handleStatus,
-    [RuleActions.comment]: handleComment,
-    [RuleActions.assign]: handleAssignees,
-    [RuleActions.review]: handleReviewers,
-    [RuleActions.label]: handleLabels,
-};
-const getParams = () => {
-    return Object.keys(Props).reduce((memo, prop) => {
-        const value = Object(core.getInput)(prop);
-        return value ? Object.assign(Object.assign({}, memo), { [prop]: value }) : memo;
-    }, {});
-};
-const main = async () => {
-    try {
-        if (isEventSupported(env.GITHUB_EVENT_NAME)) {
-            const event = loadJSONFile(env.GITHUB_EVENT_PATH);
-            const { pull_request: { head: { sha: headSha }, base: { sha: baseSha }, }, number: prNumber, repository: { name: repo, owner: { login: owner }, }, } = event;
-            const { GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun } = getParams();
-            src_debug('params:', { rulesLocation, base, dryRun });
-            if (!rulesLocation) {
-                const message = `${Props.rulesLocation} is required`;
-                Object(core.setFailed)(message);
-                throw new Error(message);
-            }
-            const rules = loadRules(rulesLocation);
-            src_debug('loaded rules and locations', {
-                rules,
-                dir: env.GITHUB_WORKSPACE,
-                rulesLocation,
-            });
-            const client = new EnhancedOctokit({ auth: GITHUB_TOKEN });
-            const { data: { files }, } = await client.repos.compareCommits({
-                base,
-                head: headSha,
-                owner,
-                repo,
-            });
-            const matchingRules = getMatchingRules(rules, files, event, files.map(({ patch }) => patch));
-            src_debug('matchingRules:', matchingRules);
-            if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
-                throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules
-                    .filter((rule) => rule.errorLevel && rule.errorLevel === 'error')
-                    .map((rule) => rule.name)
-                    .join(', ')}`);
-            }
-            const groupedRulesByAction = lodash_groupby_default()(matchingRules, (rule) => rule.action);
-            if (dryRun !== 'true') {
-                src_debug('not a dry Run');
-                if (matchingRules.length) {
-                    const groupNames = Object.keys(groupedRulesByAction);
-                    src_debug('groupNames', groupNames);
-                    await Promise.all([
-                        groupNames.map((actionName) => {
-                            const action = actionsMap[RuleActions[actionName]];
-                            const options = {
-                                owner,
-                                repo,
-                                prNumber,
-                                matchingRules: groupedRulesByAction[RuleActions[actionName]],
-                                rules,
-                                sha: headSha,
-                                base: baseSha,
-                                files,
-                            };
-                            return action(client, options);
-                        }),
-                    ]);
-                }
-            }
-            Object(core.setOutput)(OUTPUT_NAME, groupedRulesByAction);
-        }
-        else {
-            Object(core.setOutput)(OUTPUT_NAME, []);
-            throw new Error(`use-herald-action only supports [${Object.values(SUPPORTED_EVENT_TYPES).join(', ')}] events for now, event found: ${env.GITHUB_EVENT_NAME}`);
-        }
-    }
-    catch (e) {
-        Object(core.setFailed)(e);
-    }
-};
-
-// CONCATENATED MODULE: ./index.ts
-
-main();
 
 
 /***/ }),
