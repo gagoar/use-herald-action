@@ -24335,6 +24335,9 @@ const maxPerPage = 100;
 const OUTPUT_NAME = 'appliedRules';
 const FILE_ENCODING = 'utf8';
 const STATUS_DESCRIPTION_COPY = 'You can see the rule by clicking on Details';
+const COMBINED_TAG_KEY = '_combined';
+const LINE_BREAK = '<br/>';
+const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION (.*) -->$/;
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 var CommitStatus;
 (function (CommitStatus) {
@@ -24697,8 +24700,6 @@ var TypeOfComments;
     TypeOfComments["standalone"] = "standalone";
     TypeOfComments["combined"] = "combined";
 })(TypeOfComments || (TypeOfComments = {}));
-const LINE_BREAK = '<br/>';
-const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION (.*) -->$/;
 const formatUser = (handleOrEmail) => {
     return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
 };
@@ -24730,9 +24731,9 @@ const composeCommentsForUsers = (matchingRules) => {
             ...memo,
             { URL: blobURL, rule: name || path, mentions: [...users, ...teams] },
         ], []);
-        // Since combined comments may originate from multiple rules/teams, we use _combined as the key
+        // Since combined comments may originate from multiple rules/teams, we use COMBINED_TAG_KEY as the key
         //  to this comment by convention.
-        comments = Object.assign(Object.assign({}, comments), { _combined: commentTemplate([...new Set(mentions)]) });
+        comments = Object.assign(Object.assign({}, comments), { [COMBINED_TAG_KEY]: commentTemplate([...new Set(mentions)]) });
     }
     if (groups[TypeOfComments.standalone]) {
         const customMessages = groups[TypeOfComments.standalone]

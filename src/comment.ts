@@ -2,7 +2,7 @@ import PQueue from 'p-queue';
 import groupBy from 'lodash.groupby';
 import table from 'markdown-table';
 
-import { EMAIL_REGEX, maxPerPage } from './util/constants';
+import { EMAIL_REGEX, USE_HERALD_ACTION_TAG_REGEX, LINE_BREAK, COMBINED_TAG_KEY, maxPerPage } from './util/constants';
 
 import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
 import { logger } from './util/debug';
@@ -27,9 +27,6 @@ enum TypeOfComments {
 }
 
 type Mention = { rule: string; mentions: string[]; URL: string };
-
-const LINE_BREAK = '<br/>';
-const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION (.*) -->$/;
 
 const formatUser = (handleOrEmail: string) => {
   return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
@@ -79,11 +76,11 @@ export const composeCommentsForUsers = (
       [] as Mention[]
     );
 
-    // Since combined comments may originate from multiple rules/teams, we use _combined as the key
+    // Since combined comments may originate from multiple rules/teams, we use COMBINED_TAG_KEY as the key
     //  to this comment by convention.
     comments = {
       ...comments,
-      _combined: commentTemplate([...new Set(mentions)]),
+      [COMBINED_TAG_KEY]: commentTemplate([...new Set(mentions)]),
     };
   }
 
