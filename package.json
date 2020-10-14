@@ -106,7 +106,7 @@
     "lodash.groupby": "4.6.0",
     "markdown-table": "^2.0.0",
     "minimatch": "3.0.4",
-    "p-queue": "6.6.1"
+    "p-queue": "6.6.2"
   },
   "devDependencies": {
     "@types/debug": "4.1.5",
