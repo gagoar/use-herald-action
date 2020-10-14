@@ -10,6 +10,7 @@ import { MatchingRule } from './rules';
 import { env } from './environment';
 import { getBlobURL } from './util/getBlobURL';
 import { catchHandler } from './util/catchHandler';
+import PQueue from 'p-queue';
 
 type AllCommentsParams = RestEndpointMethodTypes['issues']['listComments']['parameters'];
 
@@ -102,7 +103,8 @@ const getAllComments = async (
 
 export const handleComment: ActionMapInput = async (
   client,
-  { owner, repo, prNumber, matchingRules, files, base }
+  { owner, repo, prNumber, matchingRules, files, base },
+  requestConcurrency = 1
 ): Promise<unknown> => {
   debug('handleComment called with:', matchingRules);
 
@@ -124,14 +126,18 @@ export const handleComment: ActionMapInput = async (
 
   debug('comments to add:', onlyNewComments);
 
+  const queue = new PQueue({ concurrency: requestConcurrency });
+
   const calls = await Promise.all(
     onlyNewComments.map((body: string) => {
-      return client.issues.createComment({
-        owner,
-        repo,
-        issue_number: prNumber,
-        body,
-      });
+      return queue.add(() =>
+        client.issues.createComment({
+          owner,
+          repo,
+          issue_number: prNumber,
+          body,
+        })
+      );
     })
   ).catch(catchHandler(debug));
 
