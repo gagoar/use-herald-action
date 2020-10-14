@@ -29,10 +29,11 @@ enum TypeOfComments {
 type Mention = { rule: string; mentions: string[]; URL: string };
 
 const LINE_BREAK = '<br/>';
+const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION (.*) -->$/;
+
 const formatUser = (handleOrEmail: string) => {
   return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
 };
-const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION .* -->$/;
 
 const tagComment = (body: string, path: string) => `<!-- USE_HERALD_ACTION ${path} -->\n${body}`;
 
@@ -141,6 +142,8 @@ export const handleComment: ActionMapInput = async (
 
   const commentsFromRules = composeCommentsForUsers(rulesWithBlobURL);
 
+  debug('comments from matching rules:', commentsFromRules);
+
   const rawComments = await getAllComments(client, {
     owner,
     repo,
@@ -148,15 +151,11 @@ export const handleComment: ActionMapInput = async (
   });
 
   // Filter existing comments by USE_HERALD_ACTION tag (HTML comment) and key by path
-  const useHeraldActionComments = rawComments
-    .filter(({ body }) => USE_HERALD_ACTION_TAG_REGEX.test(body.split('\n')[0]))
-    .reduce((memo, comment) => {
-      const bodyFirstLine = comment.body.split('\n')[0];
-      const path = bodyFirstLine.replace('<!-- USE_HERALD_ACTION ', '').replace(' -->', '');
-      return { ...memo, [path]: comment };
-    }, {} as Record<string, IssueComment>);
+  const useHeraldActionComments = rawComments.reduce((memo, comment) => {
+    const pathMatch = USE_HERALD_ACTION_TAG_REGEX.exec(comment.body.split('\n')[0]);
+    return pathMatch ? { ...memo, [pathMatch[1]]: comment } : memo;
+  }, {} as Record<string, IssueComment>);
 
-  debug('comments from matching rules:', commentsFromRules);
   debug('existing UHA comments:', useHeraldActionComments);
 
   // Update existing comments

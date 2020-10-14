@@ -24698,10 +24698,10 @@ var TypeOfComments;
     TypeOfComments["combined"] = "combined";
 })(TypeOfComments || (TypeOfComments = {}));
 const LINE_BREAK = '<br/>';
+const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION (.*) -->$/;
 const formatUser = (handleOrEmail) => {
     return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
 };
-const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION .* -->$/;
 const tagComment = (body, path) => `<!-- USE_HERALD_ACTION ${path} -->\n${body}`;
 const commentTemplate = (mentions) => `
    <details open>\n
@@ -24758,20 +24758,17 @@ const handleComment = async (client, { owner, repo, prNumber, matchingRules, fil
     const queue = new dist_default.a({ concurrency: requestConcurrency });
     const rulesWithBlobURL = matchingRules.map((mRule) => (Object.assign(Object.assign({}, mRule), { blobURL: getBlobURL(mRule.path, files, owner, repo, base) })));
     const commentsFromRules = composeCommentsForUsers(rulesWithBlobURL);
+    comment_debug('comments from matching rules:', commentsFromRules);
     const rawComments = await getAllComments(client, {
         owner,
         repo,
         issue_number: prNumber,
     });
     // Filter existing comments by USE_HERALD_ACTION tag (HTML comment) and key by path
-    const useHeraldActionComments = rawComments
-        .filter(({ body }) => USE_HERALD_ACTION_TAG_REGEX.test(body.split('\n')[0]))
-        .reduce((memo, comment) => {
-        const bodyFirstLine = comment.body.split('\n')[0];
-        const path = bodyFirstLine.replace('<!-- USE_HERALD_ACTION ', '').replace(' -->', '');
-        return Object.assign(Object.assign({}, memo), { [path]: comment });
+    const useHeraldActionComments = rawComments.reduce((memo, comment) => {
+        const pathMatch = USE_HERALD_ACTION_TAG_REGEX.exec(comment.body.split('\n')[0]);
+        return pathMatch ? Object.assign(Object.assign({}, memo), { [pathMatch[1]]: comment }) : memo;
     }, {});
-    comment_debug('comments from matching rules:', commentsFromRules);
     comment_debug('existing UHA comments:', useHeraldActionComments);
     // Update existing comments
     const updateCommentPromises = Object.keys(commentsFromRules)

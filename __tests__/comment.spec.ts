@@ -38,7 +38,9 @@ describe('composeCommentsForUsers', () => {
       ])
     ).toMatchInlineSnapshot(`
       Object {
-        "`);
+        "${env.GITHUB_WORKSPACE}/some/rule.json": "This is a custom message for a rule",
+      }
+    `);
   });
 
   it('it combines 2 comments when do not have customMessage', () => {
