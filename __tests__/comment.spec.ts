@@ -38,7 +38,7 @@ describe('composeCommentsForUsers', () => {
       ])
     ).toMatchInlineSnapshot(`
       Object {
-        "/Users/cyamonide/GitHub/use-herald-action/some/rule.json": "This is a custom message for a rule",
+        "${env.GITHUB_WORKSPACE}/some/rule.json": "This is a custom message for a rule",
       }
     `);
   });
