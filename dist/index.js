@@ -22503,6 +22503,7 @@ var markdown_table_default = /*#__PURE__*/__webpack_require__.n(markdown_table);
 
 
 
+
 const comment_debug = logger('comment');
 var TypeOfComments;
 (function (TypeOfComments) {
@@ -22555,7 +22556,7 @@ const getAllComments = async (client, params) => {
         return [...comments, ...moreComments];
     }
 };
-const handleComment = async (client, { owner, repo, prNumber, matchingRules, files, base }) => {
+const handleComment = async (client, { owner, repo, prNumber, matchingRules, files, base }, requestConcurrency = 1) => {
     comment_debug('handleComment called with:', matchingRules);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const rulesWithBlobURL = matchingRules.map((mRule) => (Object.assign(Object.assign({}, mRule), { blobURL: getBlobURL(mRule.path, files, owner, repo, base) })));
@@ -22568,13 +22569,14 @@ const handleComment = async (client, { owner, repo, prNumber, matchingRules, fil
     const comments = rawComments.map(({ body }) => body);
     const onlyNewComments = commentsFromRules.filter((comment) => !comments.includes(comment));
     comment_debug('comments to add:', onlyNewComments);
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
     const calls = await Promise.all(onlyNewComments.map((body) => {
-        return client.issues.createComment({
+        return queue.add(() => client.issues.createComment({
             owner,
             repo,
             issue_number: prNumber,
             body,
-        });
+        }));
     })).catch(catchHandler(comment_debug));
     return calls;
 };
@@ -22675,7 +22677,7 @@ const main = async () => {
                         };
                         return action(client, options);
                     })).catch((error) => {
-                        src_debug('We found and error calling GitHub:', error);
+                        src_debug('We found an error calling GitHub:', error);
                         throw error;
                     });
                 }
