@@ -22676,10 +22676,7 @@ const composeCommentsForUsers = (matchingRules) => {
     const groups = lodash_groupby_default()(matchingRules, (rule) => rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined);
     let comments = {};
     if (groups[TypeOfComments.combined]) {
-        const mentions = groups[TypeOfComments.combined].reduce((memo, { name, path, users, teams, blobURL }) => [
-            ...memo,
-            { URL: blobURL, rule: name || path, mentions: [...users, ...teams] },
-        ], []);
+        const mentions = groups[TypeOfComments.combined].reduce((memo, { name, path, users, teams, blobURL }) => memo.concat({ URL: blobURL, rule: name || path, mentions: [...users, ...teams] }), []);
         // Since combined comments may originate from multiple rules/teams, we use COMBINED_TAG_KEY as the key
         //  to this comment by convention.
         comments = Object.assign(Object.assign({}, comments), { [COMBINED_TAG_KEY]: commentTemplate([...new Set(mentions)]) });

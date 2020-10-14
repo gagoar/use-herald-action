@@ -70,29 +70,21 @@ export const composeCommentsForUsers = (
 
   if (groups[TypeOfComments.combined]) {
     const mentions = groups[TypeOfComments.combined].reduce(
-      (memo, { name, path, users, teams, blobURL }) => [
-        ...memo,
-        { URL: blobURL, rule: name || path, mentions: [...users, ...teams] },
-      ],
+      (memo, { name, path, users, teams, blobURL }) =>
+        memo.concat({ URL: blobURL, rule: name || path, mentions: [...users, ...teams] }),
       [] as Mention[]
     );
 
     // Since combined comments may originate from multiple rules/teams, we use COMBINED_TAG_KEY as the key
     //  to this comment by convention.
-    comments = {
-      ...comments,
-      [COMBINED_TAG_KEY]: commentTemplate([...new Set(mentions)]),
-    };
+    comments = { ...comments, [COMBINED_TAG_KEY]: commentTemplate([...new Set(mentions)]) };
   }
 
   if (groups[TypeOfComments.standalone]) {
     const customMessages = groups[TypeOfComments.standalone]
       .filter((rule) => rule.customMessage)
       .reduce(
-        (memo, { path, customMessage }) => ({
-          ...memo,
-          [path]: customMessage as string,
-        }),
+        (memo, { path, customMessage }) => ({ ...memo, [path]: customMessage as string }),
         {} as Record<string, string>
       );
     comments = { ...comments, ...customMessages };
