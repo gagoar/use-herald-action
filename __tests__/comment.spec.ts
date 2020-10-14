@@ -193,8 +193,7 @@ describe('handleComment', () => {
     `);
   });
 
-  // TODO: (siliu) rework this test
-  it('should not edit the message if it already exists', async () => {
+  it('should edit the message if it already exists', async () => {
     const rule = {
       users: ['eeny', 'meeny', 'miny', 'moe'],
       includes: ['*.ts'],
