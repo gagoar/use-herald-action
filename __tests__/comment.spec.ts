@@ -38,7 +38,7 @@ describe('composeCommentsForUsers', () => {
       ])
     ).toMatchInlineSnapshot(`
       Object {
-        "${env.GITHUB_WORKSPACE}/some/rule.json": "This is a custom message for a rule",
+        "/Users/cyamonide/GitHub/use-herald-action/some/rule.json": "This is a custom message for a rule",
       }
     `);
   });
@@ -193,31 +193,46 @@ describe('handleComment', () => {
     `);
   });
 
-  it('should edit the message if it already exists', async () => {
-    const rule = {
+  it('should edit messages if they already exist', async () => {
+    const rule1 = {
       users: ['eeny', 'meeny', 'miny', 'moe'],
       includes: ['*.ts'],
       action: RuleActions.comment,
-      path: 'rules/rule.json',
-      customMessage: 'Custom message',
+      path: 'rules/rule1.json',
       teams: [],
       matched: true,
       blobURL: 'https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/rules/rule.json',
     };
 
+    const rule2 = {
+      ...rule1,
+      path: 'rules/rule2.json',
+    };
+
     nock('https://api.github.com')
       .get(`/repos/${owner}/${repo}/issues/${prIssue}/comments?page=1&per_page=2`)
-      .reply(200, [getCommentsResponse[0]]);
+      .reply(200, getCommentsResponse.slice(0, 2));
+
+    nock('https://api.github.com')
+      .get(`/repos/${owner}/${repo}/issues/${prIssue}/comments?page=2&per_page=2`)
+      .reply(200, getCommentsResponse.slice(2, 4));
 
     nock('https://api.github.com')
       .patch(`/repos/${owner}/${repo}/issues/comments/1`)
-      .reply(200, [getCommentsResponse[0]]);
+      .reply(200, ['comment 1 successfully udpated']);
+
+    nock('https://api.github.com')
+      .patch(`/repos/${owner}/${repo}/issues/comments/3`)
+      .reply(200, ['comment 2 successfully updated']);
 
     const response = await handleComment(client, {
       owner,
       repo,
       prNumber: 1,
-      matchingRules: [{ ...rule, customMessage: 'new comment that should be updated' }],
+      matchingRules: [
+        { ...rule1, customMessage: 'new comment for rule 1 that should be updated' },
+        { ...rule2, customMessage: 'new comment for rule 2 that should be updated' },
+      ],
       base: '',
       sha: '',
       files: [],
@@ -228,42 +243,23 @@ describe('handleComment', () => {
       Array [
         Object {
           "data": Array [
-            Object {
-              "body": "<!-- USE_HERALD_ACTION rules/rule.json -->
-      first comment",
-              "created_at": "2011-04-14T16:00:49Z",
-              "html_url": "https://github.com/gagoar/example_repo/issues/1#issuecomment-1",
-              "id": 1,
-              "node_id": "MDEyOklzc3VlQ29tbWVudDE=",
-              "updated_at": "2011-04-14T16:00:49Z",
-              "url": "https://api.github.com/repos/gagoar/example_repo/issues/comments/1",
-              "user": Object {
-                "avatar_url": "https://github.com/images/error/gagoar_happy.gif",
-                "events_url": "https://api.github.com/users/gagoar/events{/privacy}",
-                "followers_url": "https://api.github.com/users/gagoar/followers",
-                "following_url": "https://api.github.com/users/gagoar/following{/other_user}",
-                "gists_url": "https://api.github.com/users/gagoar/gists{/gist_id}",
-                "gravatar_id": "",
-                "html_url": "https://github.com/gagoar",
-                "id": 1,
-                "login": "gagoar",
-                "node_id": "MDQ6VXNlcjE=",
-                "organizations_url": "https://api.github.com/users/gagoar/orgs",
-                "received_events_url": "https://api.github.com/users/gagoar/received_events",
-                "repos_url": "https://api.github.com/users/gagoar/repos",
-                "site_admin": false,
-                "starred_url": "https://api.github.com/users/gagoar/starred{/owner}{/repo}",
-                "subscriptions_url": "https://api.github.com/users/gagoar/subscriptions",
-                "type": "User",
-                "url": "https://api.github.com/users/gagoar",
-              },
-            },
+            "comment 1 successfully udpated",
           ],
           "headers": Object {
             "content-type": "application/json",
           },
           "status": 200,
           "url": "https://api.github.com/repos/gagoar/example_repo/issues/comments/1",
+        },
+        Object {
+          "data": Array [
+            "comment 2 successfully updated",
+          ],
+          "headers": Object {
+            "content-type": "application/json",
+          },
+          "status": 200,
+          "url": "https://api.github.com/repos/gagoar/example_repo/issues/comments/3",
         },
       ]
     `);
