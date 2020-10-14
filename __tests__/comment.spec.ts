@@ -38,9 +38,7 @@ describe('composeCommentsForUsers', () => {
       ])
     ).toMatchInlineSnapshot(`
       Object {
-        "/Users/cyamonide/GitHub/use-herald-action/some/rule.json": "This is a custom message for a rule",
-      }
-    `);
+        "`);
   });
 
   it('it combines 2 comments when do not have customMessage', () => {
@@ -68,7 +66,7 @@ describe('composeCommentsForUsers', () => {
         "_combined": "
          <details open>
 
-         <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>
+         <summary> Hi there, given these changes, Herald thinks that these users should take a look! </summary>
 
          | Rule                               |                                  Mention                                  |
       | :--------------------------------- | :-----------------------------------------------------------------------: |
@@ -97,7 +95,7 @@ describe('composeCommentsForUsers', () => {
         "_combined": "
          <details open>
 
-         <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>
+         <summary> Hi there, given these changes, Herald thinks that these users should take a look! </summary>
 
          | Rule                               |                          Mention                         |
       | :--------------------------------- | :------------------------------------------------------: |
