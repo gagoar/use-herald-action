@@ -123,6 +123,8 @@ export const main = async (): Promise<void> => {
 
       const groupedRulesByAction = groupBy(matchingRules, (rule) => rule.action);
 
+      debug('pineapple');
+
       if (dryRun !== 'true') {
         debug('not a dry Run');
 
