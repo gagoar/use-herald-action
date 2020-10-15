@@ -25,4 +25,3 @@ jobs:
           GITHUB_TOKEN: ${{ steps.auth.outputs.token }}
           rulesLocation: herald_rules/*.json
           DEBUG: '*'
-          dryRun: true
