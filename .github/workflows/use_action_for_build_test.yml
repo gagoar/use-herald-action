@@ -1,0 +1,23 @@
+name: Use Herald > build test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  herald:
+    name: apply herald rules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Install packages
+        run: npm install
+      - name: Build binary
+        run: npm run build
+      - name: apply herald rules
+        id: herald
+        uses: ./
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          rulesLocation: herald_rules_for_build/*.json
+          DEBUG: '*'
