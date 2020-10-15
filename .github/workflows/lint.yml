@@ -1,4 +1,4 @@
-name: Validation > Lint
+name: Validation
 
 on: pull_request
 

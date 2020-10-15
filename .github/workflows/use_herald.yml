@@ -1,0 +1,27 @@
+name: Use Herald
+
+on:
+  pull_request_target:
+    types: [edited, opened, synchronize, reopened]
+
+jobs:
+  applyRules:
+    name: apply herald rules
+    runs-on: ubuntu-latest
+    steps:
+      - id: auth
+        uses: jnwng/github-app-installation-token-action@v1
+        with:
+          appId: ${{ secrets.UHA_APP_ID }}
+          installationId: ${{ secrets.UHA_INSTALLATION_ID }}
+          privateKey: ${{ secrets.UHA_APP_PRIVATE_KEY }}
+      - uses: actions/checkout@master
+      - name: Install packages
+        run: npm install
+      - name: Build binary
+      - id: herald
+        uses: gagoar/use-herald-action@master
+        with:
+          GITHUB_TOKEN: ${{ steps.auth.outputs.token }}
+          rulesLocation: herald_rules/*.json
+          DEBUG: '*'
