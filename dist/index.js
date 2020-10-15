@@ -22786,7 +22786,6 @@ const actionsMap = {
 const getParams = () => {
     return Object.keys(Props).reduce((memo, prop) => {
         const value = Object(core.getInput)(prop);
-        src_debug(`SL_DEBUG: ${prop} : ${value}`);
         return value ? Object.assign(Object.assign({}, memo), { [prop]: value }) : memo;
     }, {});
 };
@@ -22824,7 +22823,6 @@ const main = async () => {
                     .join(', ')}`);
             }
             const groupedRulesByAction = lodash_groupby_default()(matchingRules, (rule) => rule.action);
-            src_debug('pineapple');
             if (dryRun !== 'true') {
                 src_debug('not a dry Run');
                 if (matchingRules.length) {

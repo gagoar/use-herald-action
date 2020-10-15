@@ -54,7 +54,6 @@ type ActionName = keyof typeof RuleActions;
 const getParams = () => {
   return Object.keys(Props).reduce((memo, prop) => {
     const value = getInput(prop);
-    debug(`SL_DEBUG: ${prop} : ${value}`);
     return value ? { ...memo, [prop]: value } : memo;
   }, {} as Partial<Record<keyof typeof Props, string>>);
 };
@@ -123,8 +122,6 @@ export const main = async (): Promise<void> => {
       }
 
       const groupedRulesByAction = groupBy(matchingRules, (rule) => rule.action);
-
-      debug('pineapple');
 
       if (dryRun !== 'true') {
         debug('not a dry Run');
