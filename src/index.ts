@@ -54,6 +54,7 @@ type ActionName = keyof typeof RuleActions;
 const getParams = () => {
   return Object.keys(Props).reduce((memo, prop) => {
     const value = getInput(prop);
+    debug(`SL_DEBUG: ${prop} : ${value}`);
     return value ? { ...memo, [prop]: value } : memo;
   }, {} as Partial<Record<keyof typeof Props, string>>);
 };

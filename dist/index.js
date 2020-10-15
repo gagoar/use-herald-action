@@ -22786,6 +22786,7 @@ const actionsMap = {
 const getParams = () => {
     return Object.keys(Props).reduce((memo, prop) => {
         const value = Object(core.getInput)(prop);
+        src_debug(`SL_DEBUG: ${prop} : ${value}`);
         return value ? Object.assign(Object.assign({}, memo), { [prop]: value }) : memo;
     }, {});
 };
