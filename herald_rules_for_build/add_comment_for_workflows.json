@@ -1,0 +1,6 @@
+{
+  "name": "This is a rule to attach @gagoar when workflow changes",
+  "includes": ["*"],
+  "action": "comment",
+  "customMessage": "If you see this message, it means that we have built the action and the basic functionality works!"
+}

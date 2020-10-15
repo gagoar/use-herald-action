@@ -1,20 +1,14 @@
-name: use herald
+name: Use Herald > build test
 
 on:
-  pull_request_target:
-    types: [edited, opened, synchronize, reopened]
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   herald:
     name: apply herald rules
     runs-on: ubuntu-latest
     steps:
-      - id: auth
-        uses: jnwng/github-app-installation-token-action@v1
-        with:
-          appId: ${{ secrets.UHA_APP_ID }}
-          installationId: ${{ secrets.UHA_INSTALLATION_ID }}
-          privateKey: ${{ secrets.UHA_APP_PRIVATE_KEY }}
       - uses: actions/checkout@master
       - name: Install packages
         run: npm install
@@ -24,9 +18,6 @@ jobs:
         id: herald
         uses: ./
         with:
-          GITHUB_TOKEN: ${{ steps.auth.outputs.token }}
-          rulesLocation: herald_rules/*.json
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          rulesLocation: herald_rules_for_build/*.json
           DEBUG: '*'
-
-      - name: Store response payload to file
-        run: echo '${{ fromJSON(steps.herald.outputs.appliedRules) }}'
