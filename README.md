@@ -1,3 +1,5 @@
+test
+
 <p align="center">
     <a href="https://github.com/marketplace/actions/use-herald-action">
       <img src="https://img.shields.io/badge/Marketplace-v2-undefined.svg?logo=github&logoColor=white&style=flat" alt="GitHub Marketplace" />
@@ -197,6 +199,7 @@ This step runs the action without regard for output:
 ```
 
 If you are looking for some examples you can take a look at [this workflow](https://github.com/gagoar/use-herald-action/blob/5c4fffb830e2b39c7e9c5f56f9e1d84bac5c9621/.github/workflows/use_action.yml). You can also find some examples on herald rules [here](https://github.com/gagoar/use-herald-action/tree/5c4fffb830e2b39c7e9c5f56f9e1d84bac5c9621/herald_rules)
+
 ### Using output
 
 These steps stores the action's outputs into a JSON file:
@@ -215,4 +218,3 @@ These steps stores the action's outputs into a JSON file:
 
 Notice the inclusion of the `id` field in the first step (`Invoke foobarFunction Lambda`). This is so that the second step (`Store response payload to file`) can reference the result of the first step.
 For more information for Github Actions outputs, see their [reference](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjobs_idoutputs).
-
