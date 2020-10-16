@@ -19,7 +19,7 @@
   },
   "resolutions": {
     "@octokit/request": "5.4.7",
-    "@octokit/endpoint": "6.0.5"
+    "@octokit/endpoint": "6.0.8"
   },
   "engines": {
     "node": ">12.0.0"
