@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Props } from '../src';
 import { env } from '../src/environment';
-import { Event } from '../src/util/constants';
+import { Event, HttpErrors } from '../src/util/constants';
 import * as actions from '@actions/core';
 import { Main, mockedInput } from './util/helpers';
 import getCommentsResponse from '../__mocks__/scenarios/get_comments.json';
@@ -55,7 +55,9 @@ describe('use-herald', () => {
       .get(`/repos/${login}/${name}/issues/${prIssue}/comments?page=1&per_page=100`)
       .reply(200, getCommentsResponse);
 
-    github.post(`/repos/${login}/${name}/issues/2/comments`).replyWithError('Resource not accessible by integration');
+    github
+      .post(`/repos/${login}/${name}/issues/2/comments`)
+      .replyWithError({ message: 'Resource not accessible by integration', code: HttpErrors.RESOURCE_NOT_ACCESSIBLE });
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { main } = require('../src') as Main;

@@ -19,16 +19,13 @@ describe('handleReviewers', () => {
     matched: true,
     blobURL: 'https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/rules/rule.json',
   };
+  const ReviewURL = `/repos/${owner}/${repo}/pulls/${prNumber}/requested_reviewers`;
+
   beforeEach(() => {
     nock.cleanAll();
   });
   it('should add reviewers', async () => {
-    const github = mockRequest(
-      'post',
-      `/repos/${owner}/${repo}/pulls/${prNumber}/requested_reviewers`,
-      201,
-      requestedReviewersResponse
-    );
+    const github = mockRequest('post', ReviewURL, 201, requestedReviewersResponse);
 
     const response = await handleReviewers(client, {
       owner,
@@ -587,7 +584,9 @@ describe('handleReviewers', () => {
   });
 
   it('should not fail on 422 httpError', async () => {
-    const github = mockRequest('post', `/repos/${owner}/${repo}/pulls/${prNumber}/requested_reviewers`, 422, {});
+    const github = mockRequest('post', `/repos/${owner}/${repo}/pulls/${prNumber}/requested_reviewers`, 422, () =>
+      Promise.resolve('Review cannot be requested from pull request author')
+    );
 
     const response = await handleReviewers(client, {
       owner,
@@ -600,7 +599,7 @@ describe('handleReviewers', () => {
       files: [],
     });
 
-    expect(response).toBe(undefined);
+    expect(response).toMatchInlineSnapshot('Object {}');
     expect(github.isDone()).toBe(true);
   });
 });

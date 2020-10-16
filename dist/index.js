@@ -22140,6 +22140,11 @@ var SUPPORTED_EVENT_TYPES;
     SUPPORTED_EVENT_TYPES["PULL_REQUEST_TARGET"] = "pull_request_target";
     SUPPORTED_EVENT_TYPES["push"] = "push";
 })(SUPPORTED_EVENT_TYPES || (SUPPORTED_EVENT_TYPES = {}));
+var HttpErrors;
+(function (HttpErrors) {
+    HttpErrors[HttpErrors["RESOURCE_NOT_ACCESSIBLE"] = 403] = "RESOURCE_NOT_ACCESSIBLE";
+    HttpErrors[HttpErrors["SERVER_ERROR"] = 500] = "SERVER_ERROR";
+})(HttpErrors || (HttpErrors = {}));
 
 // EXTERNAL MODULE: external "fs"
 var external_fs_ = __webpack_require__(747);
@@ -22189,7 +22194,7 @@ const makeArray = (field) => (field && Array.isArray(field) ? field : [field].fi
 
 
 
-const debug = logger('rules');
+const rules_debug = logger('rules');
 var RuleActors;
 (function (RuleActors) {
     RuleActors["users"] = "users";
@@ -22246,7 +22251,7 @@ const isValidRawRule = (content) => {
         (hasAttribute('labels', content) && !!content.labels && content.action === RuleActions.label) ||
         (hasAttribute('action', content) && content.action === RuleActions.status);
     const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
-    debug('validation:', {
+    rules_debug('validation:', {
         rule: content,
         hasActors,
         hasValidActionValues,
@@ -22260,7 +22265,7 @@ const loadRules = (rulesLocation) => {
         cwd: env.GITHUB_WORKSPACE,
         absolute: true,
     });
-    debug('files found:', matches);
+    rules_debug('files found:', matches);
     const rules = matches.reduce((memo, filePath) => {
         try {
             const rule = loadJSONFile(filePath);
@@ -22274,7 +22279,7 @@ const loadRules = (rulesLocation) => {
     return rules;
 };
 const handleIncludeExcludeFiles = ({ includes, excludes, fileNames }) => {
-    debug('includeExcludeFiles...');
+    rules_debug('includeExcludeFiles...');
     let results = [];
     if (includes === null || includes === void 0 ? void 0 : includes.length) {
         results = includes.reduce((memo, include) => {
@@ -22282,20 +22287,20 @@ const handleIncludeExcludeFiles = ({ includes, excludes, fileNames }) => {
             return [...memo, ...matches];
         }, []);
         results = [...new Set(results)];
-        debug('includes matches', { results, includes });
+        rules_debug('includes matches', { results, includes });
         if ((excludes === null || excludes === void 0 ? void 0 : excludes.length) && results.length) {
             const toExclude = excludes.reduce((memo, exclude) => {
                 const matches = minimatch_default().match(results, exclude, { matchBase: true });
                 return [...memo, ...matches];
             }, []);
             results = results.filter((filename) => !toExclude.includes(filename));
-            debug('excludes matches:', { results, excludes });
+            rules_debug('excludes matches:', { results, excludes });
         }
     }
     return !!results.length;
 };
 const handleIncludesInPatch = ({ patterns, patch }) => {
-    debug('handleIncludesInPath...');
+    rules_debug('handleIncludesInPath...');
     const matches = patterns === null || patterns === void 0 ? void 0 : patterns.reduce((memo, pattern) => {
         try {
             const rex = new RegExp(pattern);
@@ -22303,7 +22308,7 @@ const handleIncludesInPatch = ({ patterns, patch }) => {
             return matches ? [...memo, matches] : memo;
         }
         catch (e) {
-            debug(`pattern: ${pattern} failed to parse`, e);
+            rules_debug(`pattern: ${pattern} failed to parse`, e);
             return memo;
         }
     }, []);
@@ -22319,7 +22324,7 @@ const allRequiredRulesHaveMatched = (rules, matchingRules) => {
     return requiredRules.every((rule) => matchingRulesNames.includes(rule.name));
 };
 const handleEventJsonPath = ({ event, patterns }) => {
-    debug('eventJsonPath', patterns);
+    rules_debug('eventJsonPath', patterns);
     try {
         let results;
         patterns === null || patterns === void 0 ? void 0 : patterns.find((pattern) => {
@@ -22329,11 +22334,11 @@ const handleEventJsonPath = ({ event, patterns }) => {
             }
             return matches.length;
         });
-        debug('eventJSONPath matches:', results);
+        rules_debug('eventJSONPath matches:', results);
         return !!results;
     }
     catch (e) {
-        debug('eventJsonPath:Error:', e);
+        rules_debug('eventJsonPath:Error:', e);
     }
     return false;
 };
@@ -22347,7 +22352,7 @@ const isMatch = (rule, options) => {
     const matches = keyMatchers
         .filter((matcher) => { var _a; return (_a = rule[matcher]) === null || _a === void 0 ? void 0 : _a.length; })
         .map((matcher) => matchers[matcher](rule, options));
-    debug('isMatch:', { rule, matches });
+    rules_debug('isMatch:', { rule, matches });
     return matches.length ? matches.every((match) => match === true) : false;
 };
 const getMatchingRules = (rules, files, event, patchContent) => {
@@ -22367,10 +22372,11 @@ const getMatchingRules = (rules, files, event, patchContent) => {
 var dist_node = __webpack_require__(889);
 
 // CONCATENATED MODULE: ./src/util/catchHandler.ts
+
 const catchHandler = (debug) => (error) => {
-    if (error.status < 500) {
+    if (error.status < HttpErrors.SERVER_ERROR && error.status !== HttpErrors.RESOURCE_NOT_ACCESSIBLE) {
         debug(`Request failed with status ${error.status}, We do not consider this a fatal error`, error);
-        return Promise.resolve();
+        return Promise.resolve({});
     }
     debug('Request Failed', error);
     return Promise.reject(error);
