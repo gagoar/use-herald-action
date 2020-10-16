@@ -1,4 +1,4 @@
-import { getInput, setOutput, setFailed } from '@actions/core';
+import { getInput, setOutput, setFailed, startGroup, endGroup } from '@actions/core';
 import groupBy from 'lodash.groupby';
 import { loadRules, getMatchingRules, RuleActions, allRequiredRulesHaveMatched, MatchingRule, Rule } from './rules';
 import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES, RuleFile } from './util/constants';
@@ -149,7 +149,11 @@ export const main = async (): Promise<void> => {
                 files,
               };
 
-              return actionQueue.add(() => action(client, options));
+              return actionQueue.add(async () => {
+                startGroup(actionName);
+                await action(client, options);
+                endGroup();
+              });
             })
           ).catch((error: Error) => {
             debug('We found an error calling GitHub:', error);

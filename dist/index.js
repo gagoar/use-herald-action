@@ -22640,7 +22640,6 @@ var markdown_table_default = /*#__PURE__*/__webpack_require__.n(markdown_table);
 
 
 
-
 const comment_debug = logger('comment');
 var TypeOfComments;
 (function (TypeOfComments) {
@@ -22694,7 +22693,6 @@ const getAllComments = async (client, params) => {
     }
 };
 const handleComment = async (client, { owner, repo, prNumber, matchingRules, files, base }, requestConcurrency = 1) => {
-    Object(core.startGroup)('comment tests');
     comment_debug('handleComment called with:', matchingRules);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const rulesWithBlobURL = matchingRules.map((mRule) => (Object.assign(Object.assign({}, mRule), { blobURL: getBlobURL(mRule.path, files, owner, repo, base) })));
@@ -22716,7 +22714,6 @@ const handleComment = async (client, { owner, repo, prNumber, matchingRules, fil
             body,
         }));
     })).catch(catchHandler(comment_debug));
-    Object(core.endGroup)();
     return calls;
 };
 
@@ -22816,7 +22813,11 @@ const main = async () => {
                             base: baseSha,
                             files,
                         };
-                        return actionQueue.add(() => action(client, options));
+                        return actionQueue.add(async () => {
+                            Object(core.startGroup)(actionName);
+                            await action(client, options);
+                            Object(core.endGroup)();
+                        });
                     })).catch((error) => {
                         src_debug('We found an error calling GitHub:', error);
                         throw error;
