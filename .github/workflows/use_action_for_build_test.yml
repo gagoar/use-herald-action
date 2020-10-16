@@ -14,6 +14,7 @@ jobs:
         run: npm install
       - name: Build binary
         run: npm run build
+
       - name: apply herald rules
         id: herald
         uses: ./
