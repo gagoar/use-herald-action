@@ -38,4 +38,11 @@ export interface Event {
 }
 export declare type OctokitFile = RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files'][0];
 export declare type RuleFile = Partial<OctokitFile> & Required<Pick<OctokitFile, 'filename' | 'blob_url'>>;
+export declare enum AllowedHttpErrors {
+    UNPROCESSABLE_ENTITY = 422
+}
+export declare enum HttpErrors {
+    RESOURCE_NOT_ACCESSIBLE = 403,
+    SERVER_ERROR = 500
+}
 export {};
