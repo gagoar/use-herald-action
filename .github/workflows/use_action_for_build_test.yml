@@ -22,3 +22,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           rulesLocation: herald_rules_for_build/*.json
           DEBUG: '*'
+          dryRun: 'true'
