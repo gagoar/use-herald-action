@@ -1247,7 +1247,7 @@ function onceStrict (fn) {
 /***/ 53:
 /***/ (function(module) {
 
-module.exports = {"_args":[["estraverse@4.3.0","/Users/gfrigerio/base/use-herald"]],"_from":"estraverse@4.3.0","_id":"estraverse@4.3.0","_inBundle":false,"_integrity":"sha512-39nnKffWz8xN1BU/2c79n9nB9HDzo0niYUqx6xyqUnyoAnQyyWpOTdZEeiCch8BBu515t4wp9ZmgVfVhn9EBpw==","_location":"/estraverse","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"estraverse@4.3.0","name":"estraverse","escapedName":"estraverse","rawSpec":"4.3.0","saveSpec":null,"fetchSpec":"4.3.0"},"_requiredBy":["/escodegen","/eslint-scope","/esrecurse","/prettier-eslint-cli/eslint-scope","/prettier-eslint-cli/eslint/eslint-scope","/prettier-eslint-cli/vue-eslint-parser/eslint-scope"],"_resolved":"https://registry.npmjs.org/estraverse/-/estraverse-4.3.0.tgz","_spec":"4.3.0","_where":"/Users/gfrigerio/base/use-herald","bugs":{"url":"https://github.com/estools/estraverse/issues"},"description":"ECMAScript JS AST traversal functions","devDependencies":{"babel-preset-env":"^1.6.1","babel-register":"^6.3.13","chai":"^2.1.1","espree":"^1.11.0","gulp":"^3.8.10","gulp-bump":"^0.2.2","gulp-filter":"^2.0.0","gulp-git":"^1.0.1","gulp-tag-version":"^1.3.0","jshint":"^2.5.6","mocha":"^2.1.0"},"engines":{"node":">=4.0"},"homepage":"https://github.com/estools/estraverse","license":"BSD-2-Clause","main":"estraverse.js","maintainers":[{"name":"Yusuke Suzuki","email":"utatane.tea@gmail.com","url":"http://github.com/Constellation"}],"name":"estraverse","repository":{"type":"git","url":"git+ssh://git@github.com/estools/estraverse.git"},"scripts":{"lint":"jshint estraverse.js","test":"npm run-script lint && npm run-script unit-test","unit-test":"mocha --compilers js:babel-register"},"version":"4.3.0"};
+module.exports = {"name":"estraverse","description":"ECMAScript JS AST traversal functions","homepage":"https://github.com/estools/estraverse","main":"estraverse.js","version":"4.3.0","engines":{"node":">=4.0"},"maintainers":[{"name":"Yusuke Suzuki","email":"utatane.tea@gmail.com","web":"http://github.com/Constellation"}],"repository":{"type":"git","url":"http://github.com/estools/estraverse.git"},"devDependencies":{"babel-preset-env":"^1.6.1","babel-register":"^6.3.13","chai":"^2.1.1","espree":"^1.11.0","gulp":"^3.8.10","gulp-bump":"^0.2.2","gulp-filter":"^2.0.0","gulp-git":"^1.0.1","gulp-tag-version":"^1.3.0","jshint":"^2.5.6","mocha":"^2.1.0"},"license":"BSD-2-Clause","scripts":{"test":"npm run-script lint && npm run-script unit-test","lint":"jshint estraverse.js","unit-test":"mocha --compilers js:babel-register"}};
 
 /***/ }),
 
@@ -4216,7 +4216,7 @@ exports.IS_SUPPORT_READDIR_WITH_FILE_TYPES = IS_MATCHED_BY_MAJOR || IS_MATCHED_B
 /***/ 175:
 /***/ (function(module) {
 
-module.exports = {"_args":[["escodegen@1.14.1","/Users/gfrigerio/base/use-herald"]],"_from":"escodegen@1.14.1","_id":"escodegen@1.14.1","_inBundle":false,"_integrity":"sha512-Bmt7NcRySdIfNPfU2ZoXDrrXsG9ZjvDxcAlMfDUgRBjLOWTuIACXPBFJH7Z+cLb40JeQco5toikyc9t9P8E9SQ==","_location":"/escodegen","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"escodegen@1.14.1","name":"escodegen","escapedName":"escodegen","rawSpec":"1.14.1","saveSpec":null,"fetchSpec":"1.14.1"},"_requiredBy":["/jsdom","/static-eval"],"_resolved":"https://registry.npmjs.org/escodegen/-/escodegen-1.14.1.tgz","_spec":"1.14.1","_where":"/Users/gfrigerio/base/use-herald","bin":{"esgenerate":"bin/esgenerate.js","escodegen":"bin/escodegen.js"},"bugs":{"url":"https://github.com/estools/escodegen/issues"},"dependencies":{"esprima":"^4.0.1","estraverse":"^4.2.0","esutils":"^2.0.2","optionator":"^0.8.1","source-map":"~0.6.1"},"description":"ECMAScript code generator","devDependencies":{"acorn":"^7.1.0","bluebird":"^3.4.7","bower-registry-client":"^1.0.0","chai":"^3.5.0","commonjs-everywhere":"^0.9.7","gulp":"^3.8.10","gulp-eslint":"^3.0.1","gulp-mocha":"^3.0.1","semver":"^5.1.0"},"engines":{"node":">=4.0"},"files":["LICENSE.BSD","README.md","bin","escodegen.js","package.json"],"homepage":"http://github.com/estools/escodegen","license":"BSD-2-Clause","main":"escodegen.js","maintainers":[{"name":"Yusuke Suzuki","email":"utatane.tea@gmail.com","url":"http://github.com/Constellation"}],"name":"escodegen","optionalDependencies":{"source-map":"~0.6.1"},"repository":{"type":"git","url":"git+ssh://git@github.com/estools/escodegen.git"},"scripts":{"build":"cjsify -a path: tools/entry-point.js > escodegen.browser.js","build-min":"cjsify -ma path: tools/entry-point.js > escodegen.browser.min.js","lint":"gulp lint","release":"node tools/release.js","test":"gulp travis","unit-test":"gulp test"},"version":"1.14.1"};
+module.exports = {"name":"escodegen","description":"ECMAScript code generator","homepage":"http://github.com/estools/escodegen","main":"escodegen.js","bin":{"esgenerate":"./bin/esgenerate.js","escodegen":"./bin/escodegen.js"},"files":["LICENSE.BSD","README.md","bin","escodegen.js","package.json"],"version":"1.14.3","engines":{"node":">=4.0"},"maintainers":[{"name":"Yusuke Suzuki","email":"utatane.tea@gmail.com","web":"http://github.com/Constellation"}],"repository":{"type":"git","url":"http://github.com/estools/escodegen.git"},"dependencies":{"estraverse":"^4.2.0","esutils":"^2.0.2","esprima":"^4.0.1","optionator":"^0.8.1"},"optionalDependencies":{"source-map":"~0.6.1"},"devDependencies":{"acorn":"^7.1.0","bluebird":"^3.4.7","bower-registry-client":"^1.0.0","chai":"^3.5.0","commonjs-everywhere":"^0.9.7","gulp":"^3.8.10","gulp-eslint":"^3.0.1","gulp-mocha":"^3.0.1","semver":"^5.1.0"},"license":"BSD-2-Clause","scripts":{"test":"gulp travis","unit-test":"gulp test","lint":"gulp lint","release":"node tools/release.js","build-min":"./node_modules/.bin/cjsify -ma path: tools/entry-point.js > escodegen.browser.min.js","build":"./node_modules/.bin/cjsify -a path: tools/entry-point.js > escodegen.browser.js"}};
 
 /***/ }),
 
@@ -5441,7 +5441,7 @@ function supportsColor(haveStream, streamIsTTY) {
 	}
 
 	if ('CI' in env) {
-		if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
+		if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI', 'GITHUB_ACTIONS', 'BUILDKITE'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
 			return 1;
 		}
 
@@ -5450,10 +5450,6 @@ function supportsColor(haveStream, streamIsTTY) {
 
 	if ('TEAMCITY_VERSION' in env) {
 		return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
-	}
-
-	if ('GITHUB_ACTIONS' in env) {
-		return 1;
 	}
 
 	if (env.COLORTERM === 'truecolor') {
@@ -7136,7 +7132,7 @@ exports.default = AsyncReader;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const VERSION = "2.3.2";
+const VERSION = "2.4.0";
 
 /**
  * Some “list” response that can be paginated have a different response structure
@@ -8880,9 +8876,7 @@ exports.convertPatternGroupToTask = convertPatternGroupToTask;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var isPlainObject = _interopDefault(__webpack_require__(960));
+var isPlainObject = __webpack_require__(960);
 var universalUserAgent = __webpack_require__(796);
 
 function lowercaseKeys(object) {
@@ -8899,7 +8893,7 @@ function lowercaseKeys(object) {
 function mergeDeep(defaults, options) {
   const result = Object.assign({}, defaults);
   Object.keys(options).forEach(key => {
-    if (isPlainObject(options[key])) {
+    if (isPlainObject.isPlainObject(options[key])) {
       if (!(key in defaults)) Object.assign(result, {
         [key]: options[key]
       });else result[key] = mergeDeep(defaults[key], options[key]);
@@ -8910,6 +8904,16 @@ function mergeDeep(defaults, options) {
     }
   });
   return result;
+}
+
+function removeUndefinedProperties(obj) {
+  for (const key in obj) {
+    if (obj[key] === undefined) {
+      delete obj[key];
+    }
+  }
+
+  return obj;
 }
 
 function merge(defaults, route, options) {
@@ -8926,7 +8930,10 @@ function merge(defaults, route, options) {
   } // lowercase header names before merging with defaults to avoid duplicates
 
 
-  options.headers = lowercaseKeys(options.headers);
+  options.headers = lowercaseKeys(options.headers); // remove properties with undefined values before merging
+
+  removeUndefinedProperties(options);
+  removeUndefinedProperties(options.headers);
   const mergedOptions = mergeDeep(defaults || {}, options); // mediaType.previews arrays are merged, instead of overwritten
 
   if (defaults && defaults.mediaType.previews.length) {
@@ -9148,7 +9155,7 @@ function parse(options) {
   // https://fetch.spec.whatwg.org/#methods
   let method = options.method.toUpperCase(); // replace :varname with {varname} to make it RFC 6570 compatible
 
-  let url = (options.url || "/").replace(/:([a-z]\w+)/g, "{+$1}");
+  let url = (options.url || "/").replace(/:([a-z]\w+)/g, "{$1}");
   let headers = Object.assign({}, options.headers);
   let body;
   let parameters = omit(options, ["method", "baseUrl", "url", "headers", "request", "mediaType"]); // extract variable names from URL to calculate remaining variables later
@@ -9162,9 +9169,9 @@ function parse(options) {
 
   const omittedParameters = Object.keys(options).filter(option => urlVariableNames.includes(option)).concat("baseUrl");
   const remainingParameters = omit(parameters, omittedParameters);
-  const isBinaryRequset = /application\/octet-stream/i.test(headers.accept);
+  const isBinaryRequest = /application\/octet-stream/i.test(headers.accept);
 
-  if (!isBinaryRequset) {
+  if (!isBinaryRequest) {
     if (options.mediaType.format) {
       // e.g. application/vnd.github.v3+json => application/vnd.github.v3.raw
       headers.accept = headers.accept.split(/,/).map(preview => preview.replace(/application\/vnd(\.\w+)(\.v3)?(\.\w+)?(\+json)?$/, `application/vnd$1$2.${options.mediaType.format}`)).join(",");
@@ -9233,7 +9240,7 @@ function withDefaults(oldDefaults, newDefaults) {
   });
 }
 
-const VERSION = "6.0.5";
+const VERSION = "6.0.8";
 
 const userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`; // DEFAULTS has all properties set that EndpointOptions has, except url.
 // So we use RequestParameters and add method as additional required property.
@@ -18220,7 +18227,7 @@ module.exports = require("path");
             result.push('[');
         }
 
-        result.push(this.generateExpression(expr, Precedence.Sequence, E_TTT));
+        result.push(this.generateExpression(expr, Precedence.Assignment, E_TTT));
 
         if (computed) {
             result.push(']');
@@ -19460,13 +19467,19 @@ module.exports = require("path");
             multiline = false;
             if (expr.properties.length === 1) {
                 property = expr.properties[0];
-                if (property.value.type !== Syntax.Identifier) {
+                if (
+                    property.type === Syntax.Property
+                    && property.value.type !== Syntax.Identifier
+                ) {
                     multiline = true;
                 }
             } else {
                 for (i = 0, iz = expr.properties.length; i < iz; ++i) {
                     property = expr.properties[i];
-                    if (!property.shorthand) {
+                    if (
+                        property.type === Syntax.Property
+                        && !property.shorthand
+                    ) {
                         multiline = true;
                         break;
                     }
@@ -21644,18 +21657,18 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var endpoint = __webpack_require__(385);
 var universalUserAgent = __webpack_require__(796);
-var isPlainObject = _interopDefault(__webpack_require__(960));
+var isPlainObject = __webpack_require__(960);
 var nodeFetch = _interopDefault(__webpack_require__(828));
 var requestError = __webpack_require__(463);
 
-const VERSION = "5.4.7";
+const VERSION = "5.4.9";
 
 function getBufferResponse(response) {
   return response.arrayBuffer();
 }
 
 function fetchWrapper(requestOptions) {
-  if (isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) {
+  if (isPlainObject.isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) {
     requestOptions.body = JSON.stringify(requestOptions.body);
   }
 
@@ -22044,6 +22057,129 @@ function callSuccessCallback(callback, entries) {
 
 /***/ }),
 
+/***/ 772:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+var isBuffer = __webpack_require__(812);
+var toString = Object.prototype.toString;
+
+/**
+ * Get the native `typeof` a value.
+ *
+ * @param  {*} `val`
+ * @return {*} Native javascript type
+ */
+
+module.exports = function kindOf(val) {
+  // primitivies
+  if (typeof val === 'undefined') {
+    return 'undefined';
+  }
+  if (val === null) {
+    return 'null';
+  }
+  if (val === true || val === false || val instanceof Boolean) {
+    return 'boolean';
+  }
+  if (typeof val === 'string' || val instanceof String) {
+    return 'string';
+  }
+  if (typeof val === 'number' || val instanceof Number) {
+    return 'number';
+  }
+
+  // functions
+  if (typeof val === 'function' || val instanceof Function) {
+    return 'function';
+  }
+
+  // array
+  if (typeof Array.isArray !== 'undefined' && Array.isArray(val)) {
+    return 'array';
+  }
+
+  // check for instances of RegExp and Date before calling `toString`
+  if (val instanceof RegExp) {
+    return 'regexp';
+  }
+  if (val instanceof Date) {
+    return 'date';
+  }
+
+  // other objects
+  var type = toString.call(val);
+
+  if (type === '[object RegExp]') {
+    return 'regexp';
+  }
+  if (type === '[object Date]') {
+    return 'date';
+  }
+  if (type === '[object Arguments]') {
+    return 'arguments';
+  }
+  if (type === '[object Error]') {
+    return 'error';
+  }
+
+  // buffer
+  if (isBuffer(val)) {
+    return 'buffer';
+  }
+
+  // es6: Map, WeakMap, Set, WeakSet
+  if (type === '[object Set]') {
+    return 'set';
+  }
+  if (type === '[object WeakSet]') {
+    return 'weakset';
+  }
+  if (type === '[object Map]') {
+    return 'map';
+  }
+  if (type === '[object WeakMap]') {
+    return 'weakmap';
+  }
+  if (type === '[object Symbol]') {
+    return 'symbol';
+  }
+
+  // typed arrays
+  if (type === '[object Int8Array]') {
+    return 'int8array';
+  }
+  if (type === '[object Uint8Array]') {
+    return 'uint8array';
+  }
+  if (type === '[object Uint8ClampedArray]') {
+    return 'uint8clampedarray';
+  }
+  if (type === '[object Int16Array]') {
+    return 'int16array';
+  }
+  if (type === '[object Uint16Array]') {
+    return 'uint16array';
+  }
+  if (type === '[object Int32Array]') {
+    return 'int32array';
+  }
+  if (type === '[object Uint32Array]') {
+    return 'uint32array';
+  }
+  if (type === '[object Float32Array]') {
+    return 'float32array';
+  }
+  if (type === '[object Float64Array]') {
+    return 'float64array';
+  }
+
+  // must be a plain object
+  return 'object';
+};
+
+
+/***/ }),
+
 /***/ 773:
 /***/ (function(module, exports) {
 
@@ -22128,6 +22264,9 @@ const maxPerPage = 100;
 const OUTPUT_NAME = 'appliedRules';
 const FILE_ENCODING = 'utf8';
 const STATUS_DESCRIPTION_COPY = 'You can see the rule by clicking on Details';
+const COMBINED_TAG_KEY = '_combined';
+const LINE_BREAK = '<br/>';
+const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION (.*) -->$/;
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 var CommitStatus;
 (function (CommitStatus) {
@@ -22524,13 +22663,13 @@ var TypeOfComments;
     TypeOfComments["standalone"] = "standalone";
     TypeOfComments["combined"] = "combined";
 })(TypeOfComments || (TypeOfComments = {}));
-const LINE_BREAK = '<br/>';
 const formatUser = (handleOrEmail) => {
     return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
 };
+const tagComment = (body, path) => `<!-- USE_HERALD_ACTION ${path} -->\n${body}`;
 const commentTemplate = (mentions) => `
    <details open>\n
-   <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>\n
+   <summary> Hi there, given these changes, Herald thinks that these users should take a look! </summary>\n
    ${markdown_table_default()([
     ['Rule', 'Mention'],
     ...mentions.map(({ rule, URL, mentions }) => [
@@ -22539,23 +22678,28 @@ const commentTemplate = (mentions) => `
     ]),
 ], { align: ['l', 'c'] })}\n
   </details>
-  <!--herald-use-action-->
   `;
+/**
+ * This function takes a list of mathcing rules, and returns a map with rule name/path as keys, and
+ *  the comment body as values. We return a map instead of an array so we can determine which
+ *  comments we can skip reposting to avoid repeition, and which we can edit to update. We rely on
+ *  the fact that no two matching rules share the same path.
+ * @param matchingRules List of matching rules
+ */
 const composeCommentsForUsers = (matchingRules) => {
     const groups = lodash_groupby_default()(matchingRules, (rule) => rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined);
-    let comments = [];
+    let comments = {};
     if (groups[TypeOfComments.combined]) {
-        const mentions = groups[TypeOfComments.combined].reduce((memo, { name, path, users, teams, blobURL }) => [
-            ...memo,
-            { URL: blobURL, rule: name || path, mentions: [...users, ...teams] },
-        ], []);
-        comments = [...comments, commentTemplate([...new Set(mentions)])];
+        const mentions = groups[TypeOfComments.combined].reduce((memo, { name, path, users, teams, blobURL }) => memo.concat({ URL: blobURL, rule: name || path, mentions: [...users, ...teams] }), []);
+        // Since combined comments may originate from multiple rules/teams, we use COMBINED_TAG_KEY as the key
+        //  to this comment by convention.
+        comments = Object.assign(Object.assign({}, comments), { [COMBINED_TAG_KEY]: commentTemplate([...new Set(mentions)]) });
     }
     if (groups[TypeOfComments.standalone]) {
         const customMessages = groups[TypeOfComments.standalone]
             .filter((rule) => rule.customMessage)
-            .map(({ customMessage }) => customMessage);
-        comments = [...comments, ...customMessages];
+            .reduce((memo, { path, customMessage }) => (Object.assign(Object.assign({}, memo), { [path]: customMessage })), {});
+        comments = Object.assign(Object.assign({}, comments), customMessages);
     }
     return comments;
 };
@@ -22572,27 +22716,48 @@ const getAllComments = async (client, params) => {
 };
 const handleComment = async (client, { owner, repo, prNumber, matchingRules, files, base }, requestConcurrency = 1) => {
     comment_debug('handleComment called with:', matchingRules);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
     const rulesWithBlobURL = matchingRules.map((mRule) => (Object.assign(Object.assign({}, mRule), { blobURL: getBlobURL(mRule.path, files, owner, repo, base) })));
     const commentsFromRules = composeCommentsForUsers(rulesWithBlobURL);
+    comment_debug('comments from matching rules:', commentsFromRules);
     const rawComments = await getAllComments(client, {
         owner,
         repo,
         issue_number: prNumber,
     });
-    const comments = rawComments.map(({ body }) => body);
-    const onlyNewComments = commentsFromRules.filter((comment) => !comments.includes(comment));
-    comment_debug('comments to add:', onlyNewComments);
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    const calls = await Promise.all(onlyNewComments.map((body) => {
+    // Filter existing comments by USE_HERALD_ACTION tag (HTML comment) and key by path
+    const useHeraldActionComments = rawComments.reduce((memo, comment) => {
+        const pathMatch = USE_HERALD_ACTION_TAG_REGEX.exec(comment.body.split('\n')[0]);
+        return pathMatch ? Object.assign(Object.assign({}, memo), { [pathMatch[1]]: comment }) : memo;
+    }, {});
+    comment_debug('existing UHA comments:', useHeraldActionComments);
+    // Update existing comments
+    const updateCommentPromises = Object.keys(commentsFromRules)
+        .filter((key) => key in useHeraldActionComments)
+        .map((key) => {
+        // get comment number
+        const comment_id = useHeraldActionComments[key].id;
+        const body = tagComment(commentsFromRules[key], key);
+        return queue.add(() => client.issues.updateComment({
+            owner,
+            repo,
+            comment_id,
+            body,
+        }));
+    });
+    // Add new comments
+    const createCommentPromises = Object.keys(commentsFromRules)
+        .filter((key) => !(key in useHeraldActionComments))
+        .map((key) => {
+        const body = tagComment(commentsFromRules[key], key);
         return queue.add(() => client.issues.createComment({
             owner,
             repo,
             issue_number: prNumber,
             body,
         }));
-    })).catch(catchHandler(comment_debug));
-    return calls;
+    });
+    return Promise.all([...updateCommentPromises, ...createCommentPromises]).catch(catchHandler(comment_debug));
 };
 
 // CONCATENATED MODULE: ./src/util/isEventSupported.ts
@@ -24782,6 +24947,34 @@ module.exports = {
   CHAR_VERTICAL_LINE: '|', /* | */
   CHAR_ZERO_WIDTH_NOBREAK_SPACE: '\uFEFF' /* \uFEFF */
 };
+
+
+/***/ }),
+
+/***/ 812:
+/***/ (function(module) {
+
+/*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+// The _isBuffer check is for Safari 5-7 support, because it's missing
+// Object.prototype.constructor. Remove this eventually
+module.exports = function (obj) {
+  return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)
+}
+
+function isBuffer (obj) {
+  return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+}
+
+// For Node v0.10 support. Remove this eventually.
+function isSlowBuffer (obj) {
+  return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
+}
 
 
 /***/ }),
@@ -29423,7 +29616,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var request = __webpack_require__(753);
 var universalUserAgent = __webpack_require__(796);
 
-const VERSION = "4.5.4";
+const VERSION = "4.5.6";
 
 class GraphqlError extends Error {
   constructor(request, response) {
@@ -29446,13 +29639,18 @@ class GraphqlError extends Error {
 }
 
 const NON_VARIABLE_OPTIONS = ["method", "baseUrl", "url", "headers", "request", "query", "mediaType"];
+const GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
 function graphql(request, query, options) {
-  options = typeof query === "string" ? options = Object.assign({
+  if (typeof query === "string" && options && "query" in options) {
+    return Promise.reject(new Error(`[@octokit/graphql] "query" cannot be used as variable name`));
+  }
+
+  const parsedOptions = typeof query === "string" ? Object.assign({
     query
-  }, options) : options = query;
-  const requestOptions = Object.keys(options).reduce((result, key) => {
+  }, options) : query;
+  const requestOptions = Object.keys(parsedOptions).reduce((result, key) => {
     if (NON_VARIABLE_OPTIONS.includes(key)) {
-      result[key] = options[key];
+      result[key] = parsedOptions[key];
       return result;
     }
 
@@ -29460,9 +29658,17 @@ function graphql(request, query, options) {
       result.variables = {};
     }
 
-    result.variables[key] = options[key];
+    result.variables[key] = parsedOptions[key];
     return result;
-  }, {});
+  }, {}); // workaround for GitHub Enterprise baseUrl set with /api/v3 suffix
+  // https://github.com/octokit/auth-app.js/issues/111#issuecomment-657610451
+
+  const baseUrl = parsedOptions.baseUrl || request.endpoint.DEFAULTS.baseUrl;
+
+  if (GHES_V3_SUFFIX_REGEX.test(baseUrl)) {
+    requestOptions.url = baseUrl.replace(GHES_V3_SUFFIX_REGEX, "/api/graphql");
+  }
+
   return request(requestOptions).then(response => {
     if (response.data.errors) {
       const headers = {};
@@ -29636,26 +29842,30 @@ module.exports = require("zlib");
 /***/ }),
 
 /***/ 914:
-/***/ (function(module) {
+/***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
 /*!
  * is-number <https://github.com/jonschlinkert/is-number>
  *
- * Copyright (c) 2014-present, Jon Schlinkert.
- * Released under the MIT License.
+ * Copyright (c) 2014-2015, Jon Schlinkert.
+ * Licensed under the MIT License.
  */
 
 
 
-module.exports = function(num) {
-  if (typeof num === 'number') {
-    return num - num === 0;
+var typeOf = __webpack_require__(772);
+
+module.exports = function isNumber(num) {
+  var type = typeOf(num);
+
+  if (type === 'string') {
+    if (!num.trim()) return false;
+  } else if (type !== 'number') {
+    return false;
   }
-  if (typeof num === 'string' && num.trim() !== '') {
-    return Number.isFinite ? Number.isFinite(+num) : isFinite(+num);
-  }
-  return false;
+
+  return (num - num + 1) >= 0;
 };
 
 
