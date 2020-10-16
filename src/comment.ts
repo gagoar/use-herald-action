@@ -3,6 +3,7 @@ import table from 'markdown-table';
 
 import { EMAIL_REGEX, maxPerPage } from './util/constants';
 
+import { startGroup, endGroup } from '@actions/core';
 import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
 import { logger } from './util/debug';
 import { ActionMapInput } from '.';
@@ -106,6 +107,8 @@ export const handleComment: ActionMapInput = async (
   { owner, repo, prNumber, matchingRules, files, base },
   requestConcurrency = 1
 ): Promise<unknown> => {
+  startGroup('comment tests');
+
   debug('handleComment called with:', matchingRules);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -140,6 +143,8 @@ export const handleComment: ActionMapInput = async (
       );
     })
   ).catch(catchHandler(debug));
+
+  endGroup();
 
   return calls;
 };

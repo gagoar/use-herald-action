@@ -13,6 +13,7 @@ import { handleStatus } from './statuses';
 import { handleComment } from './comment';
 import { loadJSONFile } from './util/loadJSONFile';
 import { isEventSupported } from './util/isEventSupported';
+import PQueue from 'p-queue';
 
 const debug = logger('index');
 
@@ -59,6 +60,8 @@ const getParams = () => {
 };
 
 export const main = async (): Promise<void> => {
+  const actionQueue = new PQueue({ concurrency: 1 });
+
   try {
     if (isEventSupported(env.GITHUB_EVENT_NAME)) {
       const event = loadJSONFile<Event>(env.GITHUB_EVENT_PATH);
@@ -146,7 +149,7 @@ export const main = async (): Promise<void> => {
                 files,
               };
 
-              return action(client, options);
+              return actionQueue.add(() => action(client, options));
             })
           ).catch((error: Error) => {
             debug('We found an error calling GitHub:', error);
