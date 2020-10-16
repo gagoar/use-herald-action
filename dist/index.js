@@ -22368,6 +22368,10 @@ var dist_node = __webpack_require__(889);
 
 // CONCATENATED MODULE: ./src/util/catchHandler.ts
 const catchHandler = (debug) => (error) => {
+    if (error.status < 500) {
+        debug(`Request failed with status ${error.status}, We do not consider this a fatal error`, error);
+        return Promise.resolve();
+    }
     debug('Request Failed', error);
     return Promise.reject(error);
 };

@@ -1,2 +1,6 @@
 import { Debugger } from 'debug';
-export declare const catchHandler: (debug: Debugger) => (error: Error) => Promise<unknown>;
+interface HttpError extends Error {
+    status: number;
+}
+export declare const catchHandler: (debug: Debugger) => (error: HttpError) => Promise<unknown>;
+export {};

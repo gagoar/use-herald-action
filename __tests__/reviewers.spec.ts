@@ -585,4 +585,22 @@ describe('handleReviewers', () => {
     `);
     expect(github.isDone()).toBe(true);
   });
+
+  it('should not fail on 422 httpError', async () => {
+    const github = mockRequest('post', `/repos/${owner}/${repo}/pulls/${prNumber}/requested_reviewers`, 422, {});
+
+    const response = await handleReviewers(client, {
+      owner,
+      repo,
+      prNumber,
+      matchingRules: [rule],
+      rules: [],
+      base: '',
+      sha: '',
+      files: [],
+    });
+
+    expect(response).toBe(undefined);
+    expect(github.isDone()).toBe(true);
+  });
 });
