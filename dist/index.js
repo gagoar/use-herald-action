@@ -22140,6 +22140,10 @@ var SUPPORTED_EVENT_TYPES;
     SUPPORTED_EVENT_TYPES["PULL_REQUEST_TARGET"] = "pull_request_target";
     SUPPORTED_EVENT_TYPES["push"] = "push";
 })(SUPPORTED_EVENT_TYPES || (SUPPORTED_EVENT_TYPES = {}));
+var AllowedHttpErrors;
+(function (AllowedHttpErrors) {
+    AllowedHttpErrors[AllowedHttpErrors["UNPROCESSABLE_ENTITY"] = 422] = "UNPROCESSABLE_ENTITY";
+})(AllowedHttpErrors || (AllowedHttpErrors = {}));
 var HttpErrors;
 (function (HttpErrors) {
     HttpErrors[HttpErrors["RESOURCE_NOT_ACCESSIBLE"] = 403] = "RESOURCE_NOT_ACCESSIBLE";
@@ -22374,7 +22378,7 @@ var dist_node = __webpack_require__(889);
 // CONCATENATED MODULE: ./src/util/catchHandler.ts
 
 const catchHandler = (debug) => (error) => {
-    if (error.status < HttpErrors.SERVER_ERROR && error.status !== HttpErrors.RESOURCE_NOT_ACCESSIBLE) {
+    if (Object.values(AllowedHttpErrors).includes(error.status)) {
         debug(`Request failed with status ${error.status}, We do not consider this a fatal error`, error);
         return Promise.resolve({});
     }

@@ -4,6 +4,7 @@ import { mockRequest } from './util/mockGitHubRequest';
 import nock from 'nock';
 import { RuleActions } from '../src/rules';
 import requestedReviewersResponse from '../__mocks__/scenarios/create_requested_reviewers.json';
+import { AllowedHttpErrors } from '../src/util/constants';
 describe('handleReviewers', () => {
   const client = new Octokit();
   const owner = 'gagoar';
@@ -584,8 +585,11 @@ describe('handleReviewers', () => {
   });
 
   it('should not fail on 422 httpError', async () => {
-    const github = mockRequest('post', `/repos/${owner}/${repo}/pulls/${prNumber}/requested_reviewers`, 422, () =>
-      Promise.resolve('Review cannot be requested from pull request author')
+    const github = mockRequest(
+      'post',
+      `/repos/${owner}/${repo}/pulls/${prNumber}/requested_reviewers`,
+      AllowedHttpErrors.UNPROCESSABLE_ENTITY,
+      () => Promise.resolve('Review cannot be requested from pull request author')
     );
 
     const response = await handleReviewers(client, {
