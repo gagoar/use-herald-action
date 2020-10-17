@@ -37,10 +37,10 @@ describe('composeCommentsForUsers', () => {
         },
       ])
     ).toMatchInlineSnapshot(`
-      Object {
-        "${env.GITHUB_WORKSPACE}/some/rule.json": "This is a custom message for a rule",
-      }
-    `);
+        Array [
+          "This is a custom message for a rule",
+        ]
+      `);
   });
 
   it('it combines 2 comments when do not have customMessage', () => {
@@ -64,11 +64,11 @@ describe('composeCommentsForUsers', () => {
         },
       ])
     ).toMatchInlineSnapshot(`
-      Object {
-        "_combined": "
+      Array [
+        "
          <details open>
 
-         <summary> Hi there, given these changes, Herald thinks that these users should take a look! </summary>
+         <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>
 
          | Rule                               |                                  Mention                                  |
       | :--------------------------------- | :-----------------------------------------------------------------------: |
@@ -76,8 +76,9 @@ describe('composeCommentsForUsers', () => {
       | [some/rule1.json](MOCKED_BLOB_URL) | @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org<br/>@awesomeTeam |
 
         </details>
+        <!--herald-use-action-->
         ",
-      }
+      ]
     `);
   });
   it('compose message', () => {
@@ -93,19 +94,20 @@ describe('composeCommentsForUsers', () => {
         },
       ])
     ).toMatchInlineSnapshot(`
-      Object {
-        "_combined": "
+      Array [
+        "
          <details open>
 
-         <summary> Hi there, given these changes, Herald thinks that these users should take a look! </summary>
+         <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>
 
          | Rule                               |                          Mention                         |
       | :--------------------------------- | :------------------------------------------------------: |
       | [some/rule1.json](MOCKED_BLOB_URL) | @eeny<br/>meeny@gmail.com<br/>@miny<br/>moe@coursera.org |
 
         </details>
+        <!--herald-use-action-->
         ",
-      }
+      ]
     `);
   });
 });
@@ -123,7 +125,7 @@ describe('handleComment', () => {
       users: ['eeny', 'meeny', 'miny', 'moe'],
       includes: ['*.ts'],
       action: RuleActions.comment,
-      path: 'rules/new-rule.json',
+      path: 'rules/rule.json',
       customMessage: 'Custom message',
       teams: [],
       matched: true,
@@ -193,75 +195,33 @@ describe('handleComment', () => {
     `);
   });
 
-  it('should edit messages if they already exist', async () => {
-    const rule1 = {
+  it('should not publish the message because is duplicated', async () => {
+    const rule = {
       users: ['eeny', 'meeny', 'miny', 'moe'],
       includes: ['*.ts'],
       action: RuleActions.comment,
-      path: 'rules/rule1.json',
+      path: 'rules/rule.json',
+      customMessage: 'Custom message',
       teams: [],
       matched: true,
       blobURL: 'https://github.com/gago/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c111/rules/rule.json',
     };
 
-    const rule2 = {
-      ...rule1,
-      path: 'rules/rule2.json',
-    };
-
     nock('https://api.github.com')
       .get(`/repos/${owner}/${repo}/issues/${prIssue}/comments?page=1&per_page=2`)
-      .reply(200, getCommentsResponse.slice(0, 2));
-
-    nock('https://api.github.com')
-      .get(`/repos/${owner}/${repo}/issues/${prIssue}/comments?page=2&per_page=2`)
-      .reply(200, getCommentsResponse.slice(2, 4));
-
-    nock('https://api.github.com')
-      .patch(`/repos/${owner}/${repo}/issues/comments/1`)
-      .reply(200, ['comment 1 successfully udpated']);
-
-    nock('https://api.github.com')
-      .patch(`/repos/${owner}/${repo}/issues/comments/3`)
-      .reply(200, ['comment 2 successfully updated']);
+      .reply(200, [getCommentsResponse[0]]);
 
     const response = await handleComment(client, {
       owner,
       repo,
       prNumber: 1,
-      matchingRules: [
-        { ...rule1, customMessage: 'new comment for rule 1 that should be updated' },
-        { ...rule2, customMessage: 'new comment for rule 2 that should be updated' },
-      ],
+      matchingRules: [{ ...rule, customMessage: 'first comment' }],
       base: '',
       sha: '',
       files: [],
       rules: [],
     });
 
-    expect(response).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "data": Array [
-            "comment 1 successfully udpated",
-          ],
-          "headers": Object {
-            "content-type": "application/json",
-          },
-          "status": 200,
-          "url": "https://api.github.com/repos/gagoar/example_repo/issues/comments/1",
-        },
-        Object {
-          "data": Array [
-            "comment 2 successfully updated",
-          ],
-          "headers": Object {
-            "content-type": "application/json",
-          },
-          "status": 200,
-          "url": "https://api.github.com/repos/gagoar/example_repo/issues/comments/3",
-        },
-      ]
-    `);
+    expect(response).toMatchInlineSnapshot('Array []');
   });
 });
