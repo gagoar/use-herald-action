@@ -16,9 +16,8 @@ jobs:
         run: npm run build
       - name: apply herald rules
         id: herald
-        uses: ./dist/
+        uses: ./
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           rulesLocation: herald_rules_for_build/*.json
           DEBUG: '*'
-          dryRun: true
