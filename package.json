@@ -11,15 +11,10 @@
     }
   },
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
     "test": "jest",
     "build": "ncc build index.ts",
     "lint": "eslint index.ts",
     "version": "auto-changelog -p --issue-url https://github.com/gagoar/use-herald-action/issue/{id} --merge-url https://github.com/gagoar/use-herald-action/pull/{id} --compare-url https://github.com/gagoar/use-herald-action/compare/{from}...{to} && git add CHANGELOG.md"
-  },
-  "resolutions": {
-    "@octokit/request": "5.4.7",
-    "@octokit/endpoint": "6.0.5"
   },
   "engines": {
     "node": ">12.0.0"
@@ -107,7 +102,6 @@
     "debug": "4.2.0",
     "envalid": "6.0.2",
     "fast-glob": "3.2.4",
-    "is-plain-object": "^3.0.0",
     "jsonpath": "1.0.2",
     "lodash.groupby": "4.6.0",
     "markdown-table": "^2.0.0",
