@@ -1247,7 +1247,7 @@ function onceStrict (fn) {
 /***/ 53:
 /***/ (function(module) {
 
-module.exports = {"_args":[["estraverse@4.3.0","/Users/gfrigerio/base/use-herald"]],"_from":"estraverse@4.3.0","_id":"estraverse@4.3.0","_inBundle":false,"_integrity":"sha512-39nnKffWz8xN1BU/2c79n9nB9HDzo0niYUqx6xyqUnyoAnQyyWpOTdZEeiCch8BBu515t4wp9ZmgVfVhn9EBpw==","_location":"/estraverse","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"estraverse@4.3.0","name":"estraverse","escapedName":"estraverse","rawSpec":"4.3.0","saveSpec":null,"fetchSpec":"4.3.0"},"_requiredBy":["/escodegen","/eslint-scope","/esrecurse","/prettier-eslint-cli/eslint-scope","/prettier-eslint-cli/eslint/eslint-scope","/prettier-eslint-cli/vue-eslint-parser/eslint-scope"],"_resolved":"https://registry.npmjs.org/estraverse/-/estraverse-4.3.0.tgz","_spec":"4.3.0","_where":"/Users/gfrigerio/base/use-herald","bugs":{"url":"https://github.com/estools/estraverse/issues"},"description":"ECMAScript JS AST traversal functions","devDependencies":{"babel-preset-env":"^1.6.1","babel-register":"^6.3.13","chai":"^2.1.1","espree":"^1.11.0","gulp":"^3.8.10","gulp-bump":"^0.2.2","gulp-filter":"^2.0.0","gulp-git":"^1.0.1","gulp-tag-version":"^1.3.0","jshint":"^2.5.6","mocha":"^2.1.0"},"engines":{"node":">=4.0"},"homepage":"https://github.com/estools/estraverse","license":"BSD-2-Clause","main":"estraverse.js","maintainers":[{"name":"Yusuke Suzuki","email":"utatane.tea@gmail.com","url":"http://github.com/Constellation"}],"name":"estraverse","repository":{"type":"git","url":"git+ssh://git@github.com/estools/estraverse.git"},"scripts":{"lint":"jshint estraverse.js","test":"npm run-script lint && npm run-script unit-test","unit-test":"mocha --compilers js:babel-register"},"version":"4.3.0"};
+module.exports = {"_args":[["estraverse@4.3.0","/Users/cyamonide/GitHub/use-herald-action"]],"_from":"estraverse@4.3.0","_id":"estraverse@4.3.0","_inBundle":false,"_integrity":"sha512-39nnKffWz8xN1BU/2c79n9nB9HDzo0niYUqx6xyqUnyoAnQyyWpOTdZEeiCch8BBu515t4wp9ZmgVfVhn9EBpw==","_location":"/estraverse","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"estraverse@4.3.0","name":"estraverse","escapedName":"estraverse","rawSpec":"4.3.0","saveSpec":null,"fetchSpec":"4.3.0"},"_requiredBy":["/escodegen","/eslint-scope","/eslint/eslint-scope","/esrecurse","/prettier-eslint-cli/eslint-scope","/prettier-eslint-cli/eslint/eslint-scope","/prettier-eslint-cli/vue-eslint-parser/eslint-scope"],"_resolved":"https://registry.npmjs.org/estraverse/-/estraverse-4.3.0.tgz","_spec":"4.3.0","_where":"/Users/cyamonide/GitHub/use-herald-action","bugs":{"url":"https://github.com/estools/estraverse/issues"},"description":"ECMAScript JS AST traversal functions","devDependencies":{"babel-preset-env":"^1.6.1","babel-register":"^6.3.13","chai":"^2.1.1","espree":"^1.11.0","gulp":"^3.8.10","gulp-bump":"^0.2.2","gulp-filter":"^2.0.0","gulp-git":"^1.0.1","gulp-tag-version":"^1.3.0","jshint":"^2.5.6","mocha":"^2.1.0"},"engines":{"node":">=4.0"},"homepage":"https://github.com/estools/estraverse","license":"BSD-2-Clause","main":"estraverse.js","maintainers":[{"name":"Yusuke Suzuki","email":"utatane.tea@gmail.com","url":"http://github.com/Constellation"}],"name":"estraverse","repository":{"type":"git","url":"git+ssh://git@github.com/estools/estraverse.git"},"scripts":{"lint":"jshint estraverse.js","test":"npm run-script lint && npm run-script unit-test","unit-test":"mocha --compilers js:babel-register"},"version":"4.3.0"};
 
 /***/ }),
 
@@ -4216,7 +4216,7 @@ exports.IS_SUPPORT_READDIR_WITH_FILE_TYPES = IS_MATCHED_BY_MAJOR || IS_MATCHED_B
 /***/ 175:
 /***/ (function(module) {
 
-module.exports = {"_args":[["escodegen@1.14.1","/Users/gfrigerio/base/use-herald"]],"_from":"escodegen@1.14.1","_id":"escodegen@1.14.1","_inBundle":false,"_integrity":"sha512-Bmt7NcRySdIfNPfU2ZoXDrrXsG9ZjvDxcAlMfDUgRBjLOWTuIACXPBFJH7Z+cLb40JeQco5toikyc9t9P8E9SQ==","_location":"/escodegen","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"escodegen@1.14.1","name":"escodegen","escapedName":"escodegen","rawSpec":"1.14.1","saveSpec":null,"fetchSpec":"1.14.1"},"_requiredBy":["/jsdom","/static-eval"],"_resolved":"https://registry.npmjs.org/escodegen/-/escodegen-1.14.1.tgz","_spec":"1.14.1","_where":"/Users/gfrigerio/base/use-herald","bin":{"esgenerate":"bin/esgenerate.js","escodegen":"bin/escodegen.js"},"bugs":{"url":"https://github.com/estools/escodegen/issues"},"dependencies":{"esprima":"^4.0.1","estraverse":"^4.2.0","esutils":"^2.0.2","optionator":"^0.8.1","source-map":"~0.6.1"},"description":"ECMAScript code generator","devDependencies":{"acorn":"^7.1.0","bluebird":"^3.4.7","bower-registry-client":"^1.0.0","chai":"^3.5.0","commonjs-everywhere":"^0.9.7","gulp":"^3.8.10","gulp-eslint":"^3.0.1","gulp-mocha":"^3.0.1","semver":"^5.1.0"},"engines":{"node":">=4.0"},"files":["LICENSE.BSD","README.md","bin","escodegen.js","package.json"],"homepage":"http://github.com/estools/escodegen","license":"BSD-2-Clause","main":"escodegen.js","maintainers":[{"name":"Yusuke Suzuki","email":"utatane.tea@gmail.com","url":"http://github.com/Constellation"}],"name":"escodegen","optionalDependencies":{"source-map":"~0.6.1"},"repository":{"type":"git","url":"git+ssh://git@github.com/estools/escodegen.git"},"scripts":{"build":"cjsify -a path: tools/entry-point.js > escodegen.browser.js","build-min":"cjsify -ma path: tools/entry-point.js > escodegen.browser.min.js","lint":"gulp lint","release":"node tools/release.js","test":"gulp travis","unit-test":"gulp test"},"version":"1.14.1"};
+module.exports = {"_args":[["escodegen@1.14.1","/Users/cyamonide/GitHub/use-herald-action"]],"_from":"escodegen@1.14.1","_id":"escodegen@1.14.1","_inBundle":false,"_integrity":"sha512-Bmt7NcRySdIfNPfU2ZoXDrrXsG9ZjvDxcAlMfDUgRBjLOWTuIACXPBFJH7Z+cLb40JeQco5toikyc9t9P8E9SQ==","_location":"/escodegen","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"escodegen@1.14.1","name":"escodegen","escapedName":"escodegen","rawSpec":"1.14.1","saveSpec":null,"fetchSpec":"1.14.1"},"_requiredBy":["/jsdom","/static-eval"],"_resolved":"https://registry.npmjs.org/escodegen/-/escodegen-1.14.1.tgz","_spec":"1.14.1","_where":"/Users/cyamonide/GitHub/use-herald-action","bin":{"esgenerate":"bin/esgenerate.js","escodegen":"bin/escodegen.js"},"bugs":{"url":"https://github.com/estools/escodegen/issues"},"dependencies":{"esprima":"^4.0.1","estraverse":"^4.2.0","esutils":"^2.0.2","optionator":"^0.8.1","source-map":"~0.6.1"},"description":"ECMAScript code generator","devDependencies":{"acorn":"^7.1.0","bluebird":"^3.4.7","bower-registry-client":"^1.0.0","chai":"^3.5.0","commonjs-everywhere":"^0.9.7","gulp":"^3.8.10","gulp-eslint":"^3.0.1","gulp-mocha":"^3.0.1","semver":"^5.1.0"},"engines":{"node":">=4.0"},"files":["LICENSE.BSD","README.md","bin","escodegen.js","package.json"],"homepage":"http://github.com/estools/escodegen","license":"BSD-2-Clause","main":"escodegen.js","maintainers":[{"name":"Yusuke Suzuki","email":"utatane.tea@gmail.com","url":"http://github.com/Constellation"}],"name":"escodegen","optionalDependencies":{"source-map":"~0.6.1"},"repository":{"type":"git","url":"git+ssh://git@github.com/estools/escodegen.git"},"scripts":{"build":"cjsify -a path: tools/entry-point.js > escodegen.browser.js","build-min":"cjsify -ma path: tools/entry-point.js > escodegen.browser.min.js","lint":"gulp lint","release":"node tools/release.js","test":"gulp travis","unit-test":"gulp test"},"version":"1.14.1"};
 
 /***/ }),
 
@@ -4461,8 +4461,12 @@ class PQueue extends EventEmitter {
         if (!this._isPaused) {
             const canInitializeInterval = !this._isIntervalPaused();
             if (this._doesIntervalAllowAnother && this._doesConcurrentAllowAnother) {
+                const job = this._queue.dequeue();
+                if (!job) {
+                    return false;
+                }
                 this.emit('active');
-                this._queue.dequeue()();
+                job();
                 if (canInitializeInterval) {
                     this._initializeIntervalIfNeeded();
                 }
@@ -22128,6 +22132,9 @@ const maxPerPage = 100;
 const OUTPUT_NAME = 'appliedRules';
 const FILE_ENCODING = 'utf8';
 const STATUS_DESCRIPTION_COPY = 'You can see the rule by clicking on Details';
+const COMBINED_TAG_KEY = '_combined';
+const LINE_BREAK = '<br/>';
+const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION (.*) -->$/;
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 var CommitStatus;
 (function (CommitStatus) {
@@ -22524,13 +22531,13 @@ var TypeOfComments;
     TypeOfComments["standalone"] = "standalone";
     TypeOfComments["combined"] = "combined";
 })(TypeOfComments || (TypeOfComments = {}));
-const LINE_BREAK = '<br/>';
 const formatUser = (handleOrEmail) => {
     return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
 };
+const tagComment = (body, path) => `<!-- USE_HERALD_ACTION ${path} -->\n${body}`;
 const commentTemplate = (mentions) => `
    <details open>\n
-   <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>\n
+   <summary> Hi there, given these changes, Herald thinks that these users should take a look! </summary>\n
    ${markdown_table_default()([
     ['Rule', 'Mention'],
     ...mentions.map(({ rule, URL, mentions }) => [
@@ -22539,23 +22546,28 @@ const commentTemplate = (mentions) => `
     ]),
 ], { align: ['l', 'c'] })}\n
   </details>
-  <!--herald-use-action-->
   `;
+/**
+ * This function takes a list of mathcing rules, and returns a map with rule name/path as keys, and
+ *  the comment body as values. We return a map instead of an array so we can determine which
+ *  comments we can skip reposting to avoid repeition, and which we can edit to update. We rely on
+ *  the fact that no two matching rules share the same path.
+ * @param matchingRules List of matching rules
+ */
 const composeCommentsForUsers = (matchingRules) => {
     const groups = lodash_groupby_default()(matchingRules, (rule) => rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined);
-    let comments = [];
+    let comments = {};
     if (groups[TypeOfComments.combined]) {
-        const mentions = groups[TypeOfComments.combined].reduce((memo, { name, path, users, teams, blobURL }) => [
-            ...memo,
-            { URL: blobURL, rule: name || path, mentions: [...users, ...teams] },
-        ], []);
-        comments = [...comments, commentTemplate([...new Set(mentions)])];
+        const mentions = groups[TypeOfComments.combined].reduce((memo, { name, path, users, teams, blobURL }) => memo.concat({ URL: blobURL, rule: name || path, mentions: [...users, ...teams] }), []);
+        // Since combined comments may originate from multiple rules/teams, we use COMBINED_TAG_KEY as the key
+        //  to this comment by convention.
+        comments = Object.assign(Object.assign({}, comments), { [COMBINED_TAG_KEY]: commentTemplate([...new Set(mentions)]) });
     }
     if (groups[TypeOfComments.standalone]) {
         const customMessages = groups[TypeOfComments.standalone]
             .filter((rule) => rule.customMessage)
-            .map(({ customMessage }) => customMessage);
-        comments = [...comments, ...customMessages];
+            .reduce((memo, { path, customMessage }) => (Object.assign(Object.assign({}, memo), { [path]: customMessage })), {});
+        comments = Object.assign(Object.assign({}, comments), customMessages);
     }
     return comments;
 };
@@ -22572,27 +22584,48 @@ const getAllComments = async (client, params) => {
 };
 const handleComment = async (client, { owner, repo, prNumber, matchingRules, files, base }, requestConcurrency = 1) => {
     comment_debug('handleComment called with:', matchingRules);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const queue = new dist_default.a({ concurrency: requestConcurrency });
     const rulesWithBlobURL = matchingRules.map((mRule) => (Object.assign(Object.assign({}, mRule), { blobURL: getBlobURL(mRule.path, files, owner, repo, base) })));
     const commentsFromRules = composeCommentsForUsers(rulesWithBlobURL);
+    comment_debug('comments from matching rules:', commentsFromRules);
     const rawComments = await getAllComments(client, {
         owner,
         repo,
         issue_number: prNumber,
     });
-    const comments = rawComments.map(({ body }) => body);
-    const onlyNewComments = commentsFromRules.filter((comment) => !comments.includes(comment));
-    comment_debug('comments to add:', onlyNewComments);
-    const queue = new dist_default.a({ concurrency: requestConcurrency });
-    const calls = await Promise.all(onlyNewComments.map((body) => {
+    // Filter existing comments by USE_HERALD_ACTION tag (HTML comment) and key by path
+    const useHeraldActionComments = rawComments.reduce((memo, comment) => {
+        const pathMatch = USE_HERALD_ACTION_TAG_REGEX.exec(comment.body.split('\n')[0]);
+        return pathMatch ? Object.assign(Object.assign({}, memo), { [pathMatch[1]]: comment }) : memo;
+    }, {});
+    comment_debug('existing UHA comments:', useHeraldActionComments);
+    // Update existing comments
+    const updateCommentPromises = Object.keys(commentsFromRules)
+        .filter((key) => key in useHeraldActionComments)
+        .map((key) => {
+        // get comment number
+        const comment_id = useHeraldActionComments[key].id;
+        const body = tagComment(commentsFromRules[key], key);
+        return queue.add(() => client.issues.updateComment({
+            owner,
+            repo,
+            comment_id,
+            body,
+        }));
+    });
+    // Add new comments
+    const createCommentPromises = Object.keys(commentsFromRules)
+        .filter((key) => !(key in useHeraldActionComments))
+        .map((key) => {
+        const body = tagComment(commentsFromRules[key], key);
         return queue.add(() => client.issues.createComment({
             owner,
             repo,
             issue_number: prNumber,
             body,
         }));
-    })).catch(catchHandler(comment_debug));
-    return calls;
+    });
+    return Promise.all([...updateCommentPromises, ...createCommentPromises]).catch(catchHandler(comment_debug));
 };
 
 // CONCATENATED MODULE: ./src/util/isEventSupported.ts

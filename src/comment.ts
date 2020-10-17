@@ -1,7 +1,7 @@
 import groupBy from 'lodash.groupby';
 import table from 'markdown-table';
 
-import { EMAIL_REGEX, maxPerPage } from './util/constants';
+import { EMAIL_REGEX, USE_HERALD_ACTION_TAG_REGEX, LINE_BREAK, COMBINED_TAG_KEY, maxPerPage } from './util/constants';
 
 import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
 import { logger } from './util/debug';
@@ -18,6 +18,8 @@ type AllCommentsResponse = RestEndpointMethodTypes['issues']['listComments']['re
 
 type IssueComments = AllCommentsResponse['data'];
 
+type IssueComment = IssueComments[0];
+
 const debug = logger('comment');
 
 enum TypeOfComments {
@@ -27,15 +29,16 @@ enum TypeOfComments {
 
 type Mention = { rule: string; mentions: string[]; URL: string };
 
-const LINE_BREAK = '<br/>';
 const formatUser = (handleOrEmail: string) => {
   return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
 };
 
+const tagComment = (body: string, path: string) => `<!-- USE_HERALD_ACTION ${path} -->\n${body}`;
+
 const commentTemplate = (mentions: Mention[]): string =>
   `
    <details open>\n
-   <summary> Hi there, given these changes, Herald suggest these users should take a look! </summary>\n
+   <summary> Hi there, given these changes, Herald thinks that these users should take a look! </summary>\n
    ${table(
      [
        ['Rule', 'Mention'],
@@ -47,37 +50,49 @@ const commentTemplate = (mentions: Mention[]): string =>
      { align: ['l', 'c'] }
    )}\n
   </details>
-  <!--herald-use-action-->
   `;
 
-export const composeCommentsForUsers = (matchingRules: (MatchingRule & { blobURL: string })[]): string[] => {
+/**
+ * This function takes a list of mathcing rules, and returns a map with rule name/path as keys, and
+ *  the comment body as values. We return a map instead of an array so we can determine which
+ *  comments we can skip reposting to avoid repeition, and which we can edit to update. We rely on
+ *  the fact that no two matching rules share the same path.
+ * @param matchingRules List of matching rules
+ */
+export const composeCommentsForUsers = (
+  matchingRules: (MatchingRule & { blobURL: string })[]
+): Record<string, string> => {
   const groups = groupBy(matchingRules, (rule) =>
     rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined
   );
 
-  let comments = [] as string[];
+  let comments = {} as Record<string, string>;
 
   if (groups[TypeOfComments.combined]) {
     const mentions = groups[TypeOfComments.combined].reduce(
-      (memo, { name, path, users, teams, blobURL }) => [
-        ...memo,
-        { URL: blobURL, rule: name || path, mentions: [...users, ...teams] },
-      ],
+      (memo, { name, path, users, teams, blobURL }) =>
+        memo.concat({ URL: blobURL, rule: name || path, mentions: [...users, ...teams] }),
       [] as Mention[]
     );
 
-    comments = [...comments, commentTemplate([...new Set(mentions)])];
+    // Since combined comments may originate from multiple rules/teams, we use COMBINED_TAG_KEY as the key
+    //  to this comment by convention.
+    comments = { ...comments, [COMBINED_TAG_KEY]: commentTemplate([...new Set(mentions)]) };
   }
 
   if (groups[TypeOfComments.standalone]) {
     const customMessages = groups[TypeOfComments.standalone]
       .filter((rule) => rule.customMessage)
-      .map(({ customMessage }) => customMessage as string);
-    comments = [...comments, ...customMessages];
+      .reduce(
+        (memo, { path, customMessage }) => ({ ...memo, [path]: customMessage as string }),
+        {} as Record<string, string>
+      );
+    comments = { ...comments, ...customMessages };
   }
 
   return comments;
 };
+
 const getAllComments = async (
   client: InstanceType<typeof Octokit>,
   params: AllCommentsParams
@@ -108,28 +123,53 @@ export const handleComment: ActionMapInput = async (
 ): Promise<unknown> => {
   debug('handleComment called with:', matchingRules);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const queue = new PQueue({ concurrency: requestConcurrency });
 
   const rulesWithBlobURL = matchingRules.map((mRule) => ({
     ...mRule,
     blobURL: getBlobURL(mRule.path, files, owner, repo, base),
   }));
+
   const commentsFromRules = composeCommentsForUsers(rulesWithBlobURL);
+
+  debug('comments from matching rules:', commentsFromRules);
+
   const rawComments = await getAllComments(client, {
     owner,
     repo,
     issue_number: prNumber,
   });
-  const comments = rawComments.map(({ body }) => body);
 
-  const onlyNewComments = commentsFromRules.filter((comment: string) => !comments.includes(comment));
+  // Filter existing comments by USE_HERALD_ACTION tag (HTML comment) and key by path
+  const useHeraldActionComments = rawComments.reduce((memo, comment) => {
+    const pathMatch = USE_HERALD_ACTION_TAG_REGEX.exec(comment.body.split('\n')[0]);
+    return pathMatch ? { ...memo, [pathMatch[1]]: comment } : memo;
+  }, {} as Record<string, IssueComment>);
 
-  debug('comments to add:', onlyNewComments);
+  debug('existing UHA comments:', useHeraldActionComments);
 
-  const queue = new PQueue({ concurrency: requestConcurrency });
+  // Update existing comments
+  const updateCommentPromises = Object.keys(commentsFromRules)
+    .filter((key) => key in useHeraldActionComments)
+    .map((key) => {
+      // get comment number
+      const comment_id = useHeraldActionComments[key].id;
+      const body = tagComment(commentsFromRules[key], key);
+      return queue.add(() =>
+        client.issues.updateComment({
+          owner,
+          repo,
+          comment_id,
+          body,
+        })
+      );
+    });
 
-  const calls = await Promise.all(
-    onlyNewComments.map((body: string) => {
+  // Add new comments
+  const createCommentPromises = Object.keys(commentsFromRules)
+    .filter((key) => !(key in useHeraldActionComments))
+    .map((key) => {
+      const body = tagComment(commentsFromRules[key], key);
       return queue.add(() =>
         client.issues.createComment({
           owner,
@@ -138,8 +178,7 @@ export const handleComment: ActionMapInput = async (
           body,
         })
       );
-    })
-  ).catch(catchHandler(debug));
+    });
 
-  return calls;
+  return Promise.all([...updateCommentPromises, ...createCommentPromises]).catch(catchHandler(debug));
 };
