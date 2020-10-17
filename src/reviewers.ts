@@ -4,6 +4,8 @@ import { catchHandler } from './util/catchHandler';
 
 const debug = logger('reviewers');
 
+// Removes leading @ and ignores the owner scope of a team
+//   e.g. converts @myOrg/myTeam -> myTeam
 const sanitizeTeam = (team: string) => {
   const splitTeam = team.replace('@', '').split('/');
   return splitTeam[splitTeam.length - 1];

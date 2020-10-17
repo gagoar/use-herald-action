@@ -22444,6 +22444,8 @@ const handleLabels = async (client, { owner, repo, prNumber, matchingRules }) =>
 
 
 const reviewers_debug = logger('reviewers');
+// Removes leading @ and ignores the owner scope of a team
+//   e.g. converts @myOrg/myTeam -> myTeam
 const sanitizeTeam = (team) => {
     const splitTeam = team.replace('@', '').split('/');
     return splitTeam[splitTeam.length - 1];
