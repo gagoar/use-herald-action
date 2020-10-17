@@ -12,10 +12,18 @@ jobs:
       - uses: actions/checkout@master
       - name: Install packages
         run: npm install
-      - name: Build binary
+      - name: Dry run Herald rules with checked in dist/
+        id: herald-dist
+        uses: ./
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          rulesLocation: herald_rules_for_build/*.json
+          DEBUG: '*'
+          dryRun: true
+      - name: Rebuild binary
         run: npm run build
-      - name: apply herald rules
-        id: herald
+      - name: Dry run Herald rules with rebuilt dist/
+        id: herald-rebuilt
         uses: ./
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
