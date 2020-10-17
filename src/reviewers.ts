@@ -3,6 +3,12 @@ import { ActionMapInput } from '.';
 import { catchHandler } from './util/catchHandler';
 
 const debug = logger('reviewers');
+
+const sanitizeTeam = (team: string) => {
+  const splitTeam = team.replace('@', '').split('/');
+  return splitTeam[splitTeam.length - 1];
+};
+
 export const handleReviewers: ActionMapInput = async (
   client,
   { owner, repo, prNumber, matchingRules }
@@ -12,7 +18,7 @@ export const handleReviewers: ActionMapInput = async (
   const { reviewers, teamReviewers } = matchingRules.reduce(
     (memo, rule) => {
       const reviewers = [...memo.reviewers, ...rule.users.map((user) => user.replace('@', ''))];
-      const teamReviewers = [...memo.teamReviewers, ...rule.teams.map((team) => team.replace('@', ''))];
+      const teamReviewers = [...memo.teamReviewers, ...rule.teams.map(sanitizeTeam)];
 
       return { reviewers, teamReviewers };
     },
