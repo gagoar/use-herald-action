@@ -22444,11 +22444,17 @@ const handleLabels = async (client, { owner, repo, prNumber, matchingRules }) =>
 
 
 const reviewers_debug = logger('reviewers');
+// Removes leading @ and ignores the owner scope of a team
+//   e.g. converts @myOrg/myTeam -> myTeam
+const sanitizeTeam = (team) => {
+    const splitTeam = team.replace('@', '').split('/');
+    return splitTeam[splitTeam.length - 1];
+};
 const handleReviewers = async (client, { owner, repo, prNumber, matchingRules }) => {
     reviewers_debug('handleReviewers called with:', matchingRules);
     const { reviewers, teamReviewers } = matchingRules.reduce((memo, rule) => {
         const reviewers = [...memo.reviewers, ...rule.users.map((user) => user.replace('@', ''))];
-        const teamReviewers = [...memo.teamReviewers, ...rule.teams.map((team) => team.replace('@', ''))];
+        const teamReviewers = [...memo.teamReviewers, ...rule.teams.map(sanitizeTeam)];
         return { reviewers, teamReviewers };
     }, { reviewers: [], teamReviewers: [] });
     const result = await client.pulls
