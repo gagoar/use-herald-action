@@ -3,6 +3,8 @@ on:
     branches:
       - renovate/*
     # Sequence of patterns matched against refs/tags
+
+name: rebuild dist/ + commit for renovate
 jobs:
   build:
     runs-on: ubuntu-latest
