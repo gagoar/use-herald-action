@@ -28,7 +28,11 @@
     "*": [
       "pretty-quick --staged"
     ],
+    "package.json": [
+      "bash -c \"npm install\""
+    ],
     "*.ts": [
+      "bash -c \"npm install\"",
       "eslint --fix",
       "bash -c \"npm run build\"",
       "git add ."
