@@ -9,6 +9,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - id: auth
+        uses: jnwng/github-app-installation-token-action@v1
+        with:
+          appId: ${{ secrets.UHA_APP_ID }}
+          installationId: ${{ secrets.UHA_INSTALLATION_ID }}
+          privateKey: ${{ secrets.UHA_APP_PRIVATE_KEY }}
       - uses: actions/checkout@master
         with:
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
@@ -17,13 +23,22 @@ jobs:
         run: npm install
       - name: build dist/
         run: npm run build
+      - run: |
+          STATUS=$(git diff --quiet && echo clean || echo modified)
+          echo "::set-output name=status::$STATUS"
+        id: gitStatus
+      - run: |
+          echo ${{ steps.gitStatus.outputs.status }}
+          echo ${{ contains(steps.gitStatus.outputs.status, 'modified') }}
       - name: Commit dist/ files
+        if: contains(steps.gitStatus.outputs.status, 'modified')
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "rebuild dist/" -a
       - name: Push changes
+        if: contains(steps.gitStatus.outputs.status, 'modified')
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ steps.auth.outputs.token }}
           branch: ${{ github.ref }}
