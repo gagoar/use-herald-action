@@ -25,9 +25,9 @@ jobs:
         run: npm run build
       - run: echo '::set-output name=status::$(git status --porcelain)'
         id: gitStatus
-      - run: echo ${{ steps.gitStatus.outputs.status  == 'no'}}
+      - run: echo ${{ steps.gitStatus.outputs.status != '' }}
       - name: Commit dist/ files
-        if: steps.gitStatus.outputs.status != ''
+        if: steps.gitStatus.outputs.status == 'no'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
