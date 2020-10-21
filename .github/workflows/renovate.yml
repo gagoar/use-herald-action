@@ -27,7 +27,7 @@ jobs:
         id: gitStatus
       - run: |
           echo ${{ steps.gitStatus.outputs.status }}
-          echo ${{ steps.gitStatus.outputs.status == 'modified' }}
+          echo ${{ contains(steps.gitStatus.outputs.status, 'modified') }}
       - name: Commit dist/ files
         if: contains(steps.gitStatus.outputs.status, 'modified')
         run: |
