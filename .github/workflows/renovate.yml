@@ -23,19 +23,18 @@ jobs:
         run: npm install
       - name: build dist/
         run: npm run build
-      - run: echo '::set-output name=status::$(git diff --quiet && echo false || echo true)'
+      - run: echo '::set-output name=status::[[ -z $(git status -s) ]] || echo 'modified/untracked'
         id: gitStatus
       - run: |
-          echo ${{ steps.gitStatus.outputs.status == 'true' }}
-          git diff --quiet
+          echo ${{ steps.gitStatus.outputs.status }}
       - name: Commit dist/ files
-        if: steps.gitStatus.outputs.status == 'true'
+        if: steps.gitStatus.outputs.status == 'modified/untracked'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "rebuild dist/" -a
       - name: Push changes
-        if: steps.gitStatus.outputs.status == 'true'
+        if: steps.gitStatus.outputs.status == 'modified/untracked'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ steps.auth.outputs.token }}
