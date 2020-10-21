@@ -25,7 +25,7 @@ jobs:
         run: npm run build
       - run: echo '::set-output name=status::$(git diff --quiet && echo false || echo true)'
         id: gitStatus
-      - run: echo ${{ steps.gitStatus.outputs.status === 'true' }}
+      - run: echo ${{ steps.gitStatus.outputs.status == 'true' }}
       - name: Commit dist/ files
         if: steps.gitStatus.outputs.status == 'true'
         run: |
