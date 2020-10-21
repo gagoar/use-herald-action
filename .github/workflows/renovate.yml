@@ -32,7 +32,7 @@ jobs:
           git config --local user.name "GitHub Action"
           git commit -m "rebuild dist/" -a
       - name: Push changes
-        if: ${{ steps.gitStatus.outputs.status != ''}}
+        if: ${{ steps.gitStatus.outputs.status }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ steps.auth.outputs.token }}
