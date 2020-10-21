@@ -27,6 +27,7 @@ jobs:
         id: gitStatus
       - run: echo ${{ steps.gitStatus.outputs.status }}
       - name: Commit dist/ files
+        if: steps.gitStatus.outputs.status != ''
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
