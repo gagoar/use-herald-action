@@ -23,7 +23,7 @@ jobs:
         run: npm install
       - name: build dist/
         run: npm run build
-      - run: echo '::set-output status=CLEAN::$(git status --porcelain)'
+      - run: echo '::set-output name=status::$(git status --porcelain)'
         id: gitStatus
       - run: echo ${{ steps.gitStatus.outputs.status }}
       - name: Commit dist/ files
