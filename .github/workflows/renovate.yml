@@ -23,7 +23,7 @@ jobs:
         run: npm install
       - name: build dist/
         run: npm run build
-      - run: echo '::set-output name=status::$([[ -z $(git status -s) ]] || echo modified)'
+      - run: echo '::set-output name=status::$(git diff --quiet && echo clean || echo modified)'
         id: gitStatus
       - run: |
           echo ${{ steps.gitStatus.outputs.status }}
