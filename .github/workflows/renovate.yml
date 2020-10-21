@@ -23,17 +23,17 @@ jobs:
         run: npm install
       - name: build dist/
         run: npm run build
-      - run: echo '::set-output name=status::$(git status --porcelain)'
+      - run: echo '::set-output name=status::$(git diff --quiet && echo false || echo true)'
         id: gitStatus
-      - run: echo ${{ steps.gitStatus.outputs.status != '' }}
+      - run: echo ${{ steps.gitStatus.outputs.status === 'true' }}
       - name: Commit dist/ files
-        if: steps.gitStatus.outputs.status == 'no'
+        if: steps.gitStatus.outputs.status == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "rebuild dist/" -a
       - name: Push changes
-        if: steps.gitStatus.outputs.status == 'no'
+        if: steps.gitStatus.outputs.status == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ steps.auth.outputs.token }}
