@@ -27,14 +27,15 @@ jobs:
         id: gitStatus
       - run: |
           echo ${{ steps.gitStatus.outputs.status }}
+          echo ${{ steps.gitStatus.outputs.status == 'modified' }}
       - name: Commit dist/ files
-        if: steps.gitStatus.outputs.status == 'modified'
+        if: contains(steps.gitStatus.outputs.status, 'modified')
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "rebuild dist/" -a
       - name: Push changes
-        if: steps.gitStatus.outputs.status == 'modified'
+        if: contains(steps.gitStatus.outputs.status, 'modified')
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ steps.auth.outputs.token }}
