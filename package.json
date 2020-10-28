@@ -118,7 +118,7 @@
     "@types/jsonpath": "0.2.0",
     "@types/lodash.groupby": "4.6.6",
     "@types/markdown-table": "2.0.0",
-    "@types/node": "13.13.29",
+    "@types/node": "13.13.30",
     "@typescript-eslint/eslint-plugin": "4.6.0",
     "@typescript-eslint/parser": "4.6.0",
     "@zeit/ncc": "0.22.3",
