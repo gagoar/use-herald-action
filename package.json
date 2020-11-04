@@ -12,7 +12,7 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "esbuild --bundle index.ts --platform=node --target=node12 --main-fields=main,module --outdir=dist/",
+    "build": "esbuild --bundle index.ts --platform=node --target=node12 --main-fields=main,module,browser --outdir=dist/",
     "lint": "eslint index.ts",
     "version": "auto-changelog -p --issue-url https://github.com/gagoar/use-herald-action/issue/{id} --merge-url https://github.com/gagoar/use-herald-action/pull/{id} --compare-url https://github.com/gagoar/use-herald-action/compare/{from}...{to} && git add CHANGELOG.md"
   },
