@@ -21,8 +21,10 @@ jobs:
           fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
       - name: Install packages
         run: npm install
-      - name: build dist/
-        run: npm run build
+      - name: build dist/ + format
+        run: |
+          npm run build
+          npm run format
       - run: |
           STATUS=$(git diff --quiet && echo clean || echo modified)
           echo "::set-output name=status::$STATUS"
