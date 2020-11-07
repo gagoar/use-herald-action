@@ -23,9 +23,6 @@
     "resolveJsonModule": true,
     "experimentalDecorators": true,
     "baseUrl": "./",
-    "paths": {
-      "*": ["node_modules/*"]
-    },
     "jsx": "react",
     "esModuleInterop": true
   }
