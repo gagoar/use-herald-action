@@ -14948,9 +14948,10 @@ var require_before_after_hook = __commonJS((exports, module2) => {
   module2.exports.Collection = Hook.Collection;
 });
 
-// node_modules/@octokit/endpoint/node_modules/is-plain-object/index.cjs.js
-var require_index_cjs = __commonJS((exports, module2) => {
+// node_modules/@octokit/endpoint/node_modules/is-plain-object/dist/is-plain-object.js
+var require_is_plain_object = __commonJS((exports) => {
   "use strict";
+  Object.defineProperty(exports, "__esModule", {value: true});
   /*!
    * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
    *
@@ -14975,17 +14976,14 @@ var require_index_cjs = __commonJS((exports, module2) => {
     }
     return true;
   }
-  module2.exports = isPlainObject;
+  exports.isPlainObject = isPlainObject;
 });
 
 // node_modules/@octokit/endpoint/dist-node/index.js
 var require_dist_node2 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  function _interopDefault(ex) {
-    return ex && typeof ex === "object" && "default" in ex ? ex["default"] : ex;
-  }
-  var isPlainObject = _interopDefault(require_index_cjs());
+  var isPlainObject = require_is_plain_object();
   var universalUserAgent = require_dist_node();
   function lowercaseKeys(object) {
     if (!object) {
@@ -14999,7 +14997,7 @@ var require_dist_node2 = __commonJS((exports) => {
   function mergeDeep(defaults, options) {
     const result = Object.assign({}, defaults);
     Object.keys(options).forEach((key) => {
-      if (isPlainObject(options[key])) {
+      if (isPlainObject.isPlainObject(options[key])) {
         if (!(key in defaults))
           Object.assign(result, {
             [key]: options[key]
@@ -15014,6 +15012,14 @@ var require_dist_node2 = __commonJS((exports) => {
     });
     return result;
   }
+  function removeUndefinedProperties(obj) {
+    for (const key in obj) {
+      if (obj[key] === void 0) {
+        delete obj[key];
+      }
+    }
+    return obj;
+  }
   function merge(defaults, route, options) {
     if (typeof route === "string") {
       let [method, url] = route.split(" ");
@@ -15027,6 +15033,8 @@ var require_dist_node2 = __commonJS((exports) => {
       options = Object.assign({}, route);
     }
     options.headers = lowercaseKeys(options.headers);
+    removeUndefinedProperties(options);
+    removeUndefinedProperties(options.headers);
     const mergedOptions = mergeDeep(defaults || {}, options);
     if (defaults && defaults.mediaType.previews.length) {
       mergedOptions.mediaType.previews = defaults.mediaType.previews.filter((preview) => !mergedOptions.mediaType.previews.includes(preview)).concat(mergedOptions.mediaType.previews);
@@ -15184,7 +15192,7 @@ var require_dist_node2 = __commonJS((exports) => {
   }
   function parse(options) {
     let method = options.method.toUpperCase();
-    let url = (options.url || "/").replace(/:([a-z]\w+)/g, "{+$1}");
+    let url = (options.url || "/").replace(/:([a-z]\w+)/g, "{$1}");
     let headers = Object.assign({}, options.headers);
     let body;
     let parameters = omit(options, ["method", "baseUrl", "url", "headers", "request", "mediaType"]);
@@ -15195,8 +15203,8 @@ var require_dist_node2 = __commonJS((exports) => {
     }
     const omittedParameters = Object.keys(options).filter((option) => urlVariableNames.includes(option)).concat("baseUrl");
     const remainingParameters = omit(parameters, omittedParameters);
-    const isBinaryRequset = /application\/octet-stream/i.test(headers.accept);
-    if (!isBinaryRequset) {
+    const isBinaryRequest = /application\/octet-stream/i.test(headers.accept);
+    if (!isBinaryRequest) {
       if (options.mediaType.format) {
         headers.accept = headers.accept.split(/,/).map((preview) => preview.replace(/application\/vnd(\.\w+)(\.v3)?(\.\w+)?(\+json)?$/, `application/vnd$1$2.${options.mediaType.format}`)).join(",");
       }
@@ -15250,7 +15258,7 @@ var require_dist_node2 = __commonJS((exports) => {
       parse
     });
   }
-  const VERSION = "6.0.5";
+  const VERSION = "6.0.9";
   const userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`;
   const DEFAULTS = {
     method: "GET",
@@ -15268,9 +15276,10 @@ var require_dist_node2 = __commonJS((exports) => {
   exports.endpoint = endpoint;
 });
 
-// node_modules/@octokit/request/node_modules/is-plain-object/index.cjs.js
-var require_index_cjs2 = __commonJS((exports, module2) => {
+// node_modules/@octokit/request/node_modules/is-plain-object/dist/is-plain-object.js
+var require_is_plain_object2 = __commonJS((exports) => {
   "use strict";
+  Object.defineProperty(exports, "__esModule", {value: true});
   /*!
    * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
    *
@@ -15295,7 +15304,7 @@ var require_index_cjs2 = __commonJS((exports, module2) => {
     }
     return true;
   }
-  module2.exports = isPlainObject;
+  exports.isPlainObject = isPlainObject;
 });
 
 // node_modules/node-fetch/lib/index.mjs
@@ -16472,15 +16481,15 @@ var require_dist_node5 = __commonJS((exports) => {
   }
   var endpoint = require_dist_node2();
   var universalUserAgent = require_dist_node();
-  var isPlainObject = _interopDefault(require_index_cjs2());
+  var isPlainObject = require_is_plain_object2();
   var nodeFetch = _interopDefault(require_lib());
   var requestError = require_dist_node4();
-  const VERSION = "5.4.7";
+  const VERSION = "5.4.10";
   function getBufferResponse(response) {
     return response.arrayBuffer();
   }
   function fetchWrapper(requestOptions) {
-    if (isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) {
+    if (isPlainObject.isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) {
       requestOptions.body = JSON.stringify(requestOptions.body);
     }
     let headers = {};
@@ -16592,7 +16601,7 @@ var require_dist_node6 = __commonJS((exports) => {
   Object.defineProperty(exports, "__esModule", {value: true});
   var request = require_dist_node5();
   var universalUserAgent = require_dist_node();
-  const VERSION = "4.5.4";
+  const VERSION = "4.5.7";
   class GraphqlError extends Error {
     constructor(request2, response) {
       const message = response.data.errors[0].message;
@@ -16609,21 +16618,29 @@ var require_dist_node6 = __commonJS((exports) => {
     }
   }
   const NON_VARIABLE_OPTIONS = ["method", "baseUrl", "url", "headers", "request", "query", "mediaType"];
+  const GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
   function graphql(request2, query, options) {
-    options = typeof query === "string" ? options = Object.assign({
+    if (typeof query === "string" && options && "query" in options) {
+      return Promise.reject(new Error(`[@octokit/graphql] "query" cannot be used as variable name`));
+    }
+    const parsedOptions = typeof query === "string" ? Object.assign({
       query
-    }, options) : options = query;
-    const requestOptions = Object.keys(options).reduce((result, key) => {
+    }, options) : query;
+    const requestOptions = Object.keys(parsedOptions).reduce((result, key) => {
       if (NON_VARIABLE_OPTIONS.includes(key)) {
-        result[key] = options[key];
+        result[key] = parsedOptions[key];
         return result;
       }
       if (!result.variables) {
         result.variables = {};
       }
-      result.variables[key] = options[key];
+      result.variables[key] = parsedOptions[key];
       return result;
     }, {});
+    const baseUrl = parsedOptions.baseUrl || request2.endpoint.DEFAULTS.baseUrl;
+    if (GHES_V3_SUFFIX_REGEX.test(baseUrl)) {
+      requestOptions.url = baseUrl.replace(GHES_V3_SUFFIX_REGEX, "/api/graphql");
+    }
     return request2(requestOptions).then((response) => {
       if (response.data.errors) {
         const headers = {};
@@ -16712,49 +16729,39 @@ var require_dist_node8 = __commonJS((exports) => {
   var request = require_dist_node5();
   var graphql = require_dist_node6();
   var authToken = require_dist_node7();
-  function _defineProperty(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, {
-        value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-      });
-    } else {
-      obj[key] = value;
+  function _objectWithoutPropertiesLoose(source, excluded) {
+    if (source == null)
+      return {};
+    var target = {};
+    var sourceKeys = Object.keys(source);
+    var key, i;
+    for (i = 0; i < sourceKeys.length; i++) {
+      key = sourceKeys[i];
+      if (excluded.indexOf(key) >= 0)
+        continue;
+      target[key] = source[key];
     }
-    return obj;
+    return target;
   }
-  function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
+  function _objectWithoutProperties(source, excluded) {
+    if (source == null)
+      return {};
+    var target = _objectWithoutPropertiesLoose(source, excluded);
+    var key, i;
     if (Object.getOwnPropertySymbols) {
-      var symbols = Object.getOwnPropertySymbols(object);
-      if (enumerableOnly)
-        symbols = symbols.filter(function(sym) {
-          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-        });
-      keys.push.apply(keys, symbols);
-    }
-    return keys;
-  }
-  function _objectSpread2(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-      if (i % 2) {
-        ownKeys(Object(source), true).forEach(function(key) {
-          _defineProperty(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-      } else {
-        ownKeys(Object(source)).forEach(function(key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
+      var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+      for (i = 0; i < sourceSymbolKeys.length; i++) {
+        key = sourceSymbolKeys[i];
+        if (excluded.indexOf(key) >= 0)
+          continue;
+        if (!Object.prototype.propertyIsEnumerable.call(source, key))
+          continue;
+        target[key] = source[key];
       }
     }
     return target;
   }
-  const VERSION = "3.1.2";
+  const VERSION = "3.2.1";
   class Octokit2 {
     constructor(options = {}) {
       const hook = new beforeAfterHook.Collection();
@@ -16780,9 +16787,7 @@ var require_dist_node8 = __commonJS((exports) => {
         requestDefaults.headers["time-zone"] = options.timeZone;
       }
       this.request = request.request.defaults(requestDefaults);
-      this.graphql = graphql.withCustomRequest(this.request).defaults(_objectSpread2(_objectSpread2({}, requestDefaults), {}, {
-        baseUrl: requestDefaults.baseUrl.replace(/\/api\/v3$/, "/api")
-      }));
+      this.graphql = graphql.withCustomRequest(this.request).defaults(requestDefaults);
       this.log = Object.assign({
         debug: () => {
         },
@@ -16803,8 +16808,14 @@ var require_dist_node8 = __commonJS((exports) => {
           this.auth = auth;
         }
       } else {
-        const auth = options.authStrategy(Object.assign({
-          request: this.request
+        const {
+          authStrategy
+        } = options, otherOptions = _objectWithoutProperties(options, ["authStrategy"]);
+        const auth = authStrategy(Object.assign({
+          request: this.request,
+          log: this.log,
+          octokit: this,
+          octokitOptions: otherOptions
         }, options.auth));
         hook.wrap("request", auth.hook);
         this.auth = auth;
@@ -16846,7 +16857,7 @@ var require_dist_node8 = __commonJS((exports) => {
 var require_dist_node9 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const VERSION = "1.0.0";
+  const VERSION = "1.0.2";
   function requestLog(octokit) {
     octokit.hook.wrap("request", (request, options) => {
       octokit.log.debug("request", options);
@@ -16870,7 +16881,7 @@ var require_dist_node9 = __commonJS((exports) => {
 var require_dist_node10 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const VERSION = "2.3.2";
+  const VERSION = "2.6.0";
   function normalizePaginatedListResponse(response) {
     const responseNeedsNormalization = "total_count" in response.data && !("url" in response.data);
     if (!responseNeedsNormalization)
@@ -16901,22 +16912,21 @@ var require_dist_node10 = __commonJS((exports) => {
     let url = options.url;
     return {
       [Symbol.asyncIterator]: () => ({
-        next() {
-          if (!url) {
-            return Promise.resolve({
+        async next() {
+          if (!url)
+            return {
               done: true
-            });
-          }
-          return requestMethod({
+            };
+          const response = await requestMethod({
             method,
             url,
             headers
-          }).then(normalizePaginatedListResponse).then((response) => {
-            url = ((response.headers.link || "").match(/<([^>]+)>;\s*rel="next"/) || [])[1];
-            return {
-              value: response
-            };
           });
+          const normalizedResponse = normalizePaginatedListResponse(response);
+          url = ((normalizedResponse.headers.link || "").match(/<([^>]+)>;\s*rel="next"/) || [])[1];
+          return {
+            value: normalizedResponse
+          };
         }
       })
     };
@@ -16944,6 +16954,9 @@ var require_dist_node10 = __commonJS((exports) => {
       return gather(octokit, results, iterator2, mapFn);
     });
   }
+  const composePaginateRest = Object.assign(paginate, {
+    iterator
+  });
   function paginateRest(octokit) {
     return {
       paginate: Object.assign(paginate.bind(null, octokit), {
@@ -16952,6 +16965,7 @@ var require_dist_node10 = __commonJS((exports) => {
     };
   }
   paginateRest.VERSION = VERSION;
+  exports.composePaginateRest = composePaginateRest;
   exports.paginateRest = paginateRest;
 });
 
@@ -17145,8 +17159,15 @@ var require_dist_node11 = __commonJS((exports) => {
       }]
     },
     codeScanning: {
-      getAlert: ["GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_id}"],
-      listAlertsForRepo: ["GET /repos/{owner}/{repo}/code-scanning/alerts"]
+      getAlert: ["GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}", {}, {
+        renamedParameters: {
+          alert_id: "alert_number"
+        }
+      }],
+      listAlertsForRepo: ["GET /repos/{owner}/{repo}/code-scanning/alerts"],
+      listRecentAnalyses: ["GET /repos/{owner}/{repo}/code-scanning/analyses"],
+      updateAlert: ["PATCH /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}"],
+      uploadSarif: ["POST /repos/{owner}/{repo}/code-scanning/sarifs"]
     },
     codesOfConduct: {
       getAllCodesOfConduct: ["GET /codes_of_conduct", {
@@ -18000,7 +18021,7 @@ var require_dist_node11 = __commonJS((exports) => {
       updateAuthenticated: ["PATCH /user"]
     }
   };
-  const VERSION = "4.1.4";
+  const VERSION = "4.2.1";
   function endpointsToMethods(octokit, endpointsMap) {
     const newMethods = {};
     for (const [scope, endpoints] of Object.entries(endpointsMap)) {
@@ -18074,7 +18095,7 @@ var require_dist_node12 = __commonJS((exports) => {
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
-  const VERSION = "18.0.5";
+  const VERSION = "18.0.9";
   const Octokit2 = core3.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
