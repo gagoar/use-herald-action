@@ -7415,7 +7415,7 @@ var require_browser = __commonJS((exports, module2) => {
   };
 });
 
-// node_modules/chalk/source/util.js
+// node_modules/envalid/node_modules/chalk/source/util.js
 var require_util = __commonJS((exports, module2) => {
   "use strict";
   const stringReplaceAll = (string, substring, replacer) => {
@@ -7452,13 +7452,13 @@ var require_util = __commonJS((exports, module2) => {
   };
 });
 
-// node_modules/chalk/source/templates.js
+// node_modules/envalid/node_modules/chalk/source/templates.js
 var require_templates = __commonJS((exports, module2) => {
   "use strict";
   const TEMPLATE_REGEX = /(?:\\(u(?:[a-f\d]{4}|\{[a-f\d]{1,6}\})|x[a-f\d]{2}|.))|(?:\{(~)?(\w+(?:\([^)]*\))?(?:\.\w+(?:\([^)]*\))?)*)(?:[ \t]|(?=\r?\n)))|(\})|((?:.|[\r\n\f])+?)/gi;
   const STYLE_REGEX = /(?:^|\.)(\w+)(?:\(([^)]*)\))?/g;
   const STRING_REGEX = /^(['"])((?:\\.|(?!\1)[^\\])*)\1$/;
-  const ESCAPE_REGEX = /\\(u(?:[a-f\d]{4}|{[a-f\d]{1,6}})|x[a-f\d]{2}|.)|([^\\])/gi;
+  const ESCAPE_REGEX = /\\(u(?:[a-f\d]{4}|\{[a-f\d]{1,6}\})|x[a-f\d]{2}|.)|([^\\])/gi;
   const ESCAPES = new Map([
     ["n", "\n"],
     ["r", "\r"],
@@ -7557,14 +7557,14 @@ var require_templates = __commonJS((exports, module2) => {
     });
     chunks.push(chunk.join(""));
     if (styles.length > 0) {
-      const errMessage = `Chalk template literal is missing ${styles.length} closing bracket${styles.length === 1 ? "" : "s"} (\`}\`)`;
-      throw new Error(errMessage);
+      const errMsg = `Chalk template literal is missing ${styles.length} closing bracket${styles.length === 1 ? "" : "s"} (\`}\`)`;
+      throw new Error(errMsg);
     }
     return chunks.join("");
   };
 });
 
-// node_modules/chalk/source/index.js
+// node_modules/envalid/node_modules/chalk/source/index.js
 var require_source = __commonJS((exports, module2) => {
   "use strict";
   const ansiStyles = require_ansi_styles();
@@ -7581,7 +7581,7 @@ var require_source = __commonJS((exports, module2) => {
   ];
   const styles = Object.create(null);
   const applyOptions = (object, options = {}) => {
-    if (options.level && !(Number.isInteger(options.level) && options.level >= 0 && options.level <= 3)) {
+    if (options.level > 3 || options.level < 0) {
       throw new Error("The `level` option should be an integer from 0 to 3");
     }
     const colorLevel = stdoutColor ? stdoutColor.level : 0;
@@ -7682,7 +7682,7 @@ var require_source = __commonJS((exports, module2) => {
     const builder = (...arguments_) => {
       return applyStyle(builder, arguments_.length === 1 ? "" + arguments_[0] : arguments_.join(" "));
     };
-    Object.setPrototypeOf(builder, proto);
+    builder.__proto__ = proto;
     builder._generator = self2;
     builder._styler = _styler;
     builder._isEmpty = _isEmpty;
@@ -7730,6 +7730,16 @@ var require_source = __commonJS((exports, module2) => {
   chalk.supportsColor = stdoutColor;
   chalk.stderr = Chalk({level: stderrColor ? stderrColor.level : 0});
   chalk.stderr.supportsColor = stderrColor;
+  chalk.Level = {
+    None: 0,
+    Basic: 1,
+    Ansi256: 2,
+    TrueColor: 3,
+    0: "None",
+    1: "Basic",
+    2: "Ansi256",
+    3: "TrueColor"
+  };
   module2.exports = chalk;
 });
 
@@ -14938,48 +14948,34 @@ var require_before_after_hook = __commonJS((exports, module2) => {
   module2.exports.Collection = Hook.Collection;
 });
 
-// node_modules/isobject/index.js
-var require_isobject = __commonJS((exports, module2) => {
-  /*!
-   * isobject <https://github.com/jonschlinkert/isobject>
-   *
-   * Copyright (c) 2014-2017, Jon Schlinkert.
-   * Released under the MIT License.
-   */
+// node_modules/@octokit/endpoint/node_modules/is-plain-object/index.cjs.js
+var require_index_cjs = __commonJS((exports, module2) => {
   "use strict";
-  module2.exports = function isObject(val) {
-    return val != null && typeof val === "object" && Array.isArray(val) === false;
-  };
-});
-
-// node_modules/is-plain-object/index.js
-var require_is_plain_object = __commonJS((exports, module2) => {
   /*!
    * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
    *
    * Copyright (c) 2014-2017, Jon Schlinkert.
    * Released under the MIT License.
    */
-  "use strict";
-  var isObject = require_isobject();
-  function isObjectObject(o) {
-    return isObject(o) === true && Object.prototype.toString.call(o) === "[object Object]";
+  function isObject(o) {
+    return Object.prototype.toString.call(o) === "[object Object]";
   }
-  module2.exports = function isPlainObject(o) {
+  function isPlainObject(o) {
     var ctor, prot;
-    if (isObjectObject(o) === false)
+    if (isObject(o) === false)
       return false;
     ctor = o.constructor;
-    if (typeof ctor !== "function")
-      return false;
+    if (ctor === void 0)
+      return true;
     prot = ctor.prototype;
-    if (isObjectObject(prot) === false)
+    if (isObject(prot) === false)
       return false;
     if (prot.hasOwnProperty("isPrototypeOf") === false) {
       return false;
     }
     return true;
-  };
+  }
+  module2.exports = isPlainObject;
 });
 
 // node_modules/@octokit/endpoint/dist-node/index.js
@@ -14989,7 +14985,7 @@ var require_dist_node2 = __commonJS((exports) => {
   function _interopDefault(ex) {
     return ex && typeof ex === "object" && "default" in ex ? ex["default"] : ex;
   }
-  var isPlainObject = _interopDefault(require_is_plain_object());
+  var isPlainObject = _interopDefault(require_index_cjs());
   var universalUserAgent = require_dist_node();
   function lowercaseKeys(object) {
     if (!object) {
@@ -15270,6 +15266,36 @@ var require_dist_node2 = __commonJS((exports) => {
   };
   const endpoint = withDefaults(null, DEFAULTS);
   exports.endpoint = endpoint;
+});
+
+// node_modules/@octokit/request/node_modules/is-plain-object/index.cjs.js
+var require_index_cjs2 = __commonJS((exports, module2) => {
+  "use strict";
+  /*!
+   * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
+   *
+   * Copyright (c) 2014-2017, Jon Schlinkert.
+   * Released under the MIT License.
+   */
+  function isObject(o) {
+    return Object.prototype.toString.call(o) === "[object Object]";
+  }
+  function isPlainObject(o) {
+    var ctor, prot;
+    if (isObject(o) === false)
+      return false;
+    ctor = o.constructor;
+    if (ctor === void 0)
+      return true;
+    prot = ctor.prototype;
+    if (isObject(prot) === false)
+      return false;
+    if (prot.hasOwnProperty("isPrototypeOf") === false) {
+      return false;
+    }
+    return true;
+  }
+  module2.exports = isPlainObject;
 });
 
 // node_modules/node-fetch/lib/index.mjs
@@ -16446,7 +16472,7 @@ var require_dist_node5 = __commonJS((exports) => {
   }
   var endpoint = require_dist_node2();
   var universalUserAgent = require_dist_node();
-  var isPlainObject = _interopDefault(require_is_plain_object());
+  var isPlainObject = _interopDefault(require_index_cjs2());
   var nodeFetch = _interopDefault(require_lib());
   var requestError = require_dist_node4();
   const VERSION = "5.4.7";
