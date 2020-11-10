@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: auth
-        uses: jnwng/github-app-installation-token-action@v1
+        uses: jnwng/github-app-installation-token-action@v2
         with:
           appId: ${{ secrets.UHA_APP_ID }}
           installationId: ${{ secrets.UHA_INSTALLATION_ID }}
