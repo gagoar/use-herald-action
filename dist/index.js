@@ -14331,10 +14331,10 @@ var require_common2 = __commonJS((exports, module2) => {
     createDebug.enable = enable;
     createDebug.enabled = enabled;
     createDebug.humanize = require_ms();
+    createDebug.destroy = destroy;
     Object.keys(env2).forEach((key) => {
       createDebug[key] = env2[key];
     });
-    createDebug.instances = [];
     createDebug.names = [];
     createDebug.skips = [];
     createDebug.formatters = {};
@@ -14349,6 +14349,7 @@ var require_common2 = __commonJS((exports, module2) => {
     createDebug.selectColor = selectColor;
     function createDebug(namespace) {
       let prevTime;
+      let enableOverride = null;
       function debug19(...args) {
         if (!debug19.enabled) {
           return;
@@ -14367,7 +14368,7 @@ var require_common2 = __commonJS((exports, module2) => {
         let index = 0;
         args[0] = args[0].replace(/%([a-zA-Z%])/g, (match, format) => {
           if (match === "%%") {
-            return match;
+            return "%";
           }
           index++;
           const formatter = createDebug.formatters[format];
@@ -14384,24 +14385,22 @@ var require_common2 = __commonJS((exports, module2) => {
         logFn.apply(self2, args);
       }
       debug19.namespace = namespace;
-      debug19.enabled = createDebug.enabled(namespace);
       debug19.useColors = createDebug.useColors();
       debug19.color = createDebug.selectColor(namespace);
-      debug19.destroy = destroy;
       debug19.extend = extend;
+      debug19.destroy = createDebug.destroy;
+      Object.defineProperty(debug19, "enabled", {
+        enumerable: true,
+        configurable: false,
+        get: () => enableOverride === null ? createDebug.enabled(namespace) : enableOverride,
+        set: (v) => {
+          enableOverride = v;
+        }
+      });
       if (typeof createDebug.init === "function") {
         createDebug.init(debug19);
       }
-      createDebug.instances.push(debug19);
       return debug19;
-    }
-    function destroy() {
-      const index = createDebug.instances.indexOf(this);
-      if (index !== -1) {
-        createDebug.instances.splice(index, 1);
-        return true;
-      }
-      return false;
     }
     function extend(namespace, delimiter) {
       const newDebug = createDebug(this.namespace + (typeof delimiter === "undefined" ? ":" : delimiter) + namespace);
@@ -14425,10 +14424,6 @@ var require_common2 = __commonJS((exports, module2) => {
         } else {
           createDebug.names.push(new RegExp("^" + namespaces + "$"));
         }
-      }
-      for (i = 0; i < createDebug.instances.length; i++) {
-        const instance = createDebug.instances[i];
-        instance.enabled = createDebug.enabled(instance.namespace);
       }
     }
     function disable() {
@@ -14466,6 +14461,9 @@ var require_common2 = __commonJS((exports, module2) => {
       }
       return val;
     }
+    function destroy() {
+      console.warn("Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.");
+    }
     createDebug.enable(createDebug.load());
     return createDebug;
   }
@@ -14479,6 +14477,15 @@ var require_browser2 = __commonJS((exports, module2) => {
   exports.load = load;
   exports.useColors = useColors;
   exports.storage = localstorage();
+  exports.destroy = (() => {
+    let warned = false;
+    return () => {
+      if (!warned) {
+        warned = true;
+        console.warn("Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.");
+      }
+    };
+  })();
   exports.colors = [
     "#0000CC",
     "#0000FF",
@@ -14636,6 +14643,8 @@ var require_node = __commonJS((exports, module2) => {
   exports.save = save;
   exports.load = load;
   exports.useColors = useColors;
+  exports.destroy = util.deprecate(() => {
+  }, "Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.");
   exports.colors = [6, 2, 3, 4, 5, 1];
   try {
     const supportsColor = require_browser();
