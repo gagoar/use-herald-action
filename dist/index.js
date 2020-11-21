@@ -14794,7 +14794,7 @@ var require_node = __commonJS((exports, module2) => {
   const {formatters} = module2.exports;
   formatters.o = function(v) {
     this.inspectOpts.colors = this.useColors;
-    return util.inspect(v, this.inspectOpts).replace(/\s*\n\s*/g, " ");
+    return util.inspect(v, this.inspectOpts).split("\n").map((str2) => str2.trim()).join(" ");
   };
   formatters.O = function(v) {
     this.inspectOpts.colors = this.useColors;
