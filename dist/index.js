@@ -63,8 +63,8 @@ var require_command = __commonJS((exports) => {
     return result;
   };
   Object.defineProperty(exports, "__esModule", {value: true});
-  const os = __importStar(require("os"));
-  const utils_1 = require_utils();
+  var os = __importStar(require("os"));
+  var utils_1 = require_utils();
   function issueCommand(command, properties, message) {
     const cmd = new Command(command, properties, message);
     process.stdout.write(cmd.toString() + os.EOL);
@@ -74,8 +74,8 @@ var require_command = __commonJS((exports) => {
     issueCommand(name, {}, message);
   }
   exports.issue = issue;
-  const CMD_STRING = "::";
-  class Command {
+  var CMD_STRING = "::";
+  var Command = class {
     constructor(command, properties, message) {
       if (!command) {
         command = "missing.command";
@@ -106,7 +106,7 @@ var require_command = __commonJS((exports) => {
       cmdStr += `${CMD_STRING}${escapeData(this.message)}`;
       return cmdStr;
     }
-  }
+  };
   function escapeData(s) {
     return utils_1.toCommandValue(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
   }
@@ -131,9 +131,9 @@ var require_file_command = __commonJS((exports) => {
     return result;
   };
   Object.defineProperty(exports, "__esModule", {value: true});
-  const fs2 = __importStar(require("fs"));
-  const os = __importStar(require("os"));
-  const utils_1 = require_utils();
+  var fs2 = __importStar(require("fs"));
+  var os = __importStar(require("os"));
+  var utils_1 = require_utils();
   function issueCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
     if (!filePath) {
@@ -192,11 +192,11 @@ var require_core = __commonJS((exports) => {
     return result;
   };
   Object.defineProperty(exports, "__esModule", {value: true});
-  const command_1 = require_command();
-  const file_command_1 = require_file_command();
-  const utils_1 = require_utils();
-  const os = __importStar(require("os"));
-  const path3 = __importStar(require("path"));
+  var command_1 = require_command();
+  var file_command_1 = require_file_command();
+  var utils_1 = require_utils();
+  var os = __importStar(require("os"));
+  var path3 = __importStar(require("path"));
   var ExitCode;
   (function(ExitCode2) {
     ExitCode2[ExitCode2["Success"] = 0] = "Success";
@@ -1208,7 +1208,7 @@ var require_fs = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
   exports.createDirentFromStats = void 0;
-  class DirentFromStats {
+  var DirentFromStats = class {
     constructor(name, stats) {
       this.name = name;
       this.isBlockDevice = stats.isBlockDevice.bind(stats);
@@ -1219,7 +1219,7 @@ var require_fs = __commonJS((exports) => {
       this.isSocket = stats.isSocket.bind(stats);
       this.isSymbolicLink = stats.isSymbolicLink.bind(stats);
     }
-  }
+  };
   function createDirentFromStats(name, stats) {
     return new DirentFromStats(name, stats);
   }
@@ -1231,9 +1231,9 @@ var require_path = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
   exports.removeLeadingDotSegment = exports.escape = exports.makeAbsolute = exports.unixify = void 0;
-  const path3 = require("path");
-  const LEADING_DOT_SEGMENT_CHARACTERS_COUNT = 2;
-  const UNESCAPED_GLOB_SYMBOLS_RE = /(\\?)([()*?[\]{|}]|^!|[!+@](?=\())/g;
+  var path3 = require("path");
+  var LEADING_DOT_SEGMENT_CHARACTERS_COUNT = 2;
+  var UNESCAPED_GLOB_SYMBOLS_RE = /(\\?)([()*?[\]{|}]|^!|[!+@](?=\())/g;
   function unixify(filepath) {
     return filepath.replace(/\\/g, "/");
   }
@@ -1434,7 +1434,7 @@ var require_utils2 = __commonJS((exports) => {
 // node_modules/braces/lib/stringify.js
 var require_stringify = __commonJS((exports, module2) => {
   "use strict";
-  const utils = require_utils2();
+  var utils = require_utils2();
   module2.exports = (ast, options = {}) => {
     let stringify = (node, parent = {}) => {
       let invalidBlock = options.escapeInvalid && utils.isInvalidBrace(parent);
@@ -1489,8 +1489,8 @@ var require_to_regex_range = __commonJS((exports, module2) => {
    * Released under the MIT License.
    */
   "use strict";
-  const isNumber = require_is_number();
-  const toRegexRange = (min, max, options) => {
+  var isNumber = require_is_number();
+  var toRegexRange = (min, max, options) => {
     if (isNumber(min) === false) {
       throw new TypeError("toRegexRange: expected the first argument to be a number");
     }
@@ -1705,17 +1705,17 @@ var require_fill_range = __commonJS((exports, module2) => {
    * Licensed under the MIT License.
    */
   "use strict";
-  const util = require("util");
-  const toRegexRange = require_to_regex_range();
-  const isObject = (val) => val !== null && typeof val === "object" && !Array.isArray(val);
-  const transform = (toNumber) => {
+  var util = require("util");
+  var toRegexRange = require_to_regex_range();
+  var isObject = (val) => val !== null && typeof val === "object" && !Array.isArray(val);
+  var transform = (toNumber) => {
     return (value) => toNumber === true ? Number(value) : String(value);
   };
-  const isValidValue = (value) => {
+  var isValidValue = (value) => {
     return typeof value === "number" || typeof value === "string" && value !== "";
   };
-  const isNumber = (num) => Number.isInteger(+num);
-  const zeros = (input) => {
+  var isNumber = (num) => Number.isInteger(+num);
+  var zeros = (input) => {
     let value = `${input}`;
     let index = -1;
     if (value[0] === "-")
@@ -1726,13 +1726,13 @@ var require_fill_range = __commonJS((exports, module2) => {
       ;
     return index > 0;
   };
-  const stringify = (start, end, options) => {
+  var stringify = (start, end, options) => {
     if (typeof start === "string" || typeof end === "string") {
       return true;
     }
     return options.stringify === true;
   };
-  const pad = (input, maxLength, toNumber) => {
+  var pad = (input, maxLength, toNumber) => {
     if (maxLength > 0) {
       let dash = input[0] === "-" ? "-" : "";
       if (dash)
@@ -1744,7 +1744,7 @@ var require_fill_range = __commonJS((exports, module2) => {
     }
     return input;
   };
-  const toMaxLen = (input, maxLength) => {
+  var toMaxLen = (input, maxLength) => {
     let negative = input[0] === "-" ? "-" : "";
     if (negative) {
       input = input.slice(1);
@@ -1754,7 +1754,7 @@ var require_fill_range = __commonJS((exports, module2) => {
       input = "0" + input;
     return negative ? "-" + input : input;
   };
-  const toSequence = (parts, options) => {
+  var toSequence = (parts, options) => {
     parts.negatives.sort((a, b) => a < b ? -1 : a > b ? 1 : 0);
     parts.positives.sort((a, b) => a < b ? -1 : a > b ? 1 : 0);
     let prefix = options.capture ? "" : "?:";
@@ -1777,7 +1777,7 @@ var require_fill_range = __commonJS((exports, module2) => {
     }
     return result;
   };
-  const toRange = (a, b, isNumbers, options) => {
+  var toRange = (a, b, isNumbers, options) => {
     if (isNumbers) {
       return toRegexRange(a, b, {wrap: false, ...options});
     }
@@ -1787,7 +1787,7 @@ var require_fill_range = __commonJS((exports, module2) => {
     let stop = String.fromCharCode(b);
     return `[${start}-${stop}]`;
   };
-  const toRegex = (start, end, options) => {
+  var toRegex = (start, end, options) => {
     if (Array.isArray(start)) {
       let wrap = options.wrap === true;
       let prefix = options.capture ? "" : "?:";
@@ -1795,21 +1795,21 @@ var require_fill_range = __commonJS((exports, module2) => {
     }
     return toRegexRange(start, end, options);
   };
-  const rangeError = (...args) => {
+  var rangeError = (...args) => {
     return new RangeError("Invalid range arguments: " + util.inspect(...args));
   };
-  const invalidRange = (start, end, options) => {
+  var invalidRange = (start, end, options) => {
     if (options.strictRanges === true)
       throw rangeError([start, end]);
     return [];
   };
-  const invalidStep = (step, options) => {
+  var invalidStep = (step, options) => {
     if (options.strictRanges === true) {
       throw new TypeError(`Expected step "${step}" to be a number`);
     }
     return [];
   };
-  const fillNumbers = (start, end, step = 1, options = {}) => {
+  var fillNumbers = (start, end, step = 1, options = {}) => {
     let a = Number(start);
     let b = Number(end);
     if (!Number.isInteger(a) || !Number.isInteger(b)) {
@@ -1851,7 +1851,7 @@ var require_fill_range = __commonJS((exports, module2) => {
     }
     return range;
   };
-  const fillLetters = (start, end, step = 1, options = {}) => {
+  var fillLetters = (start, end, step = 1, options = {}) => {
     if (!isNumber(start) && start.length > 1 || !isNumber(end) && end.length > 1) {
       return invalidRange(start, end, options);
     }
@@ -1876,7 +1876,7 @@ var require_fill_range = __commonJS((exports, module2) => {
     }
     return range;
   };
-  const fill = (start, end, step, options = {}) => {
+  var fill = (start, end, step, options = {}) => {
     if (end == null && isValidValue(start)) {
       return [start];
     }
@@ -1909,9 +1909,9 @@ var require_fill_range = __commonJS((exports, module2) => {
 // node_modules/braces/lib/compile.js
 var require_compile = __commonJS((exports, module2) => {
   "use strict";
-  const fill = require_fill_range();
-  const utils = require_utils2();
-  const compile = (ast, options = {}) => {
+  var fill = require_fill_range();
+  var utils = require_utils2();
+  var compile = (ast, options = {}) => {
     let walk = (node, parent = {}) => {
       let invalidBlock = utils.isInvalidBrace(parent);
       let invalidNode = node.invalid === true && options.escapeInvalid === true;
@@ -1958,10 +1958,10 @@ var require_compile = __commonJS((exports, module2) => {
 // node_modules/braces/lib/expand.js
 var require_expand = __commonJS((exports, module2) => {
   "use strict";
-  const fill = require_fill_range();
-  const stringify = require_stringify();
-  const utils = require_utils2();
-  const append = (queue = "", stash = "", enclose = false) => {
+  var fill = require_fill_range();
+  var stringify = require_stringify();
+  var utils = require_utils2();
+  var append = (queue = "", stash = "", enclose = false) => {
     let result = [];
     queue = [].concat(queue);
     stash = [].concat(stash);
@@ -1985,7 +1985,7 @@ var require_expand = __commonJS((exports, module2) => {
     }
     return utils.flatten(result);
   };
-  const expand = (ast, options = {}) => {
+  var expand = (ast, options = {}) => {
     let rangeLimit = options.rangeLimit === void 0 ? 1e3 : options.rangeLimit;
     let walk = (node, parent = {}) => {
       node.queue = [];
@@ -2105,8 +2105,8 @@ var require_constants = __commonJS((exports, module2) => {
 // node_modules/braces/lib/parse.js
 var require_parse = __commonJS((exports, module2) => {
   "use strict";
-  const stringify = require_stringify();
-  const {
+  var stringify = require_stringify();
+  var {
     MAX_LENGTH,
     CHAR_BACKSLASH,
     CHAR_BACKTICK,
@@ -2123,7 +2123,7 @@ var require_parse = __commonJS((exports, module2) => {
     CHAR_NO_BREAK_SPACE,
     CHAR_ZERO_WIDTH_NOBREAK_SPACE
   } = require_constants();
-  const parse = (input, options = {}) => {
+  var parse = (input, options = {}) => {
     if (typeof input !== "string") {
       throw new TypeError("Expected a string");
     }
@@ -2335,11 +2335,11 @@ var require_parse = __commonJS((exports, module2) => {
 // node_modules/braces/index.js
 var require_braces = __commonJS((exports, module2) => {
   "use strict";
-  const stringify = require_stringify();
-  const compile = require_compile();
-  const expand = require_expand();
-  const parse = require_parse();
-  const braces = (input, options = {}) => {
+  var stringify = require_stringify();
+  var compile = require_compile();
+  var expand = require_expand();
+  var parse = require_parse();
+  var braces = (input, options = {}) => {
     let output = [];
     if (Array.isArray(input)) {
       for (let pattern of input) {
@@ -2396,25 +2396,25 @@ var require_braces = __commonJS((exports, module2) => {
 // node_modules/picomatch/lib/constants.js
 var require_constants2 = __commonJS((exports, module2) => {
   "use strict";
-  const path3 = require("path");
-  const WIN_SLASH = "\\\\/";
-  const WIN_NO_SLASH = `[^${WIN_SLASH}]`;
-  const DOT_LITERAL = "\\.";
-  const PLUS_LITERAL = "\\+";
-  const QMARK_LITERAL = "\\?";
-  const SLASH_LITERAL = "\\/";
-  const ONE_CHAR = "(?=.)";
-  const QMARK = "[^/]";
-  const END_ANCHOR = `(?:${SLASH_LITERAL}|$)`;
-  const START_ANCHOR = `(?:^|${SLASH_LITERAL})`;
-  const DOTS_SLASH = `${DOT_LITERAL}{1,2}${END_ANCHOR}`;
-  const NO_DOT = `(?!${DOT_LITERAL})`;
-  const NO_DOTS = `(?!${START_ANCHOR}${DOTS_SLASH})`;
-  const NO_DOT_SLASH = `(?!${DOT_LITERAL}{0,1}${END_ANCHOR})`;
-  const NO_DOTS_SLASH = `(?!${DOTS_SLASH})`;
-  const QMARK_NO_DOT = `[^.${SLASH_LITERAL}]`;
-  const STAR = `${QMARK}*?`;
-  const POSIX_CHARS = {
+  var path3 = require("path");
+  var WIN_SLASH = "\\\\/";
+  var WIN_NO_SLASH = `[^${WIN_SLASH}]`;
+  var DOT_LITERAL = "\\.";
+  var PLUS_LITERAL = "\\+";
+  var QMARK_LITERAL = "\\?";
+  var SLASH_LITERAL = "\\/";
+  var ONE_CHAR = "(?=.)";
+  var QMARK = "[^/]";
+  var END_ANCHOR = `(?:${SLASH_LITERAL}|$)`;
+  var START_ANCHOR = `(?:^|${SLASH_LITERAL})`;
+  var DOTS_SLASH = `${DOT_LITERAL}{1,2}${END_ANCHOR}`;
+  var NO_DOT = `(?!${DOT_LITERAL})`;
+  var NO_DOTS = `(?!${START_ANCHOR}${DOTS_SLASH})`;
+  var NO_DOT_SLASH = `(?!${DOT_LITERAL}{0,1}${END_ANCHOR})`;
+  var NO_DOTS_SLASH = `(?!${DOTS_SLASH})`;
+  var QMARK_NO_DOT = `[^.${SLASH_LITERAL}]`;
+  var STAR = `${QMARK}*?`;
+  var POSIX_CHARS = {
     DOT_LITERAL,
     PLUS_LITERAL,
     QMARK_LITERAL,
@@ -2431,7 +2431,7 @@ var require_constants2 = __commonJS((exports, module2) => {
     STAR,
     START_ANCHOR
   };
-  const WINDOWS_CHARS = {
+  var WINDOWS_CHARS = {
     ...POSIX_CHARS,
     SLASH_LITERAL: `[${WIN_SLASH}]`,
     QMARK: WIN_NO_SLASH,
@@ -2445,7 +2445,7 @@ var require_constants2 = __commonJS((exports, module2) => {
     START_ANCHOR: `(?:^|[${WIN_SLASH}])`,
     END_ANCHOR: `(?:[${WIN_SLASH}]|$)`
   };
-  const POSIX_REGEX_SOURCE = {
+  var POSIX_REGEX_SOURCE = {
     alnum: "a-zA-Z0-9",
     alpha: "a-zA-Z",
     ascii: "\\x00-\\x7F",
@@ -2537,9 +2537,9 @@ var require_constants2 = __commonJS((exports, module2) => {
 // node_modules/picomatch/lib/utils.js
 var require_utils3 = __commonJS((exports) => {
   "use strict";
-  const path3 = require("path");
-  const win32 = process.platform === "win32";
-  const {
+  var path3 = require("path");
+  var win32 = process.platform === "win32";
+  var {
     REGEX_BACKSLASH,
     REGEX_REMOVE_BACKSLASH,
     REGEX_SPECIAL_CHARS,
@@ -2598,8 +2598,8 @@ var require_utils3 = __commonJS((exports) => {
 // node_modules/picomatch/lib/scan.js
 var require_scan = __commonJS((exports, module2) => {
   "use strict";
-  const utils = require_utils3();
-  const {
+  var utils = require_utils3();
+  var {
     CHAR_ASTERISK,
     CHAR_AT,
     CHAR_BACKWARD_SLASH,
@@ -2616,15 +2616,15 @@ var require_scan = __commonJS((exports, module2) => {
     CHAR_RIGHT_PARENTHESES,
     CHAR_RIGHT_SQUARE_BRACKET
   } = require_constants2();
-  const isPathSeparator = (code) => {
+  var isPathSeparator = (code) => {
     return code === CHAR_FORWARD_SLASH || code === CHAR_BACKWARD_SLASH;
   };
-  const depth = (token) => {
+  var depth = (token) => {
     if (token.isPrefix !== true) {
       token.depth = token.isGlobstar ? Infinity : 1;
     }
   };
-  const scan = (input, options) => {
+  var scan = (input, options) => {
     const opts = options || {};
     const length = input.length - 1;
     const scanToEnd = opts.parts === true || opts.scanToEnd === true;
@@ -2908,16 +2908,16 @@ var require_scan = __commonJS((exports, module2) => {
 // node_modules/picomatch/lib/parse.js
 var require_parse2 = __commonJS((exports, module2) => {
   "use strict";
-  const constants7 = require_constants2();
-  const utils = require_utils3();
-  const {
+  var constants7 = require_constants2();
+  var utils = require_utils3();
+  var {
     MAX_LENGTH,
     POSIX_REGEX_SOURCE,
     REGEX_NON_SPECIAL_CHARS,
     REGEX_SPECIAL_CHARS_BACKREF,
     REPLACEMENTS
   } = constants7;
-  const expandRange = (args, options) => {
+  var expandRange = (args, options) => {
     if (typeof options.expandRange === "function") {
       return options.expandRange(...args, options);
     }
@@ -2930,10 +2930,10 @@ var require_parse2 = __commonJS((exports, module2) => {
     }
     return value;
   };
-  const syntaxError = (type, char) => {
+  var syntaxError = (type, char) => {
     return `Missing ${type}: "${char}" - use "\\\\${char}" to match literal characters`;
   };
-  const parse = (input, options) => {
+  var parse = (input, options) => {
     if (typeof input !== "string") {
       throw new TypeError("Expected a string");
     }
@@ -3682,13 +3682,13 @@ var require_parse2 = __commonJS((exports, module2) => {
 // node_modules/picomatch/lib/picomatch.js
 var require_picomatch = __commonJS((exports, module2) => {
   "use strict";
-  const path3 = require("path");
-  const scan = require_scan();
-  const parse = require_parse2();
-  const utils = require_utils3();
-  const constants7 = require_constants2();
-  const isObject = (val) => val && typeof val === "object" && !Array.isArray(val);
-  const picomatch = (glob, options, returnState = false) => {
+  var path3 = require("path");
+  var scan = require_scan();
+  var parse = require_parse2();
+  var utils = require_utils3();
+  var constants7 = require_constants2();
+  var isObject = (val) => val && typeof val === "object" && !Array.isArray(val);
+  var picomatch = (glob, options, returnState = false) => {
     if (Array.isArray(glob)) {
       const fns = glob.map((input) => picomatch(input, options, returnState));
       const arrayMatcher = (str2) => {
@@ -3840,12 +3840,12 @@ var require_picomatch2 = __commonJS((exports, module2) => {
 // node_modules/micromatch/index.js
 var require_micromatch = __commonJS((exports, module2) => {
   "use strict";
-  const util = require("util");
-  const braces = require_braces();
-  const picomatch = require_picomatch2();
-  const utils = require_utils3();
-  const isEmptyString = (val) => typeof val === "string" && (val === "" || val === "./");
-  const micromatch = (list, patterns, options) => {
+  var util = require("util");
+  var braces = require_braces();
+  var picomatch = require_picomatch2();
+  var utils = require_utils3();
+  var isEmptyString = (val) => typeof val === "string" && (val === "" || val === "./");
+  var micromatch = (list, patterns, options) => {
     patterns = [].concat(patterns);
     list = [].concat(list);
     let omit = new Set();
@@ -4002,17 +4002,17 @@ var require_pattern = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
   exports.matchAny = exports.convertPatternsToRe = exports.makeRe = exports.getPatternParts = exports.expandBraceExpansion = exports.expandPatternsWithBraceExpansion = exports.isAffectDepthOfReadingPattern = exports.endsWithSlashGlobStar = exports.hasGlobStar = exports.getBaseDirectory = exports.getPositivePatterns = exports.getNegativePatterns = exports.isPositivePattern = exports.isNegativePattern = exports.convertToNegativePattern = exports.convertToPositivePattern = exports.isDynamicPattern = exports.isStaticPattern = void 0;
-  const path3 = require("path");
-  const globParent = require_glob_parent();
-  const micromatch = require_micromatch();
-  const picomatch = require_picomatch2();
-  const GLOBSTAR = "**";
-  const ESCAPE_SYMBOL = "\\";
-  const COMMON_GLOB_SYMBOLS_RE = /[*?]|^!/;
-  const REGEX_CHARACTER_CLASS_SYMBOLS_RE = /\[.*]/;
-  const REGEX_GROUP_SYMBOLS_RE = /(?:^|[^!*+?@])\(.*\|.*\)/;
-  const GLOB_EXTENSION_SYMBOLS_RE = /[!*+?@]\(.*\)/;
-  const BRACE_EXPANSIONS_SYMBOLS_RE = /{.*(?:,|\.\.).*}/;
+  var path3 = require("path");
+  var globParent = require_glob_parent();
+  var micromatch = require_micromatch();
+  var picomatch = require_picomatch2();
+  var GLOBSTAR = "**";
+  var ESCAPE_SYMBOL = "\\";
+  var COMMON_GLOB_SYMBOLS_RE = /[*?]|^!/;
+  var REGEX_CHARACTER_CLASS_SYMBOLS_RE = /\[.*]/;
+  var REGEX_GROUP_SYMBOLS_RE = /(?:^|[^!*+?@])\(.*\|.*\)/;
+  var GLOB_EXTENSION_SYMBOLS_RE = /[!*+?@]\(.*\)/;
+  var BRACE_EXPANSIONS_SYMBOLS_RE = /{.*(?:,|\.\.).*}/;
   function isStaticPattern(pattern, options = {}) {
     return !isDynamicPattern(pattern, options);
   }
@@ -4119,9 +4119,9 @@ var require_pattern = __commonJS((exports) => {
 // node_modules/merge2/index.js
 var require_merge2 = __commonJS((exports, module2) => {
   "use strict";
-  const Stream = require("stream");
-  const PassThrough = Stream.PassThrough;
-  const slice = Array.prototype.slice;
+  var Stream = require("stream");
+  var PassThrough = Stream.PassThrough;
+  var slice = Array.prototype.slice;
   module2.exports = merge2;
   function merge2() {
     const streamsQueue = [];
@@ -4238,7 +4238,7 @@ var require_stream = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
   exports.merge = void 0;
-  const merge2 = require_merge2();
+  var merge2 = require_merge2();
   function merge(streams) {
     const mergedStream = merge2(streams);
     streams.forEach((stream) => {
@@ -4274,19 +4274,19 @@ var require_utils4 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
   exports.string = exports.stream = exports.pattern = exports.path = exports.fs = exports.errno = exports.array = void 0;
-  const array = require_array();
+  var array = require_array();
   exports.array = array;
-  const errno = require_errno();
+  var errno = require_errno();
   exports.errno = errno;
-  const fs2 = require_fs();
+  var fs2 = require_fs();
   exports.fs = fs2;
-  const path3 = require_path();
+  var path3 = require_path();
   exports.path = path3;
-  const pattern = require_pattern();
+  var pattern = require_pattern();
   exports.pattern = pattern;
-  const stream = require_stream();
+  var stream = require_stream();
   exports.stream = stream;
-  const string = require_string();
+  var string = require_string();
   exports.string = string;
 });
 
@@ -4295,7 +4295,7 @@ var require_tasks = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
   exports.convertPatternGroupToTask = exports.convertPatternGroupsToTasks = exports.groupPatternsByBaseDirectory = exports.getNegativePatternsAsPositive = exports.getPositivePatterns = exports.convertPatternsToTasks = exports.generate = void 0;
-  const utils = require_utils4();
+  var utils = require_utils4();
   function generate(patterns, settings) {
     const positivePatterns = getPositivePatterns(patterns);
     const negativePatterns = getNegativePatternsAsPositive(patterns, settings.ignore);
@@ -4420,7 +4420,7 @@ var require_sync = __commonJS((exports) => {
 var require_fs2 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const fs2 = require("fs");
+  var fs2 = require("fs");
   exports.FILE_SYSTEM_ADAPTER = {
     lstat: fs2.lstat,
     stat: fs2.stat,
@@ -4440,8 +4440,8 @@ var require_fs2 = __commonJS((exports) => {
 var require_settings = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const fs2 = require_fs2();
-  class Settings {
+  var fs2 = require_fs2();
+  var Settings = class {
     constructor(_options = {}) {
       this._options = _options;
       this.followSymbolicLink = this._getValue(this._options.followSymbolicLink, true);
@@ -4452,7 +4452,7 @@ var require_settings = __commonJS((exports) => {
     _getValue(option, value) {
       return option === void 0 ? value : option;
     }
-  }
+  };
   exports.default = Settings;
 });
 
@@ -4460,9 +4460,9 @@ var require_settings = __commonJS((exports) => {
 var require_out = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const async = require_async();
-  const sync2 = require_sync();
-  const settings_1 = require_settings();
+  var async = require_async();
+  var sync2 = require_sync();
+  var settings_1 = require_settings();
   exports.Settings = settings_1.default;
   function stat(path3, optionsOrSettingsOrCallback, callback) {
     if (typeof optionsOrSettingsOrCallback === "function") {
@@ -4538,13 +4538,13 @@ var require_run_parallel = __commonJS((exports, module2) => {
 var require_constants3 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const NODE_PROCESS_VERSION_PARTS = process.versions.node.split(".");
-  const MAJOR_VERSION = parseInt(NODE_PROCESS_VERSION_PARTS[0], 10);
-  const MINOR_VERSION = parseInt(NODE_PROCESS_VERSION_PARTS[1], 10);
-  const SUPPORTED_MAJOR_VERSION = 10;
-  const SUPPORTED_MINOR_VERSION = 10;
-  const IS_MATCHED_BY_MAJOR = MAJOR_VERSION > SUPPORTED_MAJOR_VERSION;
-  const IS_MATCHED_BY_MAJOR_AND_MINOR = MAJOR_VERSION === SUPPORTED_MAJOR_VERSION && MINOR_VERSION >= SUPPORTED_MINOR_VERSION;
+  var NODE_PROCESS_VERSION_PARTS = process.versions.node.split(".");
+  var MAJOR_VERSION = parseInt(NODE_PROCESS_VERSION_PARTS[0], 10);
+  var MINOR_VERSION = parseInt(NODE_PROCESS_VERSION_PARTS[1], 10);
+  var SUPPORTED_MAJOR_VERSION = 10;
+  var SUPPORTED_MINOR_VERSION = 10;
+  var IS_MATCHED_BY_MAJOR = MAJOR_VERSION > SUPPORTED_MAJOR_VERSION;
+  var IS_MATCHED_BY_MAJOR_AND_MINOR = MAJOR_VERSION === SUPPORTED_MAJOR_VERSION && MINOR_VERSION >= SUPPORTED_MINOR_VERSION;
   exports.IS_SUPPORT_READDIR_WITH_FILE_TYPES = IS_MATCHED_BY_MAJOR || IS_MATCHED_BY_MAJOR_AND_MINOR;
 });
 
@@ -4552,7 +4552,7 @@ var require_constants3 = __commonJS((exports) => {
 var require_fs3 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  class DirentFromStats {
+  var DirentFromStats = class {
     constructor(name, stats) {
       this.name = name;
       this.isBlockDevice = stats.isBlockDevice.bind(stats);
@@ -4563,7 +4563,7 @@ var require_fs3 = __commonJS((exports) => {
       this.isSocket = stats.isSocket.bind(stats);
       this.isSymbolicLink = stats.isSymbolicLink.bind(stats);
     }
-  }
+  };
   function createDirentFromStats(name, stats) {
     return new DirentFromStats(name, stats);
   }
@@ -4574,7 +4574,7 @@ var require_fs3 = __commonJS((exports) => {
 var require_utils5 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const fs2 = require_fs3();
+  var fs2 = require_fs3();
   exports.fs = fs2;
 });
 
@@ -4582,10 +4582,10 @@ var require_utils5 = __commonJS((exports) => {
 var require_async2 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const fsStat = require_out();
-  const rpl = require_run_parallel();
-  const constants_1 = require_constants3();
-  const utils = require_utils5();
+  var fsStat = require_out();
+  var rpl = require_run_parallel();
+  var constants_1 = require_constants3();
+  var utils = require_utils5();
   function read(directory, settings, callback) {
     if (!settings.stats && constants_1.IS_SUPPORT_READDIR_WITH_FILE_TYPES) {
       return readdirWithFileTypes(directory, settings, callback);
@@ -4676,9 +4676,9 @@ var require_async2 = __commonJS((exports) => {
 var require_sync2 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const fsStat = require_out();
-  const constants_1 = require_constants3();
-  const utils = require_utils5();
+  var fsStat = require_out();
+  var constants_1 = require_constants3();
+  var utils = require_utils5();
   function read(directory, settings) {
     if (!settings.stats && constants_1.IS_SUPPORT_READDIR_WITH_FILE_TYPES) {
       return readdirWithFileTypes(directory, settings);
@@ -4731,7 +4731,7 @@ var require_sync2 = __commonJS((exports) => {
 var require_fs4 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const fs2 = require("fs");
+  var fs2 = require("fs");
   exports.FILE_SYSTEM_ADAPTER = {
     lstat: fs2.lstat,
     stat: fs2.stat,
@@ -4753,10 +4753,10 @@ var require_fs4 = __commonJS((exports) => {
 var require_settings2 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const path3 = require("path");
-  const fsStat = require_out();
-  const fs2 = require_fs4();
-  class Settings {
+  var path3 = require("path");
+  var fsStat = require_out();
+  var fs2 = require_fs4();
+  var Settings = class {
     constructor(_options = {}) {
       this._options = _options;
       this.followSymbolicLinks = this._getValue(this._options.followSymbolicLinks, false);
@@ -4773,7 +4773,7 @@ var require_settings2 = __commonJS((exports) => {
     _getValue(option, value) {
       return option === void 0 ? value : option;
     }
-  }
+  };
   exports.default = Settings;
 });
 
@@ -4781,9 +4781,9 @@ var require_settings2 = __commonJS((exports) => {
 var require_out2 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const async = require_async2();
-  const sync2 = require_sync2();
-  const settings_1 = require_settings2();
+  var async = require_async2();
+  var sync2 = require_sync2();
+  var settings_1 = require_settings2();
   exports.Settings = settings_1.default;
   function scandir(path3, optionsOrSettingsOrCallback, callback) {
     if (typeof optionsOrSettingsOrCallback === "function") {
@@ -5029,14 +5029,14 @@ var require_common = __commonJS((exports) => {
 var require_reader = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const common = require_common();
-  class Reader {
+  var common = require_common();
+  var Reader = class {
     constructor(_root, _settings) {
       this._root = _root;
       this._settings = _settings;
       this._root = common.replacePathSegmentSeparator(_root, _settings.pathSegmentSeparator);
     }
-  }
+  };
   exports.default = Reader;
 });
 
@@ -5044,12 +5044,12 @@ var require_reader = __commonJS((exports) => {
 var require_async3 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const events_1 = require("events");
-  const fsScandir = require_out2();
-  const fastq = require_queue();
-  const common = require_common();
-  const reader_1 = require_reader();
-  class AsyncReader extends reader_1.default {
+  var events_1 = require("events");
+  var fsScandir = require_out2();
+  var fastq = require_queue();
+  var common = require_common();
+  var reader_1 = require_reader();
+  var AsyncReader = class extends reader_1.default {
     constructor(_root, _settings) {
       super(_root, _settings);
       this._settings = _settings;
@@ -5133,7 +5133,7 @@ var require_async3 = __commonJS((exports) => {
     _emitEntry(entry) {
       this._emitter.emit("entry", entry);
     }
-  }
+  };
   exports.default = AsyncReader;
 });
 
@@ -5141,8 +5141,8 @@ var require_async3 = __commonJS((exports) => {
 var require_async4 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const async_1 = require_async3();
-  class AsyncProvider {
+  var async_1 = require_async3();
+  var AsyncProvider = class {
     constructor(_root, _settings) {
       this._root = _root;
       this._settings = _settings;
@@ -5161,7 +5161,7 @@ var require_async4 = __commonJS((exports) => {
       });
       this._reader.read();
     }
-  }
+  };
   exports.default = AsyncProvider;
   function callFailureCallback(callback, error) {
     callback(error);
@@ -5175,9 +5175,9 @@ var require_async4 = __commonJS((exports) => {
 var require_stream2 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const stream_1 = require("stream");
-  const async_1 = require_async3();
-  class StreamProvider {
+  var stream_1 = require("stream");
+  var async_1 = require_async3();
+  var StreamProvider = class {
     constructor(_root, _settings) {
       this._root = _root;
       this._settings = _settings;
@@ -5202,7 +5202,7 @@ var require_stream2 = __commonJS((exports) => {
       this._reader.read();
       return this._stream;
     }
-  }
+  };
   exports.default = StreamProvider;
 });
 
@@ -5210,10 +5210,10 @@ var require_stream2 = __commonJS((exports) => {
 var require_sync3 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const fsScandir = require_out2();
-  const common = require_common();
-  const reader_1 = require_reader();
-  class SyncReader extends reader_1.default {
+  var fsScandir = require_out2();
+  var common = require_common();
+  var reader_1 = require_reader();
+  var SyncReader = class extends reader_1.default {
     constructor() {
       super(...arguments);
       this._scandir = fsScandir.scandirSync;
@@ -5264,7 +5264,7 @@ var require_sync3 = __commonJS((exports) => {
     _pushToStorage(entry) {
       this._storage.add(entry);
     }
-  }
+  };
   exports.default = SyncReader;
 });
 
@@ -5272,8 +5272,8 @@ var require_sync3 = __commonJS((exports) => {
 var require_sync4 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const sync_1 = require_sync3();
-  class SyncProvider {
+  var sync_1 = require_sync3();
+  var SyncProvider = class {
     constructor(_root, _settings) {
       this._root = _root;
       this._settings = _settings;
@@ -5282,7 +5282,7 @@ var require_sync4 = __commonJS((exports) => {
     read() {
       return this._reader.read();
     }
-  }
+  };
   exports.default = SyncProvider;
 });
 
@@ -5290,9 +5290,9 @@ var require_sync4 = __commonJS((exports) => {
 var require_settings3 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const path3 = require("path");
-  const fsScandir = require_out2();
-  class Settings {
+  var path3 = require("path");
+  var fsScandir = require_out2();
+  var Settings = class {
     constructor(_options = {}) {
       this._options = _options;
       this.basePath = this._getValue(this._options.basePath, void 0);
@@ -5312,7 +5312,7 @@ var require_settings3 = __commonJS((exports) => {
     _getValue(option, value) {
       return option === void 0 ? value : option;
     }
-  }
+  };
   exports.default = Settings;
 });
 
@@ -5320,10 +5320,10 @@ var require_settings3 = __commonJS((exports) => {
 var require_out3 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const async_1 = require_async4();
-  const stream_1 = require_stream2();
-  const sync_1 = require_sync4();
-  const settings_1 = require_settings3();
+  var async_1 = require_async4();
+  var stream_1 = require_stream2();
+  var sync_1 = require_sync4();
+  var settings_1 = require_settings3();
   exports.Settings = settings_1.default;
   function walk(directory, optionsOrSettingsOrCallback, callback) {
     if (typeof optionsOrSettingsOrCallback === "function") {
@@ -5356,10 +5356,10 @@ var require_out3 = __commonJS((exports) => {
 var require_reader2 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const path3 = require("path");
-  const fsStat = require_out();
-  const utils = require_utils4();
-  class Reader {
+  var path3 = require("path");
+  var fsStat = require_out();
+  var utils = require_utils4();
+  var Reader = class {
     constructor(_settings) {
       this._settings = _settings;
       this._fsStatSettings = new fsStat.Settings({
@@ -5385,7 +5385,7 @@ var require_reader2 = __commonJS((exports) => {
     _isFatalError(error) {
       return !utils.errno.isEnoentCodeError(error) && !this._settings.suppressErrors;
     }
-  }
+  };
   exports.default = Reader;
 });
 
@@ -5393,11 +5393,11 @@ var require_reader2 = __commonJS((exports) => {
 var require_stream3 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const stream_1 = require("stream");
-  const fsStat = require_out();
-  const fsWalk = require_out3();
-  const reader_1 = require_reader2();
-  class ReaderStream extends reader_1.default {
+  var stream_1 = require("stream");
+  var fsStat = require_out();
+  var fsWalk = require_out3();
+  var reader_1 = require_reader2();
+  var ReaderStream = class extends reader_1.default {
     constructor() {
       super(...arguments);
       this._walkStream = fsWalk.walkStream;
@@ -5440,7 +5440,7 @@ var require_stream3 = __commonJS((exports) => {
         });
       });
     }
-  }
+  };
   exports.default = ReaderStream;
 });
 
@@ -5448,8 +5448,8 @@ var require_stream3 = __commonJS((exports) => {
 var require_matcher = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const utils = require_utils4();
-  class Matcher {
+  var utils = require_utils4();
+  var Matcher = class {
     constructor(_patterns, _settings, _micromatchOptions) {
       this._patterns = _patterns;
       this._settings = _settings;
@@ -5490,7 +5490,7 @@ var require_matcher = __commonJS((exports) => {
     _splitSegmentsIntoSections(segments) {
       return utils.array.splitWhen(segments, (segment) => segment.dynamic && utils.pattern.hasGlobStar(segment.pattern));
     }
-  }
+  };
   exports.default = Matcher;
 });
 
@@ -5498,8 +5498,8 @@ var require_matcher = __commonJS((exports) => {
 var require_partial = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const matcher_1 = require_matcher();
-  class PartialMatcher extends matcher_1.default {
+  var matcher_1 = require_matcher();
+  var PartialMatcher = class extends matcher_1.default {
     match(filepath) {
       const parts = filepath.split("/");
       const levels = parts.length;
@@ -5525,7 +5525,7 @@ var require_partial = __commonJS((exports) => {
       }
       return false;
     }
-  }
+  };
   exports.default = PartialMatcher;
 });
 
@@ -5533,9 +5533,9 @@ var require_partial = __commonJS((exports) => {
 var require_deep = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const utils = require_utils4();
-  const partial_1 = require_partial();
-  class DeepFilter {
+  var utils = require_utils4();
+  var partial_1 = require_partial();
+  var DeepFilter = class {
     constructor(_settings, _micromatchOptions) {
       this._settings = _settings;
       this._micromatchOptions = _micromatchOptions;
@@ -5588,7 +5588,7 @@ var require_deep = __commonJS((exports) => {
     _isSkippedByNegativePatterns(entryPath, patternsRe) {
       return !utils.pattern.matchAny(entryPath, patternsRe);
     }
-  }
+  };
   exports.default = DeepFilter;
 });
 
@@ -5596,8 +5596,8 @@ var require_deep = __commonJS((exports) => {
 var require_entry = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const utils = require_utils4();
-  class EntryFilter {
+  var utils = require_utils4();
+  var EntryFilter = class {
     constructor(_settings, _micromatchOptions) {
       this._settings = _settings;
       this._micromatchOptions = _micromatchOptions;
@@ -5648,7 +5648,7 @@ var require_entry = __commonJS((exports) => {
       const filepath = utils.path.removeLeadingDotSegment(entryPath);
       return utils.pattern.matchAny(filepath, patternsRe);
     }
-  }
+  };
   exports.default = EntryFilter;
 });
 
@@ -5656,8 +5656,8 @@ var require_entry = __commonJS((exports) => {
 var require_error = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const utils = require_utils4();
-  class ErrorFilter {
+  var utils = require_utils4();
+  var ErrorFilter = class {
     constructor(_settings) {
       this._settings = _settings;
     }
@@ -5667,7 +5667,7 @@ var require_error = __commonJS((exports) => {
     _isNonFatalError(error) {
       return utils.errno.isEnoentCodeError(error) || this._settings.suppressErrors;
     }
-  }
+  };
   exports.default = ErrorFilter;
 });
 
@@ -5675,8 +5675,8 @@ var require_error = __commonJS((exports) => {
 var require_entry2 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const utils = require_utils4();
-  class EntryTransformer {
+  var utils = require_utils4();
+  var EntryTransformer = class {
     constructor(_settings) {
       this._settings = _settings;
     }
@@ -5697,7 +5697,7 @@ var require_entry2 = __commonJS((exports) => {
       }
       return Object.assign(Object.assign({}, entry), {path: filepath});
     }
-  }
+  };
   exports.default = EntryTransformer;
 });
 
@@ -5705,12 +5705,12 @@ var require_entry2 = __commonJS((exports) => {
 var require_provider = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const path3 = require("path");
-  const deep_1 = require_deep();
-  const entry_1 = require_entry();
-  const error_1 = require_error();
-  const entry_2 = require_entry2();
-  class Provider {
+  var path3 = require("path");
+  var deep_1 = require_deep();
+  var entry_1 = require_entry();
+  var error_1 = require_error();
+  var entry_2 = require_entry2();
+  var Provider = class {
     constructor(_settings) {
       this._settings = _settings;
       this.errorFilter = new error_1.default(this._settings);
@@ -5749,7 +5749,7 @@ var require_provider = __commonJS((exports) => {
         strictSlashes: false
       };
     }
-  }
+  };
   exports.default = Provider;
 });
 
@@ -5757,9 +5757,9 @@ var require_provider = __commonJS((exports) => {
 var require_async5 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const stream_1 = require_stream3();
-  const provider_1 = require_provider();
-  class ProviderAsync extends provider_1.default {
+  var stream_1 = require_stream3();
+  var provider_1 = require_provider();
+  var ProviderAsync = class extends provider_1.default {
     constructor() {
       super(...arguments);
       this._reader = new stream_1.default(this._settings);
@@ -5781,7 +5781,7 @@ var require_async5 = __commonJS((exports) => {
       }
       return this._reader.static(task.patterns, options);
     }
-  }
+  };
   exports.default = ProviderAsync;
 });
 
@@ -5789,10 +5789,10 @@ var require_async5 = __commonJS((exports) => {
 var require_stream4 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const stream_1 = require("stream");
-  const stream_2 = require_stream3();
-  const provider_1 = require_provider();
-  class ProviderStream extends provider_1.default {
+  var stream_1 = require("stream");
+  var stream_2 = require_stream3();
+  var provider_1 = require_provider();
+  var ProviderStream = class extends provider_1.default {
     constructor() {
       super(...arguments);
       this._reader = new stream_2.default(this._settings);
@@ -5813,7 +5813,7 @@ var require_stream4 = __commonJS((exports) => {
       }
       return this._reader.static(task.patterns, options);
     }
-  }
+  };
   exports.default = ProviderStream;
 });
 
@@ -5821,10 +5821,10 @@ var require_stream4 = __commonJS((exports) => {
 var require_sync5 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const fsStat = require_out();
-  const fsWalk = require_out3();
-  const reader_1 = require_reader2();
-  class ReaderSync extends reader_1.default {
+  var fsStat = require_out();
+  var fsWalk = require_out3();
+  var reader_1 = require_reader2();
+  var ReaderSync = class extends reader_1.default {
     constructor() {
       super(...arguments);
       this._walkSync = fsWalk.walkSync;
@@ -5859,7 +5859,7 @@ var require_sync5 = __commonJS((exports) => {
     _getStat(filepath) {
       return this._statSync(filepath, this._fsStatSettings);
     }
-  }
+  };
   exports.default = ReaderSync;
 });
 
@@ -5867,9 +5867,9 @@ var require_sync5 = __commonJS((exports) => {
 var require_sync6 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const sync_1 = require_sync5();
-  const provider_1 = require_provider();
-  class ProviderSync extends provider_1.default {
+  var sync_1 = require_sync5();
+  var provider_1 = require_provider();
+  var ProviderSync = class extends provider_1.default {
     constructor() {
       super(...arguments);
       this._reader = new sync_1.default(this._settings);
@@ -5886,7 +5886,7 @@ var require_sync6 = __commonJS((exports) => {
       }
       return this._reader.static(task.patterns, options);
     }
-  }
+  };
   exports.default = ProviderSync;
 });
 
@@ -5895,9 +5895,9 @@ var require_settings4 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
   exports.DEFAULT_FILE_SYSTEM_ADAPTER = void 0;
-  const fs2 = require("fs");
-  const os = require("os");
-  const CPU_COUNT = os.cpus().length;
+  var fs2 = require("fs");
+  var os = require("os");
+  var CPU_COUNT = os.cpus().length;
   exports.DEFAULT_FILE_SYSTEM_ADAPTER = {
     lstat: fs2.lstat,
     lstatSync: fs2.lstatSync,
@@ -5906,7 +5906,7 @@ var require_settings4 = __commonJS((exports) => {
     readdir: fs2.readdir,
     readdirSync: fs2.readdirSync
   };
-  class Settings {
+  var Settings = class {
     constructor(_options = {}) {
       this._options = _options;
       this.absolute = this._getValue(this._options.absolute, false);
@@ -5943,19 +5943,19 @@ var require_settings4 = __commonJS((exports) => {
     _getFileSystemMethods(methods = {}) {
       return Object.assign(Object.assign({}, exports.DEFAULT_FILE_SYSTEM_ADAPTER), methods);
     }
-  }
+  };
   exports.default = Settings;
 });
 
 // node_modules/fast-glob/out/index.js
 var require_out4 = __commonJS((exports, module2) => {
   "use strict";
-  const taskManager = require_tasks();
-  const async_1 = require_async5();
-  const stream_1 = require_stream4();
-  const sync_1 = require_sync6();
-  const settings_1 = require_settings4();
-  const utils = require_utils4();
+  var taskManager = require_tasks();
+  var async_1 = require_async5();
+  var stream_1 = require_stream4();
+  var sync_1 = require_sync6();
+  var settings_1 = require_settings4();
+  var utils = require_utils4();
   async function FastGlob(source, options) {
     assertPatternsInput(source);
     const works = getWorks(source, async_1.default, options);
@@ -6215,24 +6215,24 @@ var require_isIP = __commonJS((exports, module2) => {
 
 // node_modules/envalid/src/validators.js
 var require_validators = __commonJS((exports) => {
-  const isFQDN = require_isFQDN();
-  const isIP = require_isIP();
-  const EMAIL_REGEX2 = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-  class EnvError extends TypeError {
+  var isFQDN = require_isFQDN();
+  var isIP = require_isIP();
+  var EMAIL_REGEX2 = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  var EnvError = class extends TypeError {
     constructor(...args) {
       super(...args);
       Error.captureStackTrace(this, EnvError);
       this.name = "EnvError";
     }
-  }
+  };
   exports.EnvError = EnvError;
-  class EnvMissingError extends ReferenceError {
+  var EnvMissingError = class extends ReferenceError {
     constructor(...args) {
       super(...args);
       Error.captureStackTrace(this, EnvMissingError);
       this.name = "EnvMissingError";
     }
-  }
+  };
   exports.EnvMissingError = EnvMissingError;
   function makeValidator(parseFn, type = "unknown") {
     return function(spec = {}) {
@@ -6316,7 +6316,7 @@ var require_validators = __commonJS((exports) => {
 
 // node_modules/envalid/src/utils.js
 var require_utils6 = __commonJS((exports) => {
-  const extend = (x = {}, y = {}) => Object.assign({}, x, y);
+  var extend = (x = {}, y = {}) => Object.assign({}, x, y);
   exports.extend = extend;
 });
 
@@ -6477,12 +6477,12 @@ var require_color_name = __commonJS((exports, module2) => {
 
 // node_modules/color-convert/conversions.js
 var require_conversions = __commonJS((exports, module2) => {
-  const cssKeywords = require_color_name();
-  const reverseKeywords = {};
+  var cssKeywords = require_color_name();
+  var reverseKeywords = {};
   for (const key of Object.keys(cssKeywords)) {
     reverseKeywords[cssKeywords[key]] = key;
   }
-  const convert = {
+  var convert = {
     rgb: {channels: 3, labels: "rgb"},
     hsl: {channels: 3, labels: "hsl"},
     hsv: {channels: 3, labels: "hsv"},
@@ -7146,7 +7146,7 @@ var require_conversions = __commonJS((exports, module2) => {
 
 // node_modules/color-convert/route.js
 var require_route = __commonJS((exports, module2) => {
-  const conversions = require_conversions();
+  var conversions = require_conversions();
   function buildGraph() {
     const graph = {};
     const models = Object.keys(conversions);
@@ -7212,10 +7212,10 @@ var require_route = __commonJS((exports, module2) => {
 
 // node_modules/color-convert/index.js
 var require_color_convert = __commonJS((exports, module2) => {
-  const conversions = require_conversions();
-  const route = require_route();
-  const convert = {};
-  const models = Object.keys(conversions);
+  var conversions = require_conversions();
+  var route = require_route();
+  var convert = {};
+  var models = Object.keys(conversions);
   function wrapRaw(fn) {
     const wrappedFn = function(...args) {
       const arg0 = args[0];
@@ -7272,21 +7272,21 @@ var require_color_convert = __commonJS((exports, module2) => {
 // node_modules/ansi-styles/index.js
 var require_ansi_styles = __commonJS((exports, module2) => {
   "use strict";
-  const wrapAnsi16 = (fn, offset) => (...args) => {
+  var wrapAnsi16 = (fn, offset) => (...args) => {
     const code = fn(...args);
     return `[${code + offset}m`;
   };
-  const wrapAnsi256 = (fn, offset) => (...args) => {
+  var wrapAnsi256 = (fn, offset) => (...args) => {
     const code = fn(...args);
     return `[${38 + offset};5;${code}m`;
   };
-  const wrapAnsi16m = (fn, offset) => (...args) => {
+  var wrapAnsi16m = (fn, offset) => (...args) => {
     const rgb = fn(...args);
     return `[${38 + offset};2;${rgb[0]};${rgb[1]};${rgb[2]}m`;
   };
-  const ansi2ansi = (n) => n;
-  const rgb2rgb = (r, g, b) => [r, g, b];
-  const setLazyProperty = (object, property, get) => {
+  var ansi2ansi = (n) => n;
+  var rgb2rgb = (r, g, b) => [r, g, b];
+  var setLazyProperty = (object, property, get) => {
     Object.defineProperty(object, property, {
       get: () => {
         const value = get();
@@ -7301,8 +7301,8 @@ var require_ansi_styles = __commonJS((exports, module2) => {
       configurable: true
     });
   };
-  let colorConvert;
-  const makeDynamicStyles = (wrap, targetSpace, identity, isBackground) => {
+  var colorConvert;
+  var makeDynamicStyles = (wrap, targetSpace, identity, isBackground) => {
     if (colorConvert === void 0) {
       colorConvert = require_color_convert();
     }
@@ -7418,7 +7418,7 @@ var require_browser = __commonJS((exports, module2) => {
 // node_modules/envalid/node_modules/chalk/source/util.js
 var require_util = __commonJS((exports, module2) => {
   "use strict";
-  const stringReplaceAll = (string, substring, replacer) => {
+  var stringReplaceAll = (string, substring, replacer) => {
     let index = string.indexOf(substring);
     if (index === -1) {
       return string;
@@ -7434,7 +7434,7 @@ var require_util = __commonJS((exports, module2) => {
     returnValue += string.substr(endIndex);
     return returnValue;
   };
-  const stringEncaseCRLFWithFirstIndex = (string, prefix, postfix, index) => {
+  var stringEncaseCRLFWithFirstIndex = (string, prefix, postfix, index) => {
     let endIndex = 0;
     let returnValue = "";
     do {
@@ -7455,11 +7455,11 @@ var require_util = __commonJS((exports, module2) => {
 // node_modules/envalid/node_modules/chalk/source/templates.js
 var require_templates = __commonJS((exports, module2) => {
   "use strict";
-  const TEMPLATE_REGEX = /(?:\\(u(?:[a-f\d]{4}|\{[a-f\d]{1,6}\})|x[a-f\d]{2}|.))|(?:\{(~)?(\w+(?:\([^)]*\))?(?:\.\w+(?:\([^)]*\))?)*)(?:[ \t]|(?=\r?\n)))|(\})|((?:.|[\r\n\f])+?)/gi;
-  const STYLE_REGEX = /(?:^|\.)(\w+)(?:\(([^)]*)\))?/g;
-  const STRING_REGEX = /^(['"])((?:\\.|(?!\1)[^\\])*)\1$/;
-  const ESCAPE_REGEX = /\\(u(?:[a-f\d]{4}|\{[a-f\d]{1,6}\})|x[a-f\d]{2}|.)|([^\\])/gi;
-  const ESCAPES = new Map([
+  var TEMPLATE_REGEX = /(?:\\(u(?:[a-f\d]{4}|\{[a-f\d]{1,6}\})|x[a-f\d]{2}|.))|(?:\{(~)?(\w+(?:\([^)]*\))?(?:\.\w+(?:\([^)]*\))?)*)(?:[ \t]|(?=\r?\n)))|(\})|((?:.|[\r\n\f])+?)/gi;
+  var STYLE_REGEX = /(?:^|\.)(\w+)(?:\(([^)]*)\))?/g;
+  var STRING_REGEX = /^(['"])((?:\\.|(?!\1)[^\\])*)\1$/;
+  var ESCAPE_REGEX = /\\(u(?:[a-f\d]{4}|\{[a-f\d]{1,6}\})|x[a-f\d]{2}|.)|([^\\])/gi;
+  var ESCAPES = new Map([
     ["n", "\n"],
     ["r", "\r"],
     ["t", "	"],
@@ -7567,32 +7567,32 @@ var require_templates = __commonJS((exports, module2) => {
 // node_modules/envalid/node_modules/chalk/source/index.js
 var require_source = __commonJS((exports, module2) => {
   "use strict";
-  const ansiStyles = require_ansi_styles();
-  const {stdout: stdoutColor, stderr: stderrColor} = require_browser();
-  const {
+  var ansiStyles = require_ansi_styles();
+  var {stdout: stdoutColor, stderr: stderrColor} = require_browser();
+  var {
     stringReplaceAll,
     stringEncaseCRLFWithFirstIndex
   } = require_util();
-  const levelMapping = [
+  var levelMapping = [
     "ansi",
     "ansi",
     "ansi256",
     "ansi16m"
   ];
-  const styles = Object.create(null);
-  const applyOptions = (object, options = {}) => {
+  var styles = Object.create(null);
+  var applyOptions = (object, options = {}) => {
     if (options.level > 3 || options.level < 0) {
       throw new Error("The `level` option should be an integer from 0 to 3");
     }
     const colorLevel = stdoutColor ? stdoutColor.level : 0;
     object.level = options.level === void 0 ? colorLevel : options.level;
   };
-  class ChalkClass {
+  var ChalkClass = class {
     constructor(options) {
       return chalkFactory(options);
     }
-  }
-  const chalkFactory = (options) => {
+  };
+  var chalkFactory = (options) => {
     const chalk2 = {};
     applyOptions(chalk2, options);
     chalk2.template = (...arguments_) => chalkTag(chalk2.template, ...arguments_);
@@ -7623,7 +7623,7 @@ var require_source = __commonJS((exports, module2) => {
       return builder;
     }
   };
-  const usedModels = ["rgb", "hex", "keyword", "hsl", "hsv", "hwb", "ansi", "ansi256"];
+  var usedModels = ["rgb", "hex", "keyword", "hsl", "hsv", "hwb", "ansi", "ansi256"];
   for (const model of usedModels) {
     styles[model] = {
       get() {
@@ -7647,7 +7647,7 @@ var require_source = __commonJS((exports, module2) => {
       }
     };
   }
-  const proto = Object.defineProperties(() => {
+  var proto = Object.defineProperties(() => {
   }, {
     ...styles,
     level: {
@@ -7660,7 +7660,7 @@ var require_source = __commonJS((exports, module2) => {
       }
     }
   });
-  const createStyler = (open, close, parent) => {
+  var createStyler = (open, close, parent) => {
     let openAll;
     let closeAll;
     if (parent === void 0) {
@@ -7678,7 +7678,7 @@ var require_source = __commonJS((exports, module2) => {
       parent
     };
   };
-  const createBuilder = (self2, _styler, _isEmpty) => {
+  var createBuilder = (self2, _styler, _isEmpty) => {
     const builder = (...arguments_) => {
       return applyStyle(builder, arguments_.length === 1 ? "" + arguments_[0] : arguments_.join(" "));
     };
@@ -7688,7 +7688,7 @@ var require_source = __commonJS((exports, module2) => {
     builder._isEmpty = _isEmpty;
     return builder;
   };
-  const applyStyle = (self2, string) => {
+  var applyStyle = (self2, string) => {
     if (self2.level <= 0 || !string) {
       return self2._isEmpty ? "" : string;
     }
@@ -7709,8 +7709,8 @@ var require_source = __commonJS((exports, module2) => {
     }
     return openAll + string + closeAll;
   };
-  let template;
-  const chalkTag = (chalk2, ...strings) => {
+  var template;
+  var chalkTag = (chalk2, ...strings) => {
     const [firstString] = strings;
     if (!Array.isArray(firstString)) {
       return strings.join(" ");
@@ -7726,7 +7726,7 @@ var require_source = __commonJS((exports, module2) => {
     return template(chalk2, parts.join(""));
   };
   Object.defineProperties(Chalk.prototype, styles);
-  const chalk = Chalk();
+  var chalk = Chalk();
   chalk.supportsColor = stdoutColor;
   chalk.stderr = Chalk({level: stderrColor ? stderrColor.level : 0});
   chalk.stderr.supportsColor = stderrColor;
@@ -7745,9 +7745,9 @@ var require_source = __commonJS((exports, module2) => {
 
 // node_modules/envalid/src/reporter.js
 var require_reporter = __commonJS((exports, module2) => {
-  const {EnvMissingError} = require_validators();
-  const chalk = require_source();
-  const RULE = chalk.grey("================================");
+  var {EnvMissingError} = require_validators();
+  var chalk = require_source();
+  var RULE = chalk.grey("================================");
   module2.exports = function defaultReporter({errors = {}, env: env2 = {}}) {
     const errorKeys = Object.keys(errors);
     if (!errorKeys.length)
@@ -7823,15 +7823,15 @@ var require_meant = __commonJS((exports, module2) => {
 
 // node_modules/envalid/src/strictProxy.js
 var require_strictProxy = __commonJS((exports, module2) => {
-  const meant = require_meant();
-  const didYouMean = (scmd, commands) => {
+  var meant = require_meant();
+  var didYouMean = (scmd, commands) => {
     const bestSimilarity = meant(scmd, commands);
     const suggestion = bestSimilarity.join(", ");
     if (bestSimilarity.length > 0) {
       throw new ReferenceError(`[envalid] Env var ${scmd} not found, did you mean ${suggestion}?`);
     }
   };
-  const inspectables = [
+  var inspectables = [
     "length",
     "inspect",
     "hasOwnProperty",
@@ -7840,7 +7840,7 @@ var require_strictProxy = __commonJS((exports, module2) => {
     "then",
     "__esModule"
   ];
-  const inspectSymbolStrings = ["Symbol(util.inspect.custom)", "Symbol(nodejs.util.inspect.custom)"];
+  var inspectSymbolStrings = ["Symbol(util.inspect.custom)", "Symbol(nodejs.util.inspect.custom)"];
   module2.exports = (envObj, originalEnv) => new Proxy(envObj, {
     get(target, name) {
       if (inspectables.includes(name) || inspectSymbolStrings.includes(name.toString())) {
@@ -7864,7 +7864,7 @@ var require_strictProxy = __commonJS((exports, module2) => {
 
 // node_modules/envalid/src/envalidWithoutDotenv.js
 var require_envalidWithoutDotenv = __commonJS((exports, module2) => {
-  const {
+  var {
     EnvError,
     EnvMissingError,
     makeValidator,
@@ -7877,8 +7877,8 @@ var require_envalidWithoutDotenv = __commonJS((exports, module2) => {
     host,
     port
   } = require_validators();
-  const {extend} = require_utils6();
-  const testOnlySymbol = Symbol("envalid - test only");
+  var {extend} = require_utils6();
+  var testOnlySymbol = Symbol("envalid - test only");
   function validateVar({spec = {}, name, rawValue}) {
     if (typeof spec._parse !== "function") {
       throw new EnvError(`Invalid spec for "${name}"`);
@@ -7957,7 +7957,7 @@ var require_envalidWithoutDotenv = __commonJS((exports, module2) => {
       output = require_strictProxy()(output, env2);
     return Object.freeze(output);
   }
-  const testOnly2 = (defaultValueForTests) => {
+  var testOnly2 = (defaultValueForTests) => {
     return process.env.NODE_ENV === "test" ? defaultValueForTests : testOnlySymbol;
   };
   module2.exports = {
@@ -7979,15 +7979,15 @@ var require_envalidWithoutDotenv = __commonJS((exports, module2) => {
 
 // node_modules/dotenv/lib/main.js
 var require_main = __commonJS((exports, module2) => {
-  const fs2 = require("fs");
-  const path3 = require("path");
+  var fs2 = require("fs");
+  var path3 = require("path");
   function log(message) {
     console.log(`[dotenv][DEBUG] ${message}`);
   }
-  const NEWLINE = "\n";
-  const RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/;
-  const RE_NEWLINES = /\\n/g;
-  const NEWLINES_MATCH = /\n|\r|\r\n/;
+  var NEWLINE = "\n";
+  var RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/;
+  var RE_NEWLINES = /\\n/g;
+  var NEWLINES_MATCH = /\n|\r|\r\n/;
   function parse(src2, options) {
     const debug19 = Boolean(options && options.debug);
     const obj = {};
@@ -8049,10 +8049,10 @@ var require_main = __commonJS((exports, module2) => {
 
 // node_modules/envalid/src/envalid.js
 var require_envalid = __commonJS((exports, module2) => {
-  const envalid3 = require_envalidWithoutDotenv();
-  const {extend} = require_utils6();
-  const fs2 = require("fs");
-  const dotenv = require_main();
+  var envalid3 = require_envalidWithoutDotenv();
+  var {extend} = require_utils6();
+  var fs2 = require("fs");
+  var dotenv = require_main();
   function extendWithDotEnv(inputEnv, dotEnvPath = ".env") {
     let dotEnvBuffer = null;
     try {
@@ -8065,7 +8065,7 @@ var require_envalid = __commonJS((exports, module2) => {
     const parsed = dotenv.parse(dotEnvBuffer);
     return extend(parsed, inputEnv);
   }
-  const originalCleanEnv = envalid3.cleanEnv;
+  var originalCleanEnv = envalid3.cleanEnv;
   envalid3.cleanEnv = function cleanEnv(inputEnv, specs = {}, options = {}) {
     const env2 = options.dotEnvPath !== null ? extendWithDotEnv(inputEnv, options.dotEnvPath) : inputEnv;
     return originalCleanEnv(env2, specs, options);
@@ -14623,7 +14623,7 @@ var require_browser2 = __commonJS((exports, module2) => {
     }
   }
   module2.exports = require_common2()(exports);
-  const {formatters} = module2.exports;
+  var {formatters} = module2.exports;
   formatters.j = function(v) {
     try {
       return JSON.stringify(v);
@@ -14635,8 +14635,8 @@ var require_browser2 = __commonJS((exports, module2) => {
 
 // node_modules/debug/src/node.js
 var require_node = __commonJS((exports, module2) => {
-  const tty = require("tty");
-  const util = require("util");
+  var tty = require("tty");
+  var util = require("util");
   exports.init = init;
   exports.log = log;
   exports.formatArgs = formatArgs;
@@ -14791,7 +14791,7 @@ var require_node = __commonJS((exports, module2) => {
     }
   }
   module2.exports = require_common2()(exports);
-  const {formatters} = module2.exports;
+  var {formatters} = module2.exports;
   formatters.o = function(v) {
     this.inspectOpts.colors = this.useColors;
     return util.inspect(v, this.inspectOpts).split("\n").map((str2) => str2.trim()).join(" ");
@@ -15064,7 +15064,7 @@ var require_dist_node2 = __commonJS((exports) => {
       return `${name}=${encodeURIComponent(parameters[name])}`;
     }).join("&");
   }
-  const urlVariableRegex = /\{[^}]+\}/g;
+  var urlVariableRegex = /\{[^}]+\}/g;
   function removeNonChars(variableName) {
     return variableName.replace(/^\W+|\W+$/g, "").split(/,/);
   }
@@ -15267,9 +15267,9 @@ var require_dist_node2 = __commonJS((exports) => {
       parse
     });
   }
-  const VERSION = "6.0.9";
-  const userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`;
-  const DEFAULTS = {
+  var VERSION = "6.0.9";
+  var userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`;
+  var DEFAULTS = {
     method: "GET",
     baseUrl: "https://api.github.com",
     headers: {
@@ -15281,7 +15281,7 @@ var require_dist_node2 = __commonJS((exports) => {
       previews: []
     }
   };
-  const endpoint = withDefaults(null, DEFAULTS);
+  var endpoint = withDefaults(null, DEFAULTS);
   exports.endpoint = endpoint;
 });
 
@@ -15325,15 +15325,15 @@ var require_lib = __commonJS((exports) => {
     Response: () => Response,
     default: () => lib_default
   });
-  const stream = __toModule(require("stream"));
-  const http2 = __toModule(require("http"));
-  const url = __toModule(require("url"));
-  const https2 = __toModule(require("https"));
-  const zlib2 = __toModule(require("zlib"));
-  const Readable = stream.default.Readable;
-  const BUFFER = Symbol("buffer");
-  const TYPE = Symbol("type");
-  class Blob {
+  var stream = __toModule(require("stream"));
+  var http2 = __toModule(require("http"));
+  var url = __toModule(require("url"));
+  var https2 = __toModule(require("https"));
+  var zlib2 = __toModule(require("zlib"));
+  var Readable = stream.default.Readable;
+  var BUFFER = Symbol("buffer");
+  var TYPE = Symbol("type");
+  var Blob = class {
     constructor() {
       this[TYPE] = "";
       const blobParts = arguments[0];
@@ -15418,7 +15418,7 @@ var require_lib = __commonJS((exports) => {
       blob[BUFFER] = slicedBuffer;
       return blob;
     }
-  }
+  };
   Object.defineProperties(Blob.prototype, {
     size: {enumerable: true},
     type: {enumerable: true},
@@ -15442,13 +15442,13 @@ var require_lib = __commonJS((exports) => {
   FetchError.prototype = Object.create(Error.prototype);
   FetchError.prototype.constructor = FetchError;
   FetchError.prototype.name = "FetchError";
-  let convert;
+  var convert;
   try {
     convert = require("encoding").convert;
   } catch (e) {
   }
-  const INTERNALS = Symbol("Body internals");
-  const PassThrough = stream.default.PassThrough;
+  var INTERNALS = Symbol("Body internals");
+  var PassThrough = stream.default.PassThrough;
   function Body(body) {
     var _this = this;
     var _ref = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, _ref$size = _ref.size;
@@ -15731,8 +15731,8 @@ var require_lib = __commonJS((exports) => {
     }
   }
   Body.Promise = global.Promise;
-  const invalidTokenRegex = /[^\^_`a-zA-Z\-0-9!#$%&'*+.|~]/;
-  const invalidHeaderCharRegex = /[^\t\x20-\x7e\x80-\xff]/;
+  var invalidTokenRegex = /[^\^_`a-zA-Z\-0-9!#$%&'*+.|~]/;
+  var invalidHeaderCharRegex = /[^\t\x20-\x7e\x80-\xff]/;
   function validateName(name) {
     name = `${name}`;
     if (invalidTokenRegex.test(name) || name === "") {
@@ -15754,8 +15754,8 @@ var require_lib = __commonJS((exports) => {
     }
     return void 0;
   }
-  const MAP = Symbol("map");
-  class Headers {
+  var MAP = Symbol("map");
+  var Headers = class {
     constructor() {
       let init = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : void 0;
       this[MAP] = Object.create(null);
@@ -15866,7 +15866,7 @@ var require_lib = __commonJS((exports) => {
     [Symbol.iterator]() {
       return createHeadersIterator(this, "key+value");
     }
-  }
+  };
   Headers.prototype.entries = Headers.prototype[Symbol.iterator];
   Object.defineProperty(Headers.prototype, Symbol.toStringTag, {
     value: "Headers",
@@ -15896,7 +15896,7 @@ var require_lib = __commonJS((exports) => {
       return [k.toLowerCase(), headers[MAP][k].join(", ")];
     });
   }
-  const INTERNAL = Symbol("internal");
+  var INTERNAL = Symbol("internal");
   function createHeadersIterator(target, kind) {
     const iterator = Object.create(HeadersIteratorPrototype);
     iterator[INTERNAL] = {
@@ -15906,7 +15906,7 @@ var require_lib = __commonJS((exports) => {
     };
     return iterator;
   }
-  const HeadersIteratorPrototype = Object.setPrototypeOf({
+  var HeadersIteratorPrototype = Object.setPrototypeOf({
     next() {
       if (!this || Object.getPrototypeOf(this) !== HeadersIteratorPrototype) {
         throw new TypeError("Value of `this` is not a HeadersIterator");
@@ -15965,9 +15965,9 @@ var require_lib = __commonJS((exports) => {
     }
     return headers;
   }
-  const INTERNALS$1 = Symbol("Response internals");
-  const STATUS_CODES = http2.default.STATUS_CODES;
-  class Response {
+  var INTERNALS$1 = Symbol("Response internals");
+  var STATUS_CODES = http2.default.STATUS_CODES;
+  var Response = class {
     constructor() {
       let body = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : null;
       let opts = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
@@ -16016,7 +16016,7 @@ var require_lib = __commonJS((exports) => {
         redirected: this.redirected
       });
     }
-  }
+  };
   Body.mixIn(Response.prototype);
   Object.defineProperties(Response.prototype, {
     url: {enumerable: true},
@@ -16033,10 +16033,10 @@ var require_lib = __commonJS((exports) => {
     enumerable: false,
     configurable: true
   });
-  const INTERNALS$2 = Symbol("Request internals");
-  const parse_url = url.default.parse;
-  const format_url = url.default.format;
-  const streamDestructionSupported = "destroy" in stream.default.Readable.prototype;
+  var INTERNALS$2 = Symbol("Request internals");
+  var parse_url = url.default.parse;
+  var format_url = url.default.format;
+  var streamDestructionSupported = "destroy" in stream.default.Readable.prototype;
   function isRequest(input) {
     return typeof input === "object" && typeof input[INTERNALS$2] === "object";
   }
@@ -16044,7 +16044,7 @@ var require_lib = __commonJS((exports) => {
     const proto = signal && typeof signal === "object" && Object.getPrototypeOf(signal);
     return !!(proto && proto.constructor.name === "AbortSignal");
   }
-  class Request {
+  var Request = class {
     constructor(input) {
       let init = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
       let parsedURL;
@@ -16111,7 +16111,7 @@ var require_lib = __commonJS((exports) => {
     clone() {
       return new Request(this);
     }
-  }
+  };
   Body.mixIn(Request.prototype);
   Object.defineProperty(Request.prototype, Symbol.toStringTag, {
     value: "Request",
@@ -16183,8 +16183,8 @@ var require_lib = __commonJS((exports) => {
   AbortError.prototype = Object.create(Error.prototype);
   AbortError.prototype.constructor = AbortError;
   AbortError.prototype.name = "AbortError";
-  const PassThrough$1 = stream.default.PassThrough;
-  const resolve_url = url.default.resolve;
+  var PassThrough$1 = stream.default.PassThrough;
+  var resolve_url = url.default.resolve;
   function fetch(url2, opts) {
     if (!fetch.Promise) {
       throw new Error("native promise missing, set fetch.Promise to your favorite alternative");
@@ -16359,7 +16359,7 @@ var require_lib = __commonJS((exports) => {
 var require_dist_node3 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  class Deprecation extends Error {
+  var Deprecation = class extends Error {
     constructor(message) {
       super(message);
       if (Error.captureStackTrace) {
@@ -16367,7 +16367,7 @@ var require_dist_node3 = __commonJS((exports) => {
       }
       this.name = "Deprecation";
     }
-  }
+  };
   exports.Deprecation = Deprecation;
 });
 
@@ -16452,8 +16452,8 @@ var require_dist_node4 = __commonJS((exports) => {
   }
   var deprecation = require_dist_node3();
   var once = _interopDefault(require_once());
-  const logOnce = once((deprecation2) => console.warn(deprecation2));
-  class RequestError extends Error {
+  var logOnce = once((deprecation2) => console.warn(deprecation2));
+  var RequestError = class extends Error {
     constructor(message, statusCode, options) {
       super(message);
       if (Error.captureStackTrace) {
@@ -16477,7 +16477,7 @@ var require_dist_node4 = __commonJS((exports) => {
       requestCopy.url = requestCopy.url.replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]").replace(/\baccess_token=\w+/g, "access_token=[REDACTED]");
       this.request = requestCopy;
     }
-  }
+  };
   exports.RequestError = RequestError;
 });
 
@@ -16493,7 +16493,7 @@ var require_dist_node5 = __commonJS((exports) => {
   var isPlainObject = require_is_plain_object2();
   var nodeFetch = _interopDefault(require_lib());
   var requestError = require_dist_node4();
-  const VERSION = "5.4.10";
+  var VERSION = "5.4.10";
   function getBufferResponse(response) {
     return response.arrayBuffer();
   }
@@ -16596,7 +16596,7 @@ var require_dist_node5 = __commonJS((exports) => {
       defaults: withDefaults.bind(null, endpoint2)
     });
   }
-  const request = withDefaults(endpoint.endpoint, {
+  var request = withDefaults(endpoint.endpoint, {
     headers: {
       "user-agent": `octokit-request.js/${VERSION} ${universalUserAgent.getUserAgent()}`
     }
@@ -16610,8 +16610,8 @@ var require_dist_node6 = __commonJS((exports) => {
   Object.defineProperty(exports, "__esModule", {value: true});
   var request = require_dist_node5();
   var universalUserAgent = require_dist_node();
-  const VERSION = "4.5.7";
-  class GraphqlError extends Error {
+  var VERSION = "4.5.7";
+  var GraphqlError = class extends Error {
     constructor(request2, response) {
       const message = response.data.errors[0].message;
       super(message);
@@ -16625,9 +16625,9 @@ var require_dist_node6 = __commonJS((exports) => {
         Error.captureStackTrace(this, this.constructor);
       }
     }
-  }
-  const NON_VARIABLE_OPTIONS = ["method", "baseUrl", "url", "headers", "request", "query", "mediaType"];
-  const GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
+  };
+  var NON_VARIABLE_OPTIONS = ["method", "baseUrl", "url", "headers", "request", "query", "mediaType"];
+  var GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
   function graphql(request2, query, options) {
     if (typeof query === "string" && options && "query" in options) {
       return Promise.reject(new Error(`[@octokit/graphql] "query" cannot be used as variable name`));
@@ -16674,7 +16674,7 @@ var require_dist_node6 = __commonJS((exports) => {
       endpoint: request.request.endpoint
     });
   }
-  const graphql$1 = withDefaults(request.request, {
+  var graphql$1 = withDefaults(request.request, {
     headers: {
       "user-agent": `octokit-graphql.js/${VERSION} ${universalUserAgent.getUserAgent()}`
     },
@@ -16714,7 +16714,7 @@ var require_dist_node7 = __commonJS((exports) => {
     endpoint.headers.authorization = withAuthorizationPrefix(token);
     return request(endpoint);
   }
-  const createTokenAuth = function createTokenAuth2(token) {
+  var createTokenAuth = function createTokenAuth2(token) {
     if (!token) {
       throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
     }
@@ -16770,8 +16770,8 @@ var require_dist_node8 = __commonJS((exports) => {
     }
     return target;
   }
-  const VERSION = "3.2.1";
-  class Octokit2 {
+  var VERSION = "3.2.1";
+  var Octokit2 = class {
     constructor(options = {}) {
       const hook = new beforeAfterHook.Collection();
       const requestDefaults = {
@@ -16856,7 +16856,7 @@ var require_dist_node8 = __commonJS((exports) => {
       }, _a2.plugins = currentPlugins.concat(newPlugins.filter((plugin) => !currentPlugins.includes(plugin))), _a2);
       return NewOctokit;
     }
-  }
+  };
   Octokit2.VERSION = VERSION;
   Octokit2.plugins = [];
   exports.Octokit = Octokit2;
@@ -16866,7 +16866,7 @@ var require_dist_node8 = __commonJS((exports) => {
 var require_dist_node9 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const VERSION = "1.0.2";
+  var VERSION = "1.0.2";
   function requestLog(octokit) {
     octokit.hook.wrap("request", (request, options) => {
       octokit.log.debug("request", options);
@@ -16890,7 +16890,7 @@ var require_dist_node9 = __commonJS((exports) => {
 var require_dist_node10 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const VERSION = "2.6.0";
+  var VERSION = "2.6.0";
   function normalizePaginatedListResponse(response) {
     const responseNeedsNormalization = "total_count" in response.data && !("url" in response.data);
     if (!responseNeedsNormalization)
@@ -16963,7 +16963,7 @@ var require_dist_node10 = __commonJS((exports) => {
       return gather(octokit, results, iterator2, mapFn);
     });
   }
-  const composePaginateRest = Object.assign(paginate, {
+  var composePaginateRest = Object.assign(paginate, {
     iterator
   });
   function paginateRest(octokit) {
@@ -16982,7 +16982,7 @@ var require_dist_node10 = __commonJS((exports) => {
 var require_dist_node11 = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const Endpoints = {
+  var Endpoints = {
     actions: {
       addSelectedRepoToOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],
       cancelWorkflowRun: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel"],
@@ -18030,7 +18030,7 @@ var require_dist_node11 = __commonJS((exports) => {
       updateAuthenticated: ["PATCH /user"]
     }
   };
-  const VERSION = "4.2.1";
+  var VERSION = "4.2.1";
   function endpointsToMethods(octokit, endpointsMap) {
     const newMethods = {};
     for (const [scope, endpoints] of Object.entries(endpointsMap)) {
@@ -18104,8 +18104,8 @@ var require_dist_node12 = __commonJS((exports) => {
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
-  const VERSION = "18.0.9";
-  const Octokit2 = core3.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
+  var VERSION = "18.0.9";
+  var Octokit2 = core3.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
   exports.Octokit = Octokit2;
@@ -18310,14 +18310,14 @@ var require_p_finally = __commonJS((exports, module2) => {
 // node_modules/p-timeout/index.js
 var require_p_timeout = __commonJS((exports, module2) => {
   "use strict";
-  const pFinally = require_p_finally();
-  class TimeoutError extends Error {
+  var pFinally = require_p_finally();
+  var TimeoutError = class extends Error {
     constructor(message) {
       super(message);
       this.name = "TimeoutError";
     }
-  }
-  const pTimeout = (promise, milliseconds, fallback) => new Promise((resolve, reject) => {
+  };
+  var pTimeout = (promise, milliseconds, fallback) => new Promise((resolve, reject) => {
     if (typeof milliseconds !== "number" || milliseconds < 0) {
       throw new TypeError("Expected `milliseconds` to be a positive number");
     }
@@ -18376,8 +18376,8 @@ var require_lower_bound = __commonJS((exports) => {
 var require_priority_queue = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const lower_bound_1 = require_lower_bound();
-  class PriorityQueue {
+  var lower_bound_1 = require_lower_bound();
+  var PriorityQueue = class {
     constructor() {
       this._queue = [];
     }
@@ -18404,7 +18404,7 @@ var require_priority_queue = __commonJS((exports) => {
     get size() {
       return this._queue.length;
     }
-  }
+  };
   exports.default = PriorityQueue;
 });
 
@@ -18412,13 +18412,13 @@ var require_priority_queue = __commonJS((exports) => {
 var require_dist = __commonJS((exports) => {
   "use strict";
   Object.defineProperty(exports, "__esModule", {value: true});
-  const EventEmitter = require_eventemitter3();
-  const p_timeout_1 = require_p_timeout();
-  const priority_queue_1 = require_priority_queue();
-  const empty = () => {
+  var EventEmitter = require_eventemitter3();
+  var p_timeout_1 = require_p_timeout();
+  var priority_queue_1 = require_priority_queue();
+  var empty = () => {
   };
-  const timeoutError = new p_timeout_1.TimeoutError();
-  class PQueue3 extends EventEmitter {
+  var timeoutError = new p_timeout_1.TimeoutError();
+  var PQueue3 = class extends EventEmitter {
     constructor(options) {
       var _a2, _b, _c, _d;
       super();
@@ -18626,7 +18626,7 @@ var require_dist = __commonJS((exports) => {
     set timeout(milliseconds) {
       this._timeout = milliseconds;
     }
-  }
+  };
   exports.default = PQueue3;
 });
 
@@ -18852,17 +18852,17 @@ var require_markdown_table = __commonJS((exports, module2) => {
 });
 
 // src/index.ts
-const core2 = __toModule(require_core());
-const lodash2 = __toModule(require_lodash());
+var core2 = __toModule(require_core());
+var lodash2 = __toModule(require_lodash());
 
 // src/rules.ts
-const fast_glob = __toModule(require_out4());
-const path2 = __toModule(require("path"));
+var fast_glob = __toModule(require_out4());
+var path2 = __toModule(require("path"));
 
 // src/environment.ts
-const path = __toModule(require("path"));
-const envalid = __toModule(require_envalid());
-const environment = () => envalid.default.cleanEnv(process.env, {
+var path = __toModule(require("path"));
+var envalid = __toModule(require_envalid());
+var environment = () => envalid.default.cleanEnv(process.env, {
   GITHUB_EVENT_PATH: envalid.str({
     devDefault: envalid.testOnly("__mocks__/event.json")
   }),
@@ -18876,21 +18876,21 @@ const environment = () => envalid.default.cleanEnv(process.env, {
   }),
   TASK_ID: envalid.str({default: "use-herald-action"})
 }, {dotEnvPath: null});
-const env = environment();
+var env = environment();
 
 // src/rules.ts
-const minimatch = __toModule(require_minimatch());
-const jsonpath = __toModule(require_jsonpath());
+var minimatch = __toModule(require_minimatch());
+var jsonpath = __toModule(require_jsonpath());
 
 // src/util/constants.ts
-const maxPerPage = 100;
-const OUTPUT_NAME = "appliedRules";
-const FILE_ENCODING = "utf8";
-const STATUS_DESCRIPTION_COPY = "You can see the rule by clicking on Details";
-const COMBINED_TAG_KEY = "_combined";
-const LINE_BREAK = "<br/>";
-const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION (.*) -->$/;
-const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+var maxPerPage = 100;
+var OUTPUT_NAME = "appliedRules";
+var FILE_ENCODING = "utf8";
+var STATUS_DESCRIPTION_COPY = "You can see the rule by clicking on Details";
+var COMBINED_TAG_KEY = "_combined";
+var LINE_BREAK = "<br/>";
+var USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION (.*) -->$/;
+var EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 var CommitStatus;
 (function(CommitStatus2) {
   CommitStatus2["SUCCESS"] = "success";
@@ -18913,18 +18913,18 @@ var HttpErrors;
 })(HttpErrors || (HttpErrors = {}));
 
 // src/util/loadJSONFile.ts
-const fs = __toModule(require("fs"));
-const loadJSONFile = (filePath) => {
+var fs = __toModule(require("fs"));
+var loadJSONFile = (filePath) => {
   const file = fs.readFileSync(filePath, {encoding: FILE_ENCODING});
   const content = JSON.parse(file);
   return content;
 };
 
 // src/util/debug.ts
-const debug = __toModule(require_src());
-const core = __toModule(require_core());
+var debug = __toModule(require_src());
+var core = __toModule(require_core());
 var _a;
-const DEBUG = (_a = core.getInput("DEBUG")) != null ? _a : false;
+var DEBUG = (_a = core.getInput("DEBUG")) != null ? _a : false;
 if (DEBUG) {
   console.log("debug is enabled, provided pattern:", DEBUG);
 }
@@ -18939,10 +18939,10 @@ function logger(nameSpace) {
 }
 
 // src/util/makeArray.ts
-const makeArray = (field) => field && Array.isArray(field) ? field : [field].filter(Boolean);
+var makeArray = (field) => field && Array.isArray(field) ? field : [field].filter(Boolean);
 
 // src/rules.ts
-const debug4 = logger("rules");
+var debug4 = logger("rules");
 var RuleActors;
 (function(RuleActors2) {
   RuleActors2["users"] = "users";
@@ -18976,7 +18976,7 @@ var ErrorLevels;
   ErrorLevels2["none"] = "none";
   ErrorLevels2["error"] = "error";
 })(ErrorLevels || (ErrorLevels = {}));
-const sanitize = (content) => {
+var sanitize = (content) => {
   const attrs = {...RuleMatchers, ...RuleActors, ...RuleExtras};
   const rule = ["action", ...Object.keys(attrs)].reduce((memo, attr) => {
     return content[attr] ? {...memo, [attr]: content[attr]} : memo;
@@ -18991,8 +18991,8 @@ const sanitize = (content) => {
     eventJsonPath: makeArray(rule.eventJsonPath)
   };
 };
-const hasAttribute = (attr, content) => attr in content;
-const isValidRawRule = (content) => {
+var hasAttribute = (attr, content) => attr in content;
+var isValidRawRule = (content) => {
   if (typeof content !== "object" || content === null) {
     return false;
   }
@@ -19009,7 +19009,7 @@ const isValidRawRule = (content) => {
   });
   return hasValidActionValues && hasActors && matchers2;
 };
-const loadRules = (rulesLocation) => {
+var loadRules = (rulesLocation) => {
   const matches = fast_glob.sync(rulesLocation, {
     onlyFiles: true,
     cwd: env.GITHUB_WORKSPACE,
@@ -19027,7 +19027,7 @@ const loadRules = (rulesLocation) => {
   }, []);
   return rules3;
 };
-const handleIncludeExcludeFiles = ({includes, excludes, fileNames}) => {
+var handleIncludeExcludeFiles = ({includes, excludes, fileNames}) => {
   debug4("includeExcludeFiles...");
   let results = [];
   if (includes == null ? void 0 : includes.length) {
@@ -19048,7 +19048,7 @@ const handleIncludeExcludeFiles = ({includes, excludes, fileNames}) => {
   }
   return !!results.length;
 };
-const handleIncludesInPatch = ({patterns, patch}) => {
+var handleIncludesInPatch = ({patterns, patch}) => {
   debug4("handleIncludesInPath...");
   const matches = patterns == null ? void 0 : patterns.reduce((memo, pattern) => {
     try {
@@ -19062,7 +19062,7 @@ const handleIncludesInPatch = ({patterns, patch}) => {
   }, []);
   return !!(matches == null ? void 0 : matches.length);
 };
-const allRequiredRulesHaveMatched = (rules3, matchingRules) => {
+var allRequiredRulesHaveMatched = (rules3, matchingRules) => {
   const requiredRules = rules3.filter((rule) => rule.errorLevel && rule.errorLevel === ErrorLevels.error);
   if (!requiredRules.length) {
     return true;
@@ -19070,7 +19070,7 @@ const allRequiredRulesHaveMatched = (rules3, matchingRules) => {
   const matchingRulesNames = matchingRules.map((rule) => rule.name);
   return requiredRules.every((rule) => matchingRulesNames.includes(rule.name));
 };
-const handleEventJsonPath = ({event, patterns}) => {
+var handleEventJsonPath = ({event, patterns}) => {
   debug4("eventJsonPath", patterns);
   try {
     let results;
@@ -19088,12 +19088,12 @@ const handleEventJsonPath = ({event, patterns}) => {
   }
   return false;
 };
-const matchers = {
+var matchers = {
   [RuleMatchers.includes]: (rule, {fileNames}) => handleIncludeExcludeFiles({includes: rule.includes, excludes: rule.excludes, fileNames}),
   [RuleMatchers.eventJsonPath]: (rule, {event}) => handleEventJsonPath({patterns: rule.eventJsonPath, event}),
   [RuleMatchers.includesInPatch]: (rule, {patch}) => handleIncludesInPatch({patterns: rule.includesInPatch, patch})
 };
-const isMatch = (rule, options) => {
+var isMatch = (rule, options) => {
   const keyMatchers = Object.keys(RuleMatchers);
   const matches = keyMatchers.filter((matcher) => {
     var _a2;
@@ -19102,7 +19102,7 @@ const isMatch = (rule, options) => {
   debug4("isMatch:", {rule, matches});
   return matches.length ? matches.every((match) => match === true) : false;
 };
-const getMatchingRules = (rules3, files, event, patchContent) => {
+var getMatchingRules = (rules3, files, event, patchContent) => {
   const fileNames = files.map(({filename}) => filename);
   const matchingRules = rules3.reduce((memo, rule) => {
     if (isMatch(rule, {event, patch: patchContent, fileNames})) {
@@ -19115,10 +19115,10 @@ const getMatchingRules = (rules3, files, event, patchContent) => {
 };
 
 // src/index.ts
-const rest = __toModule(require_dist_node12());
+var rest = __toModule(require_dist_node12());
 
 // src/util/catchHandler.ts
-const catchHandler = (debug19) => (error) => {
+var catchHandler = (debug19) => (error) => {
   if (Object.values(AllowedHttpErrors).includes(error.status)) {
     debug19(`Request failed with status ${error.status}, We do not consider this a fatal error`, error);
     return Promise.resolve({});
@@ -19128,8 +19128,8 @@ const catchHandler = (debug19) => (error) => {
 };
 
 // src/assignees.ts
-const debug6 = logger("assignees");
-const handleAssignees = async (client, {owner, repo, prNumber, matchingRules}) => {
+var debug6 = logger("assignees");
+var handleAssignees = async (client, {owner, repo, prNumber, matchingRules}) => {
   debug6("handleAssignees called with:", matchingRules);
   const assignees2 = matchingRules.reduce((memo, rule) => {
     return [...memo, ...rule.users.map((user) => user.replace("@", ""))];
@@ -19144,8 +19144,8 @@ const handleAssignees = async (client, {owner, repo, prNumber, matchingRules}) =
 };
 
 // src/labels.ts
-const debug8 = logger("labels");
-const handleLabels = async (client, {owner, repo, prNumber, matchingRules}) => {
+var debug8 = logger("labels");
+var handleLabels = async (client, {owner, repo, prNumber, matchingRules}) => {
   debug8("called with:", matchingRules);
   const labels2 = matchingRules.filter(({labels: labels3}) => labels3).reduce((memo, {labels: labels3}) => [...memo, ...makeArray(labels3)], []);
   debug8("labels", labels2);
@@ -19164,12 +19164,12 @@ const handleLabels = async (client, {owner, repo, prNumber, matchingRules}) => {
 };
 
 // src/reviewers.ts
-const debug10 = logger("reviewers");
-const sanitizeTeam = (team) => {
+var debug10 = logger("reviewers");
+var sanitizeTeam = (team) => {
   const splitTeam = team.replace("@", "").split("/");
   return splitTeam[splitTeam.length - 1];
 };
-const handleReviewers = async (client, {owner, repo, prNumber, matchingRules}) => {
+var handleReviewers = async (client, {owner, repo, prNumber, matchingRules}) => {
   debug10("handleReviewers called with:", matchingRules);
   const {reviewers: reviewers2, teamReviewers} = matchingRules.reduce((memo, rule) => {
     const reviewers3 = [...memo.reviewers, ...rule.users.map((user) => user.replace("@", ""))];
@@ -19188,11 +19188,11 @@ const handleReviewers = async (client, {owner, repo, prNumber, matchingRules}) =
 };
 
 // src/statuses.ts
-const p_queue = __toModule(require_dist());
+var p_queue = __toModule(require_dist());
 
 // src/util/getBlobURL.ts
-const debug12 = logger("getBlobURL");
-const getBlobURL = (filename, files, owner, repo, base) => {
+var debug12 = logger("getBlobURL");
+var getBlobURL = (filename, files, owner, repo, base) => {
   const baseBlobPath = `https://github.com/${owner}/${repo}/blob`;
   debug12("getBlobURL", filename, files, baseBlobPath, base);
   const file = files.find((file2) => filename.match(file2.filename));
@@ -19200,8 +19200,8 @@ const getBlobURL = (filename, files, owner, repo, base) => {
 };
 
 // src/statuses.ts
-const debug14 = logger("statuses");
-const handleStatus = async (client, {owner, repo, matchingRules, rules: rules3, base, sha, files}, requestConcurrency = 1) => {
+var debug14 = logger("statuses");
+var handleStatus = async (client, {owner, repo, matchingRules, rules: rules3, base, sha, files}, requestConcurrency = 1) => {
   debug14("called with:", matchingRules.map((rule) => rule.path));
   const queue = new p_queue.default({concurrency: requestConcurrency});
   const statusActionRules = rules3.filter(({action}) => action == RuleActions.status);
@@ -19221,21 +19221,21 @@ const handleStatus = async (client, {owner, repo, matchingRules, rules: rules3, 
 };
 
 // src/comment.ts
-const lodash = __toModule(require_lodash());
-const markdown_table = __toModule(require_markdown_table());
-const p_queue2 = __toModule(require_dist());
-const debug16 = logger("comment");
+var lodash = __toModule(require_lodash());
+var markdown_table = __toModule(require_markdown_table());
+var p_queue2 = __toModule(require_dist());
+var debug16 = logger("comment");
 var TypeOfComments;
 (function(TypeOfComments2) {
   TypeOfComments2["standalone"] = "standalone";
   TypeOfComments2["combined"] = "combined";
 })(TypeOfComments || (TypeOfComments = {}));
-const formatUser = (handleOrEmail) => {
+var formatUser = (handleOrEmail) => {
   return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
 };
-const tagComment = (body, path3) => `<!-- USE_HERALD_ACTION ${path3} -->
+var tagComment = (body, path3) => `<!-- USE_HERALD_ACTION ${path3} -->
 ${body}`;
-const commentTemplate = (mentions) => `
+var commentTemplate = (mentions) => `
    <details open>
 
    <summary> Hi there, given these changes, Herald thinks that these users should take a look! </summary>
@@ -19250,7 +19250,7 @@ const commentTemplate = (mentions) => `
 
   </details>
   `;
-const composeCommentsForUsers = (matchingRules) => {
+var composeCommentsForUsers = (matchingRules) => {
   const groups = lodash.default(matchingRules, (rule) => rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined);
   let comments = {};
   if (groups[TypeOfComments.combined]) {
@@ -19263,7 +19263,7 @@ const composeCommentsForUsers = (matchingRules) => {
   }
   return comments;
 };
-const getAllComments = async (client, params) => {
+var getAllComments = async (client, params) => {
   const page = 1;
   const {data: comments} = await client.issues.listComments({
     ...params,
@@ -19281,7 +19281,7 @@ const getAllComments = async (client, params) => {
     return [...comments, ...moreComments];
   }
 };
-const handleComment = async (client, {owner, repo, prNumber, matchingRules, files, base}, requestConcurrency = 1) => {
+var handleComment = async (client, {owner, repo, prNumber, matchingRules, files, base}, requestConcurrency = 1) => {
   debug16("handleComment called with:", matchingRules);
   const queue = new p_queue2.default({concurrency: requestConcurrency});
   const rulesWithBlobURL = matchingRules.map((mRule) => ({
@@ -19323,13 +19323,13 @@ const handleComment = async (client, {owner, repo, prNumber, matchingRules, file
 };
 
 // src/util/isEventSupported.ts
-const isEventSupported = (event) => {
+var isEventSupported = (event) => {
   return Object.values(SUPPORTED_EVENT_TYPES).some((e) => event === e);
 };
 
 // src/index.ts
-const debug18 = logger("index");
-const EnhancedOctokit = rest.Octokit;
+var debug18 = logger("index");
+var EnhancedOctokit = rest.Octokit;
 var Props;
 (function(Props2) {
   Props2["GITHUB_TOKEN"] = "GITHUB_TOKEN";
@@ -19337,20 +19337,20 @@ var Props;
   Props2["dryRun"] = "dryRun";
   Props2["base"] = "base";
 })(Props || (Props = {}));
-const actionsMap = {
+var actionsMap = {
   [RuleActions.status]: handleStatus,
   [RuleActions.comment]: handleComment,
   [RuleActions.assign]: handleAssignees,
   [RuleActions.review]: handleReviewers,
   [RuleActions.label]: handleLabels
 };
-const getParams = () => {
+var getParams = () => {
   return Object.keys(Props).reduce((memo, prop) => {
     const value = core2.getInput(prop);
     return value ? {...memo, [prop]: value} : memo;
   }, {});
 };
-const main = async () => {
+var main = async () => {
   try {
     if (isEventSupported(env.GITHUB_EVENT_NAME)) {
       const event = loadJSONFile(env.GITHUB_EVENT_PATH);
