@@ -1,5 +1,6 @@
 {
+  "name": "add label when title starts with feat",
   "action": "label",
   "eventJSONPath": "$..[?(@.title.match(/^feat.*?/))].title",
-  "labels": "enhancement"
+  "labels": ["enhancement"]
 }
