@@ -118,7 +118,7 @@
     "@types/jsonpath": "0.2.0",
     "@types/lodash.groupby": "4.6.6",
     "@types/markdown-table": "2.0.0",
-    "@types/node": "13.13.32",
+    "@types/node": "13.13.33",
     "@typescript-eslint/eslint-plugin": "4.8.2",
     "@typescript-eslint/parser": "4.8.2",
     "ajv-keywords": "3.5.2",
