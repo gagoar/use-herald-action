@@ -131,7 +131,7 @@ Every rule can be written in JSON with the following key-value pairs:
   "teams": ["QATeam"],
   "action": "assign",
   "includes": "integration/*.ts",
-  "eventJSONPath": "$..[?(@.title.match("QA"))]"
+  "eventJsonPath": "$..[?(@.title.match("QA"))]"
 }
 ```
 
@@ -156,7 +156,7 @@ When creating rules, you can use the `errorLevel` to change how `use-herald-acti
 {
   "action": "comment",
   "customMessage": "Thanks for opening a pull request, looks like all is good! Please wait till the checks are all green to merge ",
-  "eventJSONPath": "$..[?(@.body.match("Issue Ticket:"))]",
+  "eventJsonPath": "$..[?(@.body.match("Issue Ticket:"))]",
   "errorLevel": "error"
 }
 ```
