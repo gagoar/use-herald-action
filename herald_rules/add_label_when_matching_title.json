@@ -1,0 +1,5 @@
+{
+  "action": "label",
+  "eventJSONPath": "$..[?(@.title.match(/^feat.*?/))].title",
+  "labels": "enhancement"
+}
