@@ -643,6 +643,38 @@ describe('rules', () => {
       sync.mockClear();
       loadJSONFile.mockClear();
     });
+    it('should load a rule when it only has JSONPath as a matcher', () => {
+      const jsonRule = {
+        name: 'add label when title starts with feat',
+        action: 'label',
+        eventJsonPath: '$..[?(@.title.match(/^feat.*?/))].title',
+        labels: ['enhancement'],
+      };
+      sync.mockReturnValue(['/some/rule.json']);
+      loadJSONFile.mockReturnValue(jsonRule);
+
+      expect(loadRules('/some/rule.json')).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "action": "label",
+            "eventJsonPath": Array [
+              "$..[?(@.title.match(/^feat.*?/))].title",
+            ],
+            "excludes": Array [],
+            "includes": Array [],
+            "includesInPatch": Array [],
+            "labels": Array [
+              "enhancement",
+            ],
+            "name": "add label when title starts with feat",
+            "path": "/some/rule.json",
+            "teams": Array [],
+            "users": Array [],
+          },
+        ]
+      `);
+      expect(consoleErrorMock).not.toHaveBeenCalled();
+    });
     it('invalid rule: empty array, will be ignored', () => {
       sync.mockReturnValue(['/some/rule.json']);
       loadJSONFile.mockReturnValue('null');
