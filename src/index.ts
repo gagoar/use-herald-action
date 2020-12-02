@@ -107,7 +107,7 @@ export const main = async (): Promise<void> => {
         rules,
         files,
         event,
-        files.map(({ patch }) => patch)
+        files.reduce((memo, { patch }) => (patch ? [...memo, patch] : memo), [] as string[])
       );
 
       debug('matchingRules:', matchingRules);

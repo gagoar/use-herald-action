@@ -15267,7 +15267,7 @@ var require_dist_node2 = __commonJS((exports2) => {
       parse
     });
   }
-  var VERSION = "6.0.9";
+  var VERSION = "6.0.10";
   var userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`;
   var DEFAULTS = {
     method: "GET",
@@ -16493,7 +16493,7 @@ var require_dist_node5 = __commonJS((exports2) => {
   var isPlainObject = require_is_plain_object2();
   var nodeFetch = _interopDefault(require_lib());
   var requestError = require_dist_node4();
-  var VERSION = "5.4.10";
+  var VERSION = "5.4.11";
   function getBufferResponse(response) {
     return response.arrayBuffer();
   }
@@ -16610,7 +16610,7 @@ var require_dist_node6 = __commonJS((exports2) => {
   Object.defineProperty(exports2, "__esModule", {value: true});
   var request = require_dist_node5();
   var universalUserAgent = require_dist_node();
-  var VERSION = "4.5.7";
+  var VERSION = "4.5.8";
   var GraphqlError = class extends Error {
     constructor(request2, response) {
       const message = response.data.errors[0].message;
@@ -16770,7 +16770,7 @@ var require_dist_node8 = __commonJS((exports2) => {
     }
     return target;
   }
-  var VERSION = "3.2.1";
+  var VERSION = "3.2.2";
   var Octokit2 = class {
     constructor(options = {}) {
       const hook = new beforeAfterHook.Collection();
@@ -16890,7 +16890,7 @@ var require_dist_node9 = __commonJS((exports2) => {
 var require_dist_node10 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var VERSION = "2.6.0";
+  var VERSION = "2.6.1";
   function normalizePaginatedListResponse(response) {
     const responseNeedsNormalization = "total_count" in response.data && !("url" in response.data);
     if (!responseNeedsNormalization)
@@ -17000,13 +17000,24 @@ var require_dist_node11 = __commonJS((exports2) => {
       deleteSelfHostedRunnerFromRepo: ["DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}"],
       deleteWorkflowRun: ["DELETE /repos/{owner}/{repo}/actions/runs/{run_id}"],
       deleteWorkflowRunLogs: ["DELETE /repos/{owner}/{repo}/actions/runs/{run_id}/logs"],
+      disableSelectedRepositoryGithubActionsOrganization: ["DELETE /orgs/{org}/actions/permissions/repositories/{repository_id}"],
+      disableWorkflow: ["PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable"],
       downloadArtifact: ["GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}"],
       downloadJobLogsForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs"],
       downloadWorkflowRunLogs: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/logs"],
+      enableSelectedRepositoryGithubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories/{repository_id}"],
+      enableWorkflow: ["PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"],
+      getAllowedActionsOrganization: ["GET /orgs/{org}/actions/permissions/selected-actions"],
+      getAllowedActionsRepository: ["GET /repos/{owner}/{repo}/actions/permissions/selected-actions"],
       getArtifact: ["GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"],
+      getGithubActionsPermissionsOrganization: ["GET /orgs/{org}/actions/permissions"],
+      getGithubActionsPermissionsRepository: ["GET /repos/{owner}/{repo}/actions/permissions"],
       getJobForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/jobs/{job_id}"],
       getOrgPublicKey: ["GET /orgs/{org}/actions/secrets/public-key"],
       getOrgSecret: ["GET /orgs/{org}/actions/secrets/{secret_name}"],
+      getRepoPermissions: ["GET /repos/{owner}/{repo}/actions/permissions", {}, {
+        renamed: ["actions", "getGithubActionsPermissionsRepository"]
+      }],
       getRepoPublicKey: ["GET /repos/{owner}/{repo}/actions/secrets/public-key"],
       getRepoSecret: ["GET /repos/{owner}/{repo}/actions/secrets/{secret_name}"],
       getSelfHostedRunnerForOrg: ["GET /orgs/{org}/actions/runners/{runner_id}"],
@@ -17023,6 +17034,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       listRunnerApplicationsForOrg: ["GET /orgs/{org}/actions/runners/downloads"],
       listRunnerApplicationsForRepo: ["GET /repos/{owner}/{repo}/actions/runners/downloads"],
       listSelectedReposForOrgSecret: ["GET /orgs/{org}/actions/secrets/{secret_name}/repositories"],
+      listSelectedRepositoriesEnabledGithubActionsOrganization: ["GET /orgs/{org}/actions/permissions/repositories"],
       listSelfHostedRunnersForOrg: ["GET /orgs/{org}/actions/runners"],
       listSelfHostedRunnersForRepo: ["GET /repos/{owner}/{repo}/actions/runners"],
       listWorkflowRunArtifacts: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts"],
@@ -17030,7 +17042,12 @@ var require_dist_node11 = __commonJS((exports2) => {
       listWorkflowRunsForRepo: ["GET /repos/{owner}/{repo}/actions/runs"],
       reRunWorkflow: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun"],
       removeSelectedRepoFromOrgSecret: ["DELETE /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],
-      setSelectedReposForOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories"]
+      setAllowedActionsOrganization: ["PUT /orgs/{org}/actions/permissions/selected-actions"],
+      setAllowedActionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions/selected-actions"],
+      setGithubActionsPermissionsOrganization: ["PUT /orgs/{org}/actions/permissions"],
+      setGithubActionsPermissionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions"],
+      setSelectedReposForOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories"],
+      setSelectedRepositoriesEnabledGithubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories"]
     },
     activity: {
       checkRepoIsStarredByAuthenticatedUser: ["GET /user/starred/{owner}/{repo}"],
@@ -17086,6 +17103,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       getSubscriptionPlanForAccount: ["GET /marketplace_listing/accounts/{account_id}"],
       getSubscriptionPlanForAccountStubbed: ["GET /marketplace_listing/stubbed/accounts/{account_id}"],
       getUserInstallation: ["GET /users/{username}/installation"],
+      getWebhookConfigForApp: ["GET /app/hook/config"],
       listAccountsForPlan: ["GET /marketplace_listing/plans/{plan_id}/accounts"],
       listAccountsForPlanStubbed: ["GET /marketplace_listing/stubbed/plans/{plan_id}/accounts"],
       listInstallationReposForAuthenticatedUser: ["GET /user/installations/{installation_id}/repositories"],
@@ -17100,7 +17118,8 @@ var require_dist_node11 = __commonJS((exports2) => {
       resetToken: ["PATCH /applications/{client_id}/token"],
       revokeInstallationAccessToken: ["DELETE /installation/token"],
       suspendInstallation: ["PUT /app/installations/{installation_id}/suspended"],
-      unsuspendInstallation: ["DELETE /app/installations/{installation_id}/suspended"]
+      unsuspendInstallation: ["DELETE /app/installations/{installation_id}/suspended"],
+      updateWebhookConfigForApp: ["PATCH /app/hook/config"]
     },
     billing: {
       getGithubActionsBillingOrg: ["GET /orgs/{org}/settings/billing/actions"],
@@ -17111,61 +17130,17 @@ var require_dist_node11 = __commonJS((exports2) => {
       getSharedStorageBillingUser: ["GET /users/{username}/settings/billing/shared-storage"]
     },
     checks: {
-      create: ["POST /repos/{owner}/{repo}/check-runs", {
-        mediaType: {
-          previews: ["antiope"]
-        }
-      }],
-      createSuite: ["POST /repos/{owner}/{repo}/check-suites", {
-        mediaType: {
-          previews: ["antiope"]
-        }
-      }],
-      get: ["GET /repos/{owner}/{repo}/check-runs/{check_run_id}", {
-        mediaType: {
-          previews: ["antiope"]
-        }
-      }],
-      getSuite: ["GET /repos/{owner}/{repo}/check-suites/{check_suite_id}", {
-        mediaType: {
-          previews: ["antiope"]
-        }
-      }],
-      listAnnotations: ["GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations", {
-        mediaType: {
-          previews: ["antiope"]
-        }
-      }],
-      listForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/check-runs", {
-        mediaType: {
-          previews: ["antiope"]
-        }
-      }],
-      listForSuite: ["GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs", {
-        mediaType: {
-          previews: ["antiope"]
-        }
-      }],
-      listSuitesForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/check-suites", {
-        mediaType: {
-          previews: ["antiope"]
-        }
-      }],
-      rerequestSuite: ["POST /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest", {
-        mediaType: {
-          previews: ["antiope"]
-        }
-      }],
-      setSuitesPreferences: ["PATCH /repos/{owner}/{repo}/check-suites/preferences", {
-        mediaType: {
-          previews: ["antiope"]
-        }
-      }],
-      update: ["PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}", {
-        mediaType: {
-          previews: ["antiope"]
-        }
-      }]
+      create: ["POST /repos/{owner}/{repo}/check-runs"],
+      createSuite: ["POST /repos/{owner}/{repo}/check-suites"],
+      get: ["GET /repos/{owner}/{repo}/check-runs/{check_run_id}"],
+      getSuite: ["GET /repos/{owner}/{repo}/check-suites/{check_suite_id}"],
+      listAnnotations: ["GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations"],
+      listForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/check-runs"],
+      listForSuite: ["GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs"],
+      listSuitesForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/check-suites"],
+      rerequestSuite: ["POST /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest"],
+      setSuitesPreferences: ["PATCH /repos/{owner}/{repo}/check-suites/preferences"],
+      update: ["PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}"]
     },
     codeScanning: {
       getAlert: ["GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}", {}, {
@@ -17197,6 +17172,16 @@ var require_dist_node11 = __commonJS((exports2) => {
     },
     emojis: {
       get: ["GET /emojis"]
+    },
+    enterpriseAdmin: {
+      disableSelectedOrganizationGithubActionsEnterprise: ["DELETE /enterprises/{enterprise}/actions/permissions/organizations/{org_id}"],
+      enableSelectedOrganizationGithubActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/organizations/{org_id}"],
+      getAllowedActionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/selected-actions"],
+      getGithubActionsPermissionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions"],
+      listSelectedOrganizationsEnabledGithubActionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/organizations"],
+      setAllowedActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/selected-actions"],
+      setGithubActionsPermissionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions"],
+      setSelectedOrganizationsEnabledGithubActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/organizations"]
     },
     gists: {
       checkIsStarred: ["GET /gists/{gist_id}/star"],
@@ -17240,36 +17225,15 @@ var require_dist_node11 = __commonJS((exports2) => {
       getTemplate: ["GET /gitignore/templates/{name}"]
     },
     interactions: {
-      getRestrictionsForOrg: ["GET /orgs/{org}/interaction-limits", {
-        mediaType: {
-          previews: ["sombra"]
-        }
-      }],
-      getRestrictionsForRepo: ["GET /repos/{owner}/{repo}/interaction-limits", {
-        mediaType: {
-          previews: ["sombra"]
-        }
-      }],
-      removeRestrictionsForOrg: ["DELETE /orgs/{org}/interaction-limits", {
-        mediaType: {
-          previews: ["sombra"]
-        }
-      }],
-      removeRestrictionsForRepo: ["DELETE /repos/{owner}/{repo}/interaction-limits", {
-        mediaType: {
-          previews: ["sombra"]
-        }
-      }],
-      setRestrictionsForOrg: ["PUT /orgs/{org}/interaction-limits", {
-        mediaType: {
-          previews: ["sombra"]
-        }
-      }],
-      setRestrictionsForRepo: ["PUT /repos/{owner}/{repo}/interaction-limits", {
-        mediaType: {
-          previews: ["sombra"]
-        }
-      }]
+      getRestrictionsForOrg: ["GET /orgs/{org}/interaction-limits"],
+      getRestrictionsForRepo: ["GET /repos/{owner}/{repo}/interaction-limits"],
+      getRestrictionsForYourPublicRepos: ["GET /user/interaction-limits"],
+      removeRestrictionsForOrg: ["DELETE /orgs/{org}/interaction-limits"],
+      removeRestrictionsForRepo: ["DELETE /repos/{owner}/{repo}/interaction-limits"],
+      removeRestrictionsForYourPublicRepos: ["DELETE /user/interaction-limits"],
+      setRestrictionsForOrg: ["PUT /orgs/{org}/interaction-limits"],
+      setRestrictionsForRepo: ["PUT /repos/{owner}/{repo}/interaction-limits"],
+      setRestrictionsForYourPublicRepos: ["PUT /user/interaction-limits"]
     },
     issues: {
       addAssignees: ["POST /repos/{owner}/{repo}/issues/{issue_number}/assignees"],
@@ -17330,7 +17294,10 @@ var require_dist_node11 = __commonJS((exports2) => {
       }]
     },
     meta: {
-      get: ["GET /meta"]
+      get: ["GET /meta"],
+      getOctocat: ["GET /octocat"],
+      getZen: ["GET /zen"],
+      root: ["GET /"]
     },
     migrations: {
       cancelImport: ["DELETE /repos/{owner}/{repo}/import"],
@@ -17417,6 +17384,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       getMembershipForAuthenticatedUser: ["GET /user/memberships/orgs/{org}"],
       getMembershipForUser: ["GET /orgs/{org}/memberships/{username}"],
       getWebhook: ["GET /orgs/{org}/hooks/{hook_id}"],
+      getWebhookConfigForOrg: ["GET /orgs/{org}/hooks/{hook_id}/config"],
       list: ["GET /organizations"],
       listAppInstallations: ["GET /orgs/{org}/installations"],
       listBlockedUsers: ["GET /orgs/{org}/blocks"],
@@ -17439,7 +17407,8 @@ var require_dist_node11 = __commonJS((exports2) => {
       unblockUser: ["DELETE /orgs/{org}/blocks/{username}"],
       update: ["PATCH /orgs/{org}"],
       updateMembershipForAuthenticatedUser: ["PATCH /user/memberships/orgs/{org}"],
-      updateWebhook: ["PATCH /orgs/{org}/hooks/{hook_id}"]
+      updateWebhook: ["PATCH /orgs/{org}/hooks/{hook_id}"],
+      updateWebhookConfigForOrg: ["PATCH /orgs/{org}/hooks/{hook_id}/config"]
     },
     projects: {
       addCollaborator: ["PUT /projects/{project_id}/collaborators/{username}", {
@@ -17670,7 +17639,7 @@ var require_dist_node11 = __commonJS((exports2) => {
           previews: ["squirrel-girl"]
         }
       }, {
-        deprecated: "octokit.reactions.deleteLegacy() is deprecated, see https://developer.github.com/v3/reactions/#delete-a-reaction-legacy"
+        deprecated: "octokit.reactions.deleteLegacy() is deprecated, see https://docs.github.com/v3/reactions/#delete-a-reaction-legacy"
       }],
       listForCommitComment: ["GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", {
         mediaType: {
@@ -17786,7 +17755,11 @@ var require_dist_node11 = __commonJS((exports2) => {
           previews: ["dorian"]
         }
       }],
-      downloadArchive: ["GET /repos/{owner}/{repo}/{archive_format}/{ref}"],
+      downloadArchive: ["GET /repos/{owner}/{repo}/zipball/{ref}", {}, {
+        renamed: ["repos", "downloadZipballArchive"]
+      }],
+      downloadTarballArchive: ["GET /repos/{owner}/{repo}/tarball/{ref}"],
+      downloadZipballArchive: ["GET /repos/{owner}/{repo}/zipball/{ref}"],
       enableAutomatedSecurityFixes: ["PUT /repos/{owner}/{repo}/automated-security-fixes", {
         mediaType: {
           previews: ["london"]
@@ -17821,11 +17794,7 @@ var require_dist_node11 = __commonJS((exports2) => {
           previews: ["zzzax"]
         }
       }],
-      getCommunityProfileMetrics: ["GET /repos/{owner}/{repo}/community/profile", {
-        mediaType: {
-          previews: ["black-panther"]
-        }
-      }],
+      getCommunityProfileMetrics: ["GET /repos/{owner}/{repo}/community/profile"],
       getContent: ["GET /repos/{owner}/{repo}/contents/{path}"],
       getContributorsStats: ["GET /repos/{owner}/{repo}/stats/contributors"],
       getDeployKey: ["GET /repos/{owner}/{repo}/keys/{key_id}"],
@@ -17849,6 +17818,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       getUsersWithAccessToProtectedBranch: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"],
       getViews: ["GET /repos/{owner}/{repo}/traffic/views"],
       getWebhook: ["GET /repos/{owner}/{repo}/hooks/{hook_id}"],
+      getWebhookConfigForRepo: ["GET /repos/{owner}/{repo}/hooks/{hook_id}/config"],
       listBranches: ["GET /repos/{owner}/{repo}/branches"],
       listBranchesForHeadCommit: ["GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head", {
         mediaType: {
@@ -17928,8 +17898,12 @@ var require_dist_node11 = __commonJS((exports2) => {
       updatePullRequestReviewProtection: ["PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"],
       updateRelease: ["PATCH /repos/{owner}/{repo}/releases/{release_id}"],
       updateReleaseAsset: ["PATCH /repos/{owner}/{repo}/releases/assets/{asset_id}"],
-      updateStatusCheckPotection: ["PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"],
+      updateStatusCheckPotection: ["PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks", {}, {
+        renamed: ["repos", "updateStatusCheckProtection"]
+      }],
+      updateStatusCheckProtection: ["PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"],
       updateWebhook: ["PATCH /repos/{owner}/{repo}/hooks/{hook_id}"],
+      updateWebhookConfigForRepo: ["PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config"],
       uploadReleaseAsset: ["POST /repos/{owner}/{repo}/releases/{release_id}/assets{?name,label}", {
         baseUrl: "https://uploads.github.com"
       }]
@@ -18030,7 +18004,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       updateAuthenticated: ["PATCH /user"]
     }
   };
-  var VERSION = "4.2.1";
+  var VERSION = "4.3.0";
   function endpointsToMethods(octokit, endpointsMap) {
     const newMethods = {};
     for (const [scope, endpoints] of Object.entries(endpointsMap)) {
@@ -18104,7 +18078,7 @@ var require_dist_node12 = __commonJS((exports2) => {
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
-  var VERSION = "18.0.9";
+  var VERSION = "18.0.10";
   var Octokit2 = core3.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
@@ -19102,7 +19076,7 @@ var isMatch = (rule, options) => {
   debug4("isMatch:", {rule, matches});
   return matches.length ? matches.every((match) => match === true) : false;
 };
-var getMatchingRules = (rules3, files, event, patchContent) => {
+var getMatchingRules = (rules3, files, event, patchContent = []) => {
   const fileNames = files.map(({filename}) => filename);
   const matchingRules = rules3.reduce((memo, rule) => {
     if (isMatch(rule, {event, patch: patchContent, fileNames})) {
@@ -19296,7 +19270,8 @@ var handleComment = async (client, {owner, repo, prNumber, matchingRules, files,
     issue_number: prNumber
   });
   const useHeraldActionComments = rawComments.reduce((memo, comment2) => {
-    const pathMatch = USE_HERALD_ACTION_TAG_REGEX.exec(comment2.body.split("\n")[0]);
+    var _a2;
+    const pathMatch = comment2.body && USE_HERALD_ACTION_TAG_REGEX.exec((_a2 = comment2.body) == null ? void 0 : _a2.split("\n")[0]);
     return pathMatch ? {...memo, [pathMatch[1]]: comment2} : memo;
   }, {});
   debug16("existing UHA comments:", useHeraldActionComments);
@@ -19387,7 +19362,7 @@ var main = async () => {
         owner,
         repo
       });
-      const matchingRules = getMatchingRules(rules3, files, event, files.map(({patch}) => patch));
+      const matchingRules = getMatchingRules(rules3, files, event, files.reduce((memo, {patch}) => patch ? [...memo, patch] : memo, []));
       debug18("matchingRules:", matchingRules);
       if (!allRequiredRulesHaveMatched(rules3, matchingRules)) {
         throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules3.filter((rule) => rule.errorLevel && rule.errorLevel === "error").map((rule) => rule.name).join(", ")}`);

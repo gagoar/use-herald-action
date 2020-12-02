@@ -68,8 +68,7 @@ describe('rules', () => {
             },
           ],
           files,
-          event,
-          []
+          event
         )
       ).toMatchInlineSnapshot('Array []');
     });
