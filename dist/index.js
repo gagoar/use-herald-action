@@ -19076,7 +19076,7 @@ var isMatch = (rule, options) => {
   debug4("isMatch:", {rule, matches});
   return matches.length ? matches.every((match) => match === true) : false;
 };
-var getMatchingRules = (rules3, files, event, patchContent) => {
+var getMatchingRules = (rules3, files, event, patchContent = []) => {
   const fileNames = files.map(({filename}) => filename);
   const matchingRules = rules3.reduce((memo, rule) => {
     if (isMatch(rule, {event, patch: patchContent, fileNames})) {
@@ -19270,7 +19270,8 @@ var handleComment = async (client, {owner, repo, prNumber, matchingRules, files,
     issue_number: prNumber
   });
   const useHeraldActionComments = rawComments.reduce((memo, comment2) => {
-    const pathMatch = USE_HERALD_ACTION_TAG_REGEX.exec(comment2.body.split("\n")[0]);
+    var _a2;
+    const pathMatch = comment2.body && USE_HERALD_ACTION_TAG_REGEX.exec((_a2 = comment2.body) == null ? void 0 : _a2.split("\n")[0]);
     return pathMatch ? {...memo, [pathMatch[1]]: comment2} : memo;
   }, {});
   debug16("existing UHA comments:", useHeraldActionComments);
@@ -19361,7 +19362,7 @@ var main = async () => {
         owner,
         repo
       });
-      const matchingRules = getMatchingRules(rules3, files, event, files.map(({patch}) => patch));
+      const matchingRules = getMatchingRules(rules3, files, event, files.reduce((memo, {patch}) => patch ? [...memo, patch] : memo, []));
       debug18("matchingRules:", matchingRules);
       if (!allRequiredRulesHaveMatched(rules3, matchingRules)) {
         throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules3.filter((rule) => rule.errorLevel && rule.errorLevel === "error").map((rule) => rule.name).join(", ")}`);

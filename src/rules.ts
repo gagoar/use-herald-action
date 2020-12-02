@@ -258,7 +258,7 @@ export const getMatchingRules = (
   rules: Rule[],
   files: RuleFile[],
   event: Event,
-  patchContent: string[]
+  patchContent: string[] = []
 ): MatchingRule[] => {
   const fileNames = files.map(({ filename }) => filename);
 

@@ -142,7 +142,7 @@ export const handleComment: ActionMapInput = async (
 
   // Filter existing comments by USE_HERALD_ACTION tag (HTML comment) and key by path
   const useHeraldActionComments = rawComments.reduce((memo, comment) => {
-    const pathMatch = USE_HERALD_ACTION_TAG_REGEX.exec(comment.body.split('\n')[0]);
+    const pathMatch = comment.body && USE_HERALD_ACTION_TAG_REGEX.exec(comment.body?.split('\n')[0]);
     return pathMatch ? { ...memo, [pathMatch[1]]: comment } : memo;
   }, {} as Record<string, IssueComment>);
 
@@ -180,5 +180,5 @@ export const handleComment: ActionMapInput = async (
       );
     });
 
-  return Promise.all([...updateCommentPromises, ...createCommentPromises]).catch(catchHandler(debug));
+  return Promise.all<Promise<unknown>>([...updateCommentPromises, ...createCommentPromises]).catch(catchHandler(debug));
 };
