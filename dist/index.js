@@ -16493,7 +16493,7 @@ var require_dist_node5 = __commonJS((exports2) => {
   var isPlainObject = require_is_plain_object2();
   var nodeFetch = _interopDefault(require_lib());
   var requestError = require_dist_node4();
-  var VERSION = "5.4.11";
+  var VERSION = "5.4.12";
   function getBufferResponse(response) {
     return response.arrayBuffer();
   }
@@ -16770,7 +16770,7 @@ var require_dist_node8 = __commonJS((exports2) => {
     }
     return target;
   }
-  var VERSION = "3.2.2";
+  var VERSION = "3.2.3";
   var Octokit2 = class {
     constructor(options = {}) {
       const hook = new beforeAfterHook.Collection();
@@ -16890,7 +16890,7 @@ var require_dist_node9 = __commonJS((exports2) => {
 var require_dist_node10 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var VERSION = "2.6.1";
+  var VERSION = "2.6.2";
   function normalizePaginatedListResponse(response) {
     const responseNeedsNormalization = "total_count" in response.data && !("url" in response.data);
     if (!responseNeedsNormalization)
@@ -18004,7 +18004,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       updateAuthenticated: ["PATCH /user"]
     }
   };
-  var VERSION = "4.3.0";
+  var VERSION = "4.3.1";
   function endpointsToMethods(octokit, endpointsMap) {
     const newMethods = {};
     for (const [scope, endpoints] of Object.entries(endpointsMap)) {
@@ -18078,7 +18078,7 @@ var require_dist_node12 = __commonJS((exports2) => {
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
-  var VERSION = "18.0.10";
+  var VERSION = "18.0.11";
   var Octokit2 = core3.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
