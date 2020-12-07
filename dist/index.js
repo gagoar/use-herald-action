@@ -16770,7 +16770,7 @@ var require_dist_node8 = __commonJS((exports2) => {
     }
     return target;
   }
-  var VERSION = "3.2.3";
+  var VERSION = "3.2.4";
   var Octokit2 = class {
     constructor(options = {}) {
       const hook = new beforeAfterHook.Collection();
@@ -17925,6 +17925,11 @@ var require_dist_node11 = __commonJS((exports2) => {
       }],
       users: ["GET /search/users"]
     },
+    secretScanning: {
+      getAlert: ["GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"],
+      listAlertsForRepo: ["GET /repos/{owner}/{repo}/secret-scanning/alerts"],
+      updateAlert: ["PATCH /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"]
+    },
     teams: {
       addOrUpdateMembershipForUserInOrg: ["PUT /orgs/{org}/teams/{team_slug}/memberships/{username}"],
       addOrUpdateProjectPermissionsInOrg: ["PUT /orgs/{org}/teams/{team_slug}/projects/{project_id}", {
@@ -18004,7 +18009,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       updateAuthenticated: ["PATCH /user"]
     }
   };
-  var VERSION = "4.3.1";
+  var VERSION = "4.4.1";
   function endpointsToMethods(octokit, endpointsMap) {
     const newMethods = {};
     for (const [scope, endpoints] of Object.entries(endpointsMap)) {
@@ -18078,7 +18083,7 @@ var require_dist_node12 = __commonJS((exports2) => {
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
-  var VERSION = "18.0.11";
+  var VERSION = "18.0.12";
   var Octokit2 = core3.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
