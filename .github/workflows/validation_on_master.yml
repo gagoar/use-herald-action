@@ -10,10 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - name: Read .nvmrc
+        run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+        id: nvm
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
-          node-version: 12.x
+          node-version: '${{ steps.nvm.outputs.NVMRC }}'
       - name: Install dependencies
         run: |
           npm install
@@ -27,7 +30,7 @@ jobs:
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
-          node-version: 12.x
+          node-version: '${{ steps.nvm.outputs.NVMRC }}'
       - name: Install dependencies
         run: |
           npm install
@@ -50,7 +53,7 @@ jobs:
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
-          node-version: 12.x
+          node-version: '${{ steps.nvm.outputs.NVMRC }}'
       - name: Install dependencies
         run: |
           npm install
