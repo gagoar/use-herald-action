@@ -124,7 +124,7 @@
     "ajv-keywords": "4.0.0",
     "auto-changelog": "2.2.1",
     "bufferutil": "4.0.3",
-    "esbuild": "0.8.27",
+    "esbuild": "0.8.29",
     "eslint": "7.17.0",
     "eslint-config-prettier": "7.1.0",
     "husky": "4.3.6",

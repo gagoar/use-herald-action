@@ -131,7 +131,7 @@ var require_file_command = __commonJS((exports2) => {
     return result;
   };
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var fs2 = __importStar(require("fs"));
+  var fs = __importStar(require("fs"));
   var os = __importStar(require("os"));
   var utils_1 = require_utils();
   function issueCommand(command, message) {
@@ -139,10 +139,10 @@ var require_file_command = __commonJS((exports2) => {
     if (!filePath) {
       throw new Error(`Unable to find environment variable for file command ${command}`);
     }
-    if (!fs2.existsSync(filePath)) {
+    if (!fs.existsSync(filePath)) {
       throw new Error(`Missing file at path: ${filePath}`);
     }
-    fs2.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
+    fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
       encoding: "utf8"
     });
   }
@@ -196,7 +196,7 @@ var require_core = __commonJS((exports2) => {
   var file_command_1 = require_file_command();
   var utils_1 = require_utils();
   var os = __importStar(require("os"));
-  var path3 = __importStar(require("path"));
+  var path = __importStar(require("path"));
   var ExitCode;
   (function(ExitCode2) {
     ExitCode2[ExitCode2["Success"] = 0] = "Success";
@@ -226,7 +226,7 @@ var require_core = __commonJS((exports2) => {
     } else {
       command_1.issueCommand("add-path", {}, inputPath);
     }
-    process.env["PATH"] = `${inputPath}${path3.delimiter}${process.env["PATH"]}`;
+    process.env["PATH"] = `${inputPath}${path.delimiter}${process.env["PATH"]}`;
   }
   exports2.addPath = addPath;
   function getInput3(name, options) {
@@ -254,10 +254,10 @@ var require_core = __commonJS((exports2) => {
     return process.env["RUNNER_DEBUG"] === "1";
   }
   exports2.isDebug = isDebug;
-  function debug19(message) {
+  function debug10(message) {
     command_1.issueCommand("debug", {}, message);
   }
-  exports2.debug = debug19;
+  exports2.debug = debug10;
   function error(message) {
     command_1.issue("error", message instanceof Error ? message.toString() : message);
   }
@@ -652,11 +652,11 @@ var require_lodash = __commonJS((exports2, module2) => {
   function baseForOwn(object, iteratee) {
     return object && baseFor(object, iteratee, keys);
   }
-  function baseGet(object, path3) {
-    path3 = isKey(path3, object) ? [path3] : castPath(path3);
-    var index = 0, length = path3.length;
+  function baseGet(object, path) {
+    path = isKey(path, object) ? [path] : castPath(path);
+    var index = 0, length = path.length;
     while (object != null && index < length) {
-      object = object[toKey(path3[index++])];
+      object = object[toKey(path[index++])];
     }
     return index && index == length ? object : void 0;
   }
@@ -778,18 +778,18 @@ var require_lodash = __commonJS((exports2, module2) => {
       return object === source || baseIsMatch(object, source, matchData);
     };
   }
-  function baseMatchesProperty(path3, srcValue) {
-    if (isKey(path3) && isStrictComparable(srcValue)) {
-      return matchesStrictComparable(toKey(path3), srcValue);
+  function baseMatchesProperty(path, srcValue) {
+    if (isKey(path) && isStrictComparable(srcValue)) {
+      return matchesStrictComparable(toKey(path), srcValue);
     }
     return function(object) {
-      var objValue = get(object, path3);
-      return objValue === void 0 && objValue === srcValue ? hasIn(object, path3) : baseIsEqual(srcValue, objValue, void 0, UNORDERED_COMPARE_FLAG | PARTIAL_COMPARE_FLAG);
+      var objValue = get(object, path);
+      return objValue === void 0 && objValue === srcValue ? hasIn(object, path) : baseIsEqual(srcValue, objValue, void 0, UNORDERED_COMPARE_FLAG | PARTIAL_COMPARE_FLAG);
     };
   }
-  function basePropertyDeep(path3) {
+  function basePropertyDeep(path) {
     return function(object) {
-      return baseGet(object, path3);
+      return baseGet(object, path);
     };
   }
   function baseToString(value) {
@@ -1007,11 +1007,11 @@ var require_lodash = __commonJS((exports2, module2) => {
       return result;
     };
   }
-  function hasPath(object, path3, hasFunc) {
-    path3 = isKey(path3, object) ? [path3] : castPath(path3);
-    var result, index = -1, length = path3.length;
+  function hasPath(object, path, hasFunc) {
+    path = isKey(path, object) ? [path] : castPath(path);
+    var result, index = -1, length = path.length;
     while (++index < length) {
-      var key = toKey(path3[index]);
+      var key = toKey(path[index]);
       if (!(result = object != null && hasFunc(object, key))) {
         break;
       }
@@ -1148,12 +1148,12 @@ var require_lodash = __commonJS((exports2, module2) => {
   function toString(value) {
     return value == null ? "" : baseToString(value);
   }
-  function get(object, path3, defaultValue) {
-    var result = object == null ? void 0 : baseGet(object, path3);
+  function get(object, path, defaultValue) {
+    var result = object == null ? void 0 : baseGet(object, path);
     return result === void 0 ? defaultValue : result;
   }
-  function hasIn(object, path3) {
-    return object != null && hasPath(object, path3, baseHasIn);
+  function hasIn(object, path) {
+    return object != null && hasPath(object, path, baseHasIn);
   }
   function keys(object) {
     return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
@@ -1161,8 +1161,8 @@ var require_lodash = __commonJS((exports2, module2) => {
   function identity(value) {
     return value;
   }
-  function property(path3) {
-    return isKey(path3) ? baseProperty(toKey(path3)) : basePropertyDeep(path3);
+  function property(path) {
+    return isKey(path) ? baseProperty(toKey(path)) : basePropertyDeep(path);
   }
   module2.exports = groupBy3;
 });
@@ -1231,7 +1231,7 @@ var require_path = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
   exports2.removeLeadingDotSegment = exports2.escape = exports2.makeAbsolute = exports2.unixify = void 0;
-  var path3 = require("path");
+  var path = require("path");
   var LEADING_DOT_SEGMENT_CHARACTERS_COUNT = 2;
   var UNESCAPED_GLOB_SYMBOLS_RE = /(\\?)([()*?[\]{|}]|^!|[!+@](?=\())/g;
   function unixify(filepath) {
@@ -1239,7 +1239,7 @@ var require_path = __commonJS((exports2) => {
   }
   exports2.unixify = unixify;
   function makeAbsolute(cwd, filepath) {
-    return path3.resolve(cwd, filepath);
+    return path.resolve(cwd, filepath);
   }
   exports2.makeAbsolute = makeAbsolute;
   function escape(pattern) {
@@ -2396,7 +2396,7 @@ var require_braces = __commonJS((exports2, module2) => {
 // node_modules/picomatch/lib/constants.js
 var require_constants2 = __commonJS((exports2, module2) => {
   "use strict";
-  var path3 = require("path");
+  var path = require("path");
   var WIN_SLASH = "\\\\/";
   var WIN_NO_SLASH = `[^${WIN_SLASH}]`;
   var DOT_LITERAL = "\\.";
@@ -2518,7 +2518,7 @@ var require_constants2 = __commonJS((exports2, module2) => {
     CHAR_UNDERSCORE: 95,
     CHAR_VERTICAL_LINE: 124,
     CHAR_ZERO_WIDTH_NOBREAK_SPACE: 65279,
-    SEP: path3.sep,
+    SEP: path.sep,
     extglobChars(chars) {
       return {
         "!": {type: "negate", open: "(?:(?!(?:", close: `))${chars.STAR})`},
@@ -2537,7 +2537,7 @@ var require_constants2 = __commonJS((exports2, module2) => {
 // node_modules/picomatch/lib/utils.js
 var require_utils3 = __commonJS((exports2) => {
   "use strict";
-  var path3 = require("path");
+  var path = require("path");
   var win32 = process.platform === "win32";
   var {
     REGEX_BACKSLASH,
@@ -2566,7 +2566,7 @@ var require_utils3 = __commonJS((exports2) => {
     if (options && typeof options.windows === "boolean") {
       return options.windows;
     }
-    return win32 === true || path3.sep === "\\";
+    return win32 === true || path.sep === "\\";
   };
   exports2.escapeLast = (input, char, lastIdx) => {
     const idx = input.lastIndexOf(char, lastIdx);
@@ -2908,7 +2908,7 @@ var require_scan = __commonJS((exports2, module2) => {
 // node_modules/picomatch/lib/parse.js
 var require_parse2 = __commonJS((exports2, module2) => {
   "use strict";
-  var constants7 = require_constants2();
+  var constants = require_constants2();
   var utils = require_utils3();
   var {
     MAX_LENGTH,
@@ -2916,7 +2916,7 @@ var require_parse2 = __commonJS((exports2, module2) => {
     REGEX_NON_SPECIAL_CHARS,
     REGEX_SPECIAL_CHARS_BACKREF,
     REPLACEMENTS
-  } = constants7;
+  } = constants;
   var expandRange = (args, options) => {
     if (typeof options.expandRange === "function") {
       return options.expandRange(...args, options);
@@ -2948,8 +2948,8 @@ var require_parse2 = __commonJS((exports2, module2) => {
     const tokens = [bos];
     const capture = opts.capture ? "" : "?:";
     const win32 = utils.isWindows(options);
-    const PLATFORM_CHARS = constants7.globChars(win32);
-    const EXTGLOB_CHARS = constants7.extglobChars(PLATFORM_CHARS);
+    const PLATFORM_CHARS = constants.globChars(win32);
+    const EXTGLOB_CHARS = constants.extglobChars(PLATFORM_CHARS);
     const {
       DOT_LITERAL,
       PLUS_LITERAL,
@@ -3090,17 +3090,17 @@ var require_parse2 = __commonJS((exports2, module2) => {
     };
     if (opts.fastpaths !== false && !/(^[*!]|[/()[\]{}"])/.test(input)) {
       let backslashes = false;
-      let output = input.replace(REGEX_SPECIAL_CHARS_BACKREF, (m, esc, chars, first, rest2, index) => {
+      let output = input.replace(REGEX_SPECIAL_CHARS_BACKREF, (m, esc, chars, first, rest, index) => {
         if (first === "\\") {
           backslashes = true;
           return m;
         }
         if (first === "?") {
           if (esc) {
-            return esc + first + (rest2 ? QMARK.repeat(rest2.length) : "");
+            return esc + first + (rest ? QMARK.repeat(rest.length) : "");
           }
           if (index === 0) {
-            return qmarkNoDot + (rest2 ? QMARK.repeat(rest2.length) : "");
+            return qmarkNoDot + (rest ? QMARK.repeat(rest.length) : "");
           }
           return QMARK.repeat(chars.length);
         }
@@ -3109,7 +3109,7 @@ var require_parse2 = __commonJS((exports2, module2) => {
         }
         if (first === "*") {
           if (esc) {
-            return esc + first + (rest2 ? star : "");
+            return esc + first + (rest ? star : "");
           }
           return star;
         }
@@ -3176,8 +3176,8 @@ var require_parse2 = __commonJS((exports2, module2) => {
             if (inner.includes(":")) {
               const idx = prev.value.lastIndexOf("[");
               const pre = prev.value.slice(0, idx);
-              const rest3 = prev.value.slice(idx + 2);
-              const posix = POSIX_REGEX_SOURCE[rest3];
+              const rest2 = prev.value.slice(idx + 2);
+              const posix = POSIX_REGEX_SOURCE[rest2];
               if (posix) {
                 prev.value = pre + posix;
                 state.backtrack = true;
@@ -3459,8 +3459,8 @@ var require_parse2 = __commonJS((exports2, module2) => {
         consume(value);
         continue;
       }
-      let rest2 = remaining();
-      if (opts.noextglob !== true && /^\([^?]/.test(rest2)) {
+      let rest = remaining();
+      if (opts.noextglob !== true && /^\([^?]/.test(rest)) {
         extglobOpen("star", value);
         continue;
       }
@@ -3473,7 +3473,7 @@ var require_parse2 = __commonJS((exports2, module2) => {
         const before = prior.prev;
         const isStart = prior.type === "slash" || prior.type === "bos";
         const afterStar = before && (before.type === "star" || before.type === "globstar");
-        if (opts.bash === true && (!isStart || rest2[0] && rest2[0] !== "/")) {
+        if (opts.bash === true && (!isStart || rest[0] && rest[0] !== "/")) {
           push({type: "star", value, output: ""});
           continue;
         }
@@ -3483,12 +3483,12 @@ var require_parse2 = __commonJS((exports2, module2) => {
           push({type: "star", value, output: ""});
           continue;
         }
-        while (rest2.slice(0, 3) === "/**") {
+        while (rest.slice(0, 3) === "/**") {
           const after = input[state.index + 4];
           if (after && after !== "/") {
             break;
           }
-          rest2 = rest2.slice(3);
+          rest = rest.slice(3);
           consume("/**", 3);
         }
         if (prior.type === "bos" && eos()) {
@@ -3511,8 +3511,8 @@ var require_parse2 = __commonJS((exports2, module2) => {
           consume(value);
           continue;
         }
-        if (prior.type === "slash" && prior.prev.type !== "bos" && rest2[0] === "/") {
-          const end = rest2[1] !== void 0 ? "|$" : "";
+        if (prior.type === "slash" && prior.prev.type !== "bos" && rest[0] === "/") {
+          const end = rest[1] !== void 0 ? "|$" : "";
           state.output = state.output.slice(0, -(prior.output + prev.output).length);
           prior.output = `(?:${prior.output}`;
           prev.type = "globstar";
@@ -3524,7 +3524,7 @@ var require_parse2 = __commonJS((exports2, module2) => {
           push({type: "slash", value: "/", output: ""});
           continue;
         }
-        if (prior.type === "bos" && rest2[0] === "/") {
+        if (prior.type === "bos" && rest[0] === "/") {
           prev.type = "globstar";
           prev.value += value;
           prev.output = `(?:^|${SLASH_LITERAL}|${globstar(opts)}${SLASH_LITERAL})`;
@@ -3626,7 +3626,7 @@ var require_parse2 = __commonJS((exports2, module2) => {
       NO_DOTS_SLASH,
       STAR,
       START_ANCHOR
-    } = constants7.globChars(win32);
+    } = constants.globChars(win32);
     const nodot = opts.dot ? NO_DOTS : NO_DOT;
     const slashDot = opts.dot ? NO_DOTS_SLASH : NO_DOT;
     const capture = opts.capture ? "" : "?:";
@@ -3682,11 +3682,11 @@ var require_parse2 = __commonJS((exports2, module2) => {
 // node_modules/picomatch/lib/picomatch.js
 var require_picomatch = __commonJS((exports2, module2) => {
   "use strict";
-  var path3 = require("path");
+  var path = require("path");
   var scan = require_scan();
   var parse = require_parse2();
   var utils = require_utils3();
-  var constants7 = require_constants2();
+  var constants = require_constants2();
   var isObject = (val) => val && typeof val === "object" && !Array.isArray(val);
   var picomatch = (glob, options, returnState = false) => {
     if (Array.isArray(glob)) {
@@ -3768,7 +3768,7 @@ var require_picomatch = __commonJS((exports2, module2) => {
   };
   picomatch.matchBase = (input, glob, options, posix = utils.isWindows(options)) => {
     const regex = glob instanceof RegExp ? glob : picomatch.makeRe(glob, options);
-    return regex.test(path3.basename(input));
+    return regex.test(path.basename(input));
   };
   picomatch.isMatch = (str2, patterns, options) => picomatch(patterns, options)(str2);
   picomatch.parse = (pattern, options) => {
@@ -3827,7 +3827,7 @@ var require_picomatch = __commonJS((exports2, module2) => {
       return /$^/;
     }
   };
-  picomatch.constants = constants7;
+  picomatch.constants = constants;
   module2.exports = picomatch;
 });
 
@@ -4002,7 +4002,7 @@ var require_pattern = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
   exports2.matchAny = exports2.convertPatternsToRe = exports2.makeRe = exports2.getPatternParts = exports2.expandBraceExpansion = exports2.expandPatternsWithBraceExpansion = exports2.isAffectDepthOfReadingPattern = exports2.endsWithSlashGlobStar = exports2.hasGlobStar = exports2.getBaseDirectory = exports2.getPositivePatterns = exports2.getNegativePatterns = exports2.isPositivePattern = exports2.isNegativePattern = exports2.convertToNegativePattern = exports2.convertToPositivePattern = exports2.isDynamicPattern = exports2.isStaticPattern = void 0;
-  var path3 = require("path");
+  var path = require("path");
   var globParent = require_glob_parent();
   var micromatch = require_micromatch();
   var picomatch = require_picomatch2();
@@ -4073,7 +4073,7 @@ var require_pattern = __commonJS((exports2) => {
   }
   exports2.endsWithSlashGlobStar = endsWithSlashGlobStar;
   function isAffectDepthOfReadingPattern(pattern) {
-    const basename2 = path3.basename(pattern);
+    const basename2 = path.basename(pattern);
     return endsWithSlashGlobStar(pattern) || isStaticPattern(basename2);
   }
   exports2.isAffectDepthOfReadingPattern = isAffectDepthOfReadingPattern;
@@ -4278,10 +4278,10 @@ var require_utils4 = __commonJS((exports2) => {
   exports2.array = array;
   var errno = require_errno();
   exports2.errno = errno;
-  var fs2 = require_fs();
-  exports2.fs = fs2;
-  var path3 = require_path();
-  exports2.path = path3;
+  var fs = require_fs();
+  exports2.fs = fs;
+  var path = require_path();
+  exports2.path = path;
   var pattern = require_pattern();
   exports2.pattern = pattern;
   var stream = require_stream();
@@ -4360,15 +4360,15 @@ var require_tasks = __commonJS((exports2) => {
 var require_async = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  function read(path3, settings, callback) {
-    settings.fs.lstat(path3, (lstatError, lstat) => {
+  function read(path, settings, callback) {
+    settings.fs.lstat(path, (lstatError, lstat) => {
       if (lstatError !== null) {
         return callFailureCallback(callback, lstatError);
       }
       if (!lstat.isSymbolicLink() || !settings.followSymbolicLink) {
         return callSuccessCallback(callback, lstat);
       }
-      settings.fs.stat(path3, (statError, stat) => {
+      settings.fs.stat(path, (statError, stat) => {
         if (statError !== null) {
           if (settings.throwErrorOnBrokenSymbolicLink) {
             return callFailureCallback(callback, statError);
@@ -4395,13 +4395,13 @@ var require_async = __commonJS((exports2) => {
 var require_sync = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  function read(path3, settings) {
-    const lstat = settings.fs.lstatSync(path3);
+  function read(path, settings) {
+    const lstat = settings.fs.lstatSync(path);
     if (!lstat.isSymbolicLink() || !settings.followSymbolicLink) {
       return lstat;
     }
     try {
-      const stat = settings.fs.statSync(path3);
+      const stat = settings.fs.statSync(path);
       if (settings.markSymbolicLink) {
         stat.isSymbolicLink = () => true;
       }
@@ -4420,12 +4420,12 @@ var require_sync = __commonJS((exports2) => {
 var require_fs2 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var fs2 = require("fs");
+  var fs = require("fs");
   exports2.FILE_SYSTEM_ADAPTER = {
-    lstat: fs2.lstat,
-    stat: fs2.stat,
-    lstatSync: fs2.lstatSync,
-    statSync: fs2.statSync
+    lstat: fs.lstat,
+    stat: fs.stat,
+    lstatSync: fs.lstatSync,
+    statSync: fs.statSync
   };
   function createFileSystemAdapter(fsMethods) {
     if (fsMethods === void 0) {
@@ -4440,12 +4440,12 @@ var require_fs2 = __commonJS((exports2) => {
 var require_settings = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var fs2 = require_fs2();
+  var fs = require_fs2();
   var Settings = class {
     constructor(_options = {}) {
       this._options = _options;
       this.followSymbolicLink = this._getValue(this._options.followSymbolicLink, true);
-      this.fs = fs2.createFileSystemAdapter(this._options.fs);
+      this.fs = fs.createFileSystemAdapter(this._options.fs);
       this.markSymbolicLink = this._getValue(this._options.markSymbolicLink, false);
       this.throwErrorOnBrokenSymbolicLink = this._getValue(this._options.throwErrorOnBrokenSymbolicLink, true);
     }
@@ -4464,16 +4464,16 @@ var require_out = __commonJS((exports2) => {
   var sync2 = require_sync();
   var settings_1 = require_settings();
   exports2.Settings = settings_1.default;
-  function stat(path3, optionsOrSettingsOrCallback, callback) {
+  function stat(path, optionsOrSettingsOrCallback, callback) {
     if (typeof optionsOrSettingsOrCallback === "function") {
-      return async.read(path3, getSettings(), optionsOrSettingsOrCallback);
+      return async.read(path, getSettings(), optionsOrSettingsOrCallback);
     }
-    async.read(path3, getSettings(optionsOrSettingsOrCallback), callback);
+    async.read(path, getSettings(optionsOrSettingsOrCallback), callback);
   }
   exports2.stat = stat;
-  function statSync(path3, optionsOrSettings) {
+  function statSync(path, optionsOrSettings) {
     const settings = getSettings(optionsOrSettings);
-    return sync2.read(path3, settings);
+    return sync2.read(path, settings);
   }
   exports2.statSync = statSync;
   function getSettings(settingsOrOptions = {}) {
@@ -4574,8 +4574,8 @@ var require_fs3 = __commonJS((exports2) => {
 var require_utils5 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var fs2 = require_fs3();
-  exports2.fs = fs2;
+  var fs = require_fs3();
+  exports2.fs = fs;
 });
 
 // node_modules/@nodelib/fs.scandir/out/providers/async.js
@@ -4731,14 +4731,14 @@ var require_sync2 = __commonJS((exports2) => {
 var require_fs4 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var fs2 = require("fs");
+  var fs = require("fs");
   exports2.FILE_SYSTEM_ADAPTER = {
-    lstat: fs2.lstat,
-    stat: fs2.stat,
-    lstatSync: fs2.lstatSync,
-    statSync: fs2.statSync,
-    readdir: fs2.readdir,
-    readdirSync: fs2.readdirSync
+    lstat: fs.lstat,
+    stat: fs.stat,
+    lstatSync: fs.lstatSync,
+    statSync: fs.statSync,
+    readdir: fs.readdir,
+    readdirSync: fs.readdirSync
   };
   function createFileSystemAdapter(fsMethods) {
     if (fsMethods === void 0) {
@@ -4753,15 +4753,15 @@ var require_fs4 = __commonJS((exports2) => {
 var require_settings2 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var path3 = require("path");
+  var path = require("path");
   var fsStat = require_out();
-  var fs2 = require_fs4();
+  var fs = require_fs4();
   var Settings = class {
     constructor(_options = {}) {
       this._options = _options;
       this.followSymbolicLinks = this._getValue(this._options.followSymbolicLinks, false);
-      this.fs = fs2.createFileSystemAdapter(this._options.fs);
-      this.pathSegmentSeparator = this._getValue(this._options.pathSegmentSeparator, path3.sep);
+      this.fs = fs.createFileSystemAdapter(this._options.fs);
+      this.pathSegmentSeparator = this._getValue(this._options.pathSegmentSeparator, path.sep);
       this.stats = this._getValue(this._options.stats, false);
       this.throwErrorOnBrokenSymbolicLink = this._getValue(this._options.throwErrorOnBrokenSymbolicLink, true);
       this.fsStatSettings = new fsStat.Settings({
@@ -4785,16 +4785,16 @@ var require_out2 = __commonJS((exports2) => {
   var sync2 = require_sync2();
   var settings_1 = require_settings2();
   exports2.Settings = settings_1.default;
-  function scandir(path3, optionsOrSettingsOrCallback, callback) {
+  function scandir(path, optionsOrSettingsOrCallback, callback) {
     if (typeof optionsOrSettingsOrCallback === "function") {
-      return async.read(path3, getSettings(), optionsOrSettingsOrCallback);
+      return async.read(path, getSettings(), optionsOrSettingsOrCallback);
     }
-    async.read(path3, getSettings(optionsOrSettingsOrCallback), callback);
+    async.read(path, getSettings(optionsOrSettingsOrCallback), callback);
   }
   exports2.scandir = scandir;
-  function scandirSync(path3, optionsOrSettings) {
+  function scandirSync(path, optionsOrSettings) {
     const settings = getSettings(optionsOrSettings);
-    return sync2.read(path3, settings);
+    return sync2.read(path, settings);
   }
   exports2.scandirSync = scandirSync;
   function getSettings(settingsOrOptions = {}) {
@@ -5290,7 +5290,7 @@ var require_sync4 = __commonJS((exports2) => {
 var require_settings3 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var path3 = require("path");
+  var path = require("path");
   var fsScandir = require_out2();
   var Settings = class {
     constructor(_options = {}) {
@@ -5300,7 +5300,7 @@ var require_settings3 = __commonJS((exports2) => {
       this.deepFilter = this._getValue(this._options.deepFilter, null);
       this.entryFilter = this._getValue(this._options.entryFilter, null);
       this.errorFilter = this._getValue(this._options.errorFilter, null);
-      this.pathSegmentSeparator = this._getValue(this._options.pathSegmentSeparator, path3.sep);
+      this.pathSegmentSeparator = this._getValue(this._options.pathSegmentSeparator, path.sep);
       this.fsScandirSettings = new fsScandir.Settings({
         followSymbolicLinks: this._options.followSymbolicLinks,
         fs: this._options.fs,
@@ -5356,7 +5356,7 @@ var require_out3 = __commonJS((exports2) => {
 var require_reader2 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var path3 = require("path");
+  var path = require("path");
   var fsStat = require_out();
   var utils = require_utils4();
   var Reader = class {
@@ -5369,7 +5369,7 @@ var require_reader2 = __commonJS((exports2) => {
       });
     }
     _getFullEntryPath(filepath) {
-      return path3.resolve(this._settings.cwd, filepath);
+      return path.resolve(this._settings.cwd, filepath);
     }
     _makeEntry(stats, pattern) {
       const entry = {
@@ -5705,7 +5705,7 @@ var require_entry2 = __commonJS((exports2) => {
 var require_provider = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var path3 = require("path");
+  var path = require("path");
   var deep_1 = require_deep();
   var entry_1 = require_entry();
   var error_1 = require_error();
@@ -5719,7 +5719,7 @@ var require_provider = __commonJS((exports2) => {
       this.entryTransformer = new entry_2.default(this._settings);
     }
     _getRootDirectory(task) {
-      return path3.resolve(this._settings.cwd, task.base);
+      return path.resolve(this._settings.cwd, task.base);
     }
     _getReaderOptions(task) {
       const basePath = task.base === "." ? "" : task.base;
@@ -5895,16 +5895,16 @@ var require_settings4 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
   exports2.DEFAULT_FILE_SYSTEM_ADAPTER = void 0;
-  var fs2 = require("fs");
+  var fs = require("fs");
   var os = require("os");
   var CPU_COUNT = os.cpus().length;
   exports2.DEFAULT_FILE_SYSTEM_ADAPTER = {
-    lstat: fs2.lstat,
-    lstatSync: fs2.lstatSync,
-    stat: fs2.stat,
-    statSync: fs2.statSync,
-    readdir: fs2.readdir,
-    readdirSync: fs2.readdirSync
+    lstat: fs.lstat,
+    lstatSync: fs.lstatSync,
+    stat: fs.stat,
+    statSync: fs.statSync,
+    readdir: fs.readdir,
+    readdirSync: fs.readdirSync
   };
   var Settings = class {
     constructor(_options = {}) {
@@ -6510,11 +6510,11 @@ var require_conversions = __commonJS((exports2, module2) => {
     if (convert[model].labels.length !== convert[model].channels) {
       throw new Error("channel and label counts mismatch: " + model);
     }
-    const {channels, labels: labels2} = convert[model];
+    const {channels, labels} = convert[model];
     delete convert[model].channels;
     delete convert[model].labels;
     Object.defineProperty(convert[model], "channels", {value: channels});
-    Object.defineProperty(convert[model], "labels", {value: labels2});
+    Object.defineProperty(convert[model], "labels", {value: labels});
   }
   convert.rgb.hsl = function(rgb) {
     const r = rgb[0] / 255;
@@ -7183,15 +7183,15 @@ var require_route = __commonJS((exports2, module2) => {
     };
   }
   function wrapConversion(toModel, graph) {
-    const path3 = [graph[toModel].parent, toModel];
+    const path = [graph[toModel].parent, toModel];
     let fn = conversions[graph[toModel].parent][toModel];
     let cur = graph[toModel].parent;
     while (graph[cur].parent) {
-      path3.unshift(graph[cur].parent);
+      path.unshift(graph[cur].parent);
       fn = link(conversions[graph[cur].parent][cur], fn);
       cur = graph[cur].parent;
     }
-    fn.conversion = path3;
+    fn.conversion = path;
     return fn;
   }
   module2.exports = function(fromModel) {
@@ -7979,8 +7979,8 @@ var require_envalidWithoutDotenv = __commonJS((exports2, module2) => {
 
 // node_modules/dotenv/lib/main.js
 var require_main = __commonJS((exports2, module2) => {
-  var fs2 = require("fs");
-  var path3 = require("path");
+  var fs = require("fs");
+  var path = require("path");
   function log(message) {
     console.log(`[dotenv][DEBUG] ${message}`);
   }
@@ -7988,10 +7988,10 @@ var require_main = __commonJS((exports2, module2) => {
   var RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/;
   var RE_NEWLINES = /\\n/g;
   var NEWLINES_MATCH = /\n|\r|\r\n/;
-  function parse(src2, options) {
-    const debug19 = Boolean(options && options.debug);
+  function parse(src, options) {
+    const debug10 = Boolean(options && options.debug);
     const obj = {};
-    src2.toString().split(NEWLINES_MATCH).forEach(function(line, idx) {
+    src.toString().split(NEWLINES_MATCH).forEach(function(line, idx) {
       const keyValueArr = line.match(RE_INI_KEY_VAL);
       if (keyValueArr != null) {
         const key = keyValueArr[1];
@@ -8008,16 +8008,16 @@ var require_main = __commonJS((exports2, module2) => {
           val = val.trim();
         }
         obj[key] = val;
-      } else if (debug19) {
+      } else if (debug10) {
         log(`did not match key and value when parsing line ${idx + 1}: ${line}`);
       }
     });
     return obj;
   }
   function config(options) {
-    let dotenvPath = path3.resolve(process.cwd(), ".env");
+    let dotenvPath = path.resolve(process.cwd(), ".env");
     let encoding = "utf8";
-    let debug19 = false;
+    let debug10 = false;
     if (options) {
       if (options.path != null) {
         dotenvPath = options.path;
@@ -8026,15 +8026,15 @@ var require_main = __commonJS((exports2, module2) => {
         encoding = options.encoding;
       }
       if (options.debug != null) {
-        debug19 = true;
+        debug10 = true;
       }
     }
     try {
-      const parsed = parse(fs2.readFileSync(dotenvPath, {encoding}), {debug: debug19});
+      const parsed = parse(fs.readFileSync(dotenvPath, {encoding}), {debug: debug10});
       Object.keys(parsed).forEach(function(key) {
         if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
           process.env[key] = parsed[key];
-        } else if (debug19) {
+        } else if (debug10) {
           log(`"${key}" is already defined in \`process.env\` and will not be overwritten`);
         }
       });
@@ -8049,14 +8049,14 @@ var require_main = __commonJS((exports2, module2) => {
 
 // node_modules/envalid/src/envalid.js
 var require_envalid = __commonJS((exports2, module2) => {
-  var envalid3 = require_envalidWithoutDotenv();
+  var envalid2 = require_envalidWithoutDotenv();
   var {extend} = require_utils6();
-  var fs2 = require("fs");
+  var fs = require("fs");
   var dotenv = require_main();
   function extendWithDotEnv(inputEnv, dotEnvPath = ".env") {
     let dotEnvBuffer = null;
     try {
-      dotEnvBuffer = fs2.readFileSync(dotEnvPath);
+      dotEnvBuffer = fs.readFileSync(dotEnvPath);
     } catch (err) {
       if (err.code === "ENOENT")
         return inputEnv;
@@ -8065,12 +8065,12 @@ var require_envalid = __commonJS((exports2, module2) => {
     const parsed = dotenv.parse(dotEnvBuffer);
     return extend(parsed, inputEnv);
   }
-  var originalCleanEnv = envalid3.cleanEnv;
-  envalid3.cleanEnv = function cleanEnv(inputEnv, specs = {}, options = {}) {
+  var originalCleanEnv = envalid2.cleanEnv;
+  envalid2.cleanEnv = function cleanEnv(inputEnv, specs = {}, options = {}) {
     const env2 = options.dotEnvPath !== null ? extendWithDotEnv(inputEnv, options.dotEnvPath) : inputEnv;
     return originalCleanEnv(env2, specs, options);
   };
-  module2.exports = envalid3;
+  module2.exports = envalid2;
 });
 
 // node_modules/concat-map/index.js
@@ -8291,14 +8291,14 @@ var require_brace_expansion = __commonJS((exports2, module2) => {
 
 // node_modules/minimatch/minimatch.js
 var require_minimatch = __commonJS((exports2, module2) => {
-  module2.exports = minimatch3;
-  minimatch3.Minimatch = Minimatch;
-  var path3 = {sep: "/"};
+  module2.exports = minimatch2;
+  minimatch2.Minimatch = Minimatch;
+  var path = {sep: "/"};
   try {
-    path3 = require("path");
+    path = require("path");
   } catch (er) {
   }
-  var GLOBSTAR = minimatch3.GLOBSTAR = Minimatch.GLOBSTAR = {};
+  var GLOBSTAR = minimatch2.GLOBSTAR = Minimatch.GLOBSTAR = {};
   var expand = require_brace_expansion();
   var plTypes = {
     "!": {open: "(?:(?!(?:", close: "))[^/]*?)"},
@@ -8319,11 +8319,11 @@ var require_minimatch = __commonJS((exports2, module2) => {
     }, {});
   }
   var slashSplit = /\/+/;
-  minimatch3.filter = filter;
+  minimatch2.filter = filter;
   function filter(pattern, options) {
     options = options || {};
     return function(p, i, list) {
-      return minimatch3(p, pattern, options);
+      return minimatch2(p, pattern, options);
     };
   }
   function ext(a, b) {
@@ -8338,11 +8338,11 @@ var require_minimatch = __commonJS((exports2, module2) => {
     });
     return t;
   }
-  minimatch3.defaults = function(def) {
+  minimatch2.defaults = function(def) {
     if (!def || !Object.keys(def).length)
-      return minimatch3;
-    var orig = minimatch3;
-    var m = function minimatch4(p, pattern, options) {
+      return minimatch2;
+    var orig = minimatch2;
+    var m = function minimatch3(p, pattern, options) {
       return orig.minimatch(p, pattern, ext(def, options));
     };
     m.Minimatch = function Minimatch2(pattern, options) {
@@ -8353,9 +8353,9 @@ var require_minimatch = __commonJS((exports2, module2) => {
   Minimatch.defaults = function(def) {
     if (!def || !Object.keys(def).length)
       return Minimatch;
-    return minimatch3.defaults(def).Minimatch;
+    return minimatch2.defaults(def).Minimatch;
   };
-  function minimatch3(p, pattern, options) {
+  function minimatch2(p, pattern, options) {
     if (typeof pattern !== "string") {
       throw new TypeError("glob pattern string required");
     }
@@ -8378,8 +8378,8 @@ var require_minimatch = __commonJS((exports2, module2) => {
     if (!options)
       options = {};
     pattern = pattern.trim();
-    if (path3.sep !== "/") {
-      pattern = pattern.split(path3.sep).join("/");
+    if (path.sep !== "/") {
+      pattern = pattern.split(path.sep).join("/");
     }
     this.options = options;
     this.set = [];
@@ -8441,7 +8441,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
       this.pattern = pattern.substr(negateOffset);
     this.negate = negate;
   }
-  minimatch3.braceExpand = function(pattern, options) {
+  minimatch2.braceExpand = function(pattern, options) {
     return braceExpand(pattern, options);
   };
   Minimatch.prototype.braceExpand = braceExpand;
@@ -8695,7 +8695,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
     regExp._src = re;
     return regExp;
   }
-  minimatch3.makeRe = function(pattern, options) {
+  minimatch2.makeRe = function(pattern, options) {
     return new Minimatch(pattern, options || {}).makeRe();
   };
   Minimatch.prototype.makeRe = makeRe;
@@ -8725,7 +8725,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
     }
     return this.regexp;
   }
-  minimatch3.match = function(list, pattern, options) {
+  minimatch2.match = function(list, pattern, options) {
     options = options || {};
     var mm = new Minimatch(pattern, options);
     list = list.filter(function(f) {
@@ -8746,8 +8746,8 @@ var require_minimatch = __commonJS((exports2, module2) => {
     if (f === "/" && partial)
       return true;
     var options = this.options;
-    if (path3.sep !== "/") {
-      f = f.split(path3.sep).join("/");
+    if (path.sep !== "/") {
+      f = f.split(path.sep).join("/");
     }
     f = f.split(slashSplit);
     this.debug(this.pattern, "split", f);
@@ -9160,30 +9160,30 @@ var require_jsonpath = __commonJS((exports2, module2) => {
           }
         }
         function addComment(type, value, start, end, loc) {
-          var comment2, attacher;
+          var comment, attacher;
           assert(typeof start === "number", "Comment must have valid position");
           if (state.lastCommentStart >= start) {
             return;
           }
           state.lastCommentStart = start;
-          comment2 = {
+          comment = {
             type,
             value
           };
           if (extra.range) {
-            comment2.range = [start, end];
+            comment.range = [start, end];
           }
           if (extra.loc) {
-            comment2.loc = loc;
+            comment.loc = loc;
           }
-          extra.comments.push(comment2);
+          extra.comments.push(comment);
           if (extra.attachComment) {
-            extra.leadingComments.push(comment2);
-            extra.trailingComments.push(comment2);
+            extra.leadingComments.push(comment);
+            extra.trailingComments.push(comment);
           }
         }
         function skipSingleLineComment(offset) {
-          var start, loc, ch, comment2;
+          var start, loc, ch, comment;
           start = index - offset;
           loc = {
             start: {
@@ -9196,12 +9196,12 @@ var require_jsonpath = __commonJS((exports2, module2) => {
             ++index;
             if (isLineTerminator(ch)) {
               if (extra.comments) {
-                comment2 = source.slice(start + offset, index - 1);
+                comment = source.slice(start + offset, index - 1);
                 loc.end = {
                   line: lineNumber,
                   column: index - lineStart - 1
                 };
-                addComment("Line", comment2, start, index - 1, loc);
+                addComment("Line", comment, start, index - 1, loc);
               }
               if (ch === 13 && source.charCodeAt(index) === 10) {
                 ++index;
@@ -9212,16 +9212,16 @@ var require_jsonpath = __commonJS((exports2, module2) => {
             }
           }
           if (extra.comments) {
-            comment2 = source.slice(start + offset, index);
+            comment = source.slice(start + offset, index);
             loc.end = {
               line: lineNumber,
               column: index - lineStart
             };
-            addComment("Line", comment2, start, index, loc);
+            addComment("Line", comment, start, index, loc);
           }
         }
         function skipMultiLineComment() {
-          var start, loc, ch, comment2;
+          var start, loc, ch, comment;
           if (extra.comments) {
             start = index - 2;
             loc = {
@@ -9248,12 +9248,12 @@ var require_jsonpath = __commonJS((exports2, module2) => {
                 ++index;
                 ++index;
                 if (extra.comments) {
-                  comment2 = source.slice(start + 2, index - 2);
+                  comment = source.slice(start + 2, index - 2);
                   loc.end = {
                     line: lineNumber,
                     column: index - lineStart
                   };
-                  addComment("Block", comment2, start, index, loc);
+                  addComment("Block", comment, start, index, loc);
                 }
                 return;
               }
@@ -12260,14 +12260,14 @@ var require_jsonpath = __commonJS((exports2, module2) => {
                   this.yytext = "";
                   this.match = "";
                 }
-                var rules3 = this._currentRules();
-                for (var i = 0; i < rules3.length; i++) {
-                  tempMatch = this._input.match(this.rules[rules3[i]]);
+                var rules = this._currentRules();
+                for (var i = 0; i < rules.length; i++) {
+                  tempMatch = this._input.match(this.rules[rules[i]]);
                   if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
                     match = tempMatch;
                     index = i;
                     if (this.options.backtrack_lexer) {
-                      token = this.test_match(tempMatch, rules3[i]);
+                      token = this.test_match(tempMatch, rules[i]);
                       if (token !== false) {
                         return token;
                       } else if (this._backtrack) {
@@ -12282,7 +12282,7 @@ var require_jsonpath = __commonJS((exports2, module2) => {
                   }
                 }
                 if (match) {
-                  token = this.test_match(match, rules3[index]);
+                  token = this.test_match(match, rules[index]);
                   if (token !== false) {
                     return token;
                   }
@@ -12429,7 +12429,7 @@ var require_jsonpath = __commonJS((exports2, module2) => {
       };
     }, {}], 3: [function(require2, module4, exports4) {
       var dict = require2("./dict");
-      var fs2 = require2("fs");
+      var fs = require2("fs");
       var grammar = {
         lex: {
           macros: {
@@ -12523,9 +12523,9 @@ var require_jsonpath = __commonJS((exports2, module2) => {
           ]
         }
       };
-      if (fs2.readFileSync) {
-        grammar.moduleInclude = fs2.readFileSync(require2.resolve("../include/module.js"));
-        grammar.actionInclude = fs2.readFileSync(require2.resolve("../include/action.js"));
+      if (fs.readFileSync) {
+        grammar.moduleInclude = fs.readFileSync(require2.resolve("../include/module.js"));
+        grammar.actionInclude = fs.readFileSync(require2.resolve("../include/action.js"));
       }
       module4.exports = grammar;
     }, {"./dict": 2, fs: 12}], 4: [function(require2, module4, exports4) {
@@ -12625,16 +12625,16 @@ var require_jsonpath = __commonJS((exports2, module2) => {
           return unique(results);
         },
         "subscript-child-filter_expression": function(component, partial, count) {
-          var src2 = component.expression.value.slice(2, -1);
-          var ast = aesprim.parse(src2).body[0].expression;
+          var src = component.expression.value.slice(2, -1);
+          var ast = aesprim.parse(src).body[0].expression;
           var passable = function(key, value) {
             return evaluate(ast, {"@": value});
           };
           return this.descend(partial, null, passable, count);
         },
         "subscript-descendant-filter_expression": function(component, partial, count) {
-          var src2 = component.expression.value.slice(2, -1);
-          var ast = aesprim.parse(src2).body[0].expression;
+          var src = component.expression.value.slice(2, -1);
+          var ast = aesprim.parse(src).body[0].expression;
           var passable = function(key, value) {
             return evaluate(ast, {"@": value});
           };
@@ -12655,12 +12655,12 @@ var require_jsonpath = __commonJS((exports2, module2) => {
       };
       Handlers.prototype._fns["subscript-child-string_literal"] = Handlers.prototype._fns["member-child-identifier"];
       Handlers.prototype._fns["member-descendant-numeric_literal"] = Handlers.prototype._fns["subscript-descendant-string_literal"] = Handlers.prototype._fns["member-descendant-identifier"];
-      function eval_recurse(partial, src2, template) {
+      function eval_recurse(partial, src, template) {
         var jp = require2("./index");
-        var ast = aesprim.parse(src2).body[0].expression;
+        var ast = aesprim.parse(src).body[0].expression;
         var value = evaluate(ast, {"@": partial.value});
-        var path3 = template.replace(/\{\{\s*value\s*\}\}/g, value);
-        var results = jp.nodes(partial.value, path3);
+        var path = template.replace(/\{\{\s*value\s*\}\}/g, value);
+        var results = jp.nodes(partial.value, path);
         results.forEach(function(r) {
           r.path = partial.path.concat(r.path.slice(1));
         });
@@ -12675,16 +12675,16 @@ var require_jsonpath = __commonJS((exports2, module2) => {
       function traverser(recurse) {
         return function(partial, ref, passable, count) {
           var value = partial.value;
-          var path3 = partial.path;
+          var path = partial.path;
           var results = [];
-          var descend = function(value2, path4) {
+          var descend = function(value2, path2) {
             if (is_array(value2)) {
               value2.forEach(function(element, index) {
                 if (results.length >= count) {
                   return;
                 }
                 if (passable(index, element, ref)) {
-                  results.push({path: path4.concat(index), value: element});
+                  results.push({path: path2.concat(index), value: element});
                 }
               });
               value2.forEach(function(element, index) {
@@ -12692,7 +12692,7 @@ var require_jsonpath = __commonJS((exports2, module2) => {
                   return;
                 }
                 if (recurse) {
-                  descend(element, path4.concat(index));
+                  descend(element, path2.concat(index));
                 }
               });
             } else if (is_object(value2)) {
@@ -12701,7 +12701,7 @@ var require_jsonpath = __commonJS((exports2, module2) => {
                   return;
                 }
                 if (passable(k, value2[k], ref)) {
-                  results.push({path: path4.concat(k), value: value2[k]});
+                  results.push({path: path2.concat(k), value: value2[k]});
                 }
               });
               this.keys(value2).forEach(function(k) {
@@ -12709,12 +12709,12 @@ var require_jsonpath = __commonJS((exports2, module2) => {
                   return;
                 }
                 if (recurse) {
-                  descend(value2[k], path4.concat(k));
+                  descend(value2[k], path2.concat(k));
                 }
               });
             }
           }.bind(this);
-          descend(value, path3);
+          descend(value, path);
           return results;
         };
       }
@@ -12787,36 +12787,36 @@ var require_jsonpath = __commonJS((exports2, module2) => {
         }, this);
         return nodes;
       };
-      JSONPath2.prototype.value = function(obj, path3, value) {
+      JSONPath2.prototype.value = function(obj, path, value) {
         assert.ok(obj instanceof Object, "obj needs to be an object");
-        assert.ok(path3, "we need a path");
+        assert.ok(path, "we need a path");
         if (arguments.length >= 3) {
-          var node = this.nodes(obj, path3).shift();
+          var node = this.nodes(obj, path).shift();
           if (!node)
-            return this._vivify(obj, path3, value);
+            return this._vivify(obj, path, value);
           var key = node.path.slice(-1).shift();
           var parent = this.parent(obj, this.stringify(node.path));
           parent[key] = value;
         }
-        return this.query(obj, this.stringify(path3), 1).shift();
+        return this.query(obj, this.stringify(path), 1).shift();
       };
       JSONPath2.prototype._vivify = function(obj, string, value) {
         var self2 = this;
         assert.ok(obj instanceof Object, "obj needs to be an object");
         assert.ok(string, "we need a path");
-        var path3 = this.parser.parse(string).map(function(component) {
+        var path = this.parser.parse(string).map(function(component) {
           return component.expression.value;
         });
-        var setValue = function(path4, value2) {
-          var key = path4.pop();
-          var node = self2.value(obj, path4);
+        var setValue = function(path2, value2) {
+          var key = path2.pop();
+          var node = self2.value(obj, path2);
           if (!node) {
-            setValue(path4.concat(), typeof key === "string" ? {} : []);
-            node = self2.value(obj, path4);
+            setValue(path2.concat(), typeof key === "string" ? {} : []);
+            node = self2.value(obj, path2);
           }
           node[key] = value2;
         };
-        setValue(path3, value);
+        setValue(path, value);
         return this.query(obj, string)[0];
       };
       JSONPath2.prototype.query = function(obj, string, count) {
@@ -12840,15 +12840,15 @@ var require_jsonpath = __commonJS((exports2, module2) => {
         assert.ok(string, "we need a path");
         if (count === 0)
           return [];
-        var path3 = this.parser.parse(string);
+        var path = this.parser.parse(string);
         var handlers = this.handlers;
         var partials = [{path: ["$"], value: obj}];
         var matches = [];
-        if (path3.length && path3[0].expression.type == "root")
-          path3.shift();
-        if (!path3.length)
+        if (path.length && path[0].expression.type == "root")
+          path.shift();
+        if (!path.length)
           return partials;
-        path3.forEach(function(component, index) {
+        path.forEach(function(component, index) {
           if (matches.length >= count)
             return;
           var handler = handlers.resolve(component);
@@ -12857,7 +12857,7 @@ var require_jsonpath = __commonJS((exports2, module2) => {
             if (matches.length >= count)
               return;
             var results = handler(component, p, count);
-            if (index == path3.length - 1) {
+            if (index == path.length - 1) {
               matches = matches.concat(results || []);
             } else {
               _partials = _partials.concat(results || []);
@@ -12867,8 +12867,8 @@ var require_jsonpath = __commonJS((exports2, module2) => {
         });
         return count ? matches.slice(0, count) : matches;
       };
-      JSONPath2.prototype.stringify = function(path3) {
-        assert.ok(path3, "we need a path");
+      JSONPath2.prototype.stringify = function(path) {
+        assert.ok(path, "we need a path");
         var string = "$";
         var templates = {
           "descendant-member": "..{{value}}",
@@ -12876,8 +12876,8 @@ var require_jsonpath = __commonJS((exports2, module2) => {
           "descendant-subscript": "..[{{value}}]",
           "child-subscript": "[{{value}}]"
         };
-        path3 = this._normalize(path3);
-        path3.forEach(function(component) {
+        path = this._normalize(path);
+        path.forEach(function(component) {
           if (component.expression.type == "root")
             return;
           var key = [component.scope, component.operation].join("-");
@@ -12894,13 +12894,13 @@ var require_jsonpath = __commonJS((exports2, module2) => {
         });
         return string;
       };
-      JSONPath2.prototype._normalize = function(path3) {
-        assert.ok(path3, "we need a path");
-        if (typeof path3 == "string") {
-          return this.parser.parse(path3);
-        } else if (Array.isArray(path3) && typeof path3[0] == "string") {
+      JSONPath2.prototype._normalize = function(path) {
+        assert.ok(path, "we need a path");
+        if (typeof path == "string") {
+          return this.parser.parse(path);
+        } else if (Array.isArray(path) && typeof path[0] == "string") {
           var _path = [{expression: {type: "root", value: "$"}}];
-          path3.forEach(function(component, index) {
+          path.forEach(function(component, index) {
             if (component == "$" && index === 0)
               return;
             if (typeof component == "string" && component.match("^" + dict.identifier + "$")) {
@@ -12919,10 +12919,10 @@ var require_jsonpath = __commonJS((exports2, module2) => {
             }
           });
           return _path;
-        } else if (Array.isArray(path3) && typeof path3[0] == "object") {
-          return path3;
+        } else if (Array.isArray(path) && typeof path[0] == "object") {
+          return path;
         }
-        throw new Error("couldn't understand path " + path3);
+        throw new Error("couldn't understand path " + path);
       };
       function _is_string(obj) {
         return Object.prototype.toString.call(obj) == "[object String]";
@@ -13683,35 +13683,35 @@ var require_jsonpath = __commonJS((exports2, module2) => {
         exports4.resolve = function() {
           var resolvedPath = "", resolvedAbsolute = false;
           for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-            var path3 = i >= 0 ? arguments[i] : process2.cwd();
-            if (typeof path3 !== "string") {
+            var path = i >= 0 ? arguments[i] : process2.cwd();
+            if (typeof path !== "string") {
               throw new TypeError("Arguments to path.resolve must be strings");
-            } else if (!path3) {
+            } else if (!path) {
               continue;
             }
-            resolvedPath = path3 + "/" + resolvedPath;
-            resolvedAbsolute = path3.charAt(0) === "/";
+            resolvedPath = path + "/" + resolvedPath;
+            resolvedAbsolute = path.charAt(0) === "/";
           }
           resolvedPath = normalizeArray(filter(resolvedPath.split("/"), function(p) {
             return !!p;
           }), !resolvedAbsolute).join("/");
           return (resolvedAbsolute ? "/" : "") + resolvedPath || ".";
         };
-        exports4.normalize = function(path3) {
-          var isAbsolute = exports4.isAbsolute(path3), trailingSlash = substr(path3, -1) === "/";
-          path3 = normalizeArray(filter(path3.split("/"), function(p) {
+        exports4.normalize = function(path) {
+          var isAbsolute = exports4.isAbsolute(path), trailingSlash = substr(path, -1) === "/";
+          path = normalizeArray(filter(path.split("/"), function(p) {
             return !!p;
           }), !isAbsolute).join("/");
-          if (!path3 && !isAbsolute) {
-            path3 = ".";
+          if (!path && !isAbsolute) {
+            path = ".";
           }
-          if (path3 && trailingSlash) {
-            path3 += "/";
+          if (path && trailingSlash) {
+            path += "/";
           }
-          return (isAbsolute ? "/" : "") + path3;
+          return (isAbsolute ? "/" : "") + path;
         };
-        exports4.isAbsolute = function(path3) {
-          return path3.charAt(0) === "/";
+        exports4.isAbsolute = function(path) {
+          return path.charAt(0) === "/";
         };
         exports4.join = function() {
           var paths = Array.prototype.slice.call(arguments, 0);
@@ -13759,17 +13759,17 @@ var require_jsonpath = __commonJS((exports2, module2) => {
         };
         exports4.sep = "/";
         exports4.delimiter = ":";
-        exports4.dirname = function(path3) {
-          if (typeof path3 !== "string")
-            path3 = path3 + "";
-          if (path3.length === 0)
+        exports4.dirname = function(path) {
+          if (typeof path !== "string")
+            path = path + "";
+          if (path.length === 0)
             return ".";
-          var code = path3.charCodeAt(0);
+          var code = path.charCodeAt(0);
           var hasRoot = code === 47;
           var end = -1;
           var matchedSlash = true;
-          for (var i = path3.length - 1; i >= 1; --i) {
-            code = path3.charCodeAt(i);
+          for (var i = path.length - 1; i >= 1; --i) {
+            code = path.charCodeAt(i);
             if (code === 47) {
               if (!matchedSlash) {
                 end = i;
@@ -13784,17 +13784,17 @@ var require_jsonpath = __commonJS((exports2, module2) => {
           if (hasRoot && end === 1) {
             return "/";
           }
-          return path3.slice(0, end);
+          return path.slice(0, end);
         };
-        function basename2(path3) {
-          if (typeof path3 !== "string")
-            path3 = path3 + "";
+        function basename2(path) {
+          if (typeof path !== "string")
+            path = path + "";
           var start = 0;
           var end = -1;
           var matchedSlash = true;
           var i;
-          for (i = path3.length - 1; i >= 0; --i) {
-            if (path3.charCodeAt(i) === 47) {
+          for (i = path.length - 1; i >= 0; --i) {
+            if (path.charCodeAt(i) === 47) {
               if (!matchedSlash) {
                 start = i + 1;
                 break;
@@ -13806,25 +13806,25 @@ var require_jsonpath = __commonJS((exports2, module2) => {
           }
           if (end === -1)
             return "";
-          return path3.slice(start, end);
+          return path.slice(start, end);
         }
-        exports4.basename = function(path3, ext) {
-          var f = basename2(path3);
+        exports4.basename = function(path, ext) {
+          var f = basename2(path);
           if (ext && f.substr(-1 * ext.length) === ext) {
             f = f.substr(0, f.length - ext.length);
           }
           return f;
         };
-        exports4.extname = function(path3) {
-          if (typeof path3 !== "string")
-            path3 = path3 + "";
+        exports4.extname = function(path) {
+          if (typeof path !== "string")
+            path = path + "";
           var startDot = -1;
           var startPart = 0;
           var end = -1;
           var matchedSlash = true;
           var preDotState = 0;
-          for (var i = path3.length - 1; i >= 0; --i) {
-            var code = path3.charCodeAt(i);
+          for (var i = path.length - 1; i >= 0; --i) {
+            var code = path.charCodeAt(i);
             if (code === 47) {
               if (!matchedSlash) {
                 startPart = i + 1;
@@ -13848,7 +13848,7 @@ var require_jsonpath = __commonJS((exports2, module2) => {
           if (startDot === -1 || end === -1 || preDotState === 0 || preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
             return "";
           }
-          return path3.slice(startDot, end);
+          return path.slice(startDot, end);
         };
         function filter(xs, f) {
           if (xs.filter)
@@ -14350,11 +14350,11 @@ var require_common2 = __commonJS((exports2, module2) => {
     function createDebug(namespace) {
       let prevTime;
       let enableOverride = null;
-      function debug19(...args) {
-        if (!debug19.enabled) {
+      function debug10(...args) {
+        if (!debug10.enabled) {
           return;
         }
-        const self2 = debug19;
+        const self2 = debug10;
         const curr = Number(new Date());
         const ms = curr - (prevTime || curr);
         self2.diff = ms;
@@ -14384,12 +14384,12 @@ var require_common2 = __commonJS((exports2, module2) => {
         const logFn = self2.log || createDebug.log;
         logFn.apply(self2, args);
       }
-      debug19.namespace = namespace;
-      debug19.useColors = createDebug.useColors();
-      debug19.color = createDebug.selectColor(namespace);
-      debug19.extend = extend;
-      debug19.destroy = createDebug.destroy;
-      Object.defineProperty(debug19, "enabled", {
+      debug10.namespace = namespace;
+      debug10.useColors = createDebug.useColors();
+      debug10.color = createDebug.selectColor(namespace);
+      debug10.extend = extend;
+      debug10.destroy = createDebug.destroy;
+      Object.defineProperty(debug10, "enabled", {
         enumerable: true,
         configurable: false,
         get: () => enableOverride === null ? createDebug.enabled(namespace) : enableOverride,
@@ -14398,9 +14398,9 @@ var require_common2 = __commonJS((exports2, module2) => {
         }
       });
       if (typeof createDebug.init === "function") {
-        createDebug.init(debug19);
+        createDebug.init(debug10);
       }
-      return debug19;
+      return debug10;
     }
     function extend(namespace, delimiter) {
       const newDebug = createDebug(this.namespace + (typeof delimiter === "undefined" ? ":" : delimiter) + namespace);
@@ -14783,11 +14783,11 @@ var require_node = __commonJS((exports2, module2) => {
   function load() {
     return process.env.DEBUG;
   }
-  function init(debug19) {
-    debug19.inspectOpts = {};
+  function init(debug10) {
+    debug10.inspectOpts = {};
     const keys = Object.keys(exports2.inspectOpts);
     for (let i = 0; i < keys.length; i++) {
-      debug19.inspectOpts[keys[i]] = exports2.inspectOpts[keys[i]];
+      debug10.inspectOpts[keys[i]] = exports2.inspectOpts[keys[i]];
     }
   }
   module2.exports = require_common2()(exports2);
@@ -15325,12 +15325,12 @@ var require_lib = __commonJS((exports2) => {
     Response: () => Response,
     default: () => lib_default
   });
-  var stream = __toModule(require("stream"));
-  var http2 = __toModule(require("http"));
-  var url = __toModule(require("url"));
-  var https2 = __toModule(require("https"));
-  var zlib2 = __toModule(require("zlib"));
-  var Readable = stream.default.Readable;
+  var import_stream = __toModule(require("stream"));
+  var import_http = __toModule(require("http"));
+  var import_url = __toModule(require("url"));
+  var import_https = __toModule(require("https"));
+  var import_zlib = __toModule(require("zlib"));
+  var Readable = import_stream.default.Readable;
   var BUFFER = Symbol("buffer");
   var TYPE = Symbol("type");
   var Blob = class {
@@ -15448,7 +15448,7 @@ var require_lib = __commonJS((exports2) => {
   } catch (e) {
   }
   var INTERNALS = Symbol("Body internals");
-  var PassThrough = stream.default.PassThrough;
+  var PassThrough = import_stream.default.PassThrough;
   function Body(body) {
     var _this = this;
     var _ref = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, _ref$size = _ref.size;
@@ -15467,7 +15467,7 @@ var require_lib = __commonJS((exports2) => {
       body = Buffer.from(body);
     } else if (ArrayBuffer.isView(body)) {
       body = Buffer.from(body.buffer, body.byteOffset, body.byteLength);
-    } else if (body instanceof stream.default)
+    } else if (body instanceof import_stream.default)
       ;
     else {
       body = Buffer.from(String(body));
@@ -15479,7 +15479,7 @@ var require_lib = __commonJS((exports2) => {
     };
     this.size = size;
     this.timeout = timeout;
-    if (body instanceof stream.default) {
+    if (body instanceof import_stream.default) {
       body.on("error", function(err) {
         const error = err.name === "AbortError" ? err : new FetchError(`Invalid response body while trying to fetch ${_this.url}: ${err.message}`, "system", err);
         _this[INTERNALS].error = error;
@@ -15568,7 +15568,7 @@ var require_lib = __commonJS((exports2) => {
     if (Buffer.isBuffer(body)) {
       return Body.Promise.resolve(body);
     }
-    if (!(body instanceof stream.default)) {
+    if (!(body instanceof import_stream.default)) {
       return Body.Promise.resolve(Buffer.alloc(0));
     }
     let accum = [];
@@ -15667,7 +15667,7 @@ var require_lib = __commonJS((exports2) => {
     if (instance.bodyUsed) {
       throw new Error("cannot clone body after it is used");
     }
-    if (body instanceof stream.default && typeof body.getBoundary !== "function") {
+    if (body instanceof import_stream.default && typeof body.getBoundary !== "function") {
       p1 = new PassThrough();
       p2 = new PassThrough();
       body.pipe(p1);
@@ -15694,7 +15694,7 @@ var require_lib = __commonJS((exports2) => {
       return null;
     } else if (typeof body.getBoundary === "function") {
       return `multipart/form-data;boundary=${body.getBoundary()}`;
-    } else if (body instanceof stream.default) {
+    } else if (body instanceof import_stream.default) {
       return null;
     } else {
       return "text/plain;charset=UTF-8";
@@ -15966,7 +15966,7 @@ var require_lib = __commonJS((exports2) => {
     return headers;
   }
   var INTERNALS$1 = Symbol("Response internals");
-  var STATUS_CODES = http2.default.STATUS_CODES;
+  var STATUS_CODES = import_http.default.STATUS_CODES;
   var Response = class {
     constructor() {
       let body = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : null;
@@ -16034,9 +16034,9 @@ var require_lib = __commonJS((exports2) => {
     configurable: true
   });
   var INTERNALS$2 = Symbol("Request internals");
-  var parse_url = url.default.parse;
-  var format_url = url.default.format;
-  var streamDestructionSupported = "destroy" in stream.default.Readable.prototype;
+  var parse_url = import_url.default.parse;
+  var format_url = import_url.default.format;
+  var streamDestructionSupported = "destroy" in import_stream.default.Readable.prototype;
   function isRequest(input) {
     return typeof input === "object" && typeof input[INTERNALS$2] === "object";
   }
@@ -16139,7 +16139,7 @@ var require_lib = __commonJS((exports2) => {
     if (!/^https?:$/.test(parsedURL.protocol)) {
       throw new TypeError("Only HTTP(S) protocols are supported");
     }
-    if (request.signal && request.body instanceof stream.default.Readable && !streamDestructionSupported) {
+    if (request.signal && request.body instanceof import_stream.default.Readable && !streamDestructionSupported) {
       throw new Error("Cancellation of streamed requests with AbortSignal is not supported in node < 8");
     }
     let contentLengthValue = null;
@@ -16183,23 +16183,23 @@ var require_lib = __commonJS((exports2) => {
   AbortError.prototype = Object.create(Error.prototype);
   AbortError.prototype.constructor = AbortError;
   AbortError.prototype.name = "AbortError";
-  var PassThrough$1 = stream.default.PassThrough;
-  var resolve_url = url.default.resolve;
-  function fetch(url2, opts) {
+  var PassThrough$1 = import_stream.default.PassThrough;
+  var resolve_url = import_url.default.resolve;
+  function fetch(url, opts) {
     if (!fetch.Promise) {
       throw new Error("native promise missing, set fetch.Promise to your favorite alternative");
     }
     Body.Promise = fetch.Promise;
     return new fetch.Promise(function(resolve, reject) {
-      const request = new Request(url2, opts);
+      const request = new Request(url, opts);
       const options = getNodeRequestOptions(request);
-      const send = (options.protocol === "https:" ? https2.default : http2.default).request;
+      const send = (options.protocol === "https:" ? import_https.default : import_http.default).request;
       const signal = request.signal;
       let response = null;
       const abort = function abort2() {
         let error = new AbortError("The user aborted a request.");
         reject(error);
-        if (request.body && request.body instanceof stream.default.Readable) {
+        if (request.body && request.body instanceof import_stream.default.Readable) {
           request.body.destroy(error);
         }
         if (!response || !response.body)
@@ -16314,11 +16314,11 @@ var require_lib = __commonJS((exports2) => {
           return;
         }
         const zlibOptions = {
-          flush: zlib2.default.Z_SYNC_FLUSH,
-          finishFlush: zlib2.default.Z_SYNC_FLUSH
+          flush: import_zlib.default.Z_SYNC_FLUSH,
+          finishFlush: import_zlib.default.Z_SYNC_FLUSH
         };
         if (codings == "gzip" || codings == "x-gzip") {
-          body = body.pipe(zlib2.default.createGunzip(zlibOptions));
+          body = body.pipe(import_zlib.default.createGunzip(zlibOptions));
           response = new Response(body, response_options);
           resolve(response);
           return;
@@ -16327,17 +16327,17 @@ var require_lib = __commonJS((exports2) => {
           const raw = res.pipe(new PassThrough$1());
           raw.once("data", function(chunk) {
             if ((chunk[0] & 15) === 8) {
-              body = body.pipe(zlib2.default.createInflate());
+              body = body.pipe(import_zlib.default.createInflate());
             } else {
-              body = body.pipe(zlib2.default.createInflateRaw());
+              body = body.pipe(import_zlib.default.createInflateRaw());
             }
             response = new Response(body, response_options);
             resolve(response);
           });
           return;
         }
-        if (codings == "br" && typeof zlib2.default.createBrotliDecompress === "function") {
-          body = body.pipe(zlib2.default.createBrotliDecompress());
+        if (codings == "br" && typeof import_zlib.default.createBrotliDecompress === "function") {
+          body = body.pipe(import_zlib.default.createBrotliDecompress());
           response = new Response(body, response_options);
           resolve(response);
           return;
@@ -16872,12 +16872,12 @@ var require_dist_node9 = __commonJS((exports2) => {
       octokit.log.debug("request", options);
       const start = Date.now();
       const requestOptions = octokit.request.endpoint.parse(options);
-      const path3 = requestOptions.url.replace(options.baseUrl, "");
+      const path = requestOptions.url.replace(options.baseUrl, "");
       return request(options).then((response) => {
-        octokit.log.info(`${requestOptions.method} ${path3} - ${response.status} in ${Date.now() - start}ms`);
+        octokit.log.info(`${requestOptions.method} ${path} - ${response.status} in ${Date.now() - start}ms`);
         return response;
       }).catch((error) => {
-        octokit.log.info(`${requestOptions.method} ${path3} - ${error.status} in ${Date.now() - start}ms`);
+        octokit.log.info(`${requestOptions.method} ${path} - ${error.status} in ${Date.now() - start}ms`);
         throw error;
       });
     });
@@ -18079,12 +18079,12 @@ var require_dist_node11 = __commonJS((exports2) => {
 var require_dist_node12 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var core3 = require_dist_node8();
+  var core = require_dist_node8();
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
   var VERSION = "18.0.12";
-  var Octokit2 = core3.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
+  var Octokit2 = core.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
   exports2.Octokit = Octokit2;
@@ -18831,35 +18831,35 @@ var require_markdown_table = __commonJS((exports2, module2) => {
 });
 
 // src/index.ts
-var core2 = __toModule(require_core());
-var lodash2 = __toModule(require_lodash());
+var import_core2 = __toModule(require_core());
+var import_lodash2 = __toModule(require_lodash());
 
 // src/rules.ts
-var fast_glob = __toModule(require_out4());
-var path2 = __toModule(require("path"));
+var import_fast_glob = __toModule(require_out4());
+var import_path2 = __toModule(require("path"));
 
 // src/environment.ts
-var path = __toModule(require("path"));
-var envalid = __toModule(require_envalid());
-var environment = () => envalid.default.cleanEnv(process.env, {
-  GITHUB_EVENT_PATH: envalid.str({
-    devDefault: envalid.testOnly("__mocks__/event.json")
+var import_path = __toModule(require("path"));
+var import_envalid = __toModule(require_envalid());
+var environment = () => import_envalid.default.cleanEnv(process.env, {
+  GITHUB_EVENT_PATH: import_envalid.str({
+    devDefault: import_envalid.testOnly("__mocks__/event.json")
   }),
-  GITHUB_WORKSPACE: envalid.str({
-    devDefault: envalid.testOnly(path.join(__dirname, ".."))
+  GITHUB_WORKSPACE: import_envalid.str({
+    devDefault: import_envalid.testOnly(import_path.join(__dirname, ".."))
   }),
-  GITHUB_EVENT_NAME: envalid.str({devDefault: "pull_request"}),
-  GITHUB_REPOSITORY: envalid.str({devDefault: envalid.testOnly("someRepo")}),
-  GITHUB_SHA: envalid.str({
-    devDefault: envalid.testOnly("ffac537e6cbbf934b08745a378932722df287a53")
+  GITHUB_EVENT_NAME: import_envalid.str({devDefault: "pull_request"}),
+  GITHUB_REPOSITORY: import_envalid.str({devDefault: import_envalid.testOnly("someRepo")}),
+  GITHUB_SHA: import_envalid.str({
+    devDefault: import_envalid.testOnly("ffac537e6cbbf934b08745a378932722df287a53")
   }),
-  TASK_ID: envalid.str({default: "use-herald-action"})
+  TASK_ID: import_envalid.str({default: "use-herald-action"})
 }, {dotEnvPath: null});
 var env = environment();
 
 // src/rules.ts
-var minimatch = __toModule(require_minimatch());
-var jsonpath = __toModule(require_jsonpath());
+var import_minimatch = __toModule(require_minimatch());
+var import_jsonpath = __toModule(require_jsonpath());
 
 // src/util/constants.ts
 var maxPerPage = 100;
@@ -18892,24 +18892,24 @@ var HttpErrors;
 })(HttpErrors || (HttpErrors = {}));
 
 // src/util/loadJSONFile.ts
-var fs = __toModule(require("fs"));
+var import_fs = __toModule(require("fs"));
 var loadJSONFile = (filePath) => {
-  const file = fs.readFileSync(filePath, {encoding: FILE_ENCODING});
+  const file = import_fs.readFileSync(filePath, {encoding: FILE_ENCODING});
   const content = JSON.parse(file);
   return content;
 };
 
 // src/util/debug.ts
-var debug = __toModule(require_src());
-var core = __toModule(require_core());
+var import_debug = __toModule(require_src());
+var import_core = __toModule(require_core());
 var _a;
-var DEBUG = (_a = core.getInput("DEBUG")) != null ? _a : false;
+var DEBUG = (_a = import_core.getInput("DEBUG")) != null ? _a : false;
 if (DEBUG) {
   console.log("debug is enabled, provided pattern:", DEBUG);
 }
 function logger(nameSpace) {
   const {TASK_ID} = env;
-  const log = debug.default(`${TASK_ID}:${nameSpace}`);
+  const log = import_debug.default(`${TASK_ID}:${nameSpace}`);
   log.log = console.log.bind(console);
   if (DEBUG) {
     log.enabled = true;
@@ -18921,7 +18921,7 @@ function logger(nameSpace) {
 var makeArray = (field) => field && Array.isArray(field) ? field : [field].filter(Boolean);
 
 // src/rules.ts
-var debug4 = logger("rules");
+var debug2 = logger("rules");
 var RuleActors;
 (function(RuleActors2) {
   RuleActors2["users"] = "users";
@@ -18980,7 +18980,7 @@ var isValidRawRule = (content) => {
   const hasUsers = hasAttribute("users", content) && Array.isArray(content.users);
   const hasActors = hasTeams || hasUsers || hasAttribute("customMessage", content) && !!content.customMessage && content.action === RuleActions.comment || hasAttribute("labels", content) && !!content.labels && content.action === RuleActions.label || hasAttribute("action", content) && content.action === RuleActions.status;
   const matchers2 = Object.keys(RuleMatchers).some((attr) => attr in content);
-  debug4("validation:", {
+  debug2("validation:", {
     rule: content,
     hasActors,
     hasValidActionValues,
@@ -18989,60 +18989,60 @@ var isValidRawRule = (content) => {
   return hasValidActionValues && hasActors && matchers2;
 };
 var loadRules = (rulesLocation) => {
-  const matches = fast_glob.sync(rulesLocation, {
+  const matches = import_fast_glob.sync(rulesLocation, {
     onlyFiles: true,
     cwd: env.GITHUB_WORKSPACE,
     absolute: true
   });
-  debug4("files found:", matches);
-  const rules3 = matches.reduce((memo, filePath) => {
+  debug2("files found:", matches);
+  const rules = matches.reduce((memo, filePath) => {
     try {
       const rule = loadJSONFile(filePath);
-      return isValidRawRule(rule) ? [...memo, {name: path2.basename(filePath), ...sanitize(rule), path: filePath}] : memo;
+      return isValidRawRule(rule) ? [...memo, {name: import_path2.basename(filePath), ...sanitize(rule), path: filePath}] : memo;
     } catch (e) {
       console.error(`${filePath} can't be parsed, it will be ignored`);
       return memo;
     }
   }, []);
-  return rules3;
+  return rules;
 };
 var handleIncludeExcludeFiles = ({includes, excludes, fileNames}) => {
-  debug4("includeExcludeFiles...");
+  debug2("includeExcludeFiles...");
   let results = [];
   if (includes == null ? void 0 : includes.length) {
     results = includes.reduce((memo, include) => {
-      const matches = minimatch.default.match(fileNames, include, {matchBase: true});
+      const matches = import_minimatch.default.match(fileNames, include, {matchBase: true});
       return [...memo, ...matches];
     }, []);
     results = [...new Set(results)];
-    debug4("includes matches", {results, includes});
+    debug2("includes matches", {results, includes});
     if ((excludes == null ? void 0 : excludes.length) && results.length) {
       const toExclude = excludes.reduce((memo, exclude) => {
-        const matches = minimatch.default.match(results, exclude, {matchBase: true});
+        const matches = import_minimatch.default.match(results, exclude, {matchBase: true});
         return [...memo, ...matches];
       }, []);
       results = results.filter((filename) => !toExclude.includes(filename));
-      debug4("excludes matches:", {results, excludes});
+      debug2("excludes matches:", {results, excludes});
     }
   }
   return !!results.length;
 };
 var handleIncludesInPatch = ({patterns, patch}) => {
-  debug4("handleIncludesInPath...");
+  debug2("handleIncludesInPath...");
   const matches = patterns == null ? void 0 : patterns.reduce((memo, pattern) => {
     try {
       const rex = new RegExp(pattern);
       const matches2 = patch == null ? void 0 : patch.find((content) => content.match(rex));
       return matches2 ? [...memo, matches2] : memo;
     } catch (e) {
-      debug4(`pattern: ${pattern} failed to parse`, e);
+      debug2(`pattern: ${pattern} failed to parse`, e);
       return memo;
     }
   }, []);
   return !!(matches == null ? void 0 : matches.length);
 };
-var allRequiredRulesHaveMatched = (rules3, matchingRules) => {
-  const requiredRules = rules3.filter((rule) => rule.errorLevel && rule.errorLevel === ErrorLevels.error);
+var allRequiredRulesHaveMatched = (rules, matchingRules) => {
+  const requiredRules = rules.filter((rule) => rule.errorLevel && rule.errorLevel === ErrorLevels.error);
   if (!requiredRules.length) {
     return true;
   }
@@ -19050,20 +19050,20 @@ var allRequiredRulesHaveMatched = (rules3, matchingRules) => {
   return requiredRules.every((rule) => matchingRulesNames.includes(rule.name));
 };
 var handleEventJsonPath = ({event, patterns}) => {
-  debug4("eventJsonPath", patterns);
+  debug2("eventJsonPath", patterns);
   try {
     let results;
     patterns == null ? void 0 : patterns.find((pattern) => {
-      const matches = jsonpath.default.query(event, pattern);
+      const matches = import_jsonpath.default.query(event, pattern);
       if (matches.length) {
         results = matches;
       }
       return matches.length;
     });
-    debug4("eventJSONPath matches:", results);
+    debug2("eventJSONPath matches:", results);
     return !!results;
   } catch (e) {
-    debug4("eventJsonPath:Error:", e);
+    debug2("eventJsonPath:Error:", e);
   }
   return false;
 };
@@ -19078,12 +19078,12 @@ var isMatch = (rule, options) => {
     var _a2;
     return (_a2 = rule[matcher]) == null ? void 0 : _a2.length;
   }).map((matcher) => matchers[matcher](rule, options));
-  debug4("isMatch:", {rule, matches});
+  debug2("isMatch:", {rule, matches});
   return matches.length ? matches.every((match) => match === true) : false;
 };
-var getMatchingRules = (rules3, files, event, patchContent = []) => {
+var getMatchingRules = (rules, files, event, patchContent = []) => {
   const fileNames = files.map(({filename}) => filename);
-  const matchingRules = rules3.reduce((memo, rule) => {
+  const matchingRules = rules.reduce((memo, rule) => {
     if (isMatch(rule, {event, patch: patchContent, fileNames})) {
       return [...memo, {...rule, matched: true}];
     } else {
@@ -19094,97 +19094,97 @@ var getMatchingRules = (rules3, files, event, patchContent = []) => {
 };
 
 // src/index.ts
-var rest = __toModule(require_dist_node12());
+var import_rest = __toModule(require_dist_node12());
 
 // src/util/catchHandler.ts
-var catchHandler = (debug19) => (error) => {
+var catchHandler = (debug10) => (error) => {
   if (Object.values(AllowedHttpErrors).includes(error.status)) {
-    debug19(`Request failed with status ${error.status}, We do not consider this a fatal error`, error);
+    debug10(`Request failed with status ${error.status}, We do not consider this a fatal error`, error);
     return Promise.resolve({});
   }
-  debug19("Request Failed", error);
+  debug10("Request Failed", error);
   return Promise.reject(error);
 };
 
 // src/assignees.ts
-var debug6 = logger("assignees");
+var debug3 = logger("assignees");
 var handleAssignees = async (client, {owner, repo, prNumber, matchingRules}) => {
-  debug6("handleAssignees called with:", matchingRules);
-  const assignees2 = matchingRules.reduce((memo, rule) => {
+  debug3("handleAssignees called with:", matchingRules);
+  const assignees = matchingRules.reduce((memo, rule) => {
     return [...memo, ...rule.users.map((user) => user.replace("@", ""))];
   }, []);
-  debug6("assignees found:", assignees2);
+  debug3("assignees found:", assignees);
   return client.issues.addAssignees({
     owner,
     repo,
     issue_number: prNumber,
-    assignees: assignees2
-  }).catch(catchHandler(debug6));
+    assignees
+  }).catch(catchHandler(debug3));
 };
 
 // src/labels.ts
-var debug8 = logger("labels");
+var debug4 = logger("labels");
 var handleLabels = async (client, {owner, repo, prNumber, matchingRules}) => {
-  debug8("called with:", matchingRules);
-  const labels2 = matchingRules.filter(({labels: labels3}) => labels3).reduce((memo, {labels: labels3}) => [...memo, ...makeArray(labels3)], []);
-  debug8("labels", labels2);
-  if (!labels2.length) {
-    debug8("no labels where found");
+  debug4("called with:", matchingRules);
+  const labels = matchingRules.filter(({labels: labels2}) => labels2).reduce((memo, {labels: labels2}) => [...memo, ...makeArray(labels2)], []);
+  debug4("labels", labels);
+  if (!labels.length) {
+    debug4("no labels where found");
     return void 0;
   }
   const result = client.issues.addLabels({
     owner,
     repo,
     issue_number: prNumber,
-    labels: labels2
-  }).catch(catchHandler(debug8));
-  debug8("result:", result);
+    labels
+  }).catch(catchHandler(debug4));
+  debug4("result:", result);
   return result;
 };
 
 // src/reviewers.ts
-var debug10 = logger("reviewers");
+var debug5 = logger("reviewers");
 var sanitizeTeam = (team) => {
   const splitTeam = team.replace("@", "").split("/");
   return splitTeam[splitTeam.length - 1];
 };
 var handleReviewers = async (client, {owner, repo, prNumber, matchingRules}) => {
-  debug10("handleReviewers called with:", matchingRules);
-  const {reviewers: reviewers2, teamReviewers} = matchingRules.reduce((memo, rule) => {
-    const reviewers3 = [...memo.reviewers, ...rule.users.map((user) => user.replace("@", ""))];
+  debug5("handleReviewers called with:", matchingRules);
+  const {reviewers, teamReviewers} = matchingRules.reduce((memo, rule) => {
+    const reviewers2 = [...memo.reviewers, ...rule.users.map((user) => user.replace("@", ""))];
     const teamReviewers2 = [...memo.teamReviewers, ...rule.teams.map(sanitizeTeam)];
-    return {reviewers: reviewers3, teamReviewers: teamReviewers2};
+    return {reviewers: reviewers2, teamReviewers: teamReviewers2};
   }, {reviewers: [], teamReviewers: []});
   const result = await client.pulls.requestReviewers({
     owner,
     repo,
     pull_number: prNumber,
-    reviewers: reviewers2,
+    reviewers,
     team_reviewers: teamReviewers
-  }).catch(catchHandler(debug10));
-  debug10("result:", result);
+  }).catch(catchHandler(debug5));
+  debug5("result:", result);
   return result;
 };
 
 // src/statuses.ts
-var p_queue = __toModule(require_dist());
+var import_p_queue = __toModule(require_dist());
 
 // src/util/getBlobURL.ts
-var debug12 = logger("getBlobURL");
+var debug6 = logger("getBlobURL");
 var getBlobURL = (filename, files, owner, repo, base) => {
   const baseBlobPath = `https://github.com/${owner}/${repo}/blob`;
-  debug12("getBlobURL", filename, files, baseBlobPath, base);
+  debug6("getBlobURL", filename, files, baseBlobPath, base);
   const file = files.find((file2) => filename.match(file2.filename));
   return file ? file.blob_url : `${baseBlobPath}/${base}/${filename.replace(`${env.GITHUB_WORKSPACE}/`, "")}`;
 };
 
 // src/statuses.ts
-var debug14 = logger("statuses");
-var handleStatus = async (client, {owner, repo, matchingRules, rules: rules3, base, sha, files}, requestConcurrency = 1) => {
-  debug14("called with:", matchingRules.map((rule) => rule.path));
-  const queue = new p_queue.default({concurrency: requestConcurrency});
-  const statusActionRules = rules3.filter(({action}) => action == RuleActions.status);
-  const statuses2 = statusActionRules.map((rule) => ({
+var debug7 = logger("statuses");
+var handleStatus = async (client, {owner, repo, matchingRules, rules, base, sha, files}, requestConcurrency = 1) => {
+  debug7("called with:", matchingRules.map((rule) => rule.path));
+  const queue = new import_p_queue.default({concurrency: requestConcurrency});
+  const statusActionRules = rules.filter(({action}) => action == RuleActions.status);
+  const statuses = statusActionRules.map((rule) => ({
     owner,
     repo,
     sha,
@@ -19193,17 +19193,17 @@ var handleStatus = async (client, {owner, repo, matchingRules, rules: rules3, ba
     target_url: rule.targetURL ? rule.targetURL : getBlobURL(rule.path, files, owner, repo, base),
     state: matchingRules.find((matchingRule) => matchingRule.path === rule.path) ? CommitStatus.SUCCESS : CommitStatus.FAILURE
   }));
-  debug14("statuses", statuses2);
-  const result = await Promise.all(statuses2.map((status) => queue.add(() => client.repos.createCommitStatus(status)))).catch(catchHandler(debug14));
-  debug14("result:", result);
+  debug7("statuses", statuses);
+  const result = await Promise.all(statuses.map((status) => queue.add(() => client.repos.createCommitStatus(status)))).catch(catchHandler(debug7));
+  debug7("result:", result);
   return result;
 };
 
 // src/comment.ts
-var lodash = __toModule(require_lodash());
-var markdown_table = __toModule(require_markdown_table());
-var p_queue2 = __toModule(require_dist());
-var debug16 = logger("comment");
+var import_lodash = __toModule(require_lodash());
+var import_markdown_table = __toModule(require_markdown_table());
+var import_p_queue2 = __toModule(require_dist());
+var debug8 = logger("comment");
 var TypeOfComments;
 (function(TypeOfComments2) {
   TypeOfComments2["standalone"] = "standalone";
@@ -19212,14 +19212,14 @@ var TypeOfComments;
 var formatUser = (handleOrEmail) => {
   return EMAIL_REGEX.test(handleOrEmail.toLowerCase()) ? handleOrEmail : `@${handleOrEmail}`;
 };
-var tagComment = (body, path3) => `<!-- USE_HERALD_ACTION ${path3} -->
+var tagComment = (body, path) => `<!-- USE_HERALD_ACTION ${path} -->
 ${body}`;
 var commentTemplate = (mentions) => `
    <details open>
 
    <summary> Hi there, given these changes, Herald thinks that these users should take a look! </summary>
 
-   ${markdown_table.default([
+   ${import_markdown_table.default([
   ["Rule", "Mention"],
   ...mentions.map(({rule, URL, mentions: mentions2}) => [
     `[${rule.replace(`${env.GITHUB_WORKSPACE}/`, "")}](${URL})`,
@@ -19230,14 +19230,14 @@ var commentTemplate = (mentions) => `
   </details>
   `;
 var composeCommentsForUsers = (matchingRules) => {
-  const groups = lodash.default(matchingRules, (rule) => rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined);
+  const groups = import_lodash.default(matchingRules, (rule) => rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined);
   let comments = {};
   if (groups[TypeOfComments.combined]) {
-    const mentions = groups[TypeOfComments.combined].reduce((memo, {name, path: path3, users, teams, blobURL}) => memo.concat({URL: blobURL, rule: name || path3, mentions: [...users, ...teams]}), []);
+    const mentions = groups[TypeOfComments.combined].reduce((memo, {name, path, users, teams, blobURL}) => memo.concat({URL: blobURL, rule: name || path, mentions: [...users, ...teams]}), []);
     comments = {...comments, [COMBINED_TAG_KEY]: commentTemplate([...new Set(mentions)])};
   }
   if (groups[TypeOfComments.standalone]) {
-    const customMessages = groups[TypeOfComments.standalone].filter((rule) => rule.customMessage).reduce((memo, {path: path3, customMessage}) => ({...memo, [path3]: customMessage}), {});
+    const customMessages = groups[TypeOfComments.standalone].filter((rule) => rule.customMessage).reduce((memo, {path, customMessage}) => ({...memo, [path]: customMessage}), {});
     comments = {...comments, ...customMessages};
   }
   return comments;
@@ -19261,25 +19261,25 @@ var getAllComments = async (client, params) => {
   }
 };
 var handleComment = async (client, {owner, repo, prNumber, matchingRules, files, base}, requestConcurrency = 1) => {
-  debug16("handleComment called with:", matchingRules);
-  const queue = new p_queue2.default({concurrency: requestConcurrency});
+  debug8("handleComment called with:", matchingRules);
+  const queue = new import_p_queue2.default({concurrency: requestConcurrency});
   const rulesWithBlobURL = matchingRules.map((mRule) => ({
     ...mRule,
     blobURL: getBlobURL(mRule.path, files, owner, repo, base)
   }));
   const commentsFromRules = composeCommentsForUsers(rulesWithBlobURL);
-  debug16("comments from matching rules:", commentsFromRules);
+  debug8("comments from matching rules:", commentsFromRules);
   const rawComments = await getAllComments(client, {
     owner,
     repo,
     issue_number: prNumber
   });
-  const useHeraldActionComments = rawComments.reduce((memo, comment2) => {
+  const useHeraldActionComments = rawComments.reduce((memo, comment) => {
     var _a2;
-    const pathMatch = comment2.body && USE_HERALD_ACTION_TAG_REGEX.exec((_a2 = comment2.body) == null ? void 0 : _a2.split("\n")[0]);
-    return pathMatch ? {...memo, [pathMatch[1]]: comment2} : memo;
+    const pathMatch = comment.body && USE_HERALD_ACTION_TAG_REGEX.exec((_a2 = comment.body) == null ? void 0 : _a2.split("\n")[0]);
+    return pathMatch ? {...memo, [pathMatch[1]]: comment} : memo;
   }, {});
-  debug16("existing UHA comments:", useHeraldActionComments);
+  debug8("existing UHA comments:", useHeraldActionComments);
   const updateCommentPromises = Object.keys(commentsFromRules).filter((key) => key in useHeraldActionComments).map((key) => {
     const comment_id = useHeraldActionComments[key].id;
     const body = tagComment(commentsFromRules[key], key);
@@ -19299,7 +19299,7 @@ var handleComment = async (client, {owner, repo, prNumber, matchingRules, files,
       body
     }));
   });
-  return Promise.all([...updateCommentPromises, ...createCommentPromises]).catch(catchHandler(debug16));
+  return Promise.all([...updateCommentPromises, ...createCommentPromises]).catch(catchHandler(debug8));
 };
 
 // src/util/isEventSupported.ts
@@ -19308,8 +19308,8 @@ var isEventSupported = (event) => {
 };
 
 // src/index.ts
-var debug18 = logger("index");
-var EnhancedOctokit = rest.Octokit;
+var debug9 = logger("index");
+var EnhancedOctokit = import_rest.Octokit;
 var Props;
 (function(Props2) {
   Props2["GITHUB_TOKEN"] = "GITHUB_TOKEN";
@@ -19326,7 +19326,7 @@ var actionsMap = {
 };
 var getParams = () => {
   return Object.keys(Props).reduce((memo, prop) => {
-    const value = core2.getInput(prop);
+    const value = import_core2.getInput(prop);
     return value ? {...memo, [prop]: value} : memo;
   }, {});
 };
@@ -19346,15 +19346,15 @@ var main = async () => {
         }
       } = event;
       const {GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun} = getParams();
-      debug18("params:", {rulesLocation, base, dryRun});
+      debug9("params:", {rulesLocation, base, dryRun});
       if (!rulesLocation) {
         const message = `${Props.rulesLocation} is required`;
-        core2.setFailed(message);
+        import_core2.setFailed(message);
         throw new Error(message);
       }
-      const rules3 = loadRules(rulesLocation);
-      debug18("loaded rules and locations", {
-        rules: rules3,
+      const rules = loadRules(rulesLocation);
+      debug9("loaded rules and locations", {
+        rules,
         dir: env.GITHUB_WORKSPACE,
         rulesLocation
       });
@@ -19367,17 +19367,17 @@ var main = async () => {
         owner,
         repo
       });
-      const matchingRules = getMatchingRules(rules3, files, event, files.reduce((memo, {patch}) => patch ? [...memo, patch] : memo, []));
-      debug18("matchingRules:", matchingRules);
-      if (!allRequiredRulesHaveMatched(rules3, matchingRules)) {
-        throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules3.filter((rule) => rule.errorLevel && rule.errorLevel === "error").map((rule) => rule.name).join(", ")}`);
+      const matchingRules = getMatchingRules(rules, files, event, files.reduce((memo, {patch}) => patch ? [...memo, patch] : memo, []));
+      debug9("matchingRules:", matchingRules);
+      if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
+        throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules.filter((rule) => rule.errorLevel && rule.errorLevel === "error").map((rule) => rule.name).join(", ")}`);
       }
-      const groupedRulesByAction = lodash2.default(matchingRules, (rule) => rule.action);
+      const groupedRulesByAction = import_lodash2.default(matchingRules, (rule) => rule.action);
       if (dryRun !== "true") {
-        debug18("not a dry Run");
+        debug9("not a dry Run");
         if (matchingRules.length) {
           const groupNames = Object.keys(groupedRulesByAction);
-          debug18("groupNames", groupNames);
+          debug9("groupNames", groupNames);
           await Promise.all(groupNames.map((actionName) => {
             const action = actionsMap[RuleActions[actionName]];
             const options = {
@@ -19385,25 +19385,25 @@ var main = async () => {
               repo,
               prNumber,
               matchingRules: groupedRulesByAction[RuleActions[actionName]],
-              rules: rules3,
+              rules,
               sha: headSha,
               base: baseSha,
               files
             };
             return action(client, options);
           })).catch((error) => {
-            debug18("We found an error calling GitHub:", error);
+            debug9("We found an error calling GitHub:", error);
             throw error;
           });
         }
       }
-      core2.setOutput(OUTPUT_NAME, groupedRulesByAction);
+      import_core2.setOutput(OUTPUT_NAME, groupedRulesByAction);
     } else {
-      core2.setOutput(OUTPUT_NAME, []);
+      import_core2.setOutput(OUTPUT_NAME, []);
       throw new Error(`use-herald-action only supports [${Object.values(SUPPORTED_EVENT_TYPES).join(", ")}] events for now, event found: ${env.GITHUB_EVENT_NAME}`);
     }
   } catch (e) {
-    core2.setFailed(e.message);
+    import_core2.setFailed(e.message);
   }
 };
 
