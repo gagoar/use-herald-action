@@ -19025,24 +19025,6 @@ var isValidRawRule = (content) => {
   });
   return hasValidActionValues && hasActors && matchers2;
 };
-var loadRules = (rulesLocation) => {
-  const matches = import_fast_glob.sync(rulesLocation, {
-    onlyFiles: true,
-    cwd: env.GITHUB_WORKSPACE,
-    absolute: true
-  });
-  debug2("files found:", matches);
-  const rules = matches.reduce((memo2, filePath) => {
-    try {
-      const rule = loadJSONFile(filePath);
-      return isValidRawRule(rule) ? [...memo2, {name: import_path2.basename(filePath), ...sanitize(rule), path: filePath}] : memo2;
-    } catch (e) {
-      console.error(`${filePath} can't be parsed, it will be ignored`);
-      return memo2;
-    }
-  }, []);
-  return rules;
-};
 var handleIncludeExcludeFiles = ({includes, excludes, fileNames}) => {
   debug2("includeExcludeFiles...");
   let results = [];
@@ -19118,23 +19100,26 @@ var isMatch = (rule, options) => {
   debug2("isMatch:", {rule, matches});
   return matches.length ? matches.every((match) => match === true) : false;
 };
-var getMatchingRules = (rules, files, event, patchContent = []) => {
-  const fileNames = files.map(({filename}) => filename);
-  const matchingRules = rules.reduce((memo2, rule) => {
-    if (isMatch(rule, {event, patch: patchContent, fileNames})) {
-      return [...memo2, {...rule, matched: true}];
-    } else {
-      return memo2;
-    }
-  }, []);
-  return matchingRules;
-};
 var Rules = class extends Array {
   constructor(...items) {
     super(...items);
   }
   static loadFromLocation(location) {
-    const rules = loadRules(location);
+    const matches = import_fast_glob.sync(location, {
+      onlyFiles: true,
+      cwd: env.GITHUB_WORKSPACE,
+      absolute: true
+    });
+    debug2("files found:", matches);
+    const rules = matches.reduce((memo2, filePath) => {
+      try {
+        const rule = loadJSONFile(filePath);
+        return isValidRawRule(rule) ? [...memo2, {name: import_path2.basename(filePath), ...sanitize(rule), path: filePath}] : memo2;
+      } catch (e) {
+        console.error(`${filePath} can't be parsed, it will be ignored`);
+        return memo2;
+      }
+    }, []);
     return new Rules(...rules);
   }
   getMatchingRules(files, event, patchContent) {
@@ -19152,8 +19137,15 @@ var MatchingRules2 = class extends Array {
     const grouped = this.groupByAction()[action];
     return grouped || [];
   }
-  static load(rules, files, event, patchContent) {
-    const matchingRules = getMatchingRules(rules, files, event, patchContent);
+  static load(rules, files, event, patchContent = []) {
+    const fileNames = files.map(({filename}) => filename);
+    const matchingRules = rules.reduce((memo2, rule) => {
+      if (isMatch(rule, {event, patch: patchContent, fileNames})) {
+        return [...memo2, {...rule, matched: true}];
+      } else {
+        return memo2;
+      }
+    }, []);
     return new MatchingRules2(...matchingRules);
   }
 };
