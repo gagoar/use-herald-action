@@ -1,6 +1,5 @@
 import { getInput, setOutput, setFailed } from '@actions/core';
-import groupBy from 'lodash.groupby';
-import { loadRules, getMatchingRules, RuleActions, allRequiredRulesHaveMatched, MatchingRule, Rule } from './rules';
+import { Rules, RuleActions, allRequiredRulesHaveMatched, MatchingRule, Rule } from './rules';
 import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES, RuleFile } from './util/constants';
 import { logger } from './util/debug';
 import { env } from './environment';
@@ -85,7 +84,7 @@ export const main = async (): Promise<void> => {
         throw new Error(message);
       }
 
-      const rules = loadRules(rulesLocation);
+      const rules = Rules.loadFromLocation(rulesLocation);
 
       debug('loaded rules and locations', {
         rules,
@@ -103,8 +102,7 @@ export const main = async (): Promise<void> => {
         repo,
       });
 
-      const matchingRules = getMatchingRules(
-        rules,
+      const matchingRules = rules.getMatchingRules(
         files,
         event,
         files.reduce((memo, { patch }) => (patch ? [...memo, patch] : memo), [] as string[])
@@ -121,33 +119,33 @@ export const main = async (): Promise<void> => {
         );
       }
 
-      const groupedRulesByAction = groupBy(matchingRules, (rule) => rule.action);
-
       if (dryRun !== 'true') {
         debug('not a dry Run');
 
         if (matchingRules.length) {
-          const groupNames = Object.keys(groupedRulesByAction) as ActionName[];
-
-          debug('groupNames', groupNames);
-
           await Promise.all(
-            groupNames.map((actionName: ActionName) => {
-              const action = actionsMap[RuleActions[actionName]];
+            Object.keys(RuleActions).reduce((promises, actionName) => {
+              const action = actionsMap[RuleActions[actionName as ActionName]];
+
+              const rulesForAction = matchingRules.groupBy(actionName as ActionName);
+
+              if (!rulesForAction.length) {
+                return promises;
+              }
 
               const options: ActionInput = {
                 owner,
                 repo,
                 prNumber,
-                matchingRules: groupedRulesByAction[RuleActions[actionName]],
+                matchingRules: rulesForAction,
                 rules,
                 sha: headSha,
                 base: baseSha,
                 files,
               };
 
-              return action(client, options);
-            })
+              return [...promises, action(client, options)];
+            }, [] as Promise<unknown>[])
           ).catch((error: Error) => {
             debug('We found an error calling GitHub:', error);
             throw error;
@@ -155,7 +153,7 @@ export const main = async (): Promise<void> => {
         }
       }
 
-      setOutput(OUTPUT_NAME, groupedRulesByAction);
+      setOutput(OUTPUT_NAME, matchingRules);
     } else {
       setOutput(OUTPUT_NAME, []);
       throw new Error(

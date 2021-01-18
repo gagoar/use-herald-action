@@ -102,6 +102,7 @@
   "author": "Gago <xeroice@gmail.com>",
   "dependencies": {
     "@actions/core": "1.2.6",
+    "@github/memoize": "^1.0.1",
     "@octokit/rest": "18.0.12",
     "debug": "4.3.1",
     "envalid": "6.0.2",
