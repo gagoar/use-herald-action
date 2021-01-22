@@ -109,30 +109,28 @@ describe('use-herald-action', () => {
       Array [
         Array [
           "appliedRules",
-          Object {
-            "comment": Array [
-              Object {
-                "action": "comment",
-                "customMessage": "This is a custom message for a rule",
-                "eventJsonPath": Array [],
-                "excludes": Array [],
-                "includes": Array [
-                  "*.ts",
-                ],
-                "includesInPatch": Array [],
-                "matched": true,
-                "name": "rule1.json",
-                "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
-                "teams": Array [],
-                "users": Array [
-                  "eeny",
-                  "meeny",
-                  "miny",
-                  "moe",
-                ],
-              },
-            ],
-          },
+          MatchingRules [
+            Object {
+              "action": "comment",
+              "customMessage": "This is a custom message for a rule",
+              "eventJsonPath": Array [],
+              "excludes": Array [],
+              "includes": Array [
+                "*.ts",
+              ],
+              "includesInPatch": Array [],
+              "matched": true,
+              "name": "rule1.json",
+              "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
+              "teams": Array [],
+              "users": Array [
+                "eeny",
+                "meeny",
+                "miny",
+                "moe",
+              ],
+            },
+          ],
         ],
       ]
     `);

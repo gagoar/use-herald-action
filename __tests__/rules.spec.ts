@@ -2,7 +2,7 @@
 
 import * as fg from 'fast-glob';
 
-import { loadRules, getMatchingRules, RuleActions } from '../src/rules';
+import { RuleActions, Rules } from '../src/rules';
 import { unMockConsole, mockConsole } from './util/helpers';
 import { Event } from '../src/util/constants';
 
@@ -57,20 +57,15 @@ describe('rules', () => {
           blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.js',
         },
       ];
-      expect(
-        getMatchingRules(
-          [
-            {
-              ...validRule,
-              includes: undefined,
-              teams: [],
-              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
-            },
-          ],
-          files,
-          event
-        )
-      ).toMatchInlineSnapshot('Array []');
+      const rule = {
+        ...validRule,
+        includes: undefined,
+        teams: [],
+        path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
+      };
+      const rules = new Rules(rule);
+
+      expect(rules.getMatchingRules(files, event)).toMatchInlineSnapshot('MatchingRules []');
     });
 
     it('Matches includes and eventJsonPath (using contains)', () => {
@@ -85,25 +80,20 @@ describe('rules', () => {
         },
       ];
 
-      expect(
-        getMatchingRules(
-          [
-            {
-              ...validRule,
-              teams: [],
-              eventJsonPath: [
-                '$[?(!@.body.match(/Issue Reference.+:/i))].body',
-                '$[?(@.body.match(/Issue Reference.+#[0-9]+/i))].body',
-              ],
-              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
-            },
-          ],
-          files,
-          alterEvent,
-          []
-        )
-      ).toMatchInlineSnapshot(`
-        Array [
+      const rule = {
+        ...validRule,
+        teams: [],
+        eventJsonPath: [
+          '$[?(!@.body.match(/Issue Reference.+:/i))].body',
+          '$[?(@.body.match(/Issue Reference.+#[0-9]+/i))].body',
+        ],
+        path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
+      };
+
+      const rules = new Rules(rule);
+
+      expect(rules.getMatchingRules(files, alterEvent)).toMatchInlineSnapshot(`
+        MatchingRules [
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
@@ -139,22 +129,17 @@ describe('rules', () => {
         },
       ];
 
-      expect(
-        getMatchingRules(
-          [
-            {
-              ...validRule,
-              teams: [],
-              eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
-              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
-            },
-          ],
-          files,
-          event,
-          []
-        )
-      ).toMatchInlineSnapshot(`
-        Array [
+      const rule = {
+        ...validRule,
+        teams: [],
+        eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
+        path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
+      };
+
+      const rules = new Rules(rule);
+
+      expect(rules.getMatchingRules(files, event, [])).toMatchInlineSnapshot(`
+        MatchingRules [
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
@@ -194,22 +179,18 @@ describe('rules', () => {
             'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/uglyfile.ts',
         },
       ];
-      expect(
-        getMatchingRules(
-          [
-            {
-              ...validRule,
-              excludes: ['/some/uglyFile.ts'],
-              teams: [],
-              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
-            },
-          ],
-          files,
-          event,
-          []
-        )
-      ).toMatchInlineSnapshot(`
-        Array [
+
+      const rule = {
+        ...validRule,
+        excludes: ['/some/uglyFile.ts'],
+        teams: [],
+        path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
+      };
+
+      const rules = new Rules(rule);
+
+      expect(rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+        MatchingRules [
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
@@ -243,23 +224,21 @@ describe('rules', () => {
           blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.ts',
         },
       ];
-      expect(
-        getMatchingRules(
-          [
-            { ...validRule, teams: [], path: `${env.GITHUB_WORKSPACE}/some/rule.json` },
-            {
-              ...validRule,
-              includes: ['src/*.ts'],
-              teams: [],
-              path: `${env.GITHUB_WORKSPACE}/some/ruleThatShouldNotMatch.json`,
-            },
-          ],
-          files,
-          event,
-          []
-        )
-      ).toMatchInlineSnapshot(`
-        Array [
+
+      const rule = [
+        { ...validRule, teams: [], path: `${env.GITHUB_WORKSPACE}/some/rule.json` },
+        {
+          ...validRule,
+          includes: ['src/*.ts'],
+          teams: [],
+          path: `${env.GITHUB_WORKSPACE}/some/ruleThatShouldNotMatch.json`,
+        },
+      ];
+
+      const rules = new Rules(...rule);
+
+      expect(rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+        MatchingRules [
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
@@ -296,26 +275,24 @@ describe('rules', () => {
         },
       ];
 
+      const rule = {
+        ...validRule,
+        includes: undefined,
+        includesInPatch: ['/noMatch/'],
+        teams: [],
+        path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
+      };
+
+      const rules = new Rules(rule);
+
       expect(
-        getMatchingRules(
-          [
-            {
-              ...validRule,
-              includes: undefined,
-              includesInPatch: ['/noMatch/'],
-              teams: [],
-              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
-            },
-          ],
-          files,
-          event,
-          [
-            '@@ -132,7 +132,7 @@ module simon @@ -1000,7 +1000,7 @@ module gago',
-            '@@ -132,7 +132,7 @@ module jon @@ -1000,7 +1000,7 @@ module heart',
-          ]
-        )
+        rules.getMatchingRules(files, event, [
+          '@@ -132,7 +132,7 @@ module simon @@ -1000,7 +1000,7 @@ module gago',
+          '@@ -132,7 +132,7 @@ module jon @@ -1000,7 +1000,7 @@ module heart',
+        ])
       ).toMatchObject([]);
     });
+
     it('matching includesInPatch (with more than one pattern)', () => {
       const files = [
         {
@@ -332,26 +309,24 @@ describe('rules', () => {
             'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/README.md',
         },
       ];
+
+      const rule = {
+        ...validRule,
+        includes: undefined,
+        includesInPatch: ['(gag).+', '(sim).+', '/noMatch/', '*'],
+        teams: [],
+        path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
+      };
+
+      const rules = new Rules(rule);
+
       expect(
-        getMatchingRules(
-          [
-            {
-              ...validRule,
-              includes: undefined,
-              includesInPatch: ['(gag).+', '(sim).+', '/noMatch/', '*'],
-              teams: [],
-              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
-            },
-          ],
-          files,
-          event,
-          [
-            '@@ -132,7 +132,7 @@ module simon @@ -1000,7 +1000,7 @@ module gago',
-            '@@ -132,7 +132,7 @@ module jon @@ -1000,7 +1000,7 @@ module heart',
-          ]
-        )
+        rules.getMatchingRules(files, event, [
+          '@@ -132,7 +132,7 @@ module simon @@ -1000,7 +1000,7 @@ module gago',
+          '@@ -132,7 +132,7 @@ module jon @@ -1000,7 +1000,7 @@ module heart',
+        ])
       ).toMatchInlineSnapshot(`
-        Array [
+        MatchingRules [
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
@@ -392,22 +367,17 @@ describe('rules', () => {
         },
       ];
 
-      expect(
-        getMatchingRules(
-          [
-            {
-              ...validRule,
-              includes: [...validRule.includes, '*.md', '.gitignore'],
-              teams: [],
-              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
-            },
-          ],
-          files,
-          event,
-          []
-        )
-      ).toMatchInlineSnapshot(`
-        Array [
+      const rule = {
+        ...validRule,
+        includes: [...validRule.includes, '*.md', '.gitignore'],
+        teams: [],
+        path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
+      };
+
+      const rules = new Rules(rule);
+
+      expect(rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+        MatchingRules [
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
@@ -440,15 +410,13 @@ describe('rules', () => {
           blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.ts',
         },
       ];
-      expect(
-        getMatchingRules(
-          [{ ...validRule, teams: [], path: `${env.GITHUB_WORKSPACE}/some/rule.json` }],
-          files,
-          event,
-          []
-        )
-      ).toMatchInlineSnapshot(`
-        Array [
+
+      const rule = { ...validRule, teams: [], path: `${env.GITHUB_WORKSPACE}/some/rule.json` };
+
+      const rules = new Rules(rule);
+
+      expect(rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+        MatchingRules [
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
@@ -477,22 +445,17 @@ describe('rules', () => {
         },
       ];
 
-      expect(
-        getMatchingRules(
-          [
-            {
-              ...validRule,
-              teams: [],
-              eventJsonPath: ['$[?(@.type.match(/Bot/))]'],
-              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
-            },
-          ],
-          files,
-          botEvent,
-          []
-        )
-      ).toMatchInlineSnapshot(`
-        Array [
+      const rule = {
+        ...validRule,
+        teams: [],
+        eventJsonPath: ['$[?(@.type.match(/Bot/))]'],
+        path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
+      };
+
+      const rules = new Rules(rule);
+
+      expect(rules.getMatchingRules(files, botEvent)).toMatchInlineSnapshot(`
+        MatchingRules [
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
@@ -523,22 +486,17 @@ describe('rules', () => {
         },
       ];
 
-      expect(
-        getMatchingRules(
-          [
-            {
-              ...validRule,
-              includes: ['*.js'],
-              teams: ['eeny'],
-              eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
-              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
-            },
-          ],
-          files,
-          event,
-          []
-        )
-      ).toMatchObject([]);
+      const rule = {
+        ...validRule,
+        includes: ['*.js'],
+        teams: ['eeny'],
+        eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
+        path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
+      };
+
+      const rules = new Rules(rule);
+
+      expect(rules.getMatchingRules(files, event)).toMatchObject([]);
     });
     it('matches includes && eventJsonPath in the same rule', () => {
       const files = [
@@ -548,23 +506,18 @@ describe('rules', () => {
         },
       ];
 
-      expect(
-        getMatchingRules(
-          [
-            {
-              ...validRule,
-              includes: ['*.js'],
-              teams: ['eeny'],
-              eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
-              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
-            },
-          ],
-          files,
-          event,
-          []
-        )
-      ).toMatchInlineSnapshot(`
-        Array [
+      const rule = {
+        ...validRule,
+        includes: ['*.js'],
+        teams: ['eeny'],
+        eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
+        path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
+      };
+
+      const rules = new Rules(rule);
+
+      expect(rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+        MatchingRules [
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
@@ -596,24 +549,17 @@ describe('rules', () => {
           blob_url: 'https://github.com/gagoar/example_repo/blob/ec26c3e57ca3a959ca5aad62de7213c562f8c821/some/file.js',
         },
       ];
+      const rule = {
+        ...validRule,
+        includes: undefined,
+        teams: [],
+        eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
+        path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
+      };
 
-      expect(
-        getMatchingRules(
-          [
-            {
-              ...validRule,
-              includes: undefined,
-              teams: [],
-              eventJsonPath: ['$.pull_request[?(@.login=="gagoar")].login'],
-              path: `${env.GITHUB_WORKSPACE}/some/rule.json`,
-            },
-          ],
-          files,
-          event,
-          []
-        )
-      ).toMatchInlineSnapshot(`
-        Array [
+      const rules = new Rules(rule);
+      expect(rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+        MatchingRules [
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",
@@ -636,7 +582,7 @@ describe('rules', () => {
     });
   });
 
-  describe('loadRules', () => {
+  describe('loadFromLocation', () => {
     beforeEach(() => {
       consoleErrorMock.mockClear();
       sync.mockClear();
@@ -652,8 +598,8 @@ describe('rules', () => {
       sync.mockReturnValue(['/some/rule.json']);
       loadJSONFile.mockReturnValue(jsonRule);
 
-      expect(loadRules('/some/rule.json')).toMatchInlineSnapshot(`
-        Array [
+      expect(Rules.loadFromLocation('/some/rule.json')).toMatchInlineSnapshot(`
+        Rules [
           Object {
             "action": "label",
             "eventJsonPath": Array [
@@ -678,7 +624,7 @@ describe('rules', () => {
       sync.mockReturnValue(['/some/rule.json']);
       loadJSONFile.mockReturnValue('null');
 
-      expect(loadRules('/some/rule.json')).toMatchInlineSnapshot('Array []');
+      expect(Rules.loadFromLocation('/some/rule.json')).toMatchInlineSnapshot('Rules []');
       expect(consoleErrorMock).not.toHaveBeenCalled();
     });
     it("invalid rule file: file can't be parse", () => {
@@ -687,14 +633,14 @@ describe('rules', () => {
         throw new Error('file can not be parsed');
       });
 
-      expect(loadRules('/some/rule.json')).toMatchInlineSnapshot('Array []');
+      expect(Rules.loadFromLocation('/some/rule.json')).toMatchInlineSnapshot('Rules []');
       expect(consoleErrorMock).toHaveBeenCalled();
     });
     it('invalid rule will be ignored', () => {
       sync.mockReturnValue(['/some/rule.json']);
       loadJSONFile.mockReturnValue(JSON.stringify(invalidRule));
 
-      expect(loadRules('/some/rule.json')).toMatchInlineSnapshot('Array []');
+      expect(Rules.loadFromLocation('/some/rule.json')).toMatchInlineSnapshot('Rules []');
     });
     it('loads rules successfully', () => {
       // rule coming from the rules.json  is called rawRule.
@@ -742,8 +688,8 @@ describe('rules', () => {
         return rawRules[filePath];
       });
 
-      expect(loadRules('/some/*.json')).toMatchInlineSnapshot(`
-        Array [
+      expect(Rules.loadFromLocation('/some/*.json')).toMatchInlineSnapshot(`
+        Rules [
           Object {
             "action": "comment",
             "customMessage": "This is a custom message for a rule",

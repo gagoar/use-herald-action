@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { sync } from 'fast-glob';
 import { basename } from 'path';
+import { memo } from './util/memoizeDecorator';
 import { Event, RuleFile } from './util/constants';
 import { env } from './environment';
 import minimatch from 'minimatch';
@@ -9,6 +10,7 @@ import JSONPath from 'jsonpath';
 import { loadJSONFile } from './util/loadJSONFile';
 import { logger } from './util/debug';
 import { makeArray } from './util/makeArray';
+import groupBy from 'lodash.groupby';
 
 const debug = logger('rules');
 
@@ -116,28 +118,6 @@ const isValidRawRule = (content: unknown): content is RawRule => {
   });
 
   return hasValidActionValues && hasActors && matchers;
-};
-
-export const loadRules = (rulesLocation: string): Rule[] => {
-  const matches = sync(rulesLocation, {
-    onlyFiles: true,
-    cwd: env.GITHUB_WORKSPACE,
-    absolute: true,
-  });
-
-  debug('files found:', matches);
-  const rules = matches.reduce((memo, filePath) => {
-    try {
-      const rule = loadJSONFile(filePath);
-
-      return isValidRawRule(rule) ? [...memo, { name: basename(filePath), ...sanitize(rule), path: filePath }] : memo;
-    } catch (e) {
-      console.error(`${filePath} can't be parsed, it will be ignored`);
-      return memo;
-    }
-  }, [] as Rule[]);
-
-  return rules;
 };
 
 export type MatchingRule = Rule & {
@@ -254,21 +234,61 @@ const isMatch: Matcher = (rule, options) => {
   return matches.length ? matches.every((match) => match === true) : false;
 };
 
-export const getMatchingRules = (
-  rules: Rule[],
-  files: RuleFile[],
-  event: Event,
-  patchContent: string[] = []
-): MatchingRule[] => {
-  const fileNames = files.map(({ filename }) => filename);
+export class Rules extends Array<Rule> {
+  public constructor(...items: Rule[]) {
+    super(...items);
+  }
+  static loadFromLocation(location: string): Rules {
+    const matches = sync(location, {
+      onlyFiles: true,
+      cwd: env.GITHUB_WORKSPACE,
+      absolute: true,
+    });
 
-  const matchingRules = rules.reduce((memo, rule) => {
-    if (isMatch(rule, { event, patch: patchContent, fileNames })) {
-      return [...memo, { ...rule, matched: true }];
-    } else {
-      return memo;
-    }
-  }, [] as MatchingRule[]);
+    debug('files found:', matches);
+    const rules = matches.reduce((memo, filePath) => {
+      try {
+        const rule = loadJSONFile(filePath);
 
-  return matchingRules;
-};
+        return isValidRawRule(rule) ? [...memo, { name: basename(filePath), ...sanitize(rule), path: filePath }] : memo;
+      } catch (e) {
+        console.error(`${filePath} can't be parsed, it will be ignored`);
+        return memo;
+      }
+    }, [] as Rule[]);
+
+    return new Rules(...rules);
+  }
+  getMatchingRules(files: RuleFile[], event: Event, patchContent?: string[]): MatchingRules {
+    return MatchingRules.load(this, files, event, patchContent);
+  }
+}
+
+class MatchingRules extends Array<MatchingRule> {
+  private constructor(...items: MatchingRule[]) {
+    super(...items);
+  }
+
+  @memo()
+  private groupByAction() {
+    return groupBy(this, (rule) => rule.action);
+  }
+  groupBy(action: keyof typeof RuleActions): MatchingRule[] {
+    const grouped = this.groupByAction()[action];
+    return grouped || [];
+  }
+
+  static load(rules: Rules, files: RuleFile[], event: Event, patchContent: string[] = []): MatchingRules {
+    const fileNames = files.map(({ filename }) => filename);
+
+    const matchingRules = rules.reduce((memo, rule) => {
+      if (isMatch(rule, { event, patch: patchContent, fileNames })) {
+        return [...memo, { ...rule, matched: true }];
+      } else {
+        return memo;
+      }
+    }, [] as MatchingRule[]);
+
+    return new MatchingRules(...matchingRules);
+  }
+}
