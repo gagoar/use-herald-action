@@ -17936,6 +17936,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       removeUserAccessRestrictions: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users", {}, {
         mapToData: "users"
       }],
+      renameBranch: ["POST /repos/{owner}/{repo}/branches/{branch}/rename"],
       replaceAllTopics: ["PUT /repos/{owner}/{repo}/topics", {
         mediaType: {
           previews: ["mercy"]
@@ -18076,7 +18077,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       updateAuthenticated: ["PATCH /user"]
     }
   };
-  var VERSION = "4.7.0";
+  var VERSION = "4.8.0";
   function endpointsToMethods(octokit, endpointsMap) {
     const newMethods = {};
     for (const [scope, endpoints] of Object.entries(endpointsMap)) {
@@ -18150,7 +18151,7 @@ var require_dist_node12 = __commonJS((exports2) => {
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
-  var VERSION = "18.0.13";
+  var VERSION = "18.0.14";
   var Octokit2 = core.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
