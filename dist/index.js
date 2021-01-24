@@ -3503,6 +3503,7 @@ var require_tasks = __commonJS((exports2) => {
 var require_async = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.read = void 0;
   function read(path, settings, callback) {
     settings.fs.lstat(path, (lstatError, lstat) => {
       if (lstatError !== null) {
@@ -3538,6 +3539,7 @@ var require_async = __commonJS((exports2) => {
 var require_sync = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.read = void 0;
   function read(path, settings) {
     const lstat = settings.fs.lstatSync(path);
     if (!lstat.isSymbolicLink() || !settings.followSymbolicLink) {
@@ -3563,6 +3565,7 @@ var require_sync = __commonJS((exports2) => {
 var require_fs2 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.createFileSystemAdapter = exports2.FILE_SYSTEM_ADAPTER = void 0;
   var fs = require("fs");
   exports2.FILE_SYSTEM_ADAPTER = {
     lstat: fs.lstat,
@@ -3593,7 +3596,7 @@ var require_settings = __commonJS((exports2) => {
       this.throwErrorOnBrokenSymbolicLink = this._getValue(this._options.throwErrorOnBrokenSymbolicLink, true);
     }
     _getValue(option, value) {
-      return option === void 0 ? value : option;
+      return option !== null && option !== void 0 ? option : value;
     }
   };
   exports2.default = Settings;
@@ -3603,6 +3606,7 @@ var require_settings = __commonJS((exports2) => {
 var require_out = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.statSync = exports2.stat = exports2.Settings = void 0;
   var async = require_async();
   var sync2 = require_sync();
   var settings_1 = require_settings();
@@ -3629,6 +3633,7 @@ var require_out = __commonJS((exports2) => {
 
 // node_modules/run-parallel/index.js
 var require_run_parallel = __commonJS((exports2, module2) => {
+  /*! run-parallel. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
   module2.exports = runParallel;
   function runParallel(tasks, cb) {
     var results, pending, keys;
@@ -3681,6 +3686,7 @@ var require_run_parallel = __commonJS((exports2, module2) => {
 var require_constants3 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.IS_SUPPORT_READDIR_WITH_FILE_TYPES = void 0;
   var NODE_PROCESS_VERSION_PARTS = process.versions.node.split(".");
   var MAJOR_VERSION = parseInt(NODE_PROCESS_VERSION_PARTS[0], 10);
   var MINOR_VERSION = parseInt(NODE_PROCESS_VERSION_PARTS[1], 10);
@@ -3695,6 +3701,7 @@ var require_constants3 = __commonJS((exports2) => {
 var require_fs3 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.createDirentFromStats = void 0;
   var DirentFromStats = class {
     constructor(name, stats) {
       this.name = name;
@@ -3717,18 +3724,35 @@ var require_fs3 = __commonJS((exports2) => {
 var require_utils5 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.fs = void 0;
   var fs = require_fs3();
   exports2.fs = fs;
+});
+
+// node_modules/@nodelib/fs.scandir/out/providers/common.js
+var require_common = __commonJS((exports2) => {
+  "use strict";
+  Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.joinPathSegments = void 0;
+  function joinPathSegments(a, b, separator) {
+    if (a.endsWith(separator)) {
+      return a + b;
+    }
+    return a + separator + b;
+  }
+  exports2.joinPathSegments = joinPathSegments;
 });
 
 // node_modules/@nodelib/fs.scandir/out/providers/async.js
 var require_async2 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.readdir = exports2.readdirWithFileTypes = exports2.read = void 0;
   var fsStat = require_out();
   var rpl = require_run_parallel();
   var constants_1 = require_constants3();
   var utils = require_utils5();
+  var common = require_common();
   function read(directory, settings, callback) {
     if (!settings.stats && constants_1.IS_SUPPORT_READDIR_WITH_FILE_TYPES) {
       return readdirWithFileTypes(directory, settings, callback);
@@ -3744,7 +3768,7 @@ var require_async2 = __commonJS((exports2) => {
       const entries = dirents.map((dirent) => ({
         dirent,
         name: dirent.name,
-        path: `${directory}${settings.pathSegmentSeparator}${dirent.name}`
+        path: common.joinPathSegments(directory, dirent.name, settings.pathSegmentSeparator)
       }));
       if (!settings.followSymbolicLinks) {
         return callSuccessCallback(callback, entries);
@@ -3781,7 +3805,7 @@ var require_async2 = __commonJS((exports2) => {
       if (readdirError !== null) {
         return callFailureCallback(callback, readdirError);
       }
-      const filepaths = names.map((name) => `${directory}${settings.pathSegmentSeparator}${name}`);
+      const filepaths = names.map((name) => common.joinPathSegments(directory, name, settings.pathSegmentSeparator));
       const tasks = filepaths.map((filepath) => {
         return (done) => fsStat.stat(filepath, settings.fsStatSettings, done);
       });
@@ -3819,9 +3843,11 @@ var require_async2 = __commonJS((exports2) => {
 var require_sync2 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.readdir = exports2.readdirWithFileTypes = exports2.read = void 0;
   var fsStat = require_out();
   var constants_1 = require_constants3();
   var utils = require_utils5();
+  var common = require_common();
   function read(directory, settings) {
     if (!settings.stats && constants_1.IS_SUPPORT_READDIR_WITH_FILE_TYPES) {
       return readdirWithFileTypes(directory, settings);
@@ -3835,7 +3861,7 @@ var require_sync2 = __commonJS((exports2) => {
       const entry = {
         dirent,
         name: dirent.name,
-        path: `${directory}${settings.pathSegmentSeparator}${dirent.name}`
+        path: common.joinPathSegments(directory, dirent.name, settings.pathSegmentSeparator)
       };
       if (entry.dirent.isSymbolicLink() && settings.followSymbolicLinks) {
         try {
@@ -3854,7 +3880,7 @@ var require_sync2 = __commonJS((exports2) => {
   function readdir(directory, settings) {
     const names = settings.fs.readdirSync(directory);
     return names.map((name) => {
-      const entryPath = `${directory}${settings.pathSegmentSeparator}${name}`;
+      const entryPath = common.joinPathSegments(directory, name, settings.pathSegmentSeparator);
       const stats = fsStat.statSync(entryPath, settings.fsStatSettings);
       const entry = {
         name,
@@ -3874,6 +3900,7 @@ var require_sync2 = __commonJS((exports2) => {
 var require_fs4 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.createFileSystemAdapter = exports2.FILE_SYSTEM_ADAPTER = void 0;
   var fs = require("fs");
   exports2.FILE_SYSTEM_ADAPTER = {
     lstat: fs.lstat,
@@ -3914,7 +3941,7 @@ var require_settings2 = __commonJS((exports2) => {
       });
     }
     _getValue(option, value) {
-      return option === void 0 ? value : option;
+      return option !== null && option !== void 0 ? option : value;
     }
   };
   exports2.default = Settings;
@@ -3924,6 +3951,7 @@ var require_settings2 = __commonJS((exports2) => {
 var require_out2 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.Settings = exports2.scandirSync = exports2.scandir = void 0;
   var async = require_async2();
   var sync2 = require_sync2();
   var settings_1 = require_settings2();
@@ -3987,10 +4015,14 @@ var require_queue = __commonJS((exports2, module2) => {
       worker = context;
       context = null;
     }
+    if (concurrency < 1) {
+      throw new Error("fastqueue concurrency must be greater than 1");
+    }
     var cache = reusify(Task);
     var queueHead = null;
     var queueTail = null;
     var _running = 0;
+    var errorHandler = null;
     var self2 = {
       push,
       drain: noop,
@@ -4006,7 +4038,8 @@ var require_queue = __commonJS((exports2, module2) => {
       unshift,
       empty: noop,
       kill,
-      killAndDrain
+      killAndDrain,
+      error
     };
     return self2;
     function running() {
@@ -4051,6 +4084,7 @@ var require_queue = __commonJS((exports2, module2) => {
       current.release = release;
       current.value = value;
       current.callback = done || noop;
+      current.errorHandler = errorHandler;
       if (_running === self2.concurrency || self2.paused) {
         if (queueTail) {
           queueTail.next = current;
@@ -4119,6 +4153,9 @@ var require_queue = __commonJS((exports2, module2) => {
       self2.drain();
       self2.drain = noop;
     }
+    function error(handler) {
+      errorHandler = handler;
+    }
   }
   function noop() {
   }
@@ -4128,11 +4165,17 @@ var require_queue = __commonJS((exports2, module2) => {
     this.next = null;
     this.release = noop;
     this.context = null;
+    this.errorHandler = null;
     var self2 = this;
     this.worked = function worked(err, result) {
       var callback = self2.callback;
+      var errorHandler = self2.errorHandler;
+      var val = self2.value;
       self2.value = null;
       self2.callback = noop;
+      if (self2.errorHandler) {
+        errorHandler(err, val);
+      }
       callback.call(self2.context, err, result);
       self2.release(self2);
     };
@@ -4141,9 +4184,10 @@ var require_queue = __commonJS((exports2, module2) => {
 });
 
 // node_modules/@nodelib/fs.walk/out/readers/common.js
-var require_common = __commonJS((exports2) => {
+var require_common2 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.joinPathSegments = exports2.replacePathSegmentSeparator = exports2.isAppliedFilter = exports2.isFatalError = void 0;
   function isFatalError(settings, error) {
     if (settings.errorFilter === null) {
       return true;
@@ -4156,12 +4200,15 @@ var require_common = __commonJS((exports2) => {
   }
   exports2.isAppliedFilter = isAppliedFilter;
   function replacePathSegmentSeparator(filepath, separator) {
-    return filepath.split(/[\\/]/).join(separator);
+    return filepath.split(/[/\\]/).join(separator);
   }
   exports2.replacePathSegmentSeparator = replacePathSegmentSeparator;
   function joinPathSegments(a, b, separator) {
     if (a === "") {
       return b;
+    }
+    if (a.endsWith(separator)) {
+      return a + b;
     }
     return a + separator + b;
   }
@@ -4172,7 +4219,7 @@ var require_common = __commonJS((exports2) => {
 var require_reader = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var common = require_common();
+  var common = require_common2();
   var Reader = class {
     constructor(_root, _settings) {
       this._root = _root;
@@ -4190,7 +4237,7 @@ var require_async3 = __commonJS((exports2) => {
   var events_1 = require("events");
   var fsScandir = require_out2();
   var fastq = require_queue();
-  var common = require_common();
+  var common = require_common2();
   var reader_1 = require_reader();
   var AsyncReader = class extends reader_1.default {
     constructor(_root, _settings) {
@@ -4214,6 +4261,9 @@ var require_async3 = __commonJS((exports2) => {
         this._pushToQueue(this._root, this._settings.basePath);
       });
       return this._emitter;
+    }
+    get isDestroyed() {
+      return this._isDestroyed;
     }
     destroy() {
       if (this._isDestroyed) {
@@ -4251,7 +4301,7 @@ var require_async3 = __commonJS((exports2) => {
       });
     }
     _handleError(error) {
-      if (!common.isFatalError(this._settings, error)) {
+      if (this._isDestroyed || !common.isFatalError(this._settings, error)) {
         return;
       }
       this._isFatalError = true;
@@ -4329,7 +4379,11 @@ var require_stream2 = __commonJS((exports2) => {
         objectMode: true,
         read: () => {
         },
-        destroy: this._reader.destroy.bind(this._reader)
+        destroy: () => {
+          if (!this._reader.isDestroyed) {
+            this._reader.destroy();
+          }
+        }
       });
     }
     read() {
@@ -4354,7 +4408,7 @@ var require_sync3 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
   var fsScandir = require_out2();
-  var common = require_common();
+  var common = require_common2();
   var reader_1 = require_reader();
   var SyncReader = class extends reader_1.default {
     constructor() {
@@ -4453,7 +4507,7 @@ var require_settings3 = __commonJS((exports2) => {
       });
     }
     _getValue(option, value) {
-      return option === void 0 ? value : option;
+      return option !== null && option !== void 0 ? option : value;
     }
   };
   exports2.default = Settings;
@@ -4463,6 +4517,7 @@ var require_settings3 = __commonJS((exports2) => {
 var require_out3 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.Settings = exports2.walkStream = exports2.walkSync = exports2.walk = void 0;
   var async_1 = require_async4();
   var stream_1 = require_stream2();
   var sync_1 = require_sync4();
@@ -5040,7 +5095,7 @@ var require_settings4 = __commonJS((exports2) => {
   exports2.DEFAULT_FILE_SYSTEM_ADAPTER = void 0;
   var fs = require("fs");
   var os = require("os");
-  var CPU_COUNT = os.cpus().length;
+  var CPU_COUNT = Math.max(os.cpus().length, 1);
   exports2.DEFAULT_FILE_SYSTEM_ADAPTER = {
     lstat: fs.lstat,
     lstatSync: fs.lstatSync,
@@ -13465,7 +13520,7 @@ var require_ms = __commonJS((exports2, module2) => {
 });
 
 // node_modules/debug/src/common.js
-var require_common2 = __commonJS((exports2, module2) => {
+var require_common3 = __commonJS((exports2, module2) => {
   function setup(env2) {
     createDebug.debug = createDebug;
     createDebug.default = createDebug;
@@ -13765,7 +13820,7 @@ var require_browser2 = __commonJS((exports2, module2) => {
     } catch (error) {
     }
   }
-  module2.exports = require_common2()(exports2);
+  module2.exports = require_common3()(exports2);
   var {formatters} = module2.exports;
   formatters.j = function(v) {
     try {
@@ -13933,7 +13988,7 @@ var require_node = __commonJS((exports2, module2) => {
       debug10.inspectOpts[keys[i]] = exports2.inspectOpts[keys[i]];
     }
   }
-  module2.exports = require_common2()(exports2);
+  module2.exports = require_common3()(exports2);
   var {formatters} = module2.exports;
   formatters.o = function(v) {
     this.inspectOpts.colors = this.useColors;
@@ -16899,7 +16954,7 @@ var require_dist_node9 = __commonJS((exports2) => {
 var require_dist_node10 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var VERSION = "2.6.2";
+  var VERSION = "2.8.0";
   function normalizePaginatedListResponse(response) {
     const responseNeedsNormalization = "total_count" in response.data && !("url" in response.data);
     if (!responseNeedsNormalization)
@@ -17126,6 +17181,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       removeRepoFromInstallation: ["DELETE /user/installations/{installation_id}/repositories/{repository_id}"],
       resetToken: ["PATCH /applications/{client_id}/token"],
       revokeInstallationAccessToken: ["DELETE /installation/token"],
+      scopeToken: ["POST /applications/{client_id}/token/scoped"],
       suspendInstallation: ["PUT /app/installations/{installation_id}/suspended"],
       unsuspendInstallation: ["DELETE /app/installations/{installation_id}/suspended"],
       updateWebhookConfigForApp: ["PATCH /app/hook/config"]
@@ -17382,6 +17438,7 @@ var require_dist_node11 = __commonJS((exports2) => {
     },
     orgs: {
       blockUser: ["PUT /orgs/{org}/blocks/{username}"],
+      cancelInvitation: ["DELETE /orgs/{org}/invitations/{invitation_id}"],
       checkBlockedUser: ["GET /orgs/{org}/blocks/{username}"],
       checkMembershipForUser: ["GET /orgs/{org}/members/{username}"],
       checkPublicMembershipForUser: ["GET /orgs/{org}/public_members/{username}"],
@@ -17397,6 +17454,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       list: ["GET /organizations"],
       listAppInstallations: ["GET /orgs/{org}/installations"],
       listBlockedUsers: ["GET /orgs/{org}/blocks"],
+      listFailedInvitations: ["GET /orgs/{org}/failed_invitations"],
       listForAuthenticatedUser: ["GET /user/orgs"],
       listForUser: ["GET /users/{username}/orgs"],
       listInvitationTeams: ["GET /orgs/{org}/invitations/{invitation_id}/teams"],
@@ -18018,7 +18076,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       updateAuthenticated: ["PATCH /user"]
     }
   };
-  var VERSION = "4.4.1";
+  var VERSION = "4.7.0";
   function endpointsToMethods(octokit, endpointsMap) {
     const newMethods = {};
     for (const [scope, endpoints] of Object.entries(endpointsMap)) {
@@ -18092,7 +18150,7 @@ var require_dist_node12 = __commonJS((exports2) => {
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
-  var VERSION = "18.0.12";
+  var VERSION = "18.0.13";
   var Octokit2 = core.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
