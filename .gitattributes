@@ -1,1 +1,2 @@
 dist/* linguist-generated linguist-vendored=true
+src/rules.guard.ts linguist-generated linguist-vendored=true
