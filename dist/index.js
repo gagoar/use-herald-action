@@ -15331,7 +15331,7 @@ var require_dist_node2 = __commonJS((exports2) => {
       parse
     });
   }
-  var VERSION = "6.0.10";
+  var VERSION = "6.0.11";
   var userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`;
   var DEFAULTS = {
     method: "GET",
@@ -16557,7 +16557,7 @@ var require_dist_node5 = __commonJS((exports2) => {
   var isPlainObject = require_is_plain_object2();
   var nodeFetch = _interopDefault(require_lib());
   var requestError = require_dist_node4();
-  var VERSION = "5.4.12";
+  var VERSION = "5.4.13";
   function getBufferResponse(response) {
     return response.arrayBuffer();
   }
@@ -16674,7 +16674,7 @@ var require_dist_node6 = __commonJS((exports2) => {
   Object.defineProperty(exports2, "__esModule", {value: true});
   var request = require_dist_node5();
   var universalUserAgent = require_dist_node();
-  var VERSION = "4.5.8";
+  var VERSION = "4.5.9";
   var GraphqlError = class extends Error {
     constructor(request2, response) {
       const message = response.data.errors[0].message;
@@ -16930,7 +16930,7 @@ var require_dist_node8 = __commonJS((exports2) => {
 var require_dist_node9 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var VERSION = "1.0.2";
+  var VERSION = "1.0.3";
   function requestLog(octokit) {
     octokit.hook.wrap("request", (request, options) => {
       octokit.log.debug("request", options);
@@ -16954,7 +16954,7 @@ var require_dist_node9 = __commonJS((exports2) => {
 var require_dist_node10 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var VERSION = "2.8.0";
+  var VERSION = "2.8.2";
   function normalizePaginatedListResponse(response) {
     const responseNeedsNormalization = "total_count" in response.data && !("url" in response.data);
     if (!responseNeedsNormalization)
@@ -18151,7 +18151,7 @@ var require_dist_node12 = __commonJS((exports2) => {
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
-  var VERSION = "18.0.14";
+  var VERSION = "18.0.15";
   var Octokit2 = core.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
