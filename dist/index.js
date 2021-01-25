@@ -263,10 +263,10 @@ var require_core = __commonJS((exports2) => {
     return process.env["RUNNER_DEBUG"] === "1";
   }
   exports2.isDebug = isDebug;
-  function debug10(message) {
+  function debug11(message) {
     command_1.issueCommand("debug", {}, message);
   }
-  exports2.debug = debug10;
+  exports2.debug = debug11;
   function error(message) {
     command_1.issue("error", message instanceof Error ? message.toString() : message);
   }
@@ -7187,7 +7187,7 @@ var require_main = __commonJS((exports2, module2) => {
   var RE_NEWLINES = /\\n/g;
   var NEWLINES_MATCH = /\n|\r|\r\n/;
   function parse(src, options) {
-    const debug10 = Boolean(options && options.debug);
+    const debug11 = Boolean(options && options.debug);
     const obj = {};
     src.toString().split(NEWLINES_MATCH).forEach(function(line, idx) {
       const keyValueArr = line.match(RE_INI_KEY_VAL);
@@ -7206,7 +7206,7 @@ var require_main = __commonJS((exports2, module2) => {
           val = val.trim();
         }
         obj[key] = val;
-      } else if (debug10) {
+      } else if (debug11) {
         log(`did not match key and value when parsing line ${idx + 1}: ${line}`);
       }
     });
@@ -7215,7 +7215,7 @@ var require_main = __commonJS((exports2, module2) => {
   function config(options) {
     let dotenvPath = path.resolve(process.cwd(), ".env");
     let encoding = "utf8";
-    let debug10 = false;
+    let debug11 = false;
     if (options) {
       if (options.path != null) {
         dotenvPath = options.path;
@@ -7224,15 +7224,15 @@ var require_main = __commonJS((exports2, module2) => {
         encoding = options.encoding;
       }
       if (options.debug != null) {
-        debug10 = true;
+        debug11 = true;
       }
     }
     try {
-      const parsed = parse(fs.readFileSync(dotenvPath, {encoding}), {debug: debug10});
+      const parsed = parse(fs.readFileSync(dotenvPath, {encoding}), {debug: debug11});
       Object.keys(parsed).forEach(function(key) {
         if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
           process.env[key] = parsed[key];
-        } else if (debug10) {
+        } else if (debug11) {
           log(`"${key}" is already defined in \`process.env\` and will not be overwritten`);
         }
       });
@@ -13548,11 +13548,11 @@ var require_common3 = __commonJS((exports2, module2) => {
     function createDebug(namespace) {
       let prevTime;
       let enableOverride = null;
-      function debug10(...args) {
-        if (!debug10.enabled) {
+      function debug11(...args) {
+        if (!debug11.enabled) {
           return;
         }
-        const self2 = debug10;
+        const self2 = debug11;
         const curr = Number(new Date());
         const ms = curr - (prevTime || curr);
         self2.diff = ms;
@@ -13582,12 +13582,12 @@ var require_common3 = __commonJS((exports2, module2) => {
         const logFn = self2.log || createDebug.log;
         logFn.apply(self2, args);
       }
-      debug10.namespace = namespace;
-      debug10.useColors = createDebug.useColors();
-      debug10.color = createDebug.selectColor(namespace);
-      debug10.extend = extend;
-      debug10.destroy = createDebug.destroy;
-      Object.defineProperty(debug10, "enabled", {
+      debug11.namespace = namespace;
+      debug11.useColors = createDebug.useColors();
+      debug11.color = createDebug.selectColor(namespace);
+      debug11.extend = extend;
+      debug11.destroy = createDebug.destroy;
+      Object.defineProperty(debug11, "enabled", {
         enumerable: true,
         configurable: false,
         get: () => enableOverride === null ? createDebug.enabled(namespace) : enableOverride,
@@ -13596,9 +13596,9 @@ var require_common3 = __commonJS((exports2, module2) => {
         }
       });
       if (typeof createDebug.init === "function") {
-        createDebug.init(debug10);
+        createDebug.init(debug11);
       }
-      return debug10;
+      return debug11;
     }
     function extend(namespace, delimiter) {
       const newDebug = createDebug(this.namespace + (typeof delimiter === "undefined" ? ":" : delimiter) + namespace);
@@ -13981,11 +13981,11 @@ var require_node = __commonJS((exports2, module2) => {
   function load() {
     return process.env.DEBUG;
   }
-  function init(debug10) {
-    debug10.inspectOpts = {};
+  function init(debug11) {
+    debug11.inspectOpts = {};
     const keys = Object.keys(exports2.inspectOpts);
     for (let i = 0; i < keys.length; i++) {
-      debug10.inspectOpts[keys[i]] = exports2.inspectOpts[keys[i]];
+      debug11.inspectOpts[keys[i]] = exports2.inspectOpts[keys[i]];
     }
   }
   module2.exports = require_common3()(exports2);
@@ -19021,12 +19021,12 @@ var import_lodash = __toModule(require_lodash());
 var import_p_queue = __toModule(require_dist());
 
 // src/util/catchHandler.ts
-var catchHandler = (debug10) => (error) => {
+var catchHandler = (debug11) => (error) => {
   if (Object.values(AllowedHttpErrors).includes(error.status)) {
-    debug10(`Request failed with status ${error.status}, We do not consider this a fatal error`, error);
+    debug11(`Request failed with status ${error.status}, We do not consider this a fatal error`, error);
     return Promise.resolve({});
   }
-  debug10("Request Failed", error);
+  debug11("Request Failed", error);
   return Promise.reject(error);
 };
 
@@ -19038,8 +19038,29 @@ function isMatchingRule(obj, _argumentName) {
   return isRule(obj) || (obj !== null && typeof obj === "object" || typeof obj === "function") && typeof obj.matched === "boolean";
 }
 
+// src/util/isValidRawRule.ts
+var debug2 = logger("isValidRawRule");
+var hasAttribute = (attr, content) => attr in content;
+var isValidRawRule = (content) => {
+  if (typeof content !== "object" || content === null) {
+    return false;
+  }
+  const hasValidActionValues = hasAttribute("action", content) && Object.keys(RuleActions).includes(content.action);
+  const hasTeams = hasAttribute("teams", content) && Array.isArray(content.teams);
+  const hasUsers = hasAttribute("users", content) && Array.isArray(content.users);
+  const hasActors = hasTeams || hasUsers || hasAttribute("customMessage", content) && !!content.customMessage && content.action === RuleActions.comment || hasAttribute("labels", content) && !!content.labels && content.action === RuleActions.label || hasAttribute("action", content) && content.action === RuleActions.status;
+  const matchers2 = Object.keys(RuleMatchers).some((attr) => attr in content);
+  debug2("validation:", {
+    rule: content,
+    hasActors,
+    hasValidActionValues,
+    matchers: matchers2
+  });
+  return hasValidActionValues && hasActors && matchers2;
+};
+
 // src/rules.ts
-var debug2 = logger("rules");
+var debug3 = logger("rules");
 var RuleActors;
 (function(RuleActors2) {
   RuleActors2["users"] = "users";
@@ -19088,26 +19109,8 @@ var sanitize = (content) => {
     eventJsonPath: makeArray(rule.eventJsonPath)
   };
 };
-var hasAttribute = (attr, content) => attr in content;
-var isValidRawRule = (content) => {
-  if (typeof content !== "object" || content === null) {
-    return false;
-  }
-  const hasValidActionValues = hasAttribute("action", content) && Object.keys(RuleActions).includes(content.action);
-  const hasTeams = hasAttribute("teams", content) && Array.isArray(content.teams);
-  const hasUsers = hasAttribute("users", content) && Array.isArray(content.users);
-  const hasActors = hasTeams || hasUsers || hasAttribute("customMessage", content) && !!content.customMessage && content.action === RuleActions.comment || hasAttribute("labels", content) && !!content.labels && content.action === RuleActions.label || hasAttribute("action", content) && content.action === RuleActions.status;
-  const matchers2 = Object.keys(RuleMatchers).some((attr) => attr in content);
-  debug2("validation:", {
-    rule: content,
-    hasActors,
-    hasValidActionValues,
-    matchers: matchers2
-  });
-  return hasValidActionValues && hasActors && matchers2;
-};
 var handleIncludeExcludeFiles = ({includes, excludes, fileNames}) => {
-  debug2("includeExcludeFiles...");
+  debug3("includeExcludeFiles...");
   let results = [];
   if (includes == null ? void 0 : includes.length) {
     results = includes.reduce((memo2, include) => {
@@ -19115,27 +19118,27 @@ var handleIncludeExcludeFiles = ({includes, excludes, fileNames}) => {
       return [...memo2, ...matches];
     }, []);
     results = [...new Set(results)];
-    debug2("includes matches", {results, includes});
+    debug3("includes matches", {results, includes});
     if ((excludes == null ? void 0 : excludes.length) && results.length) {
       const toExclude = excludes.reduce((memo2, exclude) => {
         const matches = import_minimatch.default.match(results, exclude, {matchBase: true});
         return [...memo2, ...matches];
       }, []);
       results = results.filter((filename) => !toExclude.includes(filename));
-      debug2("excludes matches:", {results, excludes});
+      debug3("excludes matches:", {results, excludes});
     }
   }
   return !!results.length;
 };
 var handleIncludesInPatch = ({patterns, patch}) => {
-  debug2("handleIncludesInPath...");
+  debug3("handleIncludesInPath...");
   const matches = patterns == null ? void 0 : patterns.reduce((memo2, pattern) => {
     try {
       const rex = new RegExp(pattern);
       const matches2 = patch == null ? void 0 : patch.find((content) => content.match(rex));
       return matches2 ? [...memo2, matches2] : memo2;
     } catch (e) {
-      debug2(`pattern: ${pattern} failed to parse`, e);
+      debug3(`pattern: ${pattern} failed to parse`, e);
       return memo2;
     }
   }, []);
@@ -19150,7 +19153,7 @@ var allRequiredRulesHaveMatched = (rules, matchingRules) => {
   return requiredRules.every((rule) => matchingRulesNames.includes(rule.name));
 };
 var handleEventJsonPath = ({event, patterns}) => {
-  debug2("eventJsonPath", patterns);
+  debug3("eventJsonPath", patterns);
   try {
     let results;
     patterns == null ? void 0 : patterns.find((pattern) => {
@@ -19160,10 +19163,10 @@ var handleEventJsonPath = ({event, patterns}) => {
       }
       return matches.length;
     });
-    debug2("eventJSONPath matches:", results);
+    debug3("eventJSONPath matches:", results);
     return !!results;
   } catch (e) {
-    debug2("eventJsonPath:Error:", e);
+    debug3("eventJsonPath:Error:", e);
   }
   return false;
 };
@@ -19178,8 +19181,8 @@ var isMatch = async (rule, options) => {
     var _a2;
     return (_a2 = rule[matcher]) == null ? void 0 : _a2.length;
   }).map((matcher) => matchers[matcher](rule, options));
-  debug2("isMatch:", {rule, matches});
-  const resolvedMatches = await Promise.all(matches).catch(catchHandler(debug2));
+  debug3("isMatch:", {rule, matches});
+  const resolvedMatches = await Promise.all(matches).catch(catchHandler(debug3));
   return matches.length ? resolvedMatches.every((match) => match === true) : false;
 };
 var Rules = class extends Array {
@@ -19192,7 +19195,7 @@ var Rules = class extends Array {
       cwd: env.GITHUB_WORKSPACE,
       absolute: true
     });
-    debug2("files found:", matches);
+    debug3("files found:", matches);
     const rules = matches.reduce((memo2, filePath) => {
       try {
         const rule = loadJSONFile(filePath);
@@ -19242,29 +19245,29 @@ __decorate([
 var import_rest = __toModule(require_dist_node12());
 
 // src/assignees.ts
-var debug3 = logger("assignees");
+var debug4 = logger("assignees");
 var handleAssignees = async (client, {owner, repo, prNumber, matchingRules}) => {
-  debug3("handleAssignees called with:", matchingRules);
+  debug4("handleAssignees called with:", matchingRules);
   const assignees = matchingRules.reduce((memo2, rule) => {
     return [...memo2, ...rule.users.map((user) => user.replace("@", ""))];
   }, []);
-  debug3("assignees found:", assignees);
+  debug4("assignees found:", assignees);
   return client.issues.addAssignees({
     owner,
     repo,
     issue_number: prNumber,
     assignees
-  }).catch(catchHandler(debug3));
+  }).catch(catchHandler(debug4));
 };
 
 // src/labels.ts
-var debug4 = logger("labels");
+var debug5 = logger("labels");
 var handleLabels = async (client, {owner, repo, prNumber, matchingRules}) => {
-  debug4("called with:", matchingRules);
+  debug5("called with:", matchingRules);
   const labels = matchingRules.filter(({labels: labels2}) => labels2).reduce((memo2, {labels: labels2}) => [...memo2, ...makeArray(labels2)], []);
-  debug4("labels", labels);
+  debug5("labels", labels);
   if (!labels.length) {
-    debug4("no labels where found");
+    debug5("no labels where found");
     return void 0;
   }
   const result = client.issues.addLabels({
@@ -19272,19 +19275,19 @@ var handleLabels = async (client, {owner, repo, prNumber, matchingRules}) => {
     repo,
     issue_number: prNumber,
     labels
-  }).catch(catchHandler(debug4));
-  debug4("result:", result);
+  }).catch(catchHandler(debug5));
+  debug5("result:", result);
   return result;
 };
 
 // src/reviewers.ts
-var debug5 = logger("reviewers");
+var debug6 = logger("reviewers");
 var sanitizeTeam = (team) => {
   const splitTeam = team.replace("@", "").split("/");
   return splitTeam[splitTeam.length - 1];
 };
 var handleReviewers = async (client, {owner, repo, prNumber, matchingRules}) => {
-  debug5("handleReviewers called with:", matchingRules);
+  debug6("handleReviewers called with:", matchingRules);
   const {reviewers, teamReviewers} = matchingRules.reduce((memo2, rule) => {
     const reviewers2 = [...memo2.reviewers, ...rule.users.map((user) => user.replace("@", ""))];
     const teamReviewers2 = [...memo2.teamReviewers, ...rule.teams.map(sanitizeTeam)];
@@ -19296,8 +19299,8 @@ var handleReviewers = async (client, {owner, repo, prNumber, matchingRules}) => 
     pull_number: prNumber,
     reviewers,
     team_reviewers: teamReviewers
-  }).catch(catchHandler(debug5));
-  debug5("result:", result);
+  }).catch(catchHandler(debug6));
+  debug6("result:", result);
   return result;
 };
 
@@ -19305,18 +19308,18 @@ var handleReviewers = async (client, {owner, repo, prNumber, matchingRules}) => 
 var import_p_queue2 = __toModule(require_dist());
 
 // src/util/getBlobURL.ts
-var debug6 = logger("getBlobURL");
+var debug7 = logger("getBlobURL");
 var getBlobURL = (filename, files, owner, repo, base) => {
   const baseBlobPath = `https://github.com/${owner}/${repo}/blob`;
-  debug6("getBlobURL", filename, files, baseBlobPath, base);
+  debug7("getBlobURL", filename, files, baseBlobPath, base);
   const file = files.find((file2) => filename.match(file2.filename));
   return file ? file.blob_url : `${baseBlobPath}/${base}/${filename.replace(`${env.GITHUB_WORKSPACE}/`, "")}`;
 };
 
 // src/statuses.ts
-var debug7 = logger("statuses");
+var debug8 = logger("statuses");
 var handleStatus = async (client, {owner, repo, matchingRules, rules, base, sha, files}, requestConcurrency = 1) => {
-  debug7("called with:", matchingRules.map((rule) => rule.path));
+  debug8("called with:", matchingRules.map((rule) => rule.path));
   const queue = new import_p_queue2.default({concurrency: requestConcurrency});
   const statusActionRules = rules.filter(({action}) => action == RuleActions.status);
   const statuses = statusActionRules.map((rule) => ({
@@ -19328,9 +19331,9 @@ var handleStatus = async (client, {owner, repo, matchingRules, rules, base, sha,
     target_url: rule.targetURL ? rule.targetURL : getBlobURL(rule.path, files, owner, repo, base),
     state: matchingRules.find((matchingRule) => matchingRule.path === rule.path) ? CommitStatus.SUCCESS : CommitStatus.FAILURE
   }));
-  debug7("statuses", statuses);
-  const result = await Promise.all(statuses.map((status) => queue.add(() => client.repos.createCommitStatus(status)))).catch(catchHandler(debug7));
-  debug7("result:", result);
+  debug8("statuses", statuses);
+  const result = await Promise.all(statuses.map((status) => queue.add(() => client.repos.createCommitStatus(status)))).catch(catchHandler(debug8));
+  debug8("result:", result);
   return result;
 };
 
@@ -19338,7 +19341,7 @@ var handleStatus = async (client, {owner, repo, matchingRules, rules, base, sha,
 var import_lodash2 = __toModule(require_lodash());
 var import_markdown_table = __toModule(require_markdown_table());
 var import_p_queue3 = __toModule(require_dist());
-var debug8 = logger("comment");
+var debug9 = logger("comment");
 var TypeOfComments;
 (function(TypeOfComments2) {
   TypeOfComments2["standalone"] = "standalone";
@@ -19396,14 +19399,14 @@ var getAllComments = async (client, params) => {
   }
 };
 var handleComment = async (client, {owner, repo, prNumber, matchingRules, files, base}, requestConcurrency = 1) => {
-  debug8("handleComment called with:", matchingRules);
+  debug9("handleComment called with:", matchingRules);
   const queue = new import_p_queue3.default({concurrency: requestConcurrency});
   const rulesWithBlobURL = matchingRules.map((mRule) => ({
     ...mRule,
     blobURL: getBlobURL(mRule.path, files, owner, repo, base)
   }));
   const commentsFromRules = composeCommentsForUsers(rulesWithBlobURL);
-  debug8("comments from matching rules:", commentsFromRules);
+  debug9("comments from matching rules:", commentsFromRules);
   const rawComments = await getAllComments(client, {
     owner,
     repo,
@@ -19414,7 +19417,7 @@ var handleComment = async (client, {owner, repo, prNumber, matchingRules, files,
     const pathMatch = comment.body && USE_HERALD_ACTION_TAG_REGEX.exec((_a2 = comment.body) == null ? void 0 : _a2.split("\n")[0]);
     return pathMatch ? {...memo2, [pathMatch[1]]: comment} : memo2;
   }, {});
-  debug8("existing UHA comments:", useHeraldActionComments);
+  debug9("existing UHA comments:", useHeraldActionComments);
   const updateCommentPromises = Object.keys(commentsFromRules).filter((key) => key in useHeraldActionComments).map((key) => {
     const comment_id = useHeraldActionComments[key].id;
     const body = tagComment(commentsFromRules[key], key);
@@ -19434,7 +19437,7 @@ var handleComment = async (client, {owner, repo, prNumber, matchingRules, files,
       body
     }));
   });
-  return Promise.all([...updateCommentPromises, ...createCommentPromises]).catch(catchHandler(debug8));
+  return Promise.all([...updateCommentPromises, ...createCommentPromises]).catch(catchHandler(debug9));
 };
 
 // src/util/isEventSupported.ts
@@ -19443,7 +19446,7 @@ var isEventSupported = (event) => {
 };
 
 // src/index.ts
-var debug9 = logger("index");
+var debug10 = logger("index");
 var EnhancedOctokit = import_rest.Octokit;
 var Props;
 (function(Props2) {
@@ -19481,14 +19484,14 @@ var main = async () => {
         }
       } = event;
       const {GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun} = getParams();
-      debug9("params:", {rulesLocation, base, dryRun});
+      debug10("params:", {rulesLocation, base, dryRun});
       if (!rulesLocation) {
         const message = `${Props.rulesLocation} is required`;
         import_core2.setFailed(message);
         throw new Error(message);
       }
       const rules = Rules.loadFromLocation(rulesLocation);
-      debug9("loaded rules and locations", {
+      debug10("loaded rules and locations", {
         rules,
         dir: env.GITHUB_WORKSPACE,
         rulesLocation
@@ -19503,12 +19506,12 @@ var main = async () => {
         repo
       });
       const matchingRules = await rules.getMatchingRules(files, event, files.reduce((memo2, {patch}) => patch ? [...memo2, patch] : memo2, []));
-      debug9("matchingRules:", matchingRules);
+      debug10("matchingRules:", matchingRules);
       if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
         throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules.filter((rule) => rule.errorLevel && rule.errorLevel === "error").map((rule) => rule.name).join(", ")}`);
       }
       if (dryRun !== "true") {
-        debug9("not a dry Run");
+        debug10("not a dry Run");
         if (matchingRules.length) {
           await Promise.all(Object.keys(RuleActions).reduce((promises, actionName) => {
             const action = actionsMap[RuleActions[actionName]];
@@ -19528,7 +19531,7 @@ var main = async () => {
             };
             return [...promises, action(client, options)];
           }, [])).catch((error) => {
-            debug9("We found an error calling GitHub:", error);
+            debug10("We found an error calling GitHub:", error);
             throw error;
           });
         }

@@ -14,6 +14,7 @@ import groupBy from 'lodash.groupby';
 import PQueue from 'p-queue';
 import { catchHandler } from './util/catchHandler';
 import { isMatchingRule } from './rules.guard';
+import { isValidRawRule, RawRule } from './util/isValidRawRule';
 
 const debug = logger('rules');
 
@@ -30,7 +31,7 @@ enum RuleExtras {
   description = 'description',
   targetURL = 'targetURL',
 }
-enum RuleMatchers {
+export enum RuleMatchers {
   includesInPatch = 'includesInPatch',
   eventJsonPath = 'eventJsonPath',
   includes = 'includes',
@@ -70,8 +71,6 @@ export interface Rule {
   errorLevel?: keyof typeof ErrorLevels;
 }
 
-type RawRule = Rule & { users?: string[]; teams?: string[] };
-
 const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
   const attrs = { ...RuleMatchers, ...RuleActors, ...RuleExtras };
   const rule = ['action', ...Object.keys(attrs)].reduce((memo, attr) => {
@@ -87,40 +86,6 @@ const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
     includesInPatch: makeArray(rule.includesInPatch),
     eventJsonPath: makeArray(rule.eventJsonPath),
   };
-};
-
-const hasAttribute = <Attr extends string>(
-  attr: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  content: Record<string, any>
-): content is Record<Attr, string> => attr in content;
-
-const isValidRawRule = (content: unknown): content is RawRule => {
-  if (typeof content !== 'object' || content === null) {
-    return false;
-  }
-
-  const hasValidActionValues =
-    hasAttribute<'action'>('action', content) && Object.keys(RuleActions).includes(content.action);
-
-  const hasTeams = hasAttribute('teams', content) && Array.isArray(content.teams);
-  const hasUsers = hasAttribute('users', content) && Array.isArray(content.users);
-  const hasActors =
-    hasTeams ||
-    hasUsers ||
-    (hasAttribute('customMessage', content) && !!content.customMessage && content.action === RuleActions.comment) ||
-    (hasAttribute('labels', content) && !!content.labels && content.action === RuleActions.label) ||
-    (hasAttribute('action', content) && content.action === RuleActions.status);
-  const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
-
-  debug('validation:', {
-    rule: content,
-    hasActors,
-    hasValidActionValues,
-    matchers,
-  });
-
-  return hasValidActionValues && hasActors && matchers;
 };
 
 export type MatchingRule = Rule & {
