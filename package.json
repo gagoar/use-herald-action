@@ -102,6 +102,7 @@
   "author": "Gago <xeroice@gmail.com>",
   "dependencies": {
     "@actions/core": "1.2.6",
+    "@actions/github": "4.0.0",
     "@github/memoize": "^1.0.1",
     "@octokit/rest": "18.0.15",
     "debug": "4.3.1",
@@ -137,6 +138,7 @@
     "prettier-eslint": "12.0.0",
     "prettier-eslint-cli": "5.0.0",
     "pretty-quick": "3.1.0",
+    "ts-auto-guard": "1.0.0-alpha.13",
     "ts-jest": "26.4.4",
     "ts-node": "9.1.1",
     "tslib": "2.1.0",

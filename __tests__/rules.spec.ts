@@ -50,7 +50,7 @@ describe('rules', () => {
   });
 
   describe('getMatchingRules', () => {
-    it('no matches', () => {
+    it('no matches', async () => {
       const files = [
         {
           filename: '/some/file.js',
@@ -65,10 +65,10 @@ describe('rules', () => {
       };
       const rules = new Rules(rule);
 
-      expect(rules.getMatchingRules(files, event)).toMatchInlineSnapshot('MatchingRules []');
+      expect(await rules.getMatchingRules(files, event)).toMatchInlineSnapshot('MatchingRules []');
     });
 
-    it('Matches includes and eventJsonPath (using contains)', () => {
+    it('Matches includes and eventJsonPath (using contains)', async () => {
       const files = [
         {
           filename: '/some/file.js',
@@ -92,7 +92,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(rules.getMatchingRules(files, alterEvent)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, alterEvent)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -117,7 +117,7 @@ describe('rules', () => {
         ]
       `);
     });
-    it('Matches includes and eventJsonPath', () => {
+    it('Matches includes and eventJsonPath', async () => {
       const files = [
         {
           filename: '/some/file.js',
@@ -138,7 +138,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(rules.getMatchingRules(files, event, [])).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, event, [])).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -163,7 +163,7 @@ describe('rules', () => {
       `);
     });
 
-    it('matching includes/excludes combined', () => {
+    it('matching includes/excludes combined', async () => {
       const files = [
         {
           filename: '/some/file.js',
@@ -189,7 +189,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -213,7 +213,7 @@ describe('rules', () => {
         ]
       `);
     });
-    it('matching includes (and not matching another rule)', () => {
+    it('matching includes (and not matching another rule)', async () => {
       const files = [
         {
           filename: '/some/file.js',
@@ -237,7 +237,7 @@ describe('rules', () => {
 
       const rules = new Rules(...rule);
 
-      expect(rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -258,7 +258,7 @@ describe('rules', () => {
         ]
       `);
     });
-    it('does not match includesInPatch (with more than one pattern)', () => {
+    it('does not match includesInPatch (with more than one pattern)', async () => {
       const files = [
         {
           filename: '/some/file.js',
@@ -286,14 +286,14 @@ describe('rules', () => {
       const rules = new Rules(rule);
 
       expect(
-        rules.getMatchingRules(files, event, [
+        await rules.getMatchingRules(files, event, [
           '@@ -132,7 +132,7 @@ module simon @@ -1000,7 +1000,7 @@ module gago',
           '@@ -132,7 +132,7 @@ module jon @@ -1000,7 +1000,7 @@ module heart',
         ])
       ).toMatchObject([]);
     });
 
-    it('matching includesInPatch (with more than one pattern)', () => {
+    it('matching includesInPatch (with more than one pattern)', async () => {
       const files = [
         {
           filename: '/some/file.js',
@@ -321,7 +321,7 @@ describe('rules', () => {
       const rules = new Rules(rule);
 
       expect(
-        rules.getMatchingRules(files, event, [
+        await rules.getMatchingRules(files, event, [
           '@@ -132,7 +132,7 @@ module simon @@ -1000,7 +1000,7 @@ module gago',
           '@@ -132,7 +132,7 @@ module jon @@ -1000,7 +1000,7 @@ module heart',
         ])
@@ -350,7 +350,7 @@ describe('rules', () => {
         ]
       `);
     });
-    it('matching includes (with more than one includes pattern)', () => {
+    it('matching includes (with more than one includes pattern)', async () => {
       const files = [
         {
           filename: '/some/file.js',
@@ -376,7 +376,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -399,7 +399,7 @@ describe('rules', () => {
         ]
       `);
     });
-    it('matching includes (includes as string)', () => {
+    it('matching includes (includes as string)', async () => {
       const files = [
         {
           filename: '/some/file.js',
@@ -415,7 +415,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -437,7 +437,7 @@ describe('rules', () => {
       `);
     });
 
-    it('does matches eventJsonPath when sender.type is Bot', () => {
+    it('does matches eventJsonPath when sender.type is Bot', async () => {
       const files = [
         {
           filename: '/some/file.ts',
@@ -454,7 +454,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(rules.getMatchingRules(files, botEvent)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, botEvent)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -478,7 +478,7 @@ describe('rules', () => {
         ]
       `);
     });
-    it('does not matches eventJsonPath because includes does not match', () => {
+    it('does not matches eventJsonPath because includes does not match', async () => {
       const files = [
         {
           filename: '/some/file.ts',
@@ -496,9 +496,9 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(rules.getMatchingRules(files, event)).toMatchObject([]);
+      expect(await rules.getMatchingRules(files, event)).toMatchObject([]);
     });
-    it('matches includes && eventJsonPath in the same rule', () => {
+    it('matches includes && eventJsonPath in the same rule', async () => {
       const files = [
         {
           filename: '/some/file.js',
@@ -516,7 +516,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -542,7 +542,7 @@ describe('rules', () => {
         ]
       `);
     });
-    it('matching eventJsonPath', () => {
+    it('matching eventJsonPath', async () => {
       const files = [
         {
           filename: '/some/file.js',
@@ -558,7 +558,7 @@ describe('rules', () => {
       };
 
       const rules = new Rules(rule);
-      expect(rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",

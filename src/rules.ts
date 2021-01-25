@@ -2,7 +2,7 @@
 import { sync } from 'fast-glob';
 import { basename } from 'path';
 import { memo } from './util/memoizeDecorator';
-import { Event, RuleFile } from './util/constants';
+import { Event, MATCH_RULE_CONCURRENCY, RuleFile } from './util/constants';
 import { env } from './environment';
 import minimatch from 'minimatch';
 
@@ -11,6 +11,9 @@ import { loadJSONFile } from './util/loadJSONFile';
 import { logger } from './util/debug';
 import { makeArray } from './util/makeArray';
 import groupBy from 'lodash.groupby';
+import PQueue from 'p-queue';
+import { catchHandler } from './util/catchHandler';
+import { isMatchingRule } from './rules.guard';
 
 const debug = logger('rules');
 
@@ -213,25 +216,28 @@ const handleEventJsonPath: HandleEventJsonPath = ({ event, patterns }) => {
   return false;
 };
 
-type Matcher = (rule: Rule, options: { event: Event; patch: string[]; fileNames: string[] }) => boolean;
+type Matcher = (rule: Rule, options: { event: Event; patch: string[]; fileNames: string[] }) => Promise<boolean>;
 
 const matchers: Record<string, Matcher> = {
-  [RuleMatchers.includes]: (rule, { fileNames }) =>
+  [RuleMatchers.includes]: async (rule, { fileNames }) =>
     handleIncludeExcludeFiles({ includes: rule.includes, excludes: rule.excludes, fileNames }),
-  [RuleMatchers.eventJsonPath]: (rule, { event }) => handleEventJsonPath({ patterns: rule.eventJsonPath, event }),
-  [RuleMatchers.includesInPatch]: (rule, { patch }) => handleIncludesInPatch({ patterns: rule.includesInPatch, patch }),
+  [RuleMatchers.eventJsonPath]: async (rule, { event }) => handleEventJsonPath({ patterns: rule.eventJsonPath, event }),
+  [RuleMatchers.includesInPatch]: async (rule, { patch }) =>
+    handleIncludesInPatch({ patterns: rule.includesInPatch, patch }),
 };
 
 type KeyMatchers = keyof typeof RuleMatchers;
 
-const isMatch: Matcher = (rule, options) => {
+const isMatch: Matcher = async (rule, options) => {
   const keyMatchers = Object.keys(RuleMatchers) as KeyMatchers[];
   const matches = keyMatchers
     .filter((matcher) => rule[matcher]?.length)
     .map((matcher) => matchers[matcher](rule, options));
 
   debug('isMatch:', { rule, matches });
-  return matches.length ? matches.every((match) => match === true) : false;
+
+  const resolvedMatches = await Promise.all(matches).catch(catchHandler(debug));
+  return matches.length ? (resolvedMatches as unknown[]).every((match) => match === true) : false;
 };
 
 export class Rules extends Array<Rule> {
@@ -259,7 +265,7 @@ export class Rules extends Array<Rule> {
 
     return new Rules(...rules);
   }
-  getMatchingRules(files: RuleFile[], event: Event, patchContent?: string[]): MatchingRules {
+  async getMatchingRules(files: RuleFile[], event: Event, patchContent?: string[]): Promise<MatchingRules> {
     return MatchingRules.load(this, files, event, patchContent);
   }
 }
@@ -278,17 +284,27 @@ class MatchingRules extends Array<MatchingRule> {
     return grouped || [];
   }
 
-  static load(rules: Rules, files: RuleFile[], event: Event, patchContent: string[] = []): MatchingRules {
+  static async load(
+    rules: Rules,
+    files: RuleFile[],
+    event: Event,
+    patchContent: string[] = []
+  ): Promise<MatchingRules> {
+    const queue = new PQueue({ concurrency: MATCH_RULE_CONCURRENCY });
     const fileNames = files.map(({ filename }) => filename);
 
-    const matchingRules = rules.reduce((memo, rule) => {
-      if (isMatch(rule, { event, patch: patchContent, fileNames })) {
-        return [...memo, { ...rule, matched: true }];
-      } else {
-        return memo;
-      }
-    }, [] as MatchingRule[]);
+    const matchingRules = rules.map((rule) => {
+      return queue.add(async () => {
+        const matched = await isMatch(rule, { event, patch: patchContent, fileNames });
 
-    return new MatchingRules(...matchingRules);
+        return { ...rule, matched } as MatchingRule;
+      });
+    });
+
+    const matchedRules = await Promise.all(matchingRules);
+
+    const filtered = matchedRules.filter((rule) => isMatchingRule(rule) && rule.matched);
+
+    return new MatchingRules(...filtered);
   }
 }

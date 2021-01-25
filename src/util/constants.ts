@@ -8,6 +8,7 @@ export const COMBINED_TAG_KEY = '_combined';
 export const LINE_BREAK = '<br/>';
 export const USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION (.*) -->$/;
 export const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+export const MATCH_RULE_CONCURRENCY = 5;
 export enum CommitStatus {
   SUCCESS = 'success',
   FAILURE = 'failure',
