@@ -263,10 +263,10 @@ var require_core = __commonJS((exports2) => {
     return process.env["RUNNER_DEBUG"] === "1";
   }
   exports2.isDebug = isDebug;
-  function debug10(message) {
+  function debug11(message) {
     command_1.issueCommand("debug", {}, message);
   }
-  exports2.debug = debug10;
+  exports2.debug = debug11;
   function error(message) {
     command_1.issue("error", message instanceof Error ? message.toString() : message);
   }
@@ -7187,7 +7187,7 @@ var require_main = __commonJS((exports2, module2) => {
   var RE_NEWLINES = /\\n/g;
   var NEWLINES_MATCH = /\n|\r|\r\n/;
   function parse(src, options) {
-    const debug10 = Boolean(options && options.debug);
+    const debug11 = Boolean(options && options.debug);
     const obj = {};
     src.toString().split(NEWLINES_MATCH).forEach(function(line, idx) {
       const keyValueArr = line.match(RE_INI_KEY_VAL);
@@ -7206,7 +7206,7 @@ var require_main = __commonJS((exports2, module2) => {
           val = val.trim();
         }
         obj[key] = val;
-      } else if (debug10) {
+      } else if (debug11) {
         log(`did not match key and value when parsing line ${idx + 1}: ${line}`);
       }
     });
@@ -7215,7 +7215,7 @@ var require_main = __commonJS((exports2, module2) => {
   function config(options) {
     let dotenvPath = path.resolve(process.cwd(), ".env");
     let encoding = "utf8";
-    let debug10 = false;
+    let debug11 = false;
     if (options) {
       if (options.path != null) {
         dotenvPath = options.path;
@@ -7224,15 +7224,15 @@ var require_main = __commonJS((exports2, module2) => {
         encoding = options.encoding;
       }
       if (options.debug != null) {
-        debug10 = true;
+        debug11 = true;
       }
     }
     try {
-      const parsed = parse(fs.readFileSync(dotenvPath, {encoding}), {debug: debug10});
+      const parsed = parse(fs.readFileSync(dotenvPath, {encoding}), {debug: debug11});
       Object.keys(parsed).forEach(function(key) {
         if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
           process.env[key] = parsed[key];
-        } else if (debug10) {
+        } else if (debug11) {
           log(`"${key}" is already defined in \`process.env\` and will not be overwritten`);
         }
       });
@@ -13548,11 +13548,11 @@ var require_common3 = __commonJS((exports2, module2) => {
     function createDebug(namespace) {
       let prevTime;
       let enableOverride = null;
-      function debug10(...args) {
-        if (!debug10.enabled) {
+      function debug11(...args) {
+        if (!debug11.enabled) {
           return;
         }
-        const self2 = debug10;
+        const self2 = debug11;
         const curr = Number(new Date());
         const ms = curr - (prevTime || curr);
         self2.diff = ms;
@@ -13582,12 +13582,12 @@ var require_common3 = __commonJS((exports2, module2) => {
         const logFn = self2.log || createDebug.log;
         logFn.apply(self2, args);
       }
-      debug10.namespace = namespace;
-      debug10.useColors = createDebug.useColors();
-      debug10.color = createDebug.selectColor(namespace);
-      debug10.extend = extend;
-      debug10.destroy = createDebug.destroy;
-      Object.defineProperty(debug10, "enabled", {
+      debug11.namespace = namespace;
+      debug11.useColors = createDebug.useColors();
+      debug11.color = createDebug.selectColor(namespace);
+      debug11.extend = extend;
+      debug11.destroy = createDebug.destroy;
+      Object.defineProperty(debug11, "enabled", {
         enumerable: true,
         configurable: false,
         get: () => enableOverride === null ? createDebug.enabled(namespace) : enableOverride,
@@ -13596,9 +13596,9 @@ var require_common3 = __commonJS((exports2, module2) => {
         }
       });
       if (typeof createDebug.init === "function") {
-        createDebug.init(debug10);
+        createDebug.init(debug11);
       }
-      return debug10;
+      return debug11;
     }
     function extend(namespace, delimiter) {
       const newDebug = createDebug(this.namespace + (typeof delimiter === "undefined" ? ":" : delimiter) + namespace);
@@ -13981,11 +13981,11 @@ var require_node = __commonJS((exports2, module2) => {
   function load() {
     return process.env.DEBUG;
   }
-  function init(debug10) {
-    debug10.inspectOpts = {};
+  function init(debug11) {
+    debug11.inspectOpts = {};
     const keys = Object.keys(exports2.inspectOpts);
     for (let i = 0; i < keys.length; i++) {
-      debug10.inspectOpts[keys[i]] = exports2.inspectOpts[keys[i]];
+      debug11.inspectOpts[keys[i]] = exports2.inspectOpts[keys[i]];
     }
   }
   module2.exports = require_common3()(exports2);
@@ -14875,6 +14875,525 @@ var require_lodash = __commonJS((exports2, module2) => {
   module2.exports = groupBy3;
 });
 
+// node_modules/eventemitter3/index.js
+var require_eventemitter3 = __commonJS((exports2, module2) => {
+  "use strict";
+  var has = Object.prototype.hasOwnProperty;
+  var prefix = "~";
+  function Events() {
+  }
+  if (Object.create) {
+    Events.prototype = Object.create(null);
+    if (!new Events().__proto__)
+      prefix = false;
+  }
+  function EE(fn, context, once) {
+    this.fn = fn;
+    this.context = context;
+    this.once = once || false;
+  }
+  function addListener(emitter, event, fn, context, once) {
+    if (typeof fn !== "function") {
+      throw new TypeError("The listener must be a function");
+    }
+    var listener = new EE(fn, context || emitter, once), evt = prefix ? prefix + event : event;
+    if (!emitter._events[evt])
+      emitter._events[evt] = listener, emitter._eventsCount++;
+    else if (!emitter._events[evt].fn)
+      emitter._events[evt].push(listener);
+    else
+      emitter._events[evt] = [emitter._events[evt], listener];
+    return emitter;
+  }
+  function clearEvent(emitter, evt) {
+    if (--emitter._eventsCount === 0)
+      emitter._events = new Events();
+    else
+      delete emitter._events[evt];
+  }
+  function EventEmitter() {
+    this._events = new Events();
+    this._eventsCount = 0;
+  }
+  EventEmitter.prototype.eventNames = function eventNames() {
+    var names = [], events, name;
+    if (this._eventsCount === 0)
+      return names;
+    for (name in events = this._events) {
+      if (has.call(events, name))
+        names.push(prefix ? name.slice(1) : name);
+    }
+    if (Object.getOwnPropertySymbols) {
+      return names.concat(Object.getOwnPropertySymbols(events));
+    }
+    return names;
+  };
+  EventEmitter.prototype.listeners = function listeners(event) {
+    var evt = prefix ? prefix + event : event, handlers = this._events[evt];
+    if (!handlers)
+      return [];
+    if (handlers.fn)
+      return [handlers.fn];
+    for (var i = 0, l = handlers.length, ee = new Array(l); i < l; i++) {
+      ee[i] = handlers[i].fn;
+    }
+    return ee;
+  };
+  EventEmitter.prototype.listenerCount = function listenerCount(event) {
+    var evt = prefix ? prefix + event : event, listeners = this._events[evt];
+    if (!listeners)
+      return 0;
+    if (listeners.fn)
+      return 1;
+    return listeners.length;
+  };
+  EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
+    var evt = prefix ? prefix + event : event;
+    if (!this._events[evt])
+      return false;
+    var listeners = this._events[evt], len = arguments.length, args, i;
+    if (listeners.fn) {
+      if (listeners.once)
+        this.removeListener(event, listeners.fn, void 0, true);
+      switch (len) {
+        case 1:
+          return listeners.fn.call(listeners.context), true;
+        case 2:
+          return listeners.fn.call(listeners.context, a1), true;
+        case 3:
+          return listeners.fn.call(listeners.context, a1, a2), true;
+        case 4:
+          return listeners.fn.call(listeners.context, a1, a2, a3), true;
+        case 5:
+          return listeners.fn.call(listeners.context, a1, a2, a3, a4), true;
+        case 6:
+          return listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true;
+      }
+      for (i = 1, args = new Array(len - 1); i < len; i++) {
+        args[i - 1] = arguments[i];
+      }
+      listeners.fn.apply(listeners.context, args);
+    } else {
+      var length = listeners.length, j;
+      for (i = 0; i < length; i++) {
+        if (listeners[i].once)
+          this.removeListener(event, listeners[i].fn, void 0, true);
+        switch (len) {
+          case 1:
+            listeners[i].fn.call(listeners[i].context);
+            break;
+          case 2:
+            listeners[i].fn.call(listeners[i].context, a1);
+            break;
+          case 3:
+            listeners[i].fn.call(listeners[i].context, a1, a2);
+            break;
+          case 4:
+            listeners[i].fn.call(listeners[i].context, a1, a2, a3);
+            break;
+          default:
+            if (!args)
+              for (j = 1, args = new Array(len - 1); j < len; j++) {
+                args[j - 1] = arguments[j];
+              }
+            listeners[i].fn.apply(listeners[i].context, args);
+        }
+      }
+    }
+    return true;
+  };
+  EventEmitter.prototype.on = function on(event, fn, context) {
+    return addListener(this, event, fn, context, false);
+  };
+  EventEmitter.prototype.once = function once(event, fn, context) {
+    return addListener(this, event, fn, context, true);
+  };
+  EventEmitter.prototype.removeListener = function removeListener(event, fn, context, once) {
+    var evt = prefix ? prefix + event : event;
+    if (!this._events[evt])
+      return this;
+    if (!fn) {
+      clearEvent(this, evt);
+      return this;
+    }
+    var listeners = this._events[evt];
+    if (listeners.fn) {
+      if (listeners.fn === fn && (!once || listeners.once) && (!context || listeners.context === context)) {
+        clearEvent(this, evt);
+      }
+    } else {
+      for (var i = 0, events = [], length = listeners.length; i < length; i++) {
+        if (listeners[i].fn !== fn || once && !listeners[i].once || context && listeners[i].context !== context) {
+          events.push(listeners[i]);
+        }
+      }
+      if (events.length)
+        this._events[evt] = events.length === 1 ? events[0] : events;
+      else
+        clearEvent(this, evt);
+    }
+    return this;
+  };
+  EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
+    var evt;
+    if (event) {
+      evt = prefix ? prefix + event : event;
+      if (this._events[evt])
+        clearEvent(this, evt);
+    } else {
+      this._events = new Events();
+      this._eventsCount = 0;
+    }
+    return this;
+  };
+  EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+  EventEmitter.prototype.addListener = EventEmitter.prototype.on;
+  EventEmitter.prefixed = prefix;
+  EventEmitter.EventEmitter = EventEmitter;
+  if (typeof module2 !== "undefined") {
+    module2.exports = EventEmitter;
+  }
+});
+
+// node_modules/p-finally/index.js
+var require_p_finally = __commonJS((exports2, module2) => {
+  "use strict";
+  module2.exports = (promise, onFinally) => {
+    onFinally = onFinally || (() => {
+    });
+    return promise.then((val) => new Promise((resolve) => {
+      resolve(onFinally());
+    }).then(() => val), (err) => new Promise((resolve) => {
+      resolve(onFinally());
+    }).then(() => {
+      throw err;
+    }));
+  };
+});
+
+// node_modules/p-timeout/index.js
+var require_p_timeout = __commonJS((exports2, module2) => {
+  "use strict";
+  var pFinally = require_p_finally();
+  var TimeoutError = class extends Error {
+    constructor(message) {
+      super(message);
+      this.name = "TimeoutError";
+    }
+  };
+  var pTimeout = (promise, milliseconds, fallback) => new Promise((resolve, reject) => {
+    if (typeof milliseconds !== "number" || milliseconds < 0) {
+      throw new TypeError("Expected `milliseconds` to be a positive number");
+    }
+    if (milliseconds === Infinity) {
+      resolve(promise);
+      return;
+    }
+    const timer = setTimeout(() => {
+      if (typeof fallback === "function") {
+        try {
+          resolve(fallback());
+        } catch (error) {
+          reject(error);
+        }
+        return;
+      }
+      const message = typeof fallback === "string" ? fallback : `Promise timed out after ${milliseconds} milliseconds`;
+      const timeoutError = fallback instanceof Error ? fallback : new TimeoutError(message);
+      if (typeof promise.cancel === "function") {
+        promise.cancel();
+      }
+      reject(timeoutError);
+    }, milliseconds);
+    pFinally(promise.then(resolve, reject), () => {
+      clearTimeout(timer);
+    });
+  });
+  module2.exports = pTimeout;
+  module2.exports.default = pTimeout;
+  module2.exports.TimeoutError = TimeoutError;
+});
+
+// node_modules/p-queue/dist/lower-bound.js
+var require_lower_bound = __commonJS((exports2) => {
+  "use strict";
+  Object.defineProperty(exports2, "__esModule", {value: true});
+  function lowerBound(array, value, comparator) {
+    let first = 0;
+    let count = array.length;
+    while (count > 0) {
+      const step = count / 2 | 0;
+      let it = first + step;
+      if (comparator(array[it], value) <= 0) {
+        first = ++it;
+        count -= step + 1;
+      } else {
+        count = step;
+      }
+    }
+    return first;
+  }
+  exports2.default = lowerBound;
+});
+
+// node_modules/p-queue/dist/priority-queue.js
+var require_priority_queue = __commonJS((exports2) => {
+  "use strict";
+  Object.defineProperty(exports2, "__esModule", {value: true});
+  var lower_bound_1 = require_lower_bound();
+  var PriorityQueue = class {
+    constructor() {
+      this._queue = [];
+    }
+    enqueue(run, options) {
+      options = Object.assign({priority: 0}, options);
+      const element = {
+        priority: options.priority,
+        run
+      };
+      if (this.size && this._queue[this.size - 1].priority >= options.priority) {
+        this._queue.push(element);
+        return;
+      }
+      const index = lower_bound_1.default(this._queue, element, (a, b) => b.priority - a.priority);
+      this._queue.splice(index, 0, element);
+    }
+    dequeue() {
+      const item = this._queue.shift();
+      return item === null || item === void 0 ? void 0 : item.run;
+    }
+    filter(options) {
+      return this._queue.filter((element) => element.priority === options.priority).map((element) => element.run);
+    }
+    get size() {
+      return this._queue.length;
+    }
+  };
+  exports2.default = PriorityQueue;
+});
+
+// node_modules/p-queue/dist/index.js
+var require_dist = __commonJS((exports2) => {
+  "use strict";
+  Object.defineProperty(exports2, "__esModule", {value: true});
+  var EventEmitter = require_eventemitter3();
+  var p_timeout_1 = require_p_timeout();
+  var priority_queue_1 = require_priority_queue();
+  var empty = () => {
+  };
+  var timeoutError = new p_timeout_1.TimeoutError();
+  var PQueue4 = class extends EventEmitter {
+    constructor(options) {
+      var _a2, _b, _c, _d;
+      super();
+      this._intervalCount = 0;
+      this._intervalEnd = 0;
+      this._pendingCount = 0;
+      this._resolveEmpty = empty;
+      this._resolveIdle = empty;
+      options = Object.assign({carryoverConcurrencyCount: false, intervalCap: Infinity, interval: 0, concurrency: Infinity, autoStart: true, queueClass: priority_queue_1.default}, options);
+      if (!(typeof options.intervalCap === "number" && options.intervalCap >= 1)) {
+        throw new TypeError(`Expected \`intervalCap\` to be a number from 1 and up, got \`${(_b = (_a2 = options.intervalCap) === null || _a2 === void 0 ? void 0 : _a2.toString()) !== null && _b !== void 0 ? _b : ""}\` (${typeof options.intervalCap})`);
+      }
+      if (options.interval === void 0 || !(Number.isFinite(options.interval) && options.interval >= 0)) {
+        throw new TypeError(`Expected \`interval\` to be a finite number >= 0, got \`${(_d = (_c = options.interval) === null || _c === void 0 ? void 0 : _c.toString()) !== null && _d !== void 0 ? _d : ""}\` (${typeof options.interval})`);
+      }
+      this._carryoverConcurrencyCount = options.carryoverConcurrencyCount;
+      this._isIntervalIgnored = options.intervalCap === Infinity || options.interval === 0;
+      this._intervalCap = options.intervalCap;
+      this._interval = options.interval;
+      this._queue = new options.queueClass();
+      this._queueClass = options.queueClass;
+      this.concurrency = options.concurrency;
+      this._timeout = options.timeout;
+      this._throwOnTimeout = options.throwOnTimeout === true;
+      this._isPaused = options.autoStart === false;
+    }
+    get _doesIntervalAllowAnother() {
+      return this._isIntervalIgnored || this._intervalCount < this._intervalCap;
+    }
+    get _doesConcurrentAllowAnother() {
+      return this._pendingCount < this._concurrency;
+    }
+    _next() {
+      this._pendingCount--;
+      this._tryToStartAnother();
+      this.emit("next");
+    }
+    _resolvePromises() {
+      this._resolveEmpty();
+      this._resolveEmpty = empty;
+      if (this._pendingCount === 0) {
+        this._resolveIdle();
+        this._resolveIdle = empty;
+        this.emit("idle");
+      }
+    }
+    _onResumeInterval() {
+      this._onInterval();
+      this._initializeIntervalIfNeeded();
+      this._timeoutId = void 0;
+    }
+    _isIntervalPaused() {
+      const now = Date.now();
+      if (this._intervalId === void 0) {
+        const delay = this._intervalEnd - now;
+        if (delay < 0) {
+          this._intervalCount = this._carryoverConcurrencyCount ? this._pendingCount : 0;
+        } else {
+          if (this._timeoutId === void 0) {
+            this._timeoutId = setTimeout(() => {
+              this._onResumeInterval();
+            }, delay);
+          }
+          return true;
+        }
+      }
+      return false;
+    }
+    _tryToStartAnother() {
+      if (this._queue.size === 0) {
+        if (this._intervalId) {
+          clearInterval(this._intervalId);
+        }
+        this._intervalId = void 0;
+        this._resolvePromises();
+        return false;
+      }
+      if (!this._isPaused) {
+        const canInitializeInterval = !this._isIntervalPaused();
+        if (this._doesIntervalAllowAnother && this._doesConcurrentAllowAnother) {
+          const job = this._queue.dequeue();
+          if (!job) {
+            return false;
+          }
+          this.emit("active");
+          job();
+          if (canInitializeInterval) {
+            this._initializeIntervalIfNeeded();
+          }
+          return true;
+        }
+      }
+      return false;
+    }
+    _initializeIntervalIfNeeded() {
+      if (this._isIntervalIgnored || this._intervalId !== void 0) {
+        return;
+      }
+      this._intervalId = setInterval(() => {
+        this._onInterval();
+      }, this._interval);
+      this._intervalEnd = Date.now() + this._interval;
+    }
+    _onInterval() {
+      if (this._intervalCount === 0 && this._pendingCount === 0 && this._intervalId) {
+        clearInterval(this._intervalId);
+        this._intervalId = void 0;
+      }
+      this._intervalCount = this._carryoverConcurrencyCount ? this._pendingCount : 0;
+      this._processQueue();
+    }
+    _processQueue() {
+      while (this._tryToStartAnother()) {
+      }
+    }
+    get concurrency() {
+      return this._concurrency;
+    }
+    set concurrency(newConcurrency) {
+      if (!(typeof newConcurrency === "number" && newConcurrency >= 1)) {
+        throw new TypeError(`Expected \`concurrency\` to be a number from 1 and up, got \`${newConcurrency}\` (${typeof newConcurrency})`);
+      }
+      this._concurrency = newConcurrency;
+      this._processQueue();
+    }
+    async add(fn, options = {}) {
+      return new Promise((resolve, reject) => {
+        const run = async () => {
+          this._pendingCount++;
+          this._intervalCount++;
+          try {
+            const operation = this._timeout === void 0 && options.timeout === void 0 ? fn() : p_timeout_1.default(Promise.resolve(fn()), options.timeout === void 0 ? this._timeout : options.timeout, () => {
+              if (options.throwOnTimeout === void 0 ? this._throwOnTimeout : options.throwOnTimeout) {
+                reject(timeoutError);
+              }
+              return void 0;
+            });
+            resolve(await operation);
+          } catch (error) {
+            reject(error);
+          }
+          this._next();
+        };
+        this._queue.enqueue(run, options);
+        this._tryToStartAnother();
+        this.emit("add");
+      });
+    }
+    async addAll(functions, options) {
+      return Promise.all(functions.map(async (function_) => this.add(function_, options)));
+    }
+    start() {
+      if (!this._isPaused) {
+        return this;
+      }
+      this._isPaused = false;
+      this._processQueue();
+      return this;
+    }
+    pause() {
+      this._isPaused = true;
+    }
+    clear() {
+      this._queue = new this._queueClass();
+    }
+    async onEmpty() {
+      if (this._queue.size === 0) {
+        return;
+      }
+      return new Promise((resolve) => {
+        const existingResolve = this._resolveEmpty;
+        this._resolveEmpty = () => {
+          existingResolve();
+          resolve();
+        };
+      });
+    }
+    async onIdle() {
+      if (this._pendingCount === 0 && this._queue.size === 0) {
+        return;
+      }
+      return new Promise((resolve) => {
+        const existingResolve = this._resolveIdle;
+        this._resolveIdle = () => {
+          existingResolve();
+          resolve();
+        };
+      });
+    }
+    get size() {
+      return this._queue.size;
+    }
+    sizeBy(options) {
+      return this._queue.filter(options).length;
+    }
+    get pending() {
+      return this._pendingCount;
+    }
+    get isPaused() {
+      return this._isPaused;
+    }
+    get timeout() {
+      return this._timeout;
+    }
+    set timeout(milliseconds) {
+      this._timeout = milliseconds;
+    }
+  };
+  exports2.default = PQueue4;
+});
+
 // node_modules/universal-user-agent/dist-node/index.js
 var require_dist_node = __commonJS((exports2) => {
   "use strict";
@@ -15331,7 +15850,7 @@ var require_dist_node2 = __commonJS((exports2) => {
       parse
     });
   }
-  var VERSION = "6.0.11";
+  var VERSION = "6.0.10";
   var userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`;
   var DEFAULTS = {
     method: "GET",
@@ -16557,7 +17076,7 @@ var require_dist_node5 = __commonJS((exports2) => {
   var isPlainObject = require_is_plain_object2();
   var nodeFetch = _interopDefault(require_lib());
   var requestError = require_dist_node4();
-  var VERSION = "5.4.13";
+  var VERSION = "5.4.12";
   function getBufferResponse(response) {
     return response.arrayBuffer();
   }
@@ -16674,7 +17193,7 @@ var require_dist_node6 = __commonJS((exports2) => {
   Object.defineProperty(exports2, "__esModule", {value: true});
   var request = require_dist_node5();
   var universalUserAgent = require_dist_node();
-  var VERSION = "4.5.9";
+  var VERSION = "4.5.8";
   var GraphqlError = class extends Error {
     constructor(request2, response) {
       const message = response.data.errors[0].message;
@@ -16930,7 +17449,7 @@ var require_dist_node8 = __commonJS((exports2) => {
 var require_dist_node9 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var VERSION = "1.0.3";
+  var VERSION = "1.0.2";
   function requestLog(octokit) {
     octokit.hook.wrap("request", (request, options) => {
       octokit.log.debug("request", options);
@@ -16954,7 +17473,7 @@ var require_dist_node9 = __commonJS((exports2) => {
 var require_dist_node10 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var VERSION = "2.8.2";
+  var VERSION = "2.8.0";
   function normalizePaginatedListResponse(response) {
     const responseNeedsNormalization = "total_count" in response.data && !("url" in response.data);
     if (!responseNeedsNormalization)
@@ -18151,530 +18670,11 @@ var require_dist_node12 = __commonJS((exports2) => {
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
-  var VERSION = "18.0.15";
+  var VERSION = "18.0.14";
   var Octokit2 = core.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
   exports2.Octokit = Octokit2;
-});
-
-// node_modules/eventemitter3/index.js
-var require_eventemitter3 = __commonJS((exports2, module2) => {
-  "use strict";
-  var has = Object.prototype.hasOwnProperty;
-  var prefix = "~";
-  function Events() {
-  }
-  if (Object.create) {
-    Events.prototype = Object.create(null);
-    if (!new Events().__proto__)
-      prefix = false;
-  }
-  function EE(fn, context, once) {
-    this.fn = fn;
-    this.context = context;
-    this.once = once || false;
-  }
-  function addListener(emitter, event, fn, context, once) {
-    if (typeof fn !== "function") {
-      throw new TypeError("The listener must be a function");
-    }
-    var listener = new EE(fn, context || emitter, once), evt = prefix ? prefix + event : event;
-    if (!emitter._events[evt])
-      emitter._events[evt] = listener, emitter._eventsCount++;
-    else if (!emitter._events[evt].fn)
-      emitter._events[evt].push(listener);
-    else
-      emitter._events[evt] = [emitter._events[evt], listener];
-    return emitter;
-  }
-  function clearEvent(emitter, evt) {
-    if (--emitter._eventsCount === 0)
-      emitter._events = new Events();
-    else
-      delete emitter._events[evt];
-  }
-  function EventEmitter() {
-    this._events = new Events();
-    this._eventsCount = 0;
-  }
-  EventEmitter.prototype.eventNames = function eventNames() {
-    var names = [], events, name;
-    if (this._eventsCount === 0)
-      return names;
-    for (name in events = this._events) {
-      if (has.call(events, name))
-        names.push(prefix ? name.slice(1) : name);
-    }
-    if (Object.getOwnPropertySymbols) {
-      return names.concat(Object.getOwnPropertySymbols(events));
-    }
-    return names;
-  };
-  EventEmitter.prototype.listeners = function listeners(event) {
-    var evt = prefix ? prefix + event : event, handlers = this._events[evt];
-    if (!handlers)
-      return [];
-    if (handlers.fn)
-      return [handlers.fn];
-    for (var i = 0, l = handlers.length, ee = new Array(l); i < l; i++) {
-      ee[i] = handlers[i].fn;
-    }
-    return ee;
-  };
-  EventEmitter.prototype.listenerCount = function listenerCount(event) {
-    var evt = prefix ? prefix + event : event, listeners = this._events[evt];
-    if (!listeners)
-      return 0;
-    if (listeners.fn)
-      return 1;
-    return listeners.length;
-  };
-  EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
-    var evt = prefix ? prefix + event : event;
-    if (!this._events[evt])
-      return false;
-    var listeners = this._events[evt], len = arguments.length, args, i;
-    if (listeners.fn) {
-      if (listeners.once)
-        this.removeListener(event, listeners.fn, void 0, true);
-      switch (len) {
-        case 1:
-          return listeners.fn.call(listeners.context), true;
-        case 2:
-          return listeners.fn.call(listeners.context, a1), true;
-        case 3:
-          return listeners.fn.call(listeners.context, a1, a2), true;
-        case 4:
-          return listeners.fn.call(listeners.context, a1, a2, a3), true;
-        case 5:
-          return listeners.fn.call(listeners.context, a1, a2, a3, a4), true;
-        case 6:
-          return listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true;
-      }
-      for (i = 1, args = new Array(len - 1); i < len; i++) {
-        args[i - 1] = arguments[i];
-      }
-      listeners.fn.apply(listeners.context, args);
-    } else {
-      var length = listeners.length, j;
-      for (i = 0; i < length; i++) {
-        if (listeners[i].once)
-          this.removeListener(event, listeners[i].fn, void 0, true);
-        switch (len) {
-          case 1:
-            listeners[i].fn.call(listeners[i].context);
-            break;
-          case 2:
-            listeners[i].fn.call(listeners[i].context, a1);
-            break;
-          case 3:
-            listeners[i].fn.call(listeners[i].context, a1, a2);
-            break;
-          case 4:
-            listeners[i].fn.call(listeners[i].context, a1, a2, a3);
-            break;
-          default:
-            if (!args)
-              for (j = 1, args = new Array(len - 1); j < len; j++) {
-                args[j - 1] = arguments[j];
-              }
-            listeners[i].fn.apply(listeners[i].context, args);
-        }
-      }
-    }
-    return true;
-  };
-  EventEmitter.prototype.on = function on(event, fn, context) {
-    return addListener(this, event, fn, context, false);
-  };
-  EventEmitter.prototype.once = function once(event, fn, context) {
-    return addListener(this, event, fn, context, true);
-  };
-  EventEmitter.prototype.removeListener = function removeListener(event, fn, context, once) {
-    var evt = prefix ? prefix + event : event;
-    if (!this._events[evt])
-      return this;
-    if (!fn) {
-      clearEvent(this, evt);
-      return this;
-    }
-    var listeners = this._events[evt];
-    if (listeners.fn) {
-      if (listeners.fn === fn && (!once || listeners.once) && (!context || listeners.context === context)) {
-        clearEvent(this, evt);
-      }
-    } else {
-      for (var i = 0, events = [], length = listeners.length; i < length; i++) {
-        if (listeners[i].fn !== fn || once && !listeners[i].once || context && listeners[i].context !== context) {
-          events.push(listeners[i]);
-        }
-      }
-      if (events.length)
-        this._events[evt] = events.length === 1 ? events[0] : events;
-      else
-        clearEvent(this, evt);
-    }
-    return this;
-  };
-  EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
-    var evt;
-    if (event) {
-      evt = prefix ? prefix + event : event;
-      if (this._events[evt])
-        clearEvent(this, evt);
-    } else {
-      this._events = new Events();
-      this._eventsCount = 0;
-    }
-    return this;
-  };
-  EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
-  EventEmitter.prototype.addListener = EventEmitter.prototype.on;
-  EventEmitter.prefixed = prefix;
-  EventEmitter.EventEmitter = EventEmitter;
-  if (typeof module2 !== "undefined") {
-    module2.exports = EventEmitter;
-  }
-});
-
-// node_modules/p-finally/index.js
-var require_p_finally = __commonJS((exports2, module2) => {
-  "use strict";
-  module2.exports = (promise, onFinally) => {
-    onFinally = onFinally || (() => {
-    });
-    return promise.then((val) => new Promise((resolve) => {
-      resolve(onFinally());
-    }).then(() => val), (err) => new Promise((resolve) => {
-      resolve(onFinally());
-    }).then(() => {
-      throw err;
-    }));
-  };
-});
-
-// node_modules/p-timeout/index.js
-var require_p_timeout = __commonJS((exports2, module2) => {
-  "use strict";
-  var pFinally = require_p_finally();
-  var TimeoutError = class extends Error {
-    constructor(message) {
-      super(message);
-      this.name = "TimeoutError";
-    }
-  };
-  var pTimeout = (promise, milliseconds, fallback) => new Promise((resolve, reject) => {
-    if (typeof milliseconds !== "number" || milliseconds < 0) {
-      throw new TypeError("Expected `milliseconds` to be a positive number");
-    }
-    if (milliseconds === Infinity) {
-      resolve(promise);
-      return;
-    }
-    const timer = setTimeout(() => {
-      if (typeof fallback === "function") {
-        try {
-          resolve(fallback());
-        } catch (error) {
-          reject(error);
-        }
-        return;
-      }
-      const message = typeof fallback === "string" ? fallback : `Promise timed out after ${milliseconds} milliseconds`;
-      const timeoutError = fallback instanceof Error ? fallback : new TimeoutError(message);
-      if (typeof promise.cancel === "function") {
-        promise.cancel();
-      }
-      reject(timeoutError);
-    }, milliseconds);
-    pFinally(promise.then(resolve, reject), () => {
-      clearTimeout(timer);
-    });
-  });
-  module2.exports = pTimeout;
-  module2.exports.default = pTimeout;
-  module2.exports.TimeoutError = TimeoutError;
-});
-
-// node_modules/p-queue/dist/lower-bound.js
-var require_lower_bound = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  function lowerBound(array, value, comparator) {
-    let first = 0;
-    let count = array.length;
-    while (count > 0) {
-      const step = count / 2 | 0;
-      let it = first + step;
-      if (comparator(array[it], value) <= 0) {
-        first = ++it;
-        count -= step + 1;
-      } else {
-        count = step;
-      }
-    }
-    return first;
-  }
-  exports2.default = lowerBound;
-});
-
-// node_modules/p-queue/dist/priority-queue.js
-var require_priority_queue = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  var lower_bound_1 = require_lower_bound();
-  var PriorityQueue = class {
-    constructor() {
-      this._queue = [];
-    }
-    enqueue(run, options) {
-      options = Object.assign({priority: 0}, options);
-      const element = {
-        priority: options.priority,
-        run
-      };
-      if (this.size && this._queue[this.size - 1].priority >= options.priority) {
-        this._queue.push(element);
-        return;
-      }
-      const index = lower_bound_1.default(this._queue, element, (a, b) => b.priority - a.priority);
-      this._queue.splice(index, 0, element);
-    }
-    dequeue() {
-      const item = this._queue.shift();
-      return item === null || item === void 0 ? void 0 : item.run;
-    }
-    filter(options) {
-      return this._queue.filter((element) => element.priority === options.priority).map((element) => element.run);
-    }
-    get size() {
-      return this._queue.length;
-    }
-  };
-  exports2.default = PriorityQueue;
-});
-
-// node_modules/p-queue/dist/index.js
-var require_dist = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  var EventEmitter = require_eventemitter3();
-  var p_timeout_1 = require_p_timeout();
-  var priority_queue_1 = require_priority_queue();
-  var empty = () => {
-  };
-  var timeoutError = new p_timeout_1.TimeoutError();
-  var PQueue3 = class extends EventEmitter {
-    constructor(options) {
-      var _a2, _b, _c, _d;
-      super();
-      this._intervalCount = 0;
-      this._intervalEnd = 0;
-      this._pendingCount = 0;
-      this._resolveEmpty = empty;
-      this._resolveIdle = empty;
-      options = Object.assign({carryoverConcurrencyCount: false, intervalCap: Infinity, interval: 0, concurrency: Infinity, autoStart: true, queueClass: priority_queue_1.default}, options);
-      if (!(typeof options.intervalCap === "number" && options.intervalCap >= 1)) {
-        throw new TypeError(`Expected \`intervalCap\` to be a number from 1 and up, got \`${(_b = (_a2 = options.intervalCap) === null || _a2 === void 0 ? void 0 : _a2.toString()) !== null && _b !== void 0 ? _b : ""}\` (${typeof options.intervalCap})`);
-      }
-      if (options.interval === void 0 || !(Number.isFinite(options.interval) && options.interval >= 0)) {
-        throw new TypeError(`Expected \`interval\` to be a finite number >= 0, got \`${(_d = (_c = options.interval) === null || _c === void 0 ? void 0 : _c.toString()) !== null && _d !== void 0 ? _d : ""}\` (${typeof options.interval})`);
-      }
-      this._carryoverConcurrencyCount = options.carryoverConcurrencyCount;
-      this._isIntervalIgnored = options.intervalCap === Infinity || options.interval === 0;
-      this._intervalCap = options.intervalCap;
-      this._interval = options.interval;
-      this._queue = new options.queueClass();
-      this._queueClass = options.queueClass;
-      this.concurrency = options.concurrency;
-      this._timeout = options.timeout;
-      this._throwOnTimeout = options.throwOnTimeout === true;
-      this._isPaused = options.autoStart === false;
-    }
-    get _doesIntervalAllowAnother() {
-      return this._isIntervalIgnored || this._intervalCount < this._intervalCap;
-    }
-    get _doesConcurrentAllowAnother() {
-      return this._pendingCount < this._concurrency;
-    }
-    _next() {
-      this._pendingCount--;
-      this._tryToStartAnother();
-      this.emit("next");
-    }
-    _resolvePromises() {
-      this._resolveEmpty();
-      this._resolveEmpty = empty;
-      if (this._pendingCount === 0) {
-        this._resolveIdle();
-        this._resolveIdle = empty;
-        this.emit("idle");
-      }
-    }
-    _onResumeInterval() {
-      this._onInterval();
-      this._initializeIntervalIfNeeded();
-      this._timeoutId = void 0;
-    }
-    _isIntervalPaused() {
-      const now = Date.now();
-      if (this._intervalId === void 0) {
-        const delay = this._intervalEnd - now;
-        if (delay < 0) {
-          this._intervalCount = this._carryoverConcurrencyCount ? this._pendingCount : 0;
-        } else {
-          if (this._timeoutId === void 0) {
-            this._timeoutId = setTimeout(() => {
-              this._onResumeInterval();
-            }, delay);
-          }
-          return true;
-        }
-      }
-      return false;
-    }
-    _tryToStartAnother() {
-      if (this._queue.size === 0) {
-        if (this._intervalId) {
-          clearInterval(this._intervalId);
-        }
-        this._intervalId = void 0;
-        this._resolvePromises();
-        return false;
-      }
-      if (!this._isPaused) {
-        const canInitializeInterval = !this._isIntervalPaused();
-        if (this._doesIntervalAllowAnother && this._doesConcurrentAllowAnother) {
-          const job = this._queue.dequeue();
-          if (!job) {
-            return false;
-          }
-          this.emit("active");
-          job();
-          if (canInitializeInterval) {
-            this._initializeIntervalIfNeeded();
-          }
-          return true;
-        }
-      }
-      return false;
-    }
-    _initializeIntervalIfNeeded() {
-      if (this._isIntervalIgnored || this._intervalId !== void 0) {
-        return;
-      }
-      this._intervalId = setInterval(() => {
-        this._onInterval();
-      }, this._interval);
-      this._intervalEnd = Date.now() + this._interval;
-    }
-    _onInterval() {
-      if (this._intervalCount === 0 && this._pendingCount === 0 && this._intervalId) {
-        clearInterval(this._intervalId);
-        this._intervalId = void 0;
-      }
-      this._intervalCount = this._carryoverConcurrencyCount ? this._pendingCount : 0;
-      this._processQueue();
-    }
-    _processQueue() {
-      while (this._tryToStartAnother()) {
-      }
-    }
-    get concurrency() {
-      return this._concurrency;
-    }
-    set concurrency(newConcurrency) {
-      if (!(typeof newConcurrency === "number" && newConcurrency >= 1)) {
-        throw new TypeError(`Expected \`concurrency\` to be a number from 1 and up, got \`${newConcurrency}\` (${typeof newConcurrency})`);
-      }
-      this._concurrency = newConcurrency;
-      this._processQueue();
-    }
-    async add(fn, options = {}) {
-      return new Promise((resolve, reject) => {
-        const run = async () => {
-          this._pendingCount++;
-          this._intervalCount++;
-          try {
-            const operation = this._timeout === void 0 && options.timeout === void 0 ? fn() : p_timeout_1.default(Promise.resolve(fn()), options.timeout === void 0 ? this._timeout : options.timeout, () => {
-              if (options.throwOnTimeout === void 0 ? this._throwOnTimeout : options.throwOnTimeout) {
-                reject(timeoutError);
-              }
-              return void 0;
-            });
-            resolve(await operation);
-          } catch (error) {
-            reject(error);
-          }
-          this._next();
-        };
-        this._queue.enqueue(run, options);
-        this._tryToStartAnother();
-        this.emit("add");
-      });
-    }
-    async addAll(functions, options) {
-      return Promise.all(functions.map(async (function_) => this.add(function_, options)));
-    }
-    start() {
-      if (!this._isPaused) {
-        return this;
-      }
-      this._isPaused = false;
-      this._processQueue();
-      return this;
-    }
-    pause() {
-      this._isPaused = true;
-    }
-    clear() {
-      this._queue = new this._queueClass();
-    }
-    async onEmpty() {
-      if (this._queue.size === 0) {
-        return;
-      }
-      return new Promise((resolve) => {
-        const existingResolve = this._resolveEmpty;
-        this._resolveEmpty = () => {
-          existingResolve();
-          resolve();
-        };
-      });
-    }
-    async onIdle() {
-      if (this._pendingCount === 0 && this._queue.size === 0) {
-        return;
-      }
-      return new Promise((resolve) => {
-        const existingResolve = this._resolveIdle;
-        this._resolveIdle = () => {
-          existingResolve();
-          resolve();
-        };
-      });
-    }
-    get size() {
-      return this._queue.size;
-    }
-    sizeBy(options) {
-      return this._queue.filter(options).length;
-    }
-    get pending() {
-      return this._pendingCount;
-    }
-    get isPaused() {
-      return this._isPaused;
-    }
-    get timeout() {
-      return this._timeout;
-    }
-    set timeout(milliseconds) {
-      this._timeout = milliseconds;
-    }
-  };
-  exports2.default = PQueue3;
 });
 
 // node_modules/repeat-string/index.js
@@ -18933,6 +18933,37 @@ function memo(memoizeOptions = {}) {
   };
 }
 
+// src/util/constants.ts
+var maxPerPage = 100;
+var OUTPUT_NAME = "appliedRules";
+var FILE_ENCODING = "utf8";
+var STATUS_DESCRIPTION_COPY = "You can see the rule by clicking on Details";
+var COMBINED_TAG_KEY = "_combined";
+var LINE_BREAK = "<br/>";
+var USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION (.*) -->$/;
+var EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+var MATCH_RULE_CONCURRENCY = 5;
+var CommitStatus;
+(function(CommitStatus2) {
+  CommitStatus2["SUCCESS"] = "success";
+  CommitStatus2["FAILURE"] = "failure";
+})(CommitStatus || (CommitStatus = {}));
+var SUPPORTED_EVENT_TYPES;
+(function(SUPPORTED_EVENT_TYPES2) {
+  SUPPORTED_EVENT_TYPES2["PULL_REQUEST"] = "pull_request";
+  SUPPORTED_EVENT_TYPES2["PULL_REQUEST_TARGET"] = "pull_request_target";
+  SUPPORTED_EVENT_TYPES2["push"] = "push";
+})(SUPPORTED_EVENT_TYPES || (SUPPORTED_EVENT_TYPES = {}));
+var AllowedHttpErrors;
+(function(AllowedHttpErrors2) {
+  AllowedHttpErrors2[AllowedHttpErrors2["UNPROCESSABLE_ENTITY"] = 422] = "UNPROCESSABLE_ENTITY";
+})(AllowedHttpErrors || (AllowedHttpErrors = {}));
+var HttpErrors;
+(function(HttpErrors2) {
+  HttpErrors2[HttpErrors2["RESOURCE_NOT_ACCESSIBLE"] = 403] = "RESOURCE_NOT_ACCESSIBLE";
+  HttpErrors2[HttpErrors2["SERVER_ERROR"] = 500] = "SERVER_ERROR";
+})(HttpErrors || (HttpErrors = {}));
+
 // src/environment.ts
 var import_path = __toModule(require("path"));
 var import_envalid = __toModule(require_envalid());
@@ -18955,36 +18986,6 @@ var env = environment();
 // src/rules.ts
 var import_minimatch = __toModule(require_minimatch());
 var import_jsonpath = __toModule(require_jsonpath());
-
-// src/util/constants.ts
-var maxPerPage = 100;
-var OUTPUT_NAME = "appliedRules";
-var FILE_ENCODING = "utf8";
-var STATUS_DESCRIPTION_COPY = "You can see the rule by clicking on Details";
-var COMBINED_TAG_KEY = "_combined";
-var LINE_BREAK = "<br/>";
-var USE_HERALD_ACTION_TAG_REGEX = /^<!-- USE_HERALD_ACTION (.*) -->$/;
-var EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-var CommitStatus;
-(function(CommitStatus2) {
-  CommitStatus2["SUCCESS"] = "success";
-  CommitStatus2["FAILURE"] = "failure";
-})(CommitStatus || (CommitStatus = {}));
-var SUPPORTED_EVENT_TYPES;
-(function(SUPPORTED_EVENT_TYPES2) {
-  SUPPORTED_EVENT_TYPES2["PULL_REQUEST"] = "pull_request";
-  SUPPORTED_EVENT_TYPES2["PULL_REQUEST_TARGET"] = "pull_request_target";
-  SUPPORTED_EVENT_TYPES2["push"] = "push";
-})(SUPPORTED_EVENT_TYPES || (SUPPORTED_EVENT_TYPES = {}));
-var AllowedHttpErrors;
-(function(AllowedHttpErrors2) {
-  AllowedHttpErrors2[AllowedHttpErrors2["UNPROCESSABLE_ENTITY"] = 422] = "UNPROCESSABLE_ENTITY";
-})(AllowedHttpErrors || (AllowedHttpErrors = {}));
-var HttpErrors;
-(function(HttpErrors2) {
-  HttpErrors2[HttpErrors2["RESOURCE_NOT_ACCESSIBLE"] = 403] = "RESOURCE_NOT_ACCESSIBLE";
-  HttpErrors2[HttpErrors2["SERVER_ERROR"] = 500] = "SERVER_ERROR";
-})(HttpErrors || (HttpErrors = {}));
 
 // src/util/loadJSONFile.ts
 var import_fs = __toModule(require("fs"));
@@ -19017,7 +19018,49 @@ var makeArray = (field) => field && Array.isArray(field) ? field : [field].filte
 
 // src/rules.ts
 var import_lodash = __toModule(require_lodash());
-var debug2 = logger("rules");
+var import_p_queue = __toModule(require_dist());
+
+// src/util/catchHandler.ts
+var catchHandler = (debug11) => (error) => {
+  if (Object.values(AllowedHttpErrors).includes(error.status)) {
+    debug11(`Request failed with status ${error.status}, We do not consider this a fatal error`, error);
+    return Promise.resolve({});
+  }
+  debug11("Request Failed", error);
+  return Promise.reject(error);
+};
+
+// src/rules.guard.ts
+function isRule(obj, _argumentName) {
+  return (obj !== null && typeof obj === "object" || typeof obj === "function") && (typeof obj.name === "undefined" || typeof obj.name === "string") && typeof obj.path === "string" && Array.isArray(obj.users) && obj.users.every((e) => typeof e === "string") && Array.isArray(obj.teams) && obj.teams.every((e) => typeof e === "string") && (obj.action === "comment" || obj.action === "review" || obj.action === "status" || obj.action === "assign" || obj.action === "label") && (typeof obj.includes === "undefined" || Array.isArray(obj.includes) && obj.includes.every((e) => typeof e === "string")) && (typeof obj.excludes === "undefined" || Array.isArray(obj.excludes) && obj.excludes.every((e) => typeof e === "string")) && (typeof obj.includesInPatch === "undefined" || Array.isArray(obj.includesInPatch) && obj.includesInPatch.every((e) => typeof e === "string")) && (typeof obj.eventJsonPath === "undefined" || Array.isArray(obj.eventJsonPath) && obj.eventJsonPath.every((e) => typeof e === "string")) && (typeof obj.customMessage === "undefined" || typeof obj.customMessage === "string") && (typeof obj.labels === "undefined" || Array.isArray(obj.labels) && obj.labels.every((e) => typeof e === "string")) && (typeof obj.description === "undefined" || typeof obj.description === "string") && (typeof obj.targetURL === "undefined" || typeof obj.targetURL === "string") && (typeof obj.errorLevel === "undefined" || obj.errorLevel === "none" || obj.errorLevel === "error");
+}
+function isMatchingRule(obj, _argumentName) {
+  return isRule(obj) || (obj !== null && typeof obj === "object" || typeof obj === "function") && typeof obj.matched === "boolean";
+}
+
+// src/util/isValidRawRule.ts
+var debug2 = logger("isValidRawRule");
+var hasAttribute = (attr, content) => attr in content;
+var isValidRawRule = (content) => {
+  if (typeof content !== "object" || content === null) {
+    return false;
+  }
+  const hasValidActionValues = hasAttribute("action", content) && Object.keys(RuleActions).includes(content.action);
+  const hasTeams = hasAttribute("teams", content) && Array.isArray(content.teams);
+  const hasUsers = hasAttribute("users", content) && Array.isArray(content.users);
+  const hasActors = hasTeams || hasUsers || hasAttribute("customMessage", content) && !!content.customMessage && content.action === RuleActions.comment || hasAttribute("labels", content) && !!content.labels && content.action === RuleActions.label || hasAttribute("action", content) && content.action === RuleActions.status;
+  const matchers2 = Object.keys(RuleMatchers).some((attr) => attr in content);
+  debug2("validation:", {
+    rule: content,
+    hasActors,
+    hasValidActionValues,
+    matchers: matchers2
+  });
+  return hasValidActionValues && hasActors && matchers2;
+};
+
+// src/rules.ts
+var debug3 = logger("rules");
 var RuleActors;
 (function(RuleActors2) {
   RuleActors2["users"] = "users";
@@ -19066,26 +19109,8 @@ var sanitize = (content) => {
     eventJsonPath: makeArray(rule.eventJsonPath)
   };
 };
-var hasAttribute = (attr, content) => attr in content;
-var isValidRawRule = (content) => {
-  if (typeof content !== "object" || content === null) {
-    return false;
-  }
-  const hasValidActionValues = hasAttribute("action", content) && Object.keys(RuleActions).includes(content.action);
-  const hasTeams = hasAttribute("teams", content) && Array.isArray(content.teams);
-  const hasUsers = hasAttribute("users", content) && Array.isArray(content.users);
-  const hasActors = hasTeams || hasUsers || hasAttribute("customMessage", content) && !!content.customMessage && content.action === RuleActions.comment || hasAttribute("labels", content) && !!content.labels && content.action === RuleActions.label || hasAttribute("action", content) && content.action === RuleActions.status;
-  const matchers2 = Object.keys(RuleMatchers).some((attr) => attr in content);
-  debug2("validation:", {
-    rule: content,
-    hasActors,
-    hasValidActionValues,
-    matchers: matchers2
-  });
-  return hasValidActionValues && hasActors && matchers2;
-};
 var handleIncludeExcludeFiles = ({includes, excludes, fileNames}) => {
-  debug2("includeExcludeFiles...");
+  debug3("includeExcludeFiles...");
   let results = [];
   if (includes == null ? void 0 : includes.length) {
     results = includes.reduce((memo2, include) => {
@@ -19093,27 +19118,27 @@ var handleIncludeExcludeFiles = ({includes, excludes, fileNames}) => {
       return [...memo2, ...matches];
     }, []);
     results = [...new Set(results)];
-    debug2("includes matches", {results, includes});
+    debug3("includes matches", {results, includes});
     if ((excludes == null ? void 0 : excludes.length) && results.length) {
       const toExclude = excludes.reduce((memo2, exclude) => {
         const matches = import_minimatch.default.match(results, exclude, {matchBase: true});
         return [...memo2, ...matches];
       }, []);
       results = results.filter((filename) => !toExclude.includes(filename));
-      debug2("excludes matches:", {results, excludes});
+      debug3("excludes matches:", {results, excludes});
     }
   }
   return !!results.length;
 };
 var handleIncludesInPatch = ({patterns, patch}) => {
-  debug2("handleIncludesInPath...");
+  debug3("handleIncludesInPath...");
   const matches = patterns == null ? void 0 : patterns.reduce((memo2, pattern) => {
     try {
       const rex = new RegExp(pattern);
       const matches2 = patch == null ? void 0 : patch.find((content) => content.match(rex));
       return matches2 ? [...memo2, matches2] : memo2;
     } catch (e) {
-      debug2(`pattern: ${pattern} failed to parse`, e);
+      debug3(`pattern: ${pattern} failed to parse`, e);
       return memo2;
     }
   }, []);
@@ -19128,7 +19153,7 @@ var allRequiredRulesHaveMatched = (rules, matchingRules) => {
   return requiredRules.every((rule) => matchingRulesNames.includes(rule.name));
 };
 var handleEventJsonPath = ({event, patterns}) => {
-  debug2("eventJsonPath", patterns);
+  debug3("eventJsonPath", patterns);
   try {
     let results;
     patterns == null ? void 0 : patterns.find((pattern) => {
@@ -19138,26 +19163,27 @@ var handleEventJsonPath = ({event, patterns}) => {
       }
       return matches.length;
     });
-    debug2("eventJSONPath matches:", results);
+    debug3("eventJSONPath matches:", results);
     return !!results;
   } catch (e) {
-    debug2("eventJsonPath:Error:", e);
+    debug3("eventJsonPath:Error:", e);
   }
   return false;
 };
 var matchers = {
-  [RuleMatchers.includes]: (rule, {fileNames}) => handleIncludeExcludeFiles({includes: rule.includes, excludes: rule.excludes, fileNames}),
-  [RuleMatchers.eventJsonPath]: (rule, {event}) => handleEventJsonPath({patterns: rule.eventJsonPath, event}),
-  [RuleMatchers.includesInPatch]: (rule, {patch}) => handleIncludesInPatch({patterns: rule.includesInPatch, patch})
+  [RuleMatchers.includes]: async (rule, {fileNames}) => handleIncludeExcludeFiles({includes: rule.includes, excludes: rule.excludes, fileNames}),
+  [RuleMatchers.eventJsonPath]: async (rule, {event}) => handleEventJsonPath({patterns: rule.eventJsonPath, event}),
+  [RuleMatchers.includesInPatch]: async (rule, {patch}) => handleIncludesInPatch({patterns: rule.includesInPatch, patch})
 };
-var isMatch = (rule, options) => {
+var isMatch = async (rule, options) => {
   const keyMatchers = Object.keys(RuleMatchers);
   const matches = keyMatchers.filter((matcher) => {
     var _a2;
     return (_a2 = rule[matcher]) == null ? void 0 : _a2.length;
   }).map((matcher) => matchers[matcher](rule, options));
-  debug2("isMatch:", {rule, matches});
-  return matches.length ? matches.every((match) => match === true) : false;
+  debug3("isMatch:", {rule, matches});
+  const resolvedMatches = await Promise.all(matches).catch(catchHandler(debug3));
+  return matches.length ? resolvedMatches.every((match) => match === true) : false;
 };
 var Rules = class extends Array {
   constructor(...items) {
@@ -19169,7 +19195,7 @@ var Rules = class extends Array {
       cwd: env.GITHUB_WORKSPACE,
       absolute: true
     });
-    debug2("files found:", matches);
+    debug3("files found:", matches);
     const rules = matches.reduce((memo2, filePath) => {
       try {
         const rule = loadJSONFile(filePath);
@@ -19181,7 +19207,7 @@ var Rules = class extends Array {
     }, []);
     return new Rules(...rules);
   }
-  getMatchingRules(files, event, patchContent) {
+  async getMatchingRules(files, event, patchContent) {
     return MatchingRules.load(this, files, event, patchContent);
   }
 };
@@ -19196,16 +19222,18 @@ var MatchingRules2 = class extends Array {
     const grouped = this.groupByAction()[action];
     return grouped || [];
   }
-  static load(rules, files, event, patchContent = []) {
+  static async load(rules, files, event, patchContent = []) {
+    const queue = new import_p_queue.default({concurrency: MATCH_RULE_CONCURRENCY});
     const fileNames = files.map(({filename}) => filename);
-    const matchingRules = rules.reduce((memo2, rule) => {
-      if (isMatch(rule, {event, patch: patchContent, fileNames})) {
-        return [...memo2, {...rule, matched: true}];
-      } else {
-        return memo2;
-      }
-    }, []);
-    return new MatchingRules2(...matchingRules);
+    const matchingRules = rules.map((rule) => {
+      return queue.add(async () => {
+        const matched = await isMatch(rule, {event, patch: patchContent, fileNames});
+        return {...rule, matched};
+      });
+    });
+    const matchedRules = await Promise.all(matchingRules);
+    const filtered = matchedRules.filter((rule) => isMatchingRule(rule) && rule.matched);
+    return new MatchingRules2(...filtered);
   }
 };
 var MatchingRules = MatchingRules2;
@@ -19216,40 +19244,30 @@ __decorate([
 // src/index.ts
 var import_rest = __toModule(require_dist_node12());
 
-// src/util/catchHandler.ts
-var catchHandler = (debug10) => (error) => {
-  if (Object.values(AllowedHttpErrors).includes(error.status)) {
-    debug10(`Request failed with status ${error.status}, We do not consider this a fatal error`, error);
-    return Promise.resolve({});
-  }
-  debug10("Request Failed", error);
-  return Promise.reject(error);
-};
-
 // src/assignees.ts
-var debug3 = logger("assignees");
+var debug4 = logger("assignees");
 var handleAssignees = async (client, {owner, repo, prNumber, matchingRules}) => {
-  debug3("handleAssignees called with:", matchingRules);
+  debug4("handleAssignees called with:", matchingRules);
   const assignees = matchingRules.reduce((memo2, rule) => {
     return [...memo2, ...rule.users.map((user) => user.replace("@", ""))];
   }, []);
-  debug3("assignees found:", assignees);
+  debug4("assignees found:", assignees);
   return client.issues.addAssignees({
     owner,
     repo,
     issue_number: prNumber,
     assignees
-  }).catch(catchHandler(debug3));
+  }).catch(catchHandler(debug4));
 };
 
 // src/labels.ts
-var debug4 = logger("labels");
+var debug5 = logger("labels");
 var handleLabels = async (client, {owner, repo, prNumber, matchingRules}) => {
-  debug4("called with:", matchingRules);
+  debug5("called with:", matchingRules);
   const labels = matchingRules.filter(({labels: labels2}) => labels2).reduce((memo2, {labels: labels2}) => [...memo2, ...makeArray(labels2)], []);
-  debug4("labels", labels);
+  debug5("labels", labels);
   if (!labels.length) {
-    debug4("no labels where found");
+    debug5("no labels where found");
     return void 0;
   }
   const result = client.issues.addLabels({
@@ -19257,19 +19275,19 @@ var handleLabels = async (client, {owner, repo, prNumber, matchingRules}) => {
     repo,
     issue_number: prNumber,
     labels
-  }).catch(catchHandler(debug4));
-  debug4("result:", result);
+  }).catch(catchHandler(debug5));
+  debug5("result:", result);
   return result;
 };
 
 // src/reviewers.ts
-var debug5 = logger("reviewers");
+var debug6 = logger("reviewers");
 var sanitizeTeam = (team) => {
   const splitTeam = team.replace("@", "").split("/");
   return splitTeam[splitTeam.length - 1];
 };
 var handleReviewers = async (client, {owner, repo, prNumber, matchingRules}) => {
-  debug5("handleReviewers called with:", matchingRules);
+  debug6("handleReviewers called with:", matchingRules);
   const {reviewers, teamReviewers} = matchingRules.reduce((memo2, rule) => {
     const reviewers2 = [...memo2.reviewers, ...rule.users.map((user) => user.replace("@", ""))];
     const teamReviewers2 = [...memo2.teamReviewers, ...rule.teams.map(sanitizeTeam)];
@@ -19281,28 +19299,28 @@ var handleReviewers = async (client, {owner, repo, prNumber, matchingRules}) => 
     pull_number: prNumber,
     reviewers,
     team_reviewers: teamReviewers
-  }).catch(catchHandler(debug5));
-  debug5("result:", result);
+  }).catch(catchHandler(debug6));
+  debug6("result:", result);
   return result;
 };
 
 // src/statuses.ts
-var import_p_queue = __toModule(require_dist());
+var import_p_queue2 = __toModule(require_dist());
 
 // src/util/getBlobURL.ts
-var debug6 = logger("getBlobURL");
+var debug7 = logger("getBlobURL");
 var getBlobURL = (filename, files, owner, repo, base) => {
   const baseBlobPath = `https://github.com/${owner}/${repo}/blob`;
-  debug6("getBlobURL", filename, files, baseBlobPath, base);
+  debug7("getBlobURL", filename, files, baseBlobPath, base);
   const file = files.find((file2) => filename.match(file2.filename));
   return file ? file.blob_url : `${baseBlobPath}/${base}/${filename.replace(`${env.GITHUB_WORKSPACE}/`, "")}`;
 };
 
 // src/statuses.ts
-var debug7 = logger("statuses");
+var debug8 = logger("statuses");
 var handleStatus = async (client, {owner, repo, matchingRules, rules, base, sha, files}, requestConcurrency = 1) => {
-  debug7("called with:", matchingRules.map((rule) => rule.path));
-  const queue = new import_p_queue.default({concurrency: requestConcurrency});
+  debug8("called with:", matchingRules.map((rule) => rule.path));
+  const queue = new import_p_queue2.default({concurrency: requestConcurrency});
   const statusActionRules = rules.filter(({action}) => action == RuleActions.status);
   const statuses = statusActionRules.map((rule) => ({
     owner,
@@ -19313,17 +19331,17 @@ var handleStatus = async (client, {owner, repo, matchingRules, rules, base, sha,
     target_url: rule.targetURL ? rule.targetURL : getBlobURL(rule.path, files, owner, repo, base),
     state: matchingRules.find((matchingRule) => matchingRule.path === rule.path) ? CommitStatus.SUCCESS : CommitStatus.FAILURE
   }));
-  debug7("statuses", statuses);
-  const result = await Promise.all(statuses.map((status) => queue.add(() => client.repos.createCommitStatus(status)))).catch(catchHandler(debug7));
-  debug7("result:", result);
+  debug8("statuses", statuses);
+  const result = await Promise.all(statuses.map((status) => queue.add(() => client.repos.createCommitStatus(status)))).catch(catchHandler(debug8));
+  debug8("result:", result);
   return result;
 };
 
 // src/comment.ts
 var import_lodash2 = __toModule(require_lodash());
 var import_markdown_table = __toModule(require_markdown_table());
-var import_p_queue2 = __toModule(require_dist());
-var debug8 = logger("comment");
+var import_p_queue3 = __toModule(require_dist());
+var debug9 = logger("comment");
 var TypeOfComments;
 (function(TypeOfComments2) {
   TypeOfComments2["standalone"] = "standalone";
@@ -19381,14 +19399,14 @@ var getAllComments = async (client, params) => {
   }
 };
 var handleComment = async (client, {owner, repo, prNumber, matchingRules, files, base}, requestConcurrency = 1) => {
-  debug8("handleComment called with:", matchingRules);
-  const queue = new import_p_queue2.default({concurrency: requestConcurrency});
+  debug9("handleComment called with:", matchingRules);
+  const queue = new import_p_queue3.default({concurrency: requestConcurrency});
   const rulesWithBlobURL = matchingRules.map((mRule) => ({
     ...mRule,
     blobURL: getBlobURL(mRule.path, files, owner, repo, base)
   }));
   const commentsFromRules = composeCommentsForUsers(rulesWithBlobURL);
-  debug8("comments from matching rules:", commentsFromRules);
+  debug9("comments from matching rules:", commentsFromRules);
   const rawComments = await getAllComments(client, {
     owner,
     repo,
@@ -19399,7 +19417,7 @@ var handleComment = async (client, {owner, repo, prNumber, matchingRules, files,
     const pathMatch = comment.body && USE_HERALD_ACTION_TAG_REGEX.exec((_a2 = comment.body) == null ? void 0 : _a2.split("\n")[0]);
     return pathMatch ? {...memo2, [pathMatch[1]]: comment} : memo2;
   }, {});
-  debug8("existing UHA comments:", useHeraldActionComments);
+  debug9("existing UHA comments:", useHeraldActionComments);
   const updateCommentPromises = Object.keys(commentsFromRules).filter((key) => key in useHeraldActionComments).map((key) => {
     const comment_id = useHeraldActionComments[key].id;
     const body = tagComment(commentsFromRules[key], key);
@@ -19419,7 +19437,7 @@ var handleComment = async (client, {owner, repo, prNumber, matchingRules, files,
       body
     }));
   });
-  return Promise.all([...updateCommentPromises, ...createCommentPromises]).catch(catchHandler(debug8));
+  return Promise.all([...updateCommentPromises, ...createCommentPromises]).catch(catchHandler(debug9));
 };
 
 // src/util/isEventSupported.ts
@@ -19428,7 +19446,7 @@ var isEventSupported = (event) => {
 };
 
 // src/index.ts
-var debug9 = logger("index");
+var debug10 = logger("index");
 var EnhancedOctokit = import_rest.Octokit;
 var Props;
 (function(Props2) {
@@ -19466,14 +19484,14 @@ var main = async () => {
         }
       } = event;
       const {GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun} = getParams();
-      debug9("params:", {rulesLocation, base, dryRun});
+      debug10("params:", {rulesLocation, base, dryRun});
       if (!rulesLocation) {
         const message = `${Props.rulesLocation} is required`;
         import_core2.setFailed(message);
         throw new Error(message);
       }
       const rules = Rules.loadFromLocation(rulesLocation);
-      debug9("loaded rules and locations", {
+      debug10("loaded rules and locations", {
         rules,
         dir: env.GITHUB_WORKSPACE,
         rulesLocation
@@ -19487,13 +19505,13 @@ var main = async () => {
         owner,
         repo
       });
-      const matchingRules = rules.getMatchingRules(files, event, files.reduce((memo2, {patch}) => patch ? [...memo2, patch] : memo2, []));
-      debug9("matchingRules:", matchingRules);
+      const matchingRules = await rules.getMatchingRules(files, event, files.reduce((memo2, {patch}) => patch ? [...memo2, patch] : memo2, []));
+      debug10("matchingRules:", matchingRules);
       if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
         throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules.filter((rule) => rule.errorLevel && rule.errorLevel === "error").map((rule) => rule.name).join(", ")}`);
       }
       if (dryRun !== "true") {
-        debug9("not a dry Run");
+        debug10("not a dry Run");
         if (matchingRules.length) {
           await Promise.all(Object.keys(RuleActions).reduce((promises, actionName) => {
             const action = actionsMap[RuleActions[actionName]];
@@ -19513,7 +19531,7 @@ var main = async () => {
             };
             return [...promises, action(client, options)];
           }, [])).catch((error) => {
-            debug9("We found an error calling GitHub:", error);
+            debug10("We found an error calling GitHub:", error);
             throw error;
           });
         }
