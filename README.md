@@ -23,6 +23,8 @@
 
 This action allows you to add comments, reviewers and assignees to a pull request depending on rules you define!
 
+The following documentation is also available at our [GitHub Pages site](https://gagoar.github.io/use-herald-action/).
+
 ## Table of contents
 
 - [Use Herald Action](#use-herald-action)
