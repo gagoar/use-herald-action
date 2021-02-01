@@ -25,19 +25,21 @@ This action allows you to add comments, reviewers and assignees to a pull reques
 
 ## Table of contents
 
-- [What is `use-herald-action`?](#what-is-use-herald-action)
-  - [Motivation](#motivation)
-- [Additional setup](#additional-setup)
-  - [Context](#context)
-- [How to create a rule](#how-to-create-a-rule)
-- [Rule Examples](#rule-examples)
-- [Error levels](#error-levels)
-- [Input parameters](#input-parameters)
-- [Output](#output)
-- [Events](#events)
-- [Examples](#examples)
-  - [Basic example](#basic-example)
-  - [Using output](#using-output)
+- [Use Herald Action](#use-herald-action)
+  - [Table of contents](#table-of-contents)
+  - [What is `use-herald-action`?](#what-is-use-herald-action)
+    - [Motivation](#motivation)
+  - [Additional setup](#additional-setup)
+    - [Context](#context)
+  - [How to create a rule](#how-to-create-a-rule)
+  - [Rule Examples](#rule-examples)
+  - [Error levels](#error-levels)
+  - [Input parameters](#input-parameters)
+  - [Output](#output)
+  - [Events](#events)
+  - [Examples](#examples)
+    - [Basic example](#basic-example)
+    - [Using output](#using-output)
 
 <hr>
 
@@ -73,7 +75,7 @@ Although the main motivation behind this GitHub Action is to bridge the gap desc
 
 ## Additional setup
 
-Are you looking to use `use-herald-action` in a **private organization's repository**? If so, you wil need to do some [additional setup here](https://gagoar.github.io/use-herald-action) prior to using the action in your workflow.
+Are you looking to use `use-herald-action` in a **private organization's repository**? If so, you will need to do some [additional setup here](https://gagoar.github.io/use-herald-action/organization-app-flow/) prior to using the action in your workflow.
 
 ### Context
 
