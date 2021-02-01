@@ -1,6 +1,6 @@
 import { getInput, setOutput, setFailed } from '@actions/core';
 import { Rules, RuleActions, allRequiredRulesHaveMatched, MatchingRule, Rule } from './rules';
-import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES, RuleFile } from './util/constants';
+import { Event, OUTPUT_NAME, SUPPORTED_EVENT_TYPES, RuleFile, OctokitClient } from './util/constants';
 import { logger } from './util/debug';
 import { env } from './environment';
 
@@ -35,7 +35,7 @@ export type ActionInput = {
   files: RuleFile[];
 };
 export type ActionMapInput = (
-  client: InstanceType<typeof Octokit>,
+  client: OctokitClient,
   options: ActionInput,
   requestConcurrency?: number
 ) => Promise<unknown>;
@@ -102,9 +102,14 @@ export const main = async (): Promise<void> => {
         repo,
       });
 
+      if (!files) {
+        throw new Error(`There were no files returned from ${base} base and ${headSha} head`);
+      }
+
       const matchingRules = await rules.getMatchingRules(
         files,
         event,
+        client,
         files.reduce((memo, { patch }) => (patch ? [...memo, patch] : memo), [] as string[])
       );
 

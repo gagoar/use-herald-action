@@ -4,8 +4,10 @@ import { env } from '../src/environment';
 import { Event, HttpErrors } from '../src/util/constants';
 import * as actions from '@actions/core';
 import { Main, mockedInput } from './util/helpers';
+import event from '../__mocks__/event.json';
 import getCommentsResponse from '../__mocks__/scenarios/get_comments.json';
-import { mockCompareCommits } from './util/mockGitHubRequest';
+import { mockCompareCommits, mockRequest } from './util/mockGitHubRequest';
+
 
 jest.mock('@actions/core');
 jest.mock('../src/environment', () => {
@@ -19,7 +21,16 @@ jest.mock('../src/environment', () => {
     },
   };
 });
+jest.mock('@actions/github', () => {
+  const workflowEvent = jest.requireActual('../__mocks__/event.json') as Event;
 
+  return {
+    context: {
+      actor: workflowEvent.repository.name,
+      repo: { owner: workflowEvent.repository.owner.login },
+    },
+  };
+});
 describe('use-herald', () => {
   const getInput = actions.getInput as jest.Mock<any>;
   const setFailed = actions.setFailed as jest.Mock<any>;
@@ -35,7 +46,7 @@ describe('use-herald', () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
   } = require(`../${env.GITHUB_EVENT_PATH}`) as Event;
 
-  const getGithubMock = () =>
+  const getCompareCommitsMock = () =>
     mockCompareCommits({
       login,
       name,
@@ -49,13 +60,23 @@ describe('use-herald', () => {
     });
 
     const prIssue = 2;
-    const github = getGithubMock();
+    const compareCommitsMock = getCompareCommitsMock();
+    const membershipMock = mockRequest(
+      'get',
+      `/orgs/${event.repository.owner.login}/teams/counting_out_game/memberships/${event.repository.name}`,
+      200,
+      {
+        role: 'maintainer',
+        state: 'active',
+        url: `https://api.github.com/teams/1/memberships/${event.repository.owner.login}`,
+      }
+    );
 
-    github
+    compareCommitsMock
       .get(`/repos/${login}/${name}/issues/${prIssue}/comments?page=1&per_page=100`)
       .reply(200, getCommentsResponse);
 
-    github
+    compareCommitsMock
       .post(`/repos/${login}/${name}/issues/2/comments`)
       .replyWithError({ message: 'Resource not accessible by integration', code: HttpErrors.RESOURCE_NOT_ACCESSIBLE });
 
@@ -73,6 +94,8 @@ describe('use-herald', () => {
         ],
       ]
     `);
-    expect(github.isDone()).toBe(true);
+    expect(compareCommitsMock.isDone()).toBe(true);
+    expect(membershipMock.isDone()).toBe(true);
   });
+
 });
