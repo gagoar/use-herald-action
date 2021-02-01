@@ -8,7 +8,7 @@ export type CallbackRequest = (
   body: { target_url: string; description: string; state: string; context: string },
   cb: (arg0: unknown, arg1: unknown) => void
 ) => void;
-type MockResponse = Record<string, unknown> | Record<string, unknown>[] | CallbackRequest;
+export type MockResponse = Record<string, unknown> | Record<string, unknown>[] | CallbackRequest;
 type MockRequest = (
   action: 'post' | 'get',
   url: string,
@@ -22,9 +22,29 @@ type CompareURLInput = { login: string; name: string; base: string; head: string
 const compareURL = (options: CompareURLInput) =>
   `/repos/${options.login}/${options.name}/compare/${options.base}...${options.head}`;
 
+
 export const mockCompareCommits = (options: CompareURLInput & { response?: MockResponse }): ReturnType<MockRequest> => {
   return mockRequest('get', compareURL(options), 200, options.response || getCompareCommitsResponse);
 };
+
+type mockTeamMembershipInput = {
+  org: string,
+  team_slug: string,
+  username: string
+};
+type mockTeamMembershipResponse = {
+  url: string,
+  role: string,
+  state: string
+}
+
+// "https://api.github.com/orgs/gagoar/teams/counting_out_game/memberships/example_repo"
+const teamMembershipURL = (options: mockTeamMembershipInput) => {
+  return `/orgs/${options.org}/teams/${options.team_slug}/memberships/${options.username}`
+};
+export const mockTeamMembership = (options: mockTeamMembershipInput, response: mockTeamMembershipResponse): ReturnType<MockRequest> => {
+  return mockRequest('get', teamMembershipURL(options), 200, response);
+}
 export const mockRequestWithError = (
   action: 'get' | 'post',
   url: string,

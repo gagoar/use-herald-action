@@ -102,6 +102,7 @@
   "author": "Gago <xeroice@gmail.com>",
   "dependencies": {
     "@actions/core": "1.4.0",
+    "@actions/github": "^5.0.0",
     "@octokit/rest": "18.5.2",
     "debug": "4.3.2",
     "envalid": "6.0.2",
