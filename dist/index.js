@@ -17809,15 +17809,24 @@ var require_dist_node11 = __commonJS((exports2) => {
       getTemplate: ["GET /gitignore/templates/{name}"]
     },
     interactions: {
+      getRestrictionsForAuthenticatedUser: ["GET /user/interaction-limits"],
       getRestrictionsForOrg: ["GET /orgs/{org}/interaction-limits"],
       getRestrictionsForRepo: ["GET /repos/{owner}/{repo}/interaction-limits"],
-      getRestrictionsForYourPublicRepos: ["GET /user/interaction-limits"],
+      getRestrictionsForYourPublicRepos: ["GET /user/interaction-limits", {}, {
+        renamed: ["interactions", "getRestrictionsForAuthenticatedUser"]
+      }],
+      removeRestrictionsForAuthenticatedUser: ["DELETE /user/interaction-limits"],
       removeRestrictionsForOrg: ["DELETE /orgs/{org}/interaction-limits"],
       removeRestrictionsForRepo: ["DELETE /repos/{owner}/{repo}/interaction-limits"],
-      removeRestrictionsForYourPublicRepos: ["DELETE /user/interaction-limits"],
+      removeRestrictionsForYourPublicRepos: ["DELETE /user/interaction-limits", {}, {
+        renamed: ["interactions", "removeRestrictionsForAuthenticatedUser"]
+      }],
+      setRestrictionsForAuthenticatedUser: ["PUT /user/interaction-limits"],
       setRestrictionsForOrg: ["PUT /orgs/{org}/interaction-limits"],
       setRestrictionsForRepo: ["PUT /repos/{owner}/{repo}/interaction-limits"],
-      setRestrictionsForYourPublicRepos: ["PUT /user/interaction-limits"]
+      setRestrictionsForYourPublicRepos: ["PUT /user/interaction-limits", {}, {
+        renamed: ["interactions", "setRestrictionsForAuthenticatedUser"]
+      }]
     },
     issues: {
       addAssignees: ["POST /repos/{owner}/{repo}/issues/{issue_number}/assignees"],
@@ -18596,7 +18605,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       updateAuthenticated: ["PATCH /user"]
     }
   };
-  var VERSION = "4.8.0";
+  var VERSION = "4.10.1";
   function endpointsToMethods(octokit, endpointsMap) {
     const newMethods = {};
     for (const [scope, endpoints] of Object.entries(endpointsMap)) {
@@ -18670,7 +18679,7 @@ var require_dist_node12 = __commonJS((exports2) => {
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
-  var VERSION = "18.0.15";
+  var VERSION = "18.1.0";
   var Octokit2 = core.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
