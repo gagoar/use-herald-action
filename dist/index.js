@@ -13,12 +13,10 @@ var __commonJS = (callback, module2) => () => {
   return module2.exports;
 };
 var __export = (target, all) => {
-  __markAsModule(target);
   for (var name in all)
     __defProp(target, name, {get: all[name], enumerable: true});
 };
 var __exportStar = (target, module2, desc) => {
-  __markAsModule(target);
   if (module2 && typeof module2 === "object" || typeof module2 === "function") {
     for (let key of __getOwnPropNames(module2))
       if (!__hasOwnProp.call(target, key) && key !== "default")
@@ -29,7 +27,7 @@ var __exportStar = (target, module2, desc) => {
 var __toModule = (module2) => {
   if (module2 && module2.__esModule)
     return module2;
-  return __exportStar(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", {value: module2, enumerable: true}), module2);
+  return __exportStar(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", {value: module2, enumerable: true})), module2);
 };
 var __decorate = (decorators, target, key, kind) => {
   var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
@@ -15901,6 +15899,7 @@ var require_is_plain_object2 = __commonJS((exports2) => {
 
 // node_modules/node-fetch/lib/index.mjs
 var require_lib = __commonJS((exports2) => {
+  __markAsModule(exports2);
   __export(exports2, {
     FetchError: () => FetchError,
     Headers: () => Headers,
