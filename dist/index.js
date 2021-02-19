@@ -17472,7 +17472,7 @@ var require_dist_node9 = __commonJS((exports2) => {
 var require_dist_node10 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
-  var VERSION = "2.9.1";
+  var VERSION = "2.10.0";
   function normalizePaginatedListResponse(response) {
     const responseNeedsNormalization = "total_count" in response.data && !("url" in response.data);
     if (!responseNeedsNormalization)
@@ -17726,12 +17726,16 @@ var require_dist_node11 = __commonJS((exports2) => {
       update: ["PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}"]
     },
     codeScanning: {
+      deleteAnalysis: ["DELETE /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}{?confirm_delete}"],
       getAlert: ["GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}", {}, {
         renamedParameters: {
           alert_id: "alert_number"
         }
       }],
+      getAnalysis: ["GET /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}"],
+      getSarif: ["GET /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}"],
       listAlertsForRepo: ["GET /repos/{owner}/{repo}/code-scanning/alerts"],
+      listAlertsInstances: ["GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances"],
       listRecentAnalyses: ["GET /repos/{owner}/{repo}/code-scanning/analyses"],
       updateAlert: ["PATCH /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}"],
       uploadSarif: ["POST /repos/{owner}/{repo}/code-scanning/sarifs"]
@@ -18003,6 +18007,25 @@ var require_dist_node11 = __commonJS((exports2) => {
       updateMembershipForAuthenticatedUser: ["PATCH /user/memberships/orgs/{org}"],
       updateWebhook: ["PATCH /orgs/{org}/hooks/{hook_id}"],
       updateWebhookConfigForOrg: ["PATCH /orgs/{org}/hooks/{hook_id}/config"]
+    },
+    packages: {
+      deletePackageForAuthenticatedUser: ["DELETE /user/packages/{package_type}/{package_name}"],
+      deletePackageForOrg: ["DELETE /orgs/{org}/packages/{package_type}/{package_name}"],
+      deletePackageVersionForAuthenticatedUser: ["DELETE /user/packages/{package_type}/{package_name}/versions/{package_version_id}"],
+      deletePackageVersionForOrg: ["DELETE /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}"],
+      getAllPackageVersionsForAPackageOwnedByAnOrg: ["GET /orgs/{org}/packages/{package_type}/{package_name}/versions"],
+      getAllPackageVersionsForAPackageOwnedByTheAuthenticatedUser: ["GET /user/packages/{package_type}/{package_name}/versions"],
+      getAllPackageVersionsForPackageOwnedByUser: ["GET /users/{username}/packages/{package_type}/{package_name}/versions"],
+      getPackageForAuthenticatedUser: ["GET /user/packages/{package_type}/{package_name}"],
+      getPackageForOrganization: ["GET /orgs/{org}/packages/{package_type}/{package_name}"],
+      getPackageForUser: ["GET /users/{username}/packages/{package_type}/{package_name}"],
+      getPackageVersionForAuthenticatedUser: ["GET /user/packages/{package_type}/{package_name}/versions/{package_version_id}"],
+      getPackageVersionForOrganization: ["GET /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}"],
+      getPackageVersionForUser: ["GET /users/{username}/packages/{package_type}/{package_name}/versions/{package_version_id}"],
+      restorePackageForAuthenticatedUser: ["POST /user/packages/{package_type}/{package_name}/restore"],
+      restorePackageForOrg: ["POST /orgs/{org}/packages/{package_type}/{package_name}/restore"],
+      restorePackageVersionForAuthenticatedUser: ["POST /user/packages/{package_type}/{package_name}/versions/{package_version_id}/restore"],
+      restorePackageVersionForOrg: ["POST /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}/restore"]
     },
     projects: {
       addCollaborator: ["PUT /projects/{project_id}/collaborators/{username}", {
@@ -18604,7 +18627,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       updateAuthenticated: ["PATCH /user"]
     }
   };
-  var VERSION = "4.10.3";
+  var VERSION = "4.12.0";
   function endpointsToMethods(octokit, endpointsMap) {
     const newMethods = {};
     for (const [scope, endpoints] of Object.entries(endpointsMap)) {
@@ -18678,7 +18701,7 @@ var require_dist_node12 = __commonJS((exports2) => {
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
-  var VERSION = "18.1.1";
+  var VERSION = "18.2.0";
   var Octokit2 = core.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
