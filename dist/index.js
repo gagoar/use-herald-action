@@ -20025,6 +20025,7 @@ var handleMembership = async (client, isMemberOf = [], requestConcurrency = 2) =
   });
   debug3(`We will check membership of ${actor} in the following teams ${membershipChecks.map(({team_slug: team}) => team)}`);
   const results = await Promise.all(membershipChecks.map((membership) => queue.add(() => client.teams.getMembershipForUserInOrg(membership)))).catch(catchHandler(debug3));
+  debug3(results);
   return results.some((data) => (data == null ? void 0 : data.status) === ACTIVE_STATE);
 };
 
