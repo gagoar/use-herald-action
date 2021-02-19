@@ -53,6 +53,7 @@ export type RuleFile = Partial<OctokitFile> & Required<Pick<OctokitFile, 'filena
 
 export enum AllowedHttpErrors {
   UNPROCESSABLE_ENTITY = 422,
+  NOT_FOUND = 404
 }
 export enum HttpErrors {
   RESOURCE_NOT_ACCESSIBLE = 403,

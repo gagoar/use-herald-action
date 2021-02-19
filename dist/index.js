@@ -19906,6 +19906,7 @@ var SUPPORTED_EVENT_TYPES;
 var AllowedHttpErrors;
 (function(AllowedHttpErrors2) {
   AllowedHttpErrors2[AllowedHttpErrors2["UNPROCESSABLE_ENTITY"] = 422] = "UNPROCESSABLE_ENTITY";
+  AllowedHttpErrors2[AllowedHttpErrors2["NOT_FOUND"] = 404] = "NOT_FOUND";
 })(AllowedHttpErrors || (AllowedHttpErrors = {}));
 var HttpErrors;
 (function(HttpErrors2) {
