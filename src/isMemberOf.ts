@@ -8,8 +8,6 @@ const debug = logger('isMemberOf');
 
 const ACTIVE_STATE = 'active';
 
-
-
 export const handleMembership = async (
   client: OctokitClient,
   isMemberOf: string[] = [],
