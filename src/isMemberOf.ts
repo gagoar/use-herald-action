@@ -34,11 +34,7 @@ export const handleMembership = async (
     membershipChecks.map((membership) => queue.add(() => client.teams.getMembershipForUserInOrg(membership)))
   ).catch(catchHandler(debug));
 
-  debug(results);
-
   const isMember = results instanceof Array && (results).some(result => result.data.state === ACTIVE_STATE);
-
-  debug(isMember);
 
   return isMember;
 };
