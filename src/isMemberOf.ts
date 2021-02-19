@@ -1,4 +1,4 @@
-import github from '@actions/github';
+import { context } from '@actions/github';
 import PQueue from 'p-queue';
 import { catchHandler } from './util/catchHandler';
 import { OctokitClient } from './util/constants';
@@ -13,7 +13,7 @@ export const handleMembership = async (
   isMemberOf: string[] = [],
   requestConcurrency = 2
 ): Promise<boolean> => {
-  const { repo, actor } = github.context;
+  const { repo, actor } = context;
 
   const queue = new PQueue({ concurrency: requestConcurrency });
 
