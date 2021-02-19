@@ -4007,11 +4007,11 @@ var require_reusify = __commonJS((exports2, module2) => {
 var require_queue = __commonJS((exports2, module2) => {
   "use strict";
   var reusify = require_reusify();
-  function fastqueue(context, worker, concurrency) {
-    if (typeof context === "function") {
+  function fastqueue(context2, worker, concurrency) {
+    if (typeof context2 === "function") {
       concurrency = worker;
-      worker = context;
-      context = null;
+      worker = context2;
+      context2 = null;
     }
     if (concurrency < 1) {
       throw new Error("fastqueue concurrency must be greater than 1");
@@ -4078,7 +4078,7 @@ var require_queue = __commonJS((exports2, module2) => {
     }
     function push(value, done) {
       var current = cache.get();
-      current.context = context;
+      current.context = context2;
       current.release = release;
       current.value = value;
       current.callback = done || noop;
@@ -4094,12 +4094,12 @@ var require_queue = __commonJS((exports2, module2) => {
         }
       } else {
         _running++;
-        worker.call(context, current.value, current.worked);
+        worker.call(context2, current.value, current.worked);
       }
     }
     function unshift(value, done) {
       var current = cache.get();
-      current.context = context;
+      current.context = context2;
       current.release = release;
       current.value = value;
       current.callback = done || noop;
@@ -4114,7 +4114,7 @@ var require_queue = __commonJS((exports2, module2) => {
         }
       } else {
         _running++;
-        worker.call(context, current.value, current.worked);
+        worker.call(context2, current.value, current.worked);
       }
     }
     function release(holder) {
@@ -4129,7 +4129,7 @@ var require_queue = __commonJS((exports2, module2) => {
           }
           queueHead = next.next;
           next.next = null;
-          worker.call(context, next.value, next.worked);
+          worker.call(context2, next.value, next.worked);
           if (queueTail === null) {
             self2.empty();
           }
@@ -14885,16 +14885,16 @@ var require_eventemitter3 = __commonJS((exports2, module2) => {
     if (!new Events().__proto__)
       prefix = false;
   }
-  function EE(fn, context, once) {
+  function EE(fn, context2, once) {
     this.fn = fn;
-    this.context = context;
+    this.context = context2;
     this.once = once || false;
   }
-  function addListener(emitter, event, fn, context, once) {
+  function addListener(emitter, event, fn, context2, once) {
     if (typeof fn !== "function") {
       throw new TypeError("The listener must be a function");
     }
-    var listener = new EE(fn, context || emitter, once), evt = prefix ? prefix + event : event;
+    var listener = new EE(fn, context2 || emitter, once), evt = prefix ? prefix + event : event;
     if (!emitter._events[evt])
       emitter._events[evt] = listener, emitter._eventsCount++;
     else if (!emitter._events[evt].fn)
@@ -15000,13 +15000,13 @@ var require_eventemitter3 = __commonJS((exports2, module2) => {
     }
     return true;
   };
-  EventEmitter.prototype.on = function on(event, fn, context) {
-    return addListener(this, event, fn, context, false);
+  EventEmitter.prototype.on = function on(event, fn, context2) {
+    return addListener(this, event, fn, context2, false);
   };
-  EventEmitter.prototype.once = function once(event, fn, context) {
-    return addListener(this, event, fn, context, true);
+  EventEmitter.prototype.once = function once(event, fn, context2) {
+    return addListener(this, event, fn, context2, true);
   };
-  EventEmitter.prototype.removeListener = function removeListener(event, fn, context, once) {
+  EventEmitter.prototype.removeListener = function removeListener(event, fn, context2, once) {
     var evt = prefix ? prefix + event : event;
     if (!this._events[evt])
       return this;
@@ -15016,12 +15016,12 @@ var require_eventemitter3 = __commonJS((exports2, module2) => {
     }
     var listeners = this._events[evt];
     if (listeners.fn) {
-      if (listeners.fn === fn && (!once || listeners.once) && (!context || listeners.context === context)) {
+      if (listeners.fn === fn && (!once || listeners.once) && (!context2 || listeners.context === context2)) {
         clearEvent(this, evt);
       }
     } else {
       for (var i = 0, events = [], length = listeners.length; i < length; i++) {
-        if (listeners[i].fn !== fn || once && !listeners[i].once || context && listeners[i].context !== context) {
+        if (listeners[i].fn !== fn || once && !listeners[i].once || context2 && listeners[i].context !== context2) {
           events.push(listeners[i]);
         }
       }
@@ -16530,8 +16530,8 @@ var require_dist_node2 = __commonJS((exports2) => {
   function isKeyOperator(operator) {
     return operator === ";" || operator === "&" || operator === "?";
   }
-  function getValues(context, operator, key, modifier) {
-    var value = context[key], result = [];
+  function getValues(context2, operator, key, modifier) {
+    var value = context2[key], result = [];
     if (isDefined(value) && value !== "") {
       if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
         value = value.toString();
@@ -16591,7 +16591,7 @@ var require_dist_node2 = __commonJS((exports2) => {
       expand: expand.bind(null, template)
     };
   }
-  function expand(template, context) {
+  function expand(template, context2) {
     var operators = ["+", "#", ".", "/", ";", "?", "&"];
     return template.replace(/\{([^\{\}]+)\}|([^\{\}]+)/g, function(_, expression, literal) {
       if (expression) {
@@ -16603,7 +16603,7 @@ var require_dist_node2 = __commonJS((exports2) => {
         }
         expression.split(/,/g).forEach(function(variable) {
           var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
-          values.push(getValues(context, operator, tmp[1], tmp[2] || tmp[3]));
+          values.push(getValues(context2, operator, tmp[1], tmp[2] || tmp[3]));
         });
         if (operator && operator !== "+") {
           var separator = ",";
@@ -20014,7 +20014,7 @@ var import_p_queue = __toModule(require_dist());
 var debug3 = logger("isMemberOf");
 var ACTIVE_STATE = "active";
 var handleMembership = async (client, isMemberOf = [], requestConcurrency = 2) => {
-  const {repo, actor} = import_github.default.context;
+  const {repo, actor} = import_github.context;
   const queue = new import_p_queue.default({concurrency: requestConcurrency});
   const membershipChecks = isMemberOf.map((team) => {
     return {
