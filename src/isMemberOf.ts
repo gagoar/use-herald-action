@@ -8,6 +8,8 @@ const debug = logger('isMemberOf');
 
 const ACTIVE_STATE = 'active';
 
+
+
 export const handleMembership = async (
   client: OctokitClient,
   isMemberOf: string[] = [],
@@ -34,8 +36,7 @@ export const handleMembership = async (
 
   debug(results);
 
-  // const isMember = (results as Record<string, unknown | Record<string, unknown>>[]).some((response: Record<string, string | Record<string, unknown>>) => response?.data?.status === ACTIVE_STATE);
-  const isMember = false;
+  const isMember = results instanceof Array && (results).some(result => result.data.state === ACTIVE_STATE);
 
   debug(isMember);
 

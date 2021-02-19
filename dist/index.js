@@ -20012,6 +20012,7 @@ var isValidRawRule = (content) => {
 var import_github = __toModule(require_github());
 var import_p_queue = __toModule(require_dist());
 var debug3 = logger("isMemberOf");
+var ACTIVE_STATE = "active";
 var handleMembership = async (client, isMemberOf = [], requestConcurrency = 2) => {
   const {repo, actor} = import_github.context;
   const queue = new import_p_queue.default({concurrency: requestConcurrency});
@@ -20025,7 +20026,7 @@ var handleMembership = async (client, isMemberOf = [], requestConcurrency = 2) =
   debug3(`We will check membership of ${actor} in the following teams ${membershipChecks.map(({team_slug: team}) => team)}`);
   const results = await Promise.all(membershipChecks.map((membership) => queue.add(() => client.teams.getMembershipForUserInOrg(membership)))).catch(catchHandler(debug3));
   debug3(results);
-  const isMember = false;
+  const isMember = results instanceof Array && results.some((result) => result.data.state === ACTIVE_STATE);
   debug3(isMember);
   return isMember;
 };
