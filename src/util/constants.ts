@@ -1,4 +1,4 @@
-import { RestEndpointMethodTypes } from '@octokit/rest';
+import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
 
 export const maxPerPage = 100;
 export const OUTPUT_NAME = 'appliedRules';
@@ -20,6 +20,8 @@ export enum SUPPORTED_EVENT_TYPES {
   PULL_REQUEST_TARGET = 'pull_request_target',
   push = 'push',
 }
+
+export type OctokitClient = InstanceType<typeof Octokit>;
 interface Commit {
   sha: string;
 }
@@ -51,6 +53,7 @@ export type RuleFile = Partial<OctokitFile> & Required<Pick<OctokitFile, 'filena
 
 export enum AllowedHttpErrors {
   UNPROCESSABLE_ENTITY = 422,
+  NOT_FOUND = 404
 }
 export enum HttpErrors {
   RESOURCE_NOT_ACCESSIBLE = 403,

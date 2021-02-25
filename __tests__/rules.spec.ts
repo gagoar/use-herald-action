@@ -4,7 +4,7 @@ import * as fg from 'fast-glob';
 
 import { RuleActions, Rules } from '../src/rules';
 import { unMockConsole, mockConsole } from './util/helpers';
-import { Event } from '../src/util/constants';
+import { Event, OctokitClient } from '../src/util/constants';
 
 import eventJSON from '../__mocks__/event.json';
 import alterEventJSON from '../__mocks__/event_should_work.json';
@@ -65,7 +65,7 @@ describe('rules', () => {
       };
       const rules = new Rules(rule);
 
-      expect(await rules.getMatchingRules(files, event)).toMatchInlineSnapshot('MatchingRules []');
+      expect(await rules.getMatchingRules(files, event, {} as OctokitClient)).toMatchInlineSnapshot('MatchingRules []');
     });
 
     it('Matches includes and eventJsonPath (using contains)', async () => {
@@ -92,7 +92,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(await rules.getMatchingRules(files, alterEvent)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, alterEvent, {} as OctokitClient)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -138,7 +138,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(await rules.getMatchingRules(files, event, [])).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, event, {} as OctokitClient, [])).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -189,7 +189,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(await rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, event, {} as OctokitClient)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -237,7 +237,7 @@ describe('rules', () => {
 
       const rules = new Rules(...rule);
 
-      expect(await rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, event, {} as OctokitClient)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -286,7 +286,7 @@ describe('rules', () => {
       const rules = new Rules(rule);
 
       expect(
-        await rules.getMatchingRules(files, event, [
+        await rules.getMatchingRules(files, event, {} as OctokitClient, [
           '@@ -132,7 +132,7 @@ module simon @@ -1000,7 +1000,7 @@ module gago',
           '@@ -132,7 +132,7 @@ module jon @@ -1000,7 +1000,7 @@ module heart',
         ])
@@ -321,7 +321,7 @@ describe('rules', () => {
       const rules = new Rules(rule);
 
       expect(
-        await rules.getMatchingRules(files, event, [
+        await rules.getMatchingRules(files, event, {} as OctokitClient, [
           '@@ -132,7 +132,7 @@ module simon @@ -1000,7 +1000,7 @@ module gago',
           '@@ -132,7 +132,7 @@ module jon @@ -1000,7 +1000,7 @@ module heart',
         ])
@@ -376,7 +376,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(await rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, event, {} as OctokitClient)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -415,7 +415,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(await rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, event, {} as OctokitClient)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -454,7 +454,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(await rules.getMatchingRules(files, botEvent)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, botEvent, {} as OctokitClient)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -496,7 +496,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(await rules.getMatchingRules(files, event)).toMatchObject([]);
+      expect(await rules.getMatchingRules(files, event, {} as OctokitClient)).toMatchObject([]);
     });
     it('matches includes && eventJsonPath in the same rule', async () => {
       const files = [
@@ -516,7 +516,7 @@ describe('rules', () => {
 
       const rules = new Rules(rule);
 
-      expect(await rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, event, {} as OctokitClient)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -558,7 +558,7 @@ describe('rules', () => {
       };
 
       const rules = new Rules(rule);
-      expect(await rules.getMatchingRules(files, event)).toMatchInlineSnapshot(`
+      expect(await rules.getMatchingRules(files, event, {} as OctokitClient)).toMatchInlineSnapshot(`
         MatchingRules [
           Object {
             "action": "comment",
@@ -608,6 +608,7 @@ describe('rules', () => {
             "excludes": Array [],
             "includes": Array [],
             "includesInPatch": Array [],
+            "isMemberOf": Array [],
             "labels": Array [
               "enhancement",
             ],
@@ -699,6 +700,7 @@ describe('rules', () => {
               "*.ts",
             ],
             "includesInPatch": Array [],
+            "isMemberOf": Array [],
             "name": "rule1.json",
             "path": "/some/rule1.json",
             "teams": Array [],
@@ -718,6 +720,7 @@ describe('rules', () => {
               "*.ts",
             ],
             "includesInPatch": Array [],
+            "isMemberOf": Array [],
             "name": "rule2.json",
             "path": "/some/rule2.json",
             "teams": Array [
@@ -734,6 +737,7 @@ describe('rules', () => {
               "*.ts",
             ],
             "includesInPatch": Array [],
+            "isMemberOf": Array [],
             "name": "rule3.json",
             "path": "/some/rule3.json",
             "teams": Array [
@@ -750,6 +754,7 @@ describe('rules', () => {
             "excludes": Array [],
             "includes": Array [],
             "includesInPatch": Array [],
+            "isMemberOf": Array [],
             "name": "rule4.json",
             "path": "/some/rule4.json",
             "teams": Array [],
@@ -769,6 +774,7 @@ describe('rules', () => {
               "*.ts",
             ],
             "includesInPatch": Array [],
+            "isMemberOf": Array [],
             "labels": Array [
               "feature-label",
               "another-label",

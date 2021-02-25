@@ -2,7 +2,7 @@
 import { sync } from 'fast-glob';
 import { basename } from 'path';
 import { memo } from './util/memoizeDecorator';
-import { Event, MATCH_RULE_CONCURRENCY, RuleFile } from './util/constants';
+import { Event, MATCH_RULE_CONCURRENCY, OctokitClient, RuleFile } from './util/constants';
 import { env } from './environment';
 import minimatch from 'minimatch';
 
@@ -15,6 +15,7 @@ import PQueue from 'p-queue';
 import { catchHandler } from './util/catchHandler';
 import { isMatchingRule } from './rules.guard';
 import { isValidRawRule, RawRule } from './util/isValidRawRule';
+import { handleMembership } from './isMemberOf';
 
 const debug = logger('rules');
 
@@ -35,6 +36,8 @@ export enum RuleMatchers {
   includesInPatch = 'includesInPatch',
   eventJsonPath = 'eventJsonPath',
   includes = 'includes',
+
+  isMemberOf = 'isMemberOf',
 }
 
 // Nothings lost, nothings added except string indexes
@@ -62,6 +65,7 @@ export interface Rule {
   action: keyof typeof RuleActions;
   includes?: string[];
   excludes?: string[];
+  isMemberOf?: string[];
   includesInPatch?: string[];
   eventJsonPath?: string[];
   customMessage?: string;
@@ -85,6 +89,7 @@ const sanitize = (content: RawRule & StringIndexSignatureInterface): Rule => {
     excludes: makeArray(rule.excludes),
     includesInPatch: makeArray(rule.includesInPatch),
     eventJsonPath: makeArray(rule.eventJsonPath),
+    isMemberOf: makeArray(rule.isMemberOf),
   };
 };
 
@@ -181,14 +186,19 @@ const handleEventJsonPath: HandleEventJsonPath = ({ event, patterns }) => {
   return false;
 };
 
-type Matcher = (rule: Rule, options: { event: Event; patch: string[]; fileNames: string[] }) => Promise<boolean>;
+type Matcher = (
+  rule: Rule,
+  options: { event: Event; patch: string[]; fileNames: string[]; client: OctokitClient }
+) => Promise<boolean>;
 
 const matchers: Record<string, Matcher> = {
-  [RuleMatchers.includes]: async (rule, { fileNames }) =>
-    handleIncludeExcludeFiles({ includes: rule.includes, excludes: rule.excludes, fileNames }),
-  [RuleMatchers.eventJsonPath]: async (rule, { event }) => handleEventJsonPath({ patterns: rule.eventJsonPath, event }),
-  [RuleMatchers.includesInPatch]: async (rule, { patch }) =>
-    handleIncludesInPatch({ patterns: rule.includesInPatch, patch }),
+  [RuleMatchers.isMemberOf]: async ({ isMemberOf }, { client }) => handleMembership(client, isMemberOf),
+  [RuleMatchers.includes]: async ({ includes, excludes }, { fileNames }) =>
+    handleIncludeExcludeFiles({ includes, excludes, fileNames }),
+  [RuleMatchers.eventJsonPath]: async ({ eventJsonPath }, { event }) =>
+    handleEventJsonPath({ patterns: eventJsonPath, event }),
+  [RuleMatchers.includesInPatch]: async ({ includesInPatch }, { patch }) =>
+    handleIncludesInPatch({ patterns: includesInPatch, patch }),
 };
 
 type KeyMatchers = keyof typeof RuleMatchers;
@@ -196,7 +206,7 @@ type KeyMatchers = keyof typeof RuleMatchers;
 const isMatch: Matcher = async (rule, options) => {
   const keyMatchers = Object.keys(RuleMatchers) as KeyMatchers[];
   const matches = keyMatchers
-    .filter((matcher) => rule[matcher]?.length)
+    .filter((matcher) => (Array.isArray(rule[matcher]) ? rule[matcher]?.length : false))
     .map((matcher) => matchers[matcher](rule, options));
 
   debug('isMatch:', { rule, matches });
@@ -230,8 +240,13 @@ export class Rules extends Array<Rule> {
 
     return new Rules(...rules);
   }
-  async getMatchingRules(files: RuleFile[], event: Event, patchContent?: string[]): Promise<MatchingRules> {
-    return MatchingRules.load(this, files, event, patchContent);
+  async getMatchingRules(
+    files: RuleFile[],
+    event: Event,
+    client: OctokitClient,
+    patchContent?: string[]
+  ): Promise<MatchingRules> {
+    return MatchingRules.load(this, client, files, event, patchContent);
   }
 }
 
@@ -251,6 +266,7 @@ class MatchingRules extends Array<MatchingRule> {
 
   static async load(
     rules: Rules,
+    client: OctokitClient,
     files: RuleFile[],
     event: Event,
     patchContent: string[] = []
@@ -260,7 +276,7 @@ class MatchingRules extends Array<MatchingRule> {
 
     const matchingRules = rules.map((rule) => {
       return queue.add(async () => {
-        const matched = await isMatch(rule, { event, patch: patchContent, fileNames });
+        const matched = await isMatch(rule, { event, patch: patchContent, fileNames, client });
 
         return { ...rule, matched } as MatchingRule;
       });
