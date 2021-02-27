@@ -19242,7 +19242,7 @@ var Rules = class extends Array {
     return MatchingRules.load(this, files, event, patchContent);
   }
 };
-var MatchingRules2 = class extends Array {
+var _MatchingRules = class extends Array {
   constructor(...items) {
     super(...items);
   }
@@ -19264,10 +19264,10 @@ var MatchingRules2 = class extends Array {
     });
     const matchedRules = await Promise.all(matchingRules);
     const filtered = matchedRules.filter((rule) => isMatchingRule(rule) && rule.matched);
-    return new MatchingRules2(...filtered);
+    return new _MatchingRules(...filtered);
   }
 };
-var MatchingRules = MatchingRules2;
+var MatchingRules = _MatchingRules;
 __decorate([
   memo()
 ], MatchingRules.prototype, "groupByAction", 1);
