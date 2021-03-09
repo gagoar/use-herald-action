@@ -102,7 +102,7 @@
   "author": "Gago <xeroice@gmail.com>",
   "dependencies": {
     "@actions/core": "1.2.6",
-    "@octokit/rest": "18.3.0",
+    "@octokit/rest": "18.3.5",
     "debug": "4.3.1",
     "envalid": "6.0.2",
     "fast-glob": "3.2.5",
