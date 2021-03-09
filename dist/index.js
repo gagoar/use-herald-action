@@ -12,10 +12,6 @@ var __commonJS = (callback, module2) => () => {
   }
   return module2.exports;
 };
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, {get: all[name], enumerable: true});
-};
 var __exportStar = (target, module2, desc) => {
   if (module2 && typeof module2 === "object" || typeof module2 === "function") {
     for (let key of __getOwnPropNames(module2))
@@ -25,9 +21,7 @@ var __exportStar = (target, module2, desc) => {
   return target;
 };
 var __toModule = (module2) => {
-  if (module2 && module2.__esModule)
-    return module2;
-  return __exportStar(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", {value: module2, enumerable: true})), module2);
+  return __exportStar(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", module2 && module2.__esModule && "default" in module2 ? {get: () => module2.default, enumerable: true} : {value: module2, enumerable: true})), module2);
 };
 var __decorate = (decorators, target, key, kind) => {
   var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
@@ -15897,22 +15891,19 @@ var require_is_plain_object2 = __commonJS((exports2) => {
   exports2.isPlainObject = isPlainObject;
 });
 
-// node_modules/node-fetch/lib/index.mjs
-var require_lib = __commonJS((exports2) => {
-  __markAsModule(exports2);
-  __export(exports2, {
-    FetchError: () => FetchError,
-    Headers: () => Headers,
-    Request: () => Request,
-    Response: () => Response,
-    default: () => lib_default
-  });
-  var import_stream = __toModule(require("stream"));
-  var import_http = __toModule(require("http"));
-  var import_url = __toModule(require("url"));
-  var import_https = __toModule(require("https"));
-  var import_zlib = __toModule(require("zlib"));
-  var Readable = import_stream.default.Readable;
+// node_modules/node-fetch/lib/index.js
+var require_lib = __commonJS((exports2, module2) => {
+  "use strict";
+  Object.defineProperty(exports2, "__esModule", {value: true});
+  function _interopDefault(ex) {
+    return ex && typeof ex === "object" && "default" in ex ? ex["default"] : ex;
+  }
+  var Stream = _interopDefault(require("stream"));
+  var http = _interopDefault(require("http"));
+  var Url = _interopDefault(require("url"));
+  var https = _interopDefault(require("https"));
+  var zlib = _interopDefault(require("zlib"));
+  var Readable = Stream.Readable;
   var BUFFER = Symbol("buffer");
   var TYPE = Symbol("type");
   var Blob = class {
@@ -16030,7 +16021,7 @@ var require_lib = __commonJS((exports2) => {
   } catch (e) {
   }
   var INTERNALS = Symbol("Body internals");
-  var PassThrough = import_stream.default.PassThrough;
+  var PassThrough = Stream.PassThrough;
   function Body(body) {
     var _this = this;
     var _ref = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, _ref$size = _ref.size;
@@ -16049,7 +16040,7 @@ var require_lib = __commonJS((exports2) => {
       body = Buffer.from(body);
     } else if (ArrayBuffer.isView(body)) {
       body = Buffer.from(body.buffer, body.byteOffset, body.byteLength);
-    } else if (body instanceof import_stream.default)
+    } else if (body instanceof Stream)
       ;
     else {
       body = Buffer.from(String(body));
@@ -16061,7 +16052,7 @@ var require_lib = __commonJS((exports2) => {
     };
     this.size = size;
     this.timeout = timeout;
-    if (body instanceof import_stream.default) {
+    if (body instanceof Stream) {
       body.on("error", function(err) {
         const error = err.name === "AbortError" ? err : new FetchError(`Invalid response body while trying to fetch ${_this.url}: ${err.message}`, "system", err);
         _this[INTERNALS].error = error;
@@ -16150,7 +16141,7 @@ var require_lib = __commonJS((exports2) => {
     if (Buffer.isBuffer(body)) {
       return Body.Promise.resolve(body);
     }
-    if (!(body instanceof import_stream.default)) {
+    if (!(body instanceof Stream)) {
       return Body.Promise.resolve(Buffer.alloc(0));
     }
     let accum = [];
@@ -16249,7 +16240,7 @@ var require_lib = __commonJS((exports2) => {
     if (instance.bodyUsed) {
       throw new Error("cannot clone body after it is used");
     }
-    if (body instanceof import_stream.default && typeof body.getBoundary !== "function") {
+    if (body instanceof Stream && typeof body.getBoundary !== "function") {
       p1 = new PassThrough();
       p2 = new PassThrough();
       body.pipe(p1);
@@ -16276,7 +16267,7 @@ var require_lib = __commonJS((exports2) => {
       return null;
     } else if (typeof body.getBoundary === "function") {
       return `multipart/form-data;boundary=${body.getBoundary()}`;
-    } else if (body instanceof import_stream.default) {
+    } else if (body instanceof Stream) {
       return null;
     } else {
       return "text/plain;charset=UTF-8";
@@ -16548,7 +16539,7 @@ var require_lib = __commonJS((exports2) => {
     return headers;
   }
   var INTERNALS$1 = Symbol("Response internals");
-  var STATUS_CODES = import_http.default.STATUS_CODES;
+  var STATUS_CODES = http.STATUS_CODES;
   var Response = class {
     constructor() {
       let body = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : null;
@@ -16616,9 +16607,9 @@ var require_lib = __commonJS((exports2) => {
     configurable: true
   });
   var INTERNALS$2 = Symbol("Request internals");
-  var parse_url = import_url.default.parse;
-  var format_url = import_url.default.format;
-  var streamDestructionSupported = "destroy" in import_stream.default.Readable.prototype;
+  var parse_url = Url.parse;
+  var format_url = Url.format;
+  var streamDestructionSupported = "destroy" in Stream.Readable.prototype;
   function isRequest(input) {
     return typeof input === "object" && typeof input[INTERNALS$2] === "object";
   }
@@ -16721,7 +16712,7 @@ var require_lib = __commonJS((exports2) => {
     if (!/^https?:$/.test(parsedURL.protocol)) {
       throw new TypeError("Only HTTP(S) protocols are supported");
     }
-    if (request.signal && request.body instanceof import_stream.default.Readable && !streamDestructionSupported) {
+    if (request.signal && request.body instanceof Stream.Readable && !streamDestructionSupported) {
       throw new Error("Cancellation of streamed requests with AbortSignal is not supported in node < 8");
     }
     let contentLengthValue = null;
@@ -16765,8 +16756,8 @@ var require_lib = __commonJS((exports2) => {
   AbortError.prototype = Object.create(Error.prototype);
   AbortError.prototype.constructor = AbortError;
   AbortError.prototype.name = "AbortError";
-  var PassThrough$1 = import_stream.default.PassThrough;
-  var resolve_url = import_url.default.resolve;
+  var PassThrough$1 = Stream.PassThrough;
+  var resolve_url = Url.resolve;
   function fetch(url, opts) {
     if (!fetch.Promise) {
       throw new Error("native promise missing, set fetch.Promise to your favorite alternative");
@@ -16775,13 +16766,13 @@ var require_lib = __commonJS((exports2) => {
     return new fetch.Promise(function(resolve, reject) {
       const request = new Request(url, opts);
       const options = getNodeRequestOptions(request);
-      const send = (options.protocol === "https:" ? import_https.default : import_http.default).request;
+      const send = (options.protocol === "https:" ? https : http).request;
       const signal = request.signal;
       let response = null;
       const abort = function abort2() {
         let error = new AbortError("The user aborted a request.");
         reject(error);
-        if (request.body && request.body instanceof import_stream.default.Readable) {
+        if (request.body && request.body instanceof Stream.Readable) {
           request.body.destroy(error);
         }
         if (!response || !response.body)
@@ -16896,11 +16887,11 @@ var require_lib = __commonJS((exports2) => {
           return;
         }
         const zlibOptions = {
-          flush: import_zlib.default.Z_SYNC_FLUSH,
-          finishFlush: import_zlib.default.Z_SYNC_FLUSH
+          flush: zlib.Z_SYNC_FLUSH,
+          finishFlush: zlib.Z_SYNC_FLUSH
         };
         if (codings == "gzip" || codings == "x-gzip") {
-          body = body.pipe(import_zlib.default.createGunzip(zlibOptions));
+          body = body.pipe(zlib.createGunzip(zlibOptions));
           response = new Response(body, response_options);
           resolve(response);
           return;
@@ -16909,17 +16900,17 @@ var require_lib = __commonJS((exports2) => {
           const raw = res.pipe(new PassThrough$1());
           raw.once("data", function(chunk) {
             if ((chunk[0] & 15) === 8) {
-              body = body.pipe(import_zlib.default.createInflate());
+              body = body.pipe(zlib.createInflate());
             } else {
-              body = body.pipe(import_zlib.default.createInflateRaw());
+              body = body.pipe(zlib.createInflateRaw());
             }
             response = new Response(body, response_options);
             resolve(response);
           });
           return;
         }
-        if (codings == "br" && typeof import_zlib.default.createBrotliDecompress === "function") {
-          body = body.pipe(import_zlib.default.createBrotliDecompress());
+        if (codings == "br" && typeof zlib.createBrotliDecompress === "function") {
+          body = body.pipe(zlib.createBrotliDecompress());
           response = new Response(body, response_options);
           resolve(response);
           return;
@@ -16934,7 +16925,13 @@ var require_lib = __commonJS((exports2) => {
     return code === 301 || code === 302 || code === 303 || code === 307 || code === 308;
   };
   fetch.Promise = global.Promise;
-  var lib_default = fetch;
+  module2.exports = exports2 = fetch;
+  Object.defineProperty(exports2, "__esModule", {value: true});
+  exports2.default = exports2;
+  exports2.Headers = Headers;
+  exports2.Request = Request;
+  exports2.Response = Response;
+  exports2.FetchError = FetchError;
 });
 
 // node_modules/deprecation/dist-node/index.js
@@ -19012,18 +19009,18 @@ var HttpErrors;
 var import_path = __toModule(require("path"));
 var import_envalid = __toModule(require_envalid());
 var environment = () => import_envalid.default.cleanEnv(process.env, {
-  GITHUB_EVENT_PATH: import_envalid.str({
-    devDefault: import_envalid.testOnly("__mocks__/event.json")
+  GITHUB_EVENT_PATH: (0, import_envalid.str)({
+    devDefault: (0, import_envalid.testOnly)("__mocks__/event.json")
   }),
-  GITHUB_WORKSPACE: import_envalid.str({
-    devDefault: import_envalid.testOnly(import_path.join(__dirname, ".."))
+  GITHUB_WORKSPACE: (0, import_envalid.str)({
+    devDefault: (0, import_envalid.testOnly)((0, import_path.join)(__dirname, ".."))
   }),
-  GITHUB_EVENT_NAME: import_envalid.str({devDefault: "pull_request"}),
-  GITHUB_REPOSITORY: import_envalid.str({devDefault: import_envalid.testOnly("someRepo")}),
-  GITHUB_SHA: import_envalid.str({
-    devDefault: import_envalid.testOnly("ffac537e6cbbf934b08745a378932722df287a53")
+  GITHUB_EVENT_NAME: (0, import_envalid.str)({devDefault: "pull_request"}),
+  GITHUB_REPOSITORY: (0, import_envalid.str)({devDefault: (0, import_envalid.testOnly)("someRepo")}),
+  GITHUB_SHA: (0, import_envalid.str)({
+    devDefault: (0, import_envalid.testOnly)("ffac537e6cbbf934b08745a378932722df287a53")
   }),
-  TASK_ID: import_envalid.str({default: "use-herald-action"})
+  TASK_ID: (0, import_envalid.str)({default: "use-herald-action"})
 }, {dotEnvPath: null});
 var env = environment();
 
@@ -19034,7 +19031,7 @@ var import_jsonpath = __toModule(require_jsonpath());
 // src/util/loadJSONFile.ts
 var import_fs = __toModule(require("fs"));
 var loadJSONFile = (filePath) => {
-  const file = import_fs.readFileSync(filePath, {encoding: FILE_ENCODING});
+  const file = (0, import_fs.readFileSync)(filePath, {encoding: FILE_ENCODING});
   const content = JSON.parse(file);
   return content;
 };
@@ -19043,13 +19040,13 @@ var loadJSONFile = (filePath) => {
 var import_debug = __toModule(require_src());
 var import_core = __toModule(require_core());
 var _a;
-var DEBUG = (_a = import_core.getInput("DEBUG")) != null ? _a : false;
+var DEBUG = (_a = (0, import_core.getInput)("DEBUG")) != null ? _a : false;
 if (DEBUG) {
   console.log("debug is enabled, provided pattern:", DEBUG);
 }
 function logger(nameSpace) {
   const {TASK_ID} = env;
-  const log = import_debug.default(`${TASK_ID}:${nameSpace}`);
+  const log = (0, import_debug.default)(`${TASK_ID}:${nameSpace}`);
   log.log = console.log.bind(console);
   if (DEBUG) {
     log.enabled = true;
@@ -19234,7 +19231,7 @@ var Rules = class extends Array {
     super(...items);
   }
   static loadFromLocation(location) {
-    const matches = import_fast_glob.sync(location, {
+    const matches = (0, import_fast_glob.sync)(location, {
       onlyFiles: true,
       cwd: env.GITHUB_WORKSPACE,
       absolute: true
@@ -19243,7 +19240,7 @@ var Rules = class extends Array {
     const rules = matches.reduce((memo2, filePath) => {
       try {
         const rule = loadJSONFile(filePath);
-        return isValidRawRule(rule) ? [...memo2, {name: import_path2.basename(filePath), ...sanitize(rule), path: filePath}] : memo2;
+        return isValidRawRule(rule) ? [...memo2, {name: (0, import_path2.basename)(filePath), ...sanitize(rule), path: filePath}] : memo2;
       } catch (e) {
         console.error(`${filePath} can't be parsed, it will be ignored`);
         return memo2;
@@ -19260,7 +19257,7 @@ var _MatchingRules = class extends Array {
     super(...items);
   }
   groupByAction() {
-    return import_lodash.default(this, (rule) => rule.action);
+    return (0, import_lodash.default)(this, (rule) => rule.action);
   }
   groupBy(action) {
     const grouped = this.groupByAction()[action];
@@ -19401,7 +19398,7 @@ var commentTemplate = (mentions) => `
 
    <summary> Hi there, given these changes, Herald thinks that these users should take a look! </summary>
 
-   ${import_markdown_table.default([
+   ${(0, import_markdown_table.default)([
   ["Rule", "Mention"],
   ...mentions.map(({rule, URL, mentions: mentions2}) => [
     `[${rule.replace(`${env.GITHUB_WORKSPACE}/`, "")}](${URL})`,
@@ -19412,7 +19409,7 @@ var commentTemplate = (mentions) => `
   </details>
   `;
 var composeCommentsForUsers = (matchingRules) => {
-  const groups = import_lodash2.default(matchingRules, (rule) => rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined);
+  const groups = (0, import_lodash2.default)(matchingRules, (rule) => rule.customMessage ? TypeOfComments.standalone : TypeOfComments.combined);
   let comments = {};
   if (groups[TypeOfComments.combined]) {
     const mentions = groups[TypeOfComments.combined].reduce((memo2, {name, path, users, teams, blobURL}) => memo2.concat({URL: blobURL, rule: name || path, mentions: [...users, ...teams]}), []);
@@ -19508,7 +19505,7 @@ var actionsMap = {
 };
 var getParams = () => {
   return Object.keys(Props).reduce((memo2, prop) => {
-    const value = import_core2.getInput(prop);
+    const value = (0, import_core2.getInput)(prop);
     return value ? {...memo2, [prop]: value} : memo2;
   }, {});
 };
@@ -19531,7 +19528,7 @@ var main = async () => {
       debug10("params:", {rulesLocation, base, dryRun});
       if (!rulesLocation) {
         const message = `${Props.rulesLocation} is required`;
-        import_core2.setFailed(message);
+        (0, import_core2.setFailed)(message);
         throw new Error(message);
       }
       const rules = Rules.loadFromLocation(rulesLocation);
@@ -19580,13 +19577,13 @@ var main = async () => {
           });
         }
       }
-      import_core2.setOutput(OUTPUT_NAME, matchingRules);
+      (0, import_core2.setOutput)(OUTPUT_NAME, matchingRules);
     } else {
-      import_core2.setOutput(OUTPUT_NAME, []);
+      (0, import_core2.setOutput)(OUTPUT_NAME, []);
       throw new Error(`use-herald-action only supports [${Object.values(SUPPORTED_EVENT_TYPES).join(", ")}] events for now, event found: ${env.GITHUB_EVENT_NAME}`);
     }
   } catch (e) {
-    import_core2.setFailed(e.message);
+    (0, import_core2.setFailed)(e.message);
   }
 };
 
