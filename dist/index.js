@@ -18319,7 +18319,6 @@ var require_dist_node11 = __commonJS((exports2) => {
         }
       }],
       compareCommits: ["GET /repos/{owner}/{repo}/compare/{base}...{head}"],
-      createAnEnvironment: ["POST /repos/{owner}/{repo}/environments/{environment_name}"],
       createCommitComment: ["POST /repos/{owner}/{repo}/commits/{commit_sha}/comments"],
       createCommitSignatureProtection: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures", {
         mediaType: {
@@ -18334,6 +18333,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       createForAuthenticatedUser: ["POST /user/repos"],
       createFork: ["POST /repos/{owner}/{repo}/forks"],
       createInOrg: ["POST /orgs/{org}/repos"],
+      createOrUpdateEnvironment: ["PUT /repos/{owner}/{repo}/environments/{environment_name}"],
       createOrUpdateFileContents: ["PUT /repos/{owner}/{repo}/contents/{path}"],
       createPagesSite: ["POST /repos/{owner}/{repo}/pages", {
         mediaType: {
@@ -18509,7 +18509,6 @@ var require_dist_node11 = __commonJS((exports2) => {
       setAppAccessRestrictions: ["PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps", {}, {
         mapToData: "apps"
       }],
-      setEnvironmentProtectionRules: ["PUT /repos/{owner}/{repo}/environments/{environment_name}"],
       setStatusCheckContexts: ["PUT /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts", {}, {
         mapToData: "contexts"
       }],
@@ -18640,7 +18639,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       updateAuthenticated: ["PATCH /user"]
     }
   };
-  var VERSION = "4.13.0";
+  var VERSION = "4.13.5";
   function endpointsToMethods(octokit, endpointsMap) {
     const newMethods = {};
     for (const [scope, endpoints] of Object.entries(endpointsMap)) {
@@ -18714,7 +18713,7 @@ var require_dist_node12 = __commonJS((exports2) => {
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
-  var VERSION = "18.3.0";
+  var VERSION = "18.3.5";
   var Octokit2 = core.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
