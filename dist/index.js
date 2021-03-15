@@ -4,6 +4,7 @@ var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __assign = Object.assign;
 var __markAsModule = (target) => __defProp(target, "__esModule", {value: true});
 var __commonJS = (callback, module2) => () => {
   if (!module2) {
@@ -635,7 +636,7 @@ var require_to_regex_range = __commonJS((exports2, module2) => {
     if (isNumber(max) === false) {
       throw new TypeError("toRegexRange: expected the second argument to be a number.");
     }
-    let opts = {relaxZeros: true, ...options};
+    let opts = __assign({relaxZeros: true}, options);
     if (typeof opts.strictZeros === "boolean") {
       opts.relaxZeros = opts.strictZeros === false;
     }
@@ -914,7 +915,7 @@ var require_fill_range = __commonJS((exports2, module2) => {
   };
   var toRange = (a, b, isNumbers, options) => {
     if (isNumbers) {
-      return toRegexRange(a, b, {wrap: false, ...options});
+      return toRegexRange(a, b, __assign({wrap: false}, options));
     }
     let start = String.fromCharCode(a);
     if (a === b)
@@ -982,7 +983,7 @@ var require_fill_range = __commonJS((exports2, module2) => {
       index++;
     }
     if (options.toRegex === true) {
-      return step > 1 ? toSequence(parts, options) : toRegex(range, null, {wrap: false, ...options});
+      return step > 1 ? toSequence(parts, options) : toRegex(range, null, __assign({wrap: false}, options));
     }
     return range;
   };
@@ -1024,7 +1025,7 @@ var require_fill_range = __commonJS((exports2, module2) => {
     if (isObject(step)) {
       return fill(start, end, 0, step);
     }
-    let opts = {...options};
+    let opts = __assign({}, options);
     if (opts.capture === true)
       opts.wrap = true;
     step = step || opts.step || 1;
@@ -1073,7 +1074,7 @@ var require_compile = __commonJS((exports2, module2) => {
       }
       if (node.nodes && node.ranges > 0) {
         let args = utils.reduce(node.nodes);
-        let range = fill(...args, {...options, wrap: false, toRegex: true});
+        let range = fill(...args, __assign(__assign({}, options), {wrap: false, toRegex: true}));
         if (range.length !== 0) {
           return args.length > 1 && range.length > 1 ? `(${range})` : range;
         }
@@ -1566,8 +1567,7 @@ var require_constants2 = __commonJS((exports2, module2) => {
     STAR,
     START_ANCHOR
   };
-  var WINDOWS_CHARS = {
-    ...POSIX_CHARS,
+  var WINDOWS_CHARS = __assign(__assign({}, POSIX_CHARS), {
     SLASH_LITERAL: `[${WIN_SLASH}]`,
     QMARK: WIN_NO_SLASH,
     STAR: `${WIN_NO_SLASH}*?`,
@@ -1579,7 +1579,7 @@ var require_constants2 = __commonJS((exports2, module2) => {
     QMARK_NO_DOT: `[^.${WIN_SLASH}]`,
     START_ANCHOR: `(?:^|[${WIN_SLASH}])`,
     END_ANCHOR: `(?:[${WIN_SLASH}]|$)`
-  };
+  });
   var POSIX_REGEX_SOURCE = {
     alnum: "a-zA-Z0-9",
     alpha: "a-zA-Z",
@@ -2073,7 +2073,7 @@ var require_parse2 = __commonJS((exports2, module2) => {
       throw new TypeError("Expected a string");
     }
     input = REPLACEMENTS[input] || input;
-    const opts = {...options};
+    const opts = __assign({}, options);
     const max = typeof opts.maxLength === "number" ? Math.min(MAX_LENGTH, opts.maxLength) : MAX_LENGTH;
     let len = input.length;
     if (len > max) {
@@ -2196,7 +2196,7 @@ var require_parse2 = __commonJS((exports2, module2) => {
       prev = tok;
     };
     const extglobOpen = (type, value2) => {
-      const token = {...EXTGLOB_CHARS[value2], conditions: 1, inner: ""};
+      const token = __assign(__assign({}, EXTGLOB_CHARS[value2]), {conditions: 1, inner: ""});
       token.prev = prev;
       token.parens = state.parens;
       token.output = state.output;
@@ -2743,7 +2743,7 @@ var require_parse2 = __commonJS((exports2, module2) => {
     return state;
   };
   parse.fastpaths = (input, options) => {
-    const opts = {...options};
+    const opts = __assign({}, options);
     const max = typeof opts.maxLength === "number" ? Math.min(MAX_LENGTH, opts.maxLength) : MAX_LENGTH;
     const len = input.length;
     if (len > max) {
@@ -2847,7 +2847,7 @@ var require_picomatch = __commonJS((exports2, module2) => {
     delete regex.state;
     let isIgnored = () => false;
     if (opts.ignore) {
-      const ignoreOpts = {...options, ignore: null, onMatch: null, onResult: null};
+      const ignoreOpts = __assign(__assign({}, options), {ignore: null, onMatch: null, onResult: null});
       isIgnored = picomatch(opts.ignore, ignoreOpts, returnState);
     }
     const matcher = (input, returnObject = false) => {
@@ -2909,7 +2909,7 @@ var require_picomatch = __commonJS((exports2, module2) => {
   picomatch.parse = (pattern, options) => {
     if (Array.isArray(pattern))
       return pattern.map((p) => picomatch.parse(p, options));
-    return parse(pattern, {...options, fastpaths: false});
+    return parse(pattern, __assign(__assign({}, options), {fastpaths: false}));
   };
   picomatch.scan = (input, options) => scan(input, options);
   picomatch.compileRe = (parsed, options, returnOutput = false, returnState = false) => {
@@ -2994,7 +2994,7 @@ var require_micromatch = __commonJS((exports2, module2) => {
       }
     };
     for (let i = 0; i < patterns.length; i++) {
-      let isMatch2 = picomatch(String(patterns[i]), {...options, onResult}, true);
+      let isMatch2 = picomatch(String(patterns[i]), __assign(__assign({}, options), {onResult}), true);
       let negated = isMatch2.state.negated || isMatch2.state.negatedExtglob;
       if (negated)
         negatives++;
@@ -3036,7 +3036,7 @@ var require_micromatch = __commonJS((exports2, module2) => {
         options.onResult(state);
       items.push(state.output);
     };
-    let matches = micromatch(list, patterns, {...options, onResult});
+    let matches = micromatch(list, patterns, __assign(__assign({}, options), {onResult}));
     for (let item of items) {
       if (!matches.includes(item)) {
         result.add(item);
@@ -3059,7 +3059,7 @@ var require_micromatch = __commonJS((exports2, module2) => {
         return true;
       }
     }
-    return micromatch.isMatch(str2, pattern, {...options, contains: true});
+    return micromatch.isMatch(str2, pattern, __assign(__assign({}, options), {contains: true}));
   };
   micromatch.matchKeys = (obj, patterns, options) => {
     if (!utils.isObject(obj)) {
@@ -3099,7 +3099,7 @@ var require_micromatch = __commonJS((exports2, module2) => {
   };
   micromatch.capture = (glob, input, options) => {
     let posix = utils.isWindows(options);
-    let regex = picomatch.makeRe(String(glob), {...options, capture: true});
+    let regex = picomatch.makeRe(String(glob), __assign(__assign({}, options), {capture: true}));
     let match = regex.exec(posix ? utils.toPosixSlashes(input) : input);
     if (match) {
       return match.slice(1).map((v) => v === void 0 ? "" : v);
@@ -3127,7 +3127,7 @@ var require_micromatch = __commonJS((exports2, module2) => {
   micromatch.braceExpand = (pattern, options) => {
     if (typeof pattern !== "string")
       throw new TypeError("Expected a string");
-    return micromatch.braces(pattern, {...options, expand: true});
+    return micromatch.braces(pattern, __assign(__assign({}, options), {expand: true}));
   };
   module2.exports = micromatch;
 });
@@ -6838,8 +6838,7 @@ var require_source = __commonJS((exports2, module2) => {
     };
   }
   var proto = Object.defineProperties(() => {
-  }, {
-    ...styles,
+  }, __assign(__assign({}, styles), {
     level: {
       enumerable: true,
       get() {
@@ -6849,7 +6848,7 @@ var require_source = __commonJS((exports2, module2) => {
         this._generator.level = level;
       }
     }
-  });
+  }));
   var createStyler = (open, close, parent) => {
     let openAll;
     let closeAll;
@@ -19135,19 +19134,18 @@ var ErrorLevels;
   ErrorLevels2["error"] = "error";
 })(ErrorLevels || (ErrorLevels = {}));
 var sanitize = (content) => {
-  const attrs = {...RuleMatchers, ...RuleActors, ...RuleExtras};
+  const attrs = __assign(__assign(__assign({}, RuleMatchers), RuleActors), RuleExtras);
   const rule = ["action", ...Object.keys(attrs)].reduce((memo2, attr) => {
-    return content[attr] ? {...memo2, [attr]: content[attr]} : memo2;
+    return content[attr] ? __assign(__assign({}, memo2), {[attr]: content[attr]}) : memo2;
   }, {});
-  return {
-    ...rule,
+  return __assign(__assign({}, rule), {
     users: rule.users ? rule.users : [],
     teams: rule.teams ? rule.teams : [],
     includes: makeArray(rule.includes),
     excludes: makeArray(rule.excludes),
     includesInPatch: makeArray(rule.includesInPatch),
     eventJsonPath: makeArray(rule.eventJsonPath)
-  };
+  });
 };
 var handleIncludeExcludeFiles = ({includes, excludes, fileNames}) => {
   debug3("includeExcludeFiles...");
@@ -19239,7 +19237,7 @@ var Rules = class extends Array {
     const rules = matches.reduce((memo2, filePath) => {
       try {
         const rule = loadJSONFile(filePath);
-        return isValidRawRule(rule) ? [...memo2, {name: (0, import_path2.basename)(filePath), ...sanitize(rule), path: filePath}] : memo2;
+        return isValidRawRule(rule) ? [...memo2, __assign(__assign({name: (0, import_path2.basename)(filePath)}, sanitize(rule)), {path: filePath})] : memo2;
       } catch (e) {
         console.error(`${filePath} can't be parsed, it will be ignored`);
         return memo2;
@@ -19268,7 +19266,7 @@ var _MatchingRules = class extends Array {
     const matchingRules = rules.map((rule) => {
       return queue.add(async () => {
         const matched = await isMatch(rule, {event, patch: patchContent, fileNames});
-        return {...rule, matched};
+        return __assign(__assign({}, rule), {matched});
       });
     });
     const matchedRules = await Promise.all(matchingRules);
@@ -19412,37 +19410,34 @@ var composeCommentsForUsers = (matchingRules) => {
   let comments = {};
   if (groups[TypeOfComments.combined]) {
     const mentions = groups[TypeOfComments.combined].reduce((memo2, {name, path, users, teams, blobURL}) => memo2.concat({URL: blobURL, rule: name || path, mentions: [...users, ...teams]}), []);
-    comments = {...comments, [COMBINED_TAG_KEY]: commentTemplate([...new Set(mentions)])};
+    comments = __assign(__assign({}, comments), {[COMBINED_TAG_KEY]: commentTemplate([...new Set(mentions)])});
   }
   if (groups[TypeOfComments.standalone]) {
-    const customMessages = groups[TypeOfComments.standalone].filter((rule) => rule.customMessage).reduce((memo2, {path, customMessage}) => ({...memo2, [path]: customMessage}), {});
-    comments = {...comments, ...customMessages};
+    const customMessages = groups[TypeOfComments.standalone].filter((rule) => rule.customMessage).reduce((memo2, {path, customMessage}) => __assign(__assign({}, memo2), {[path]: customMessage}), {});
+    comments = __assign(__assign({}, comments), customMessages);
   }
   return comments;
 };
 var getAllComments = async (client, params) => {
   const page = 1;
-  const {data: comments} = await client.issues.listComments({
-    ...params,
+  const {data: comments} = await client.issues.listComments(__assign(__assign({}, params), {
     per_page: maxPerPage,
     page
-  });
+  }));
   if (comments.length < maxPerPage) {
     return comments;
   } else {
-    const {data: moreComments} = await client.issues.listComments({
-      ...params,
+    const {data: moreComments} = await client.issues.listComments(__assign(__assign({}, params), {
       page: page + 1,
       per_page: maxPerPage
-    });
+    }));
     return [...comments, ...moreComments];
   }
 };
 var handleComment = async (client, {owner, repo, prNumber, matchingRules, files, base}, requestConcurrency = 1) => {
   debug9("handleComment called with:", matchingRules);
   const queue = new import_p_queue3.default({concurrency: requestConcurrency});
-  const rulesWithBlobURL = matchingRules.map((mRule) => ({
-    ...mRule,
+  const rulesWithBlobURL = matchingRules.map((mRule) => __assign(__assign({}, mRule), {
     blobURL: getBlobURL(mRule.path, files, owner, repo, base)
   }));
   const commentsFromRules = composeCommentsForUsers(rulesWithBlobURL);
@@ -19455,7 +19450,7 @@ var handleComment = async (client, {owner, repo, prNumber, matchingRules, files,
   const useHeraldActionComments = rawComments.reduce((memo2, comment) => {
     var _a2;
     const pathMatch = comment.body && USE_HERALD_ACTION_TAG_REGEX.exec((_a2 = comment.body) == null ? void 0 : _a2.split("\n")[0]);
-    return pathMatch ? {...memo2, [pathMatch[1]]: comment} : memo2;
+    return pathMatch ? __assign(__assign({}, memo2), {[pathMatch[1]]: comment}) : memo2;
   }, {});
   debug9("existing UHA comments:", useHeraldActionComments);
   const updateCommentPromises = Object.keys(commentsFromRules).filter((key) => key in useHeraldActionComments).map((key) => {
@@ -19505,7 +19500,7 @@ var actionsMap = {
 var getParams = () => {
   return Object.keys(Props).reduce((memo2, prop) => {
     const value = (0, import_core2.getInput)(prop);
-    return value ? {...memo2, [prop]: value} : memo2;
+    return value ? __assign(__assign({}, memo2), {[prop]: value}) : memo2;
   }, {});
 };
 var main = async () => {
