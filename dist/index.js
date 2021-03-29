@@ -17578,6 +17578,48 @@ var require_dist_node10 = __commonJS((exports2) => {
 var require_dist_node11 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      if (enumerableOnly)
+        symbols = symbols.filter(function(sym) {
+          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+      keys.push.apply(keys, symbols);
+    }
+    return keys;
+  }
+  function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+      if (i % 2) {
+        ownKeys(Object(source), true).forEach(function(key) {
+          _defineProperty(target, key, source[key]);
+        });
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys(Object(source)).forEach(function(key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+      }
+    }
+    return target;
+  }
   var Endpoints = {
     actions: {
       addSelectedRepoToOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],
@@ -18660,7 +18702,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       updateAuthenticated: ["PATCH /user"]
     }
   };
-  var VERSION = "4.14.0";
+  var VERSION = "5.0.0";
   function endpointsToMethods(octokit, endpointsMap) {
     const newMethods = {};
     for (const [scope, endpoints] of Object.entries(endpointsMap)) {
@@ -18720,9 +18762,20 @@ var require_dist_node11 = __commonJS((exports2) => {
     return Object.assign(withDecorations, requestWithDefaults);
   }
   function restEndpointMethods(octokit) {
-    return endpointsToMethods(octokit, Endpoints);
+    const api = endpointsToMethods(octokit, Endpoints);
+    return {
+      rest: api
+    };
   }
   restEndpointMethods.VERSION = VERSION;
+  function legacyRestEndpointMethods(octokit) {
+    const api = endpointsToMethods(octokit, Endpoints);
+    return _objectSpread2(_objectSpread2({}, api), {}, {
+      rest: api
+    });
+  }
+  legacyRestEndpointMethods.VERSION = VERSION;
+  exports2.legacyRestEndpointMethods = legacyRestEndpointMethods;
   exports2.restEndpointMethods = restEndpointMethods;
 });
 
@@ -18734,8 +18787,8 @@ var require_dist_node12 = __commonJS((exports2) => {
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
-  var VERSION = "18.4.0";
-  var Octokit2 = core.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.restEndpointMethods, pluginPaginateRest.paginateRest).defaults({
+  var VERSION = "18.5.2";
+  var Octokit2 = core.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.legacyRestEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
   exports2.Octokit = Octokit2;
