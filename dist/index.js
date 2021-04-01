@@ -8059,7 +8059,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
 
 // node_modules/jsonpath/jsonpath.js
 var require_jsonpath = __commonJS((exports2, module2) => {
-  /*! jsonpath 1.0.2 */
+  /*! jsonpath 1.1.1 */
   (function(f) {
     if (typeof exports2 === "object" && typeof module2 !== "undefined") {
       module2.exports = f();
