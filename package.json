@@ -106,7 +106,7 @@
     "debug": "4.3.1",
     "envalid": "6.0.2",
     "fast-glob": "3.2.5",
-    "jsonpath": "1.1.0",
+    "jsonpath": "1.1.1",
     "lodash.groupby": "4.6.0",
     "markdown-table": "^2.0.0",
     "minimatch": "3.0.4",
