@@ -121,7 +121,7 @@
     "@types/node": "13.13.48",
     "@typescript-eslint/eslint-plugin": "4.22.1",
     "@typescript-eslint/parser": "4.22.1",
-    "ajv-keywords": "4.0.0",
+    "ajv-keywords": "4.0.1",
     "auto-changelog": "2.2.1",
     "bufferutil": "4.0.3",
     "esbuild": "0.9.6",
