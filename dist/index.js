@@ -17084,7 +17084,7 @@ var require_dist_node5 = __commonJS((exports2) => {
   var isPlainObject = require_is_plain_object2();
   var nodeFetch = _interopDefault(require_lib());
   var requestError = require_dist_node4();
-  var VERSION = "5.4.14";
+  var VERSION = "5.4.15";
   function getBufferResponse(response) {
     return response.arrayBuffer();
   }
@@ -17369,7 +17369,7 @@ var require_dist_node8 = __commonJS((exports2) => {
     }
     return target;
   }
-  var VERSION = "3.3.1";
+  var VERSION = "3.4.0";
   var Octokit2 = class {
     constructor(options = {}) {
       const hook = new beforeAfterHook.Collection();
@@ -18339,7 +18339,7 @@ var require_dist_node11 = __commonJS((exports2) => {
           previews: ["squirrel-girl"]
         }
       }, {
-        deprecated: "octokit.reactions.deleteLegacy() is deprecated, see https://docs.github.com/rest/reference/reactions/#delete-a-reaction-legacy"
+        deprecated: "octokit.rest.reactions.deleteLegacy() is deprecated, see https://docs.github.com/rest/reference/reactions/#delete-a-reaction-legacy"
       }],
       listForCommitComment: ["GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", {
         mediaType: {
@@ -18406,7 +18406,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       createDeploymentStatus: ["POST /repos/{owner}/{repo}/deployments/{deployment_id}/statuses"],
       createDispatchEvent: ["POST /repos/{owner}/{repo}/dispatches"],
       createForAuthenticatedUser: ["POST /user/repos"],
-      createFork: ["POST /repos/{owner}/{repo}/forks{?org,organization}"],
+      createFork: ["POST /repos/{owner}/{repo}/forks"],
       createInOrg: ["POST /orgs/{org}/repos"],
       createOrUpdateEnvironment: ["PUT /repos/{owner}/{repo}/environments/{environment_name}"],
       createOrUpdateFileContents: ["PUT /repos/{owner}/{repo}/contents/{path}"],
@@ -18715,7 +18715,7 @@ var require_dist_node11 = __commonJS((exports2) => {
       updateAuthenticated: ["PATCH /user"]
     }
   };
-  var VERSION = "5.0.0";
+  var VERSION = "5.0.1";
   function endpointsToMethods(octokit, endpointsMap) {
     const newMethods = {};
     for (const [scope, endpoints] of Object.entries(endpointsMap)) {
@@ -18800,7 +18800,7 @@ var require_dist_node12 = __commonJS((exports2) => {
   var pluginRequestLog = require_dist_node9();
   var pluginPaginateRest = require_dist_node10();
   var pluginRestEndpointMethods = require_dist_node11();
-  var VERSION = "18.5.2";
+  var VERSION = "18.5.3";
   var Octokit2 = core.Octokit.plugin(pluginRequestLog.requestLog, pluginRestEndpointMethods.legacyRestEndpointMethods, pluginPaginateRest.paginateRest).defaults({
     userAgent: `octokit-rest.js/${VERSION}`
   });
