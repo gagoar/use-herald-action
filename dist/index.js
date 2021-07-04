@@ -13553,6 +13553,8 @@ var require_common3 = __commonJS((exports2, module2) => {
     function createDebug(namespace) {
       let prevTime;
       let enableOverride = null;
+      let namespacesCache;
+      let enabledCache;
       function debug11(...args) {
         if (!debug11.enabled) {
           return;
@@ -13595,7 +13597,16 @@ var require_common3 = __commonJS((exports2, module2) => {
       Object.defineProperty(debug11, "enabled", {
         enumerable: true,
         configurable: false,
-        get: () => enableOverride === null ? createDebug.enabled(namespace) : enableOverride,
+        get: () => {
+          if (enableOverride !== null) {
+            return enableOverride;
+          }
+          if (namespacesCache !== createDebug.namespaces) {
+            namespacesCache = createDebug.namespaces;
+            enabledCache = createDebug.enabled(namespace);
+          }
+          return enabledCache;
+        },
         set: (v) => {
           enableOverride = v;
         }
@@ -13612,6 +13623,7 @@ var require_common3 = __commonJS((exports2, module2) => {
     }
     function enable(namespaces) {
       createDebug.save(namespaces);
+      createDebug.namespaces = namespaces;
       createDebug.names = [];
       createDebug.skips = [];
       let i;
