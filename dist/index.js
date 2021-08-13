@@ -5373,2065 +5373,749 @@ var require_out4 = __commonJS((exports2, module2) => {
   module2.exports = FastGlob;
 });
 
-// node_modules/validator/lib/util/assertString.js
-var require_assertString = __commonJS((exports2, module2) => {
+// node_modules/envalid/dist/envalid.cjs.production.min.js
+var require_envalid_cjs_production_min = __commonJS((exports2) => {
   "use strict";
-  Object.defineProperty(exports2, "__esModule", {
-    value: true
-  });
-  exports2.default = assertString;
-  function _typeof(obj) {
-    "@babel/helpers - typeof";
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function _typeof2(obj2) {
-        return typeof obj2;
-      };
-    } else {
-      _typeof = function _typeof2(obj2) {
-        return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
-      };
-    }
-    return _typeof(obj);
+  function e() {
+    return (e = Object.assign || function(e2) {
+      for (var t2 = 1; t2 < arguments.length; t2++) {
+        var r2 = arguments[t2];
+        for (var n2 in r2)
+          Object.prototype.hasOwnProperty.call(r2, n2) && (e2[n2] = r2[n2]);
+      }
+      return e2;
+    }).apply(this, arguments);
   }
-  function assertString(input) {
-    var isString = typeof input === "string" || input instanceof String;
-    if (!isString) {
-      var invalidType;
-      if (input === null) {
-        invalidType = "null";
-      } else {
-        invalidType = _typeof(input);
-        if (invalidType === "object" && input.constructor && input.constructor.hasOwnProperty("name")) {
-          invalidType = input.constructor.name;
-        } else {
-          invalidType = "a ".concat(invalidType);
-        }
-      }
-      throw new TypeError("Expected string but received ".concat(invalidType, "."));
-    }
+  function t(e2, t2) {
+    e2.prototype = Object.create(t2.prototype), e2.prototype.constructor = e2, e2.__proto__ = t2;
   }
-  module2.exports = exports2.default;
-  module2.exports.default = exports2.default;
-});
-
-// node_modules/validator/lib/util/merge.js
-var require_merge = __commonJS((exports2, module2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {
-    value: true
-  });
-  exports2.default = merge;
-  function merge() {
-    var obj = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
-    var defaults = arguments.length > 1 ? arguments[1] : void 0;
-    for (var key in defaults) {
-      if (typeof obj[key] === "undefined") {
-        obj[key] = defaults[key];
-      }
-    }
-    return obj;
+  function r(e2) {
+    return (r = Object.setPrototypeOf ? Object.getPrototypeOf : function(e3) {
+      return e3.__proto__ || Object.getPrototypeOf(e3);
+    })(e2);
   }
-  module2.exports = exports2.default;
-  module2.exports.default = exports2.default;
-});
-
-// node_modules/validator/lib/isFQDN.js
-var require_isFQDN = __commonJS((exports2, module2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {
-    value: true
-  });
-  exports2.default = isFQDN;
-  var _assertString = _interopRequireDefault(require_assertString());
-  var _merge = _interopRequireDefault(require_merge());
-  function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {default: obj};
+  function n(e2, t2) {
+    return (n = Object.setPrototypeOf || function(e3, t3) {
+      return e3.__proto__ = t3, e3;
+    })(e2, t2);
   }
-  var default_fqdn_options = {
-    require_tld: true,
-    allow_underscores: false,
-    allow_trailing_dot: false
-  };
-  function isFQDN(str2, options) {
-    (0, _assertString.default)(str2);
-    options = (0, _merge.default)(options, default_fqdn_options);
-    if (options.allow_trailing_dot && str2[str2.length - 1] === ".") {
-      str2 = str2.substring(0, str2.length - 1);
-    }
-    var parts = str2.split(".");
-    for (var i = 0; i < parts.length; i++) {
-      if (parts[i].length > 63) {
-        return false;
-      }
-    }
-    if (options.require_tld) {
-      var tld = parts.pop();
-      if (!parts.length || !/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
-        return false;
-      }
-      if (/[\s\u2002-\u200B\u202F\u205F\u3000\uFEFF\uDB40\uDC20\u00A9\uFFFD]/.test(tld)) {
-        return false;
-      }
-    }
-    for (var part, _i = 0; _i < parts.length; _i++) {
-      part = parts[_i];
-      if (options.allow_underscores) {
-        part = part.replace(/_/g, "");
-      }
-      if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
-        return false;
-      }
-      if (/[\uff01-\uff5e]/.test(part)) {
-        return false;
-      }
-      if (part[0] === "-" || part[part.length - 1] === "-") {
-        return false;
-      }
-    }
-    return true;
-  }
-  module2.exports = exports2.default;
-  module2.exports.default = exports2.default;
-});
-
-// node_modules/validator/lib/isIP.js
-var require_isIP = __commonJS((exports2, module2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {
-    value: true
-  });
-  exports2.default = isIP;
-  var _assertString = _interopRequireDefault(require_assertString());
-  function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {default: obj};
-  }
-  var ipv4Maybe = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/;
-  var ipv6Block = /^[0-9A-F]{1,4}$/i;
-  function isIP(str2) {
-    var version = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "";
-    (0, _assertString.default)(str2);
-    version = String(version);
-    if (!version) {
-      return isIP(str2, 4) || isIP(str2, 6);
-    } else if (version === "4") {
-      if (!ipv4Maybe.test(str2)) {
-        return false;
-      }
-      var parts = str2.split(".").sort(function(a, b) {
-        return a - b;
-      });
-      return parts[3] <= 255;
-    } else if (version === "6") {
-      var addressAndZone = [str2];
-      if (str2.includes("%")) {
-        addressAndZone = str2.split("%");
-        if (addressAndZone.length !== 2) {
-          return false;
-        }
-        if (!addressAndZone[0].includes(":")) {
-          return false;
-        }
-        if (addressAndZone[1] === "") {
-          return false;
-        }
-      }
-      var blocks = addressAndZone[0].split(":");
-      var foundOmissionBlock = false;
-      var foundIPv4TransitionBlock = isIP(blocks[blocks.length - 1], 4);
-      var expectedNumberOfBlocks = foundIPv4TransitionBlock ? 7 : 8;
-      if (blocks.length > expectedNumberOfBlocks) {
-        return false;
-      }
-      if (str2 === "::") {
-        return true;
-      } else if (str2.substr(0, 2) === "::") {
-        blocks.shift();
-        blocks.shift();
-        foundOmissionBlock = true;
-      } else if (str2.substr(str2.length - 2) === "::") {
-        blocks.pop();
-        blocks.pop();
-        foundOmissionBlock = true;
-      }
-      for (var i = 0; i < blocks.length; ++i) {
-        if (blocks[i] === "" && i > 0 && i < blocks.length - 1) {
-          if (foundOmissionBlock) {
-            return false;
-          }
-          foundOmissionBlock = true;
-        } else if (foundIPv4TransitionBlock && i === blocks.length - 1) {
-        } else if (!ipv6Block.test(blocks[i])) {
-          return false;
-        }
-      }
-      if (foundOmissionBlock) {
-        return blocks.length >= 1;
-      }
-      return blocks.length === expectedNumberOfBlocks;
-    }
-    return false;
-  }
-  module2.exports = exports2.default;
-  module2.exports.default = exports2.default;
-});
-
-// node_modules/envalid/src/validators.js
-var require_validators = __commonJS((exports2) => {
-  var isFQDN = require_isFQDN();
-  var isIP = require_isIP();
-  var EMAIL_REGEX2 = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-  var EnvError = class extends TypeError {
-    constructor(...args) {
-      super(...args);
-      Error.captureStackTrace(this, EnvError);
-      this.name = "EnvError";
-    }
-  };
-  exports2.EnvError = EnvError;
-  var EnvMissingError = class extends ReferenceError {
-    constructor(...args) {
-      super(...args);
-      Error.captureStackTrace(this, EnvMissingError);
-      this.name = "EnvMissingError";
-    }
-  };
-  exports2.EnvMissingError = EnvMissingError;
-  function makeValidator(parseFn, type = "unknown") {
-    return function(spec = {}) {
-      spec.type = type;
-      spec._parse = parseFn;
-      return spec;
-    };
-  }
-  exports2.makeValidator = makeValidator;
-  exports2.bool = makeValidator((input) => {
-    switch (input) {
-      case true:
-      case "true":
-      case "t":
-      case "1":
-        return true;
-      case false:
-      case "false":
-      case "f":
-      case "0":
-        return false;
-      default:
-        return null;
-    }
-  }, "bool");
-  exports2.num = makeValidator((input) => {
-    const coerced = +input;
-    if (Number.isNaN(coerced))
-      throw new EnvError(`Invalid number input: "${input}"`);
-    return coerced;
-  }, "num");
-  exports2.str = makeValidator((input) => {
-    if (typeof input === "string")
-      return input;
-    throw new EnvError(`Not a string: "${input}"`);
-  }, "str");
-  exports2.email = makeValidator((x) => {
-    if (EMAIL_REGEX2.test(x))
-      return x;
-    throw new EnvError(`Invalid email address: "${x}"`);
-  }, "email");
-  exports2.host = makeValidator((input) => {
-    if (!isFQDN(input, {require_tld: false}) && !isIP(input)) {
-      throw new EnvError(`Invalid host (domain or ip): "${input}"`);
-    }
-    return input;
-  }, "host");
-  exports2.port = makeValidator((input) => {
-    const coerced = +input;
-    if (Number.isNaN(coerced) || `${coerced}` !== `${input}` || coerced % 1 !== 0 || coerced < 1 || coerced > 65535) {
-      throw new EnvError(`Invalid port input: "${input}"`);
-    }
-    return coerced;
-  }, "port");
-  exports2.url = makeValidator((x) => {
-    const url = require("url");
-    let isValid = false;
-    if (url.URL) {
-      try {
-        new url.URL(x);
-        isValid = true;
-      } catch (e) {
-        isValid = false;
-      }
-    } else {
-      const parsed = url.parse(x);
-      isValid = !!(parsed.protocol && parsed.host && parsed.slashes);
-    }
-    if (isValid)
-      return x;
-    throw new EnvError(`Invalid url: "${x}"`);
-  }, "url");
-  exports2.json = makeValidator((x) => {
+  function o() {
+    if (typeof Reflect == "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy == "function")
+      return true;
     try {
-      return JSON.parse(x);
-    } catch (e) {
-      throw new EnvError(`Invalid json: "${x}"`);
+      return Date.prototype.toString.call(Reflect.construct(Date, [], function() {
+      })), true;
+    } catch (e2) {
+      return false;
     }
-  }, "json");
-});
-
-// node_modules/envalid/src/utils.js
-var require_utils6 = __commonJS((exports2) => {
-  var extend = (x = {}, y = {}) => Object.assign({}, x, y);
-  exports2.extend = extend;
-});
-
-// node_modules/color-name/index.js
-var require_color_name = __commonJS((exports2, module2) => {
-  "use strict";
-  module2.exports = {
-    aliceblue: [240, 248, 255],
-    antiquewhite: [250, 235, 215],
-    aqua: [0, 255, 255],
-    aquamarine: [127, 255, 212],
-    azure: [240, 255, 255],
-    beige: [245, 245, 220],
-    bisque: [255, 228, 196],
-    black: [0, 0, 0],
-    blanchedalmond: [255, 235, 205],
-    blue: [0, 0, 255],
-    blueviolet: [138, 43, 226],
-    brown: [165, 42, 42],
-    burlywood: [222, 184, 135],
-    cadetblue: [95, 158, 160],
-    chartreuse: [127, 255, 0],
-    chocolate: [210, 105, 30],
-    coral: [255, 127, 80],
-    cornflowerblue: [100, 149, 237],
-    cornsilk: [255, 248, 220],
-    crimson: [220, 20, 60],
-    cyan: [0, 255, 255],
-    darkblue: [0, 0, 139],
-    darkcyan: [0, 139, 139],
-    darkgoldenrod: [184, 134, 11],
-    darkgray: [169, 169, 169],
-    darkgreen: [0, 100, 0],
-    darkgrey: [169, 169, 169],
-    darkkhaki: [189, 183, 107],
-    darkmagenta: [139, 0, 139],
-    darkolivegreen: [85, 107, 47],
-    darkorange: [255, 140, 0],
-    darkorchid: [153, 50, 204],
-    darkred: [139, 0, 0],
-    darksalmon: [233, 150, 122],
-    darkseagreen: [143, 188, 143],
-    darkslateblue: [72, 61, 139],
-    darkslategray: [47, 79, 79],
-    darkslategrey: [47, 79, 79],
-    darkturquoise: [0, 206, 209],
-    darkviolet: [148, 0, 211],
-    deeppink: [255, 20, 147],
-    deepskyblue: [0, 191, 255],
-    dimgray: [105, 105, 105],
-    dimgrey: [105, 105, 105],
-    dodgerblue: [30, 144, 255],
-    firebrick: [178, 34, 34],
-    floralwhite: [255, 250, 240],
-    forestgreen: [34, 139, 34],
-    fuchsia: [255, 0, 255],
-    gainsboro: [220, 220, 220],
-    ghostwhite: [248, 248, 255],
-    gold: [255, 215, 0],
-    goldenrod: [218, 165, 32],
-    gray: [128, 128, 128],
-    green: [0, 128, 0],
-    greenyellow: [173, 255, 47],
-    grey: [128, 128, 128],
-    honeydew: [240, 255, 240],
-    hotpink: [255, 105, 180],
-    indianred: [205, 92, 92],
-    indigo: [75, 0, 130],
-    ivory: [255, 255, 240],
-    khaki: [240, 230, 140],
-    lavender: [230, 230, 250],
-    lavenderblush: [255, 240, 245],
-    lawngreen: [124, 252, 0],
-    lemonchiffon: [255, 250, 205],
-    lightblue: [173, 216, 230],
-    lightcoral: [240, 128, 128],
-    lightcyan: [224, 255, 255],
-    lightgoldenrodyellow: [250, 250, 210],
-    lightgray: [211, 211, 211],
-    lightgreen: [144, 238, 144],
-    lightgrey: [211, 211, 211],
-    lightpink: [255, 182, 193],
-    lightsalmon: [255, 160, 122],
-    lightseagreen: [32, 178, 170],
-    lightskyblue: [135, 206, 250],
-    lightslategray: [119, 136, 153],
-    lightslategrey: [119, 136, 153],
-    lightsteelblue: [176, 196, 222],
-    lightyellow: [255, 255, 224],
-    lime: [0, 255, 0],
-    limegreen: [50, 205, 50],
-    linen: [250, 240, 230],
-    magenta: [255, 0, 255],
-    maroon: [128, 0, 0],
-    mediumaquamarine: [102, 205, 170],
-    mediumblue: [0, 0, 205],
-    mediumorchid: [186, 85, 211],
-    mediumpurple: [147, 112, 219],
-    mediumseagreen: [60, 179, 113],
-    mediumslateblue: [123, 104, 238],
-    mediumspringgreen: [0, 250, 154],
-    mediumturquoise: [72, 209, 204],
-    mediumvioletred: [199, 21, 133],
-    midnightblue: [25, 25, 112],
-    mintcream: [245, 255, 250],
-    mistyrose: [255, 228, 225],
-    moccasin: [255, 228, 181],
-    navajowhite: [255, 222, 173],
-    navy: [0, 0, 128],
-    oldlace: [253, 245, 230],
-    olive: [128, 128, 0],
-    olivedrab: [107, 142, 35],
-    orange: [255, 165, 0],
-    orangered: [255, 69, 0],
-    orchid: [218, 112, 214],
-    palegoldenrod: [238, 232, 170],
-    palegreen: [152, 251, 152],
-    paleturquoise: [175, 238, 238],
-    palevioletred: [219, 112, 147],
-    papayawhip: [255, 239, 213],
-    peachpuff: [255, 218, 185],
-    peru: [205, 133, 63],
-    pink: [255, 192, 203],
-    plum: [221, 160, 221],
-    powderblue: [176, 224, 230],
-    purple: [128, 0, 128],
-    rebeccapurple: [102, 51, 153],
-    red: [255, 0, 0],
-    rosybrown: [188, 143, 143],
-    royalblue: [65, 105, 225],
-    saddlebrown: [139, 69, 19],
-    salmon: [250, 128, 114],
-    sandybrown: [244, 164, 96],
-    seagreen: [46, 139, 87],
-    seashell: [255, 245, 238],
-    sienna: [160, 82, 45],
-    silver: [192, 192, 192],
-    skyblue: [135, 206, 235],
-    slateblue: [106, 90, 205],
-    slategray: [112, 128, 144],
-    slategrey: [112, 128, 144],
-    snow: [255, 250, 250],
-    springgreen: [0, 255, 127],
-    steelblue: [70, 130, 180],
-    tan: [210, 180, 140],
-    teal: [0, 128, 128],
-    thistle: [216, 191, 216],
-    tomato: [255, 99, 71],
-    turquoise: [64, 224, 208],
-    violet: [238, 130, 238],
-    wheat: [245, 222, 179],
-    white: [255, 255, 255],
-    whitesmoke: [245, 245, 245],
-    yellow: [255, 255, 0],
-    yellowgreen: [154, 205, 50]
-  };
-});
-
-// node_modules/color-convert/conversions.js
-var require_conversions = __commonJS((exports2, module2) => {
-  var cssKeywords = require_color_name();
-  var reverseKeywords = {};
-  for (const key of Object.keys(cssKeywords)) {
-    reverseKeywords[cssKeywords[key]] = key;
   }
-  var convert = {
-    rgb: {channels: 3, labels: "rgb"},
-    hsl: {channels: 3, labels: "hsl"},
-    hsv: {channels: 3, labels: "hsv"},
-    hwb: {channels: 3, labels: "hwb"},
-    cmyk: {channels: 4, labels: "cmyk"},
-    xyz: {channels: 3, labels: "xyz"},
-    lab: {channels: 3, labels: "lab"},
-    lch: {channels: 3, labels: "lch"},
-    hex: {channels: 1, labels: ["hex"]},
-    keyword: {channels: 1, labels: ["keyword"]},
-    ansi16: {channels: 1, labels: ["ansi16"]},
-    ansi256: {channels: 1, labels: ["ansi256"]},
-    hcg: {channels: 3, labels: ["h", "c", "g"]},
-    apple: {channels: 3, labels: ["r16", "g16", "b16"]},
-    gray: {channels: 1, labels: ["gray"]}
-  };
-  module2.exports = convert;
-  for (const model of Object.keys(convert)) {
-    if (!("channels" in convert[model])) {
-      throw new Error("missing channels property: " + model);
-    }
-    if (!("labels" in convert[model])) {
-      throw new Error("missing channel labels property: " + model);
-    }
-    if (convert[model].labels.length !== convert[model].channels) {
-      throw new Error("channel and label counts mismatch: " + model);
-    }
-    const {channels, labels} = convert[model];
-    delete convert[model].channels;
-    delete convert[model].labels;
-    Object.defineProperty(convert[model], "channels", {value: channels});
-    Object.defineProperty(convert[model], "labels", {value: labels});
+  function i(e2, t2, r2) {
+    return (i = o() ? Reflect.construct : function(e3, t3, r3) {
+      var o2 = [null];
+      o2.push.apply(o2, t3);
+      var i2 = new (Function.bind.apply(e3, o2))();
+      return r3 && n(i2, r3.prototype), i2;
+    }).apply(null, arguments);
   }
-  convert.rgb.hsl = function(rgb) {
-    const r = rgb[0] / 255;
-    const g = rgb[1] / 255;
-    const b = rgb[2] / 255;
-    const min = Math.min(r, g, b);
-    const max = Math.max(r, g, b);
-    const delta = max - min;
-    let h;
-    let s;
-    if (max === min) {
-      h = 0;
-    } else if (r === max) {
-      h = (g - b) / delta;
-    } else if (g === max) {
-      h = 2 + (b - r) / delta;
-    } else if (b === max) {
-      h = 4 + (r - g) / delta;
+  function u(e2) {
+    var t2 = typeof Map == "function" ? new Map() : void 0;
+    return (u = function(e3) {
+      if (e3 === null || Function.toString.call(e3).indexOf("[native code]") === -1)
+        return e3;
+      if (typeof e3 != "function")
+        throw new TypeError("Super expression must either be null or a function");
+      if (t2 !== void 0) {
+        if (t2.has(e3))
+          return t2.get(e3);
+        t2.set(e3, o2);
+      }
+      function o2() {
+        return i(e3, arguments, r(this).constructor);
+      }
+      return o2.prototype = Object.create(e3.prototype, {constructor: {value: o2, enumerable: false, writable: true, configurable: true}}), n(o2, e3);
+    })(e2);
+  }
+  function c(e2) {
+    if (e2 === void 0)
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    return e2;
+  }
+  Object.defineProperty(exports2, "__esModule", {value: true});
+  var a;
+  var s;
+  var f = function(e2) {
+    function r2(t2) {
+      var n2;
+      return n2 = e2.call(this, t2) || this, Object.setPrototypeOf(c(n2), (this instanceof r2 ? this.constructor : void 0).prototype), Error.captureStackTrace(c(n2), r2), n2.name = n2.constructor.name, n2;
     }
-    h = Math.min(h * 60, 360);
-    if (h < 0) {
-      h += 360;
+    return t(r2, e2), r2;
+  }(u(TypeError));
+  var l = function(e2) {
+    function r2(t2) {
+      var n2;
+      return n2 = e2.call(this, t2) || this, Object.setPrototypeOf(c(n2), (this instanceof r2 ? this.constructor : void 0).prototype), Error.captureStackTrace(c(n2), r2), n2.name = n2.constructor.name, n2;
     }
-    const l = (min + max) / 2;
-    if (max === min) {
-      s = 0;
-    } else if (l <= 0.5) {
-      s = delta / (max + min);
-    } else {
-      s = delta / (2 - max - min);
-    }
-    return [h, s * 100, l * 100];
-  };
-  convert.rgb.hsv = function(rgb) {
-    let rdif;
-    let gdif;
-    let bdif;
-    let h;
-    let s;
-    const r = rgb[0] / 255;
-    const g = rgb[1] / 255;
-    const b = rgb[2] / 255;
-    const v = Math.max(r, g, b);
-    const diff = v - Math.min(r, g, b);
-    const diffc = function(c) {
-      return (v - c) / 6 / diff + 1 / 2;
+    return t(r2, e2), r2;
+  }(u(ReferenceError));
+  var p = console.error.bind(console);
+  var v = !(typeof process != "object" || !((a = process) == null || (s = a.versions) == null ? void 0 : s.node));
+  var d = function(e2) {
+    return function(t2) {
+      return v ? "[" + e2 + "m" + t2 + "[0m" : t2;
     };
-    if (diff === 0) {
-      h = 0;
-      s = 0;
-    } else {
-      s = diff / v;
-      rdif = diffc(r);
-      gdif = diffc(g);
-      bdif = diffc(b);
-      if (r === v) {
-        h = bdif - gdif;
-      } else if (g === v) {
-        h = 1 / 3 + rdif - bdif;
-      } else if (b === v) {
-        h = 2 / 3 + gdif - rdif;
+  };
+  var h = {blue: d("34"), white: d("37"), yellow: d("33")};
+  var w = h.white("================================");
+  var y = function(e2, t2) {
+    var r2 = e2.errors, n2 = r2 === void 0 ? {} : r2, o2 = t2 === void 0 ? {logger: p} : t2, i2 = o2.onError, u2 = o2.logger;
+    if (Object.keys(n2).length) {
+      for (var c2 = [], a2 = [], s2 = 0, f2 = Object.entries(n2); s2 < f2.length; s2++) {
+        var d2 = f2[s2], y2 = d2[0], m2 = d2[1];
+        m2 instanceof l ? c2.push("    " + h.blue(y2) + ": " + (m2.message || "(required)")) : a2.push("    " + h.blue(y2) + ": " + ((m2 == null ? void 0 : m2.message) || "(invalid format)"));
       }
-      if (h < 0) {
-        h += 1;
-      } else if (h > 1) {
-        h -= 1;
+      if (a2.length && a2.unshift(" " + h.yellow("Invalid") + " environment variables:"), c2.length && c2.unshift(" " + h.yellow("Missing") + " environment variables:"), u2([w, a2.sort().join("\n"), c2.sort().join("\n"), h.yellow("\n Exiting with error code 1"), w].filter(function(e3) {
+        return !!e3;
+      }).join("\n")), i2)
+        i2(n2);
+      else {
+        if (!v)
+          throw new TypeError("Environment validation failed");
+        process.exit(1);
       }
     }
-    return [
-      h * 360,
-      s * 100,
-      v * 100
-    ];
   };
-  convert.rgb.hwb = function(rgb) {
-    const r = rgb[0];
-    const g = rgb[1];
-    let b = rgb[2];
-    const h = convert.rgb.hsl(rgb)[0];
-    const w = 1 / 255 * Math.min(r, Math.min(g, b));
-    b = 1 - 1 / 255 * Math.max(r, Math.max(g, b));
-    return [h, w * 100, b * 100];
-  };
-  convert.rgb.cmyk = function(rgb) {
-    const r = rgb[0] / 255;
-    const g = rgb[1] / 255;
-    const b = rgb[2] / 255;
-    const k = Math.min(1 - r, 1 - g, 1 - b);
-    const c = (1 - r - k) / (1 - k) || 0;
-    const m = (1 - g - k) / (1 - k) || 0;
-    const y = (1 - b - k) / (1 - k) || 0;
-    return [c * 100, m * 100, y * 100, k * 100];
-  };
-  function comparativeDistance(x, y) {
-    return (x[0] - y[0]) ** 2 + (x[1] - y[1]) ** 2 + (x[2] - y[2]) ** 2;
+  var m = Symbol("envalid - test only");
+  function b(e2) {
+    var t2 = e2.spec, r2 = e2.name, n2 = e2.rawValue;
+    if (typeof t2._parse != "function")
+      throw new f('Invalid spec for "' + r2 + '"');
+    var o2 = t2._parse(n2);
+    if (t2.choices) {
+      if (!Array.isArray(t2.choices))
+        throw new TypeError('"choices" must be an array (in spec for "' + r2 + '")');
+      if (!t2.choices.includes(o2))
+        throw new f('Value "' + o2 + '" not in choices [' + t2.choices + "]");
+    }
+    if (o2 == null)
+      throw new f('Invalid value for env var "' + r2 + '"');
+    return o2;
   }
-  convert.rgb.keyword = function(rgb) {
-    const reversed = reverseKeywords[rgb];
-    if (reversed) {
-      return reversed;
-    }
-    let currentClosestDistance = Infinity;
-    let currentClosestKeyword;
-    for (const keyword of Object.keys(cssKeywords)) {
-      const value = cssKeywords[keyword];
-      const distance = comparativeDistance(rgb, value);
-      if (distance < currentClosestDistance) {
-        currentClosestDistance = distance;
-        currentClosestKeyword = keyword;
+  function O(e2) {
+    return e2.desc + (e2.example ? ' (eg. "' + e2.example + '")' : "") + (e2.docs ? ". See " + e2.docs : "");
+  }
+  var g = function(e2, t2) {
+    return e2[t2];
+  };
+  function x(e2, t2, r2) {
+    var n2;
+    r2 === void 0 && (r2 = {});
+    for (var o2 = {}, i2 = {}, u2 = Object.keys(t2), c2 = g(e2, "NODE_ENV"), a2 = 0, s2 = u2; a2 < s2.length; a2++) {
+      var f2, p2 = s2[a2], v2 = t2[p2], d2 = c2 && c2 !== "production" && v2.hasOwnProperty("devDefault"), h2 = d2 ? v2.devDefault : void 0, w2 = (f2 = g(e2, p2)) != null ? f2 : h2 === void 0 ? v2.default : h2, x2 = v2.hasOwnProperty("default") && v2.default === w2 || d2 && h2 === w2;
+      try {
+        if (w2 === m)
+          throw new l(O(v2));
+        if (w2 === void 0) {
+          if (!x2)
+            throw new l(O(v2));
+          o2[p2] = void 0;
+        } else
+          o2[p2] = b({name: p2, spec: v2, rawValue: w2});
+      } catch (e3) {
+        var E2;
+        if (((E2 = r2) == null ? void 0 : E2.reporter) === null)
+          throw e3;
+        i2[p2] = e3;
       }
     }
-    return currentClosestKeyword;
-  };
-  convert.keyword.rgb = function(keyword) {
-    return cssKeywords[keyword];
-  };
-  convert.rgb.xyz = function(rgb) {
-    let r = rgb[0] / 255;
-    let g = rgb[1] / 255;
-    let b = rgb[2] / 255;
-    r = r > 0.04045 ? ((r + 0.055) / 1.055) ** 2.4 : r / 12.92;
-    g = g > 0.04045 ? ((g + 0.055) / 1.055) ** 2.4 : g / 12.92;
-    b = b > 0.04045 ? ((b + 0.055) / 1.055) ** 2.4 : b / 12.92;
-    const x = r * 0.4124 + g * 0.3576 + b * 0.1805;
-    const y = r * 0.2126 + g * 0.7152 + b * 0.0722;
-    const z = r * 0.0193 + g * 0.1192 + b * 0.9505;
-    return [x * 100, y * 100, z * 100];
-  };
-  convert.rgb.lab = function(rgb) {
-    const xyz = convert.rgb.xyz(rgb);
-    let x = xyz[0];
-    let y = xyz[1];
-    let z = xyz[2];
-    x /= 95.047;
-    y /= 100;
-    z /= 108.883;
-    x = x > 8856e-6 ? x ** (1 / 3) : 7.787 * x + 16 / 116;
-    y = y > 8856e-6 ? y ** (1 / 3) : 7.787 * y + 16 / 116;
-    z = z > 8856e-6 ? z ** (1 / 3) : 7.787 * z + 16 / 116;
-    const l = 116 * y - 16;
-    const a = 500 * (x - y);
-    const b = 200 * (y - z);
-    return [l, a, b];
-  };
-  convert.hsl.rgb = function(hsl) {
-    const h = hsl[0] / 360;
-    const s = hsl[1] / 100;
-    const l = hsl[2] / 100;
-    let t2;
-    let t3;
-    let val;
-    if (s === 0) {
-      val = l * 255;
-      return [val, val, val];
-    }
-    if (l < 0.5) {
-      t2 = l * (1 + s);
-    } else {
-      t2 = l + s - l * s;
-    }
-    const t1 = 2 * l - t2;
-    const rgb = [0, 0, 0];
-    for (let i = 0; i < 3; i++) {
-      t3 = h + 1 / 3 * -(i - 1);
-      if (t3 < 0) {
-        t3++;
+    return (((n2 = r2) == null ? void 0 : n2.reporter) || y)({errors: i2, env: o2}), o2;
+  }
+  var E = function(e2, t2) {
+    var r2 = ["length", "inspect", "hasOwnProperty", "toJSON", Symbol.toStringTag, Symbol.iterator, "asymmetricMatch", "nodeType", "then", "__esModule"], n2 = ["Symbol(util.inspect.custom)", "Symbol(nodejs.util.inspect.custom)"];
+    return new Proxy(e2, {get: function(e3, o2) {
+      if (r2.includes(o2) || n2.includes(o2.toString()))
+        return e3[o2];
+      if (!e3.hasOwnProperty(o2)) {
+        if (typeof t2 == "object" && (t2 == null || t2.hasOwnProperty == null ? void 0 : t2.hasOwnProperty(o2)))
+          throw new ReferenceError("[envalid] Env var " + o2 + " was accessed but not validated. This var is set in the environment; please add an envalid validator for it.");
+        throw new ReferenceError("[envalid] Env var not found: " + o2);
       }
-      if (t3 > 1) {
-        t3--;
+      return e3[o2];
+    }, set: function(e3, t3) {
+      throw new TypeError("[envalid] Attempt to mutate environment value: " + t3);
+    }});
+  };
+  var j = function(e2, t2) {
+    var r2 = e2.NODE_ENV || t2.NODE_ENV, n2 = !r2 || r2 === "production";
+    return Object.defineProperties(e2, {isDevelopment: {value: r2 === "development"}, isDev: {value: r2 === "development"}, isProduction: {value: n2}, isProd: {value: n2}, isTest: {value: r2 === "test"}}), e2;
+  };
+  var _ = function(e2, t2) {
+    return E(j(e2, t2), t2);
+  };
+  var P = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/;
+  var N = /([a-f0-9]+:+)+[a-f0-9]+/;
+  var S = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  var R = function(t2) {
+    return function(r2) {
+      return e({}, r2, {_parse: t2});
+    };
+  };
+  exports2.EnvError = f, exports2.EnvMissingError = l, exports2.accessorMiddleware = j, exports2.applyDefaultMiddleware = _, exports2.bool = function(e2) {
+    return R(function(e3) {
+      switch (e3) {
+        case true:
+        case "true":
+        case "t":
+        case "1":
+          return true;
+        case false:
+        case "false":
+        case "f":
+        case "0":
+          return false;
+        default:
+          throw new f('Invalid bool input: "' + e3 + '"');
       }
-      if (6 * t3 < 1) {
-        val = t1 + (t2 - t1) * 6 * t3;
-      } else if (2 * t3 < 1) {
-        val = t2;
-      } else if (3 * t3 < 2) {
-        val = t1 + (t2 - t1) * (2 / 3 - t3) * 6;
-      } else {
-        val = t1;
+    })(e2);
+  }, exports2.cleanEnv = function(e2, t2, r2) {
+    r2 === void 0 && (r2 = {});
+    var n2 = x(e2, t2, r2);
+    return Object.freeze(_(n2, e2));
+  }, exports2.customCleanEnv = function(e2, t2, r2, n2) {
+    n2 === void 0 && (n2 = {});
+    var o2 = x(e2, t2, n2);
+    return Object.freeze(r2(o2, e2));
+  }, exports2.defaultReporter = y, exports2.email = function(e2) {
+    return R(function(e3) {
+      if (S.test(e3))
+        return e3;
+      throw new f('Invalid email address: "' + e3 + '"');
+    })(e2);
+  }, exports2.host = function(e2) {
+    return R(function(e3) {
+      if (!function(e4) {
+        if (!e4.length)
+          return false;
+        for (var t2, r2 = e4.split("."), n2 = 0; n2 < r2.length; n2++) {
+          if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(t2 = r2[n2]))
+            return false;
+          if (/[\uff01-\uff5e]/.test(t2))
+            return false;
+          if (t2[0] === "-" || t2[t2.length - 1] === "-")
+            return false;
+        }
+        return true;
+      }(e3) && !function(e4) {
+        return !!e4.length && (P.test(e4) || N.test(e4));
+      }(e3))
+        throw new f('Invalid host (domain or ip): "' + e3 + '"');
+      return e3;
+    })(e2);
+  }, exports2.json = function(e2) {
+    return R(function(e3) {
+      try {
+        return JSON.parse(e3);
+      } catch (t2) {
+        throw new f('Invalid json: "' + e3 + '"');
       }
-      rgb[i] = val * 255;
-    }
-    return rgb;
-  };
-  convert.hsl.hsv = function(hsl) {
-    const h = hsl[0];
-    let s = hsl[1] / 100;
-    let l = hsl[2] / 100;
-    let smin = s;
-    const lmin = Math.max(l, 0.01);
-    l *= 2;
-    s *= l <= 1 ? l : 2 - l;
-    smin *= lmin <= 1 ? lmin : 2 - lmin;
-    const v = (l + s) / 2;
-    const sv = l === 0 ? 2 * smin / (lmin + smin) : 2 * s / (l + s);
-    return [h, sv * 100, v * 100];
-  };
-  convert.hsv.rgb = function(hsv) {
-    const h = hsv[0] / 60;
-    const s = hsv[1] / 100;
-    let v = hsv[2] / 100;
-    const hi = Math.floor(h) % 6;
-    const f = h - Math.floor(h);
-    const p = 255 * v * (1 - s);
-    const q = 255 * v * (1 - s * f);
-    const t = 255 * v * (1 - s * (1 - f));
-    v *= 255;
-    switch (hi) {
-      case 0:
-        return [v, t, p];
-      case 1:
-        return [q, v, p];
-      case 2:
-        return [p, v, t];
-      case 3:
-        return [p, q, v];
-      case 4:
-        return [t, p, v];
-      case 5:
-        return [v, p, q];
-    }
-  };
-  convert.hsv.hsl = function(hsv) {
-    const h = hsv[0];
-    const s = hsv[1] / 100;
-    const v = hsv[2] / 100;
-    const vmin = Math.max(v, 0.01);
-    let sl;
-    let l;
-    l = (2 - s) * v;
-    const lmin = (2 - s) * vmin;
-    sl = s * vmin;
-    sl /= lmin <= 1 ? lmin : 2 - lmin;
-    sl = sl || 0;
-    l /= 2;
-    return [h, sl * 100, l * 100];
-  };
-  convert.hwb.rgb = function(hwb) {
-    const h = hwb[0] / 360;
-    let wh = hwb[1] / 100;
-    let bl = hwb[2] / 100;
-    const ratio = wh + bl;
-    let f;
-    if (ratio > 1) {
-      wh /= ratio;
-      bl /= ratio;
-    }
-    const i = Math.floor(6 * h);
-    const v = 1 - bl;
-    f = 6 * h - i;
-    if ((i & 1) !== 0) {
-      f = 1 - f;
-    }
-    const n = wh + f * (v - wh);
-    let r;
-    let g;
-    let b;
-    switch (i) {
-      default:
-      case 6:
-      case 0:
-        r = v;
-        g = n;
-        b = wh;
-        break;
-      case 1:
-        r = n;
-        g = v;
-        b = wh;
-        break;
-      case 2:
-        r = wh;
-        g = v;
-        b = n;
-        break;
-      case 3:
-        r = wh;
-        g = n;
-        b = v;
-        break;
-      case 4:
-        r = n;
-        g = wh;
-        b = v;
-        break;
-      case 5:
-        r = v;
-        g = wh;
-        b = n;
-        break;
-    }
-    return [r * 255, g * 255, b * 255];
-  };
-  convert.cmyk.rgb = function(cmyk) {
-    const c = cmyk[0] / 100;
-    const m = cmyk[1] / 100;
-    const y = cmyk[2] / 100;
-    const k = cmyk[3] / 100;
-    const r = 1 - Math.min(1, c * (1 - k) + k);
-    const g = 1 - Math.min(1, m * (1 - k) + k);
-    const b = 1 - Math.min(1, y * (1 - k) + k);
-    return [r * 255, g * 255, b * 255];
-  };
-  convert.xyz.rgb = function(xyz) {
-    const x = xyz[0] / 100;
-    const y = xyz[1] / 100;
-    const z = xyz[2] / 100;
-    let r;
-    let g;
-    let b;
-    r = x * 3.2406 + y * -1.5372 + z * -0.4986;
-    g = x * -0.9689 + y * 1.8758 + z * 0.0415;
-    b = x * 0.0557 + y * -0.204 + z * 1.057;
-    r = r > 31308e-7 ? 1.055 * r ** (1 / 2.4) - 0.055 : r * 12.92;
-    g = g > 31308e-7 ? 1.055 * g ** (1 / 2.4) - 0.055 : g * 12.92;
-    b = b > 31308e-7 ? 1.055 * b ** (1 / 2.4) - 0.055 : b * 12.92;
-    r = Math.min(Math.max(0, r), 1);
-    g = Math.min(Math.max(0, g), 1);
-    b = Math.min(Math.max(0, b), 1);
-    return [r * 255, g * 255, b * 255];
-  };
-  convert.xyz.lab = function(xyz) {
-    let x = xyz[0];
-    let y = xyz[1];
-    let z = xyz[2];
-    x /= 95.047;
-    y /= 100;
-    z /= 108.883;
-    x = x > 8856e-6 ? x ** (1 / 3) : 7.787 * x + 16 / 116;
-    y = y > 8856e-6 ? y ** (1 / 3) : 7.787 * y + 16 / 116;
-    z = z > 8856e-6 ? z ** (1 / 3) : 7.787 * z + 16 / 116;
-    const l = 116 * y - 16;
-    const a = 500 * (x - y);
-    const b = 200 * (y - z);
-    return [l, a, b];
-  };
-  convert.lab.xyz = function(lab) {
-    const l = lab[0];
-    const a = lab[1];
-    const b = lab[2];
-    let x;
-    let y;
-    let z;
-    y = (l + 16) / 116;
-    x = a / 500 + y;
-    z = y - b / 200;
-    const y2 = y ** 3;
-    const x2 = x ** 3;
-    const z2 = z ** 3;
-    y = y2 > 8856e-6 ? y2 : (y - 16 / 116) / 7.787;
-    x = x2 > 8856e-6 ? x2 : (x - 16 / 116) / 7.787;
-    z = z2 > 8856e-6 ? z2 : (z - 16 / 116) / 7.787;
-    x *= 95.047;
-    y *= 100;
-    z *= 108.883;
-    return [x, y, z];
-  };
-  convert.lab.lch = function(lab) {
-    const l = lab[0];
-    const a = lab[1];
-    const b = lab[2];
-    let h;
-    const hr = Math.atan2(b, a);
-    h = hr * 360 / 2 / Math.PI;
-    if (h < 0) {
-      h += 360;
-    }
-    const c = Math.sqrt(a * a + b * b);
-    return [l, c, h];
-  };
-  convert.lch.lab = function(lch) {
-    const l = lch[0];
-    const c = lch[1];
-    const h = lch[2];
-    const hr = h / 360 * 2 * Math.PI;
-    const a = c * Math.cos(hr);
-    const b = c * Math.sin(hr);
-    return [l, a, b];
-  };
-  convert.rgb.ansi16 = function(args, saturation = null) {
-    const [r, g, b] = args;
-    let value = saturation === null ? convert.rgb.hsv(args)[2] : saturation;
-    value = Math.round(value / 50);
-    if (value === 0) {
-      return 30;
-    }
-    let ansi = 30 + (Math.round(b / 255) << 2 | Math.round(g / 255) << 1 | Math.round(r / 255));
-    if (value === 2) {
-      ansi += 60;
-    }
-    return ansi;
-  };
-  convert.hsv.ansi16 = function(args) {
-    return convert.rgb.ansi16(convert.hsv.rgb(args), args[2]);
-  };
-  convert.rgb.ansi256 = function(args) {
-    const r = args[0];
-    const g = args[1];
-    const b = args[2];
-    if (r === g && g === b) {
-      if (r < 8) {
-        return 16;
+    })(e2);
+  }, exports2.makeValidator = R, exports2.num = function(e2) {
+    return R(function(e3) {
+      var t2 = +e3;
+      if (Number.isNaN(t2))
+        throw new f('Invalid number input: "' + e3 + '"');
+      return t2;
+    })(e2);
+  }, exports2.port = function(e2) {
+    return R(function(e3) {
+      var t2 = +e3;
+      if (Number.isNaN(t2) || "" + t2 != "" + e3 || t2 % 1 != 0 || t2 < 1 || t2 > 65535)
+        throw new f('Invalid port input: "' + e3 + '"');
+      return t2;
+    })(e2);
+  }, exports2.str = function(e2) {
+    return R(function(e3) {
+      if (typeof e3 == "string")
+        return e3;
+      throw new f('Not a string: "' + e3 + '"');
+    })(e2);
+  }, exports2.strictProxyMiddleware = E, exports2.testOnly = function(e2) {
+    return m;
+  }, exports2.url = function(e2) {
+    return R(function(e3) {
+      try {
+        return new URL(e3), e3;
+      } catch (t2) {
+        throw new f('Invalid url: "' + e3 + '"');
       }
-      if (r > 248) {
-        return 231;
-      }
-      return Math.round((r - 8) / 247 * 24) + 232;
-    }
-    const ansi = 16 + 36 * Math.round(r / 255 * 5) + 6 * Math.round(g / 255 * 5) + Math.round(b / 255 * 5);
-    return ansi;
-  };
-  convert.ansi16.rgb = function(args) {
-    let color = args % 10;
-    if (color === 0 || color === 7) {
-      if (args > 50) {
-        color += 3.5;
-      }
-      color = color / 10.5 * 255;
-      return [color, color, color];
-    }
-    const mult = (~~(args > 50) + 1) * 0.5;
-    const r = (color & 1) * mult * 255;
-    const g = (color >> 1 & 1) * mult * 255;
-    const b = (color >> 2 & 1) * mult * 255;
-    return [r, g, b];
-  };
-  convert.ansi256.rgb = function(args) {
-    if (args >= 232) {
-      const c = (args - 232) * 10 + 8;
-      return [c, c, c];
-    }
-    args -= 16;
-    let rem;
-    const r = Math.floor(args / 36) / 5 * 255;
-    const g = Math.floor((rem = args % 36) / 6) / 5 * 255;
-    const b = rem % 6 / 5 * 255;
-    return [r, g, b];
-  };
-  convert.rgb.hex = function(args) {
-    const integer = ((Math.round(args[0]) & 255) << 16) + ((Math.round(args[1]) & 255) << 8) + (Math.round(args[2]) & 255);
-    const string = integer.toString(16).toUpperCase();
-    return "000000".substring(string.length) + string;
-  };
-  convert.hex.rgb = function(args) {
-    const match = args.toString(16).match(/[a-f0-9]{6}|[a-f0-9]{3}/i);
-    if (!match) {
-      return [0, 0, 0];
-    }
-    let colorString = match[0];
-    if (match[0].length === 3) {
-      colorString = colorString.split("").map((char) => {
-        return char + char;
-      }).join("");
-    }
-    const integer = parseInt(colorString, 16);
-    const r = integer >> 16 & 255;
-    const g = integer >> 8 & 255;
-    const b = integer & 255;
-    return [r, g, b];
-  };
-  convert.rgb.hcg = function(rgb) {
-    const r = rgb[0] / 255;
-    const g = rgb[1] / 255;
-    const b = rgb[2] / 255;
-    const max = Math.max(Math.max(r, g), b);
-    const min = Math.min(Math.min(r, g), b);
-    const chroma = max - min;
-    let grayscale;
-    let hue;
-    if (chroma < 1) {
-      grayscale = min / (1 - chroma);
-    } else {
-      grayscale = 0;
-    }
-    if (chroma <= 0) {
-      hue = 0;
-    } else if (max === r) {
-      hue = (g - b) / chroma % 6;
-    } else if (max === g) {
-      hue = 2 + (b - r) / chroma;
-    } else {
-      hue = 4 + (r - g) / chroma;
-    }
-    hue /= 6;
-    hue %= 1;
-    return [hue * 360, chroma * 100, grayscale * 100];
-  };
-  convert.hsl.hcg = function(hsl) {
-    const s = hsl[1] / 100;
-    const l = hsl[2] / 100;
-    const c = l < 0.5 ? 2 * s * l : 2 * s * (1 - l);
-    let f = 0;
-    if (c < 1) {
-      f = (l - 0.5 * c) / (1 - c);
-    }
-    return [hsl[0], c * 100, f * 100];
-  };
-  convert.hsv.hcg = function(hsv) {
-    const s = hsv[1] / 100;
-    const v = hsv[2] / 100;
-    const c = s * v;
-    let f = 0;
-    if (c < 1) {
-      f = (v - c) / (1 - c);
-    }
-    return [hsv[0], c * 100, f * 100];
-  };
-  convert.hcg.rgb = function(hcg) {
-    const h = hcg[0] / 360;
-    const c = hcg[1] / 100;
-    const g = hcg[2] / 100;
-    if (c === 0) {
-      return [g * 255, g * 255, g * 255];
-    }
-    const pure = [0, 0, 0];
-    const hi = h % 1 * 6;
-    const v = hi % 1;
-    const w = 1 - v;
-    let mg = 0;
-    switch (Math.floor(hi)) {
-      case 0:
-        pure[0] = 1;
-        pure[1] = v;
-        pure[2] = 0;
-        break;
-      case 1:
-        pure[0] = w;
-        pure[1] = 1;
-        pure[2] = 0;
-        break;
-      case 2:
-        pure[0] = 0;
-        pure[1] = 1;
-        pure[2] = v;
-        break;
-      case 3:
-        pure[0] = 0;
-        pure[1] = w;
-        pure[2] = 1;
-        break;
-      case 4:
-        pure[0] = v;
-        pure[1] = 0;
-        pure[2] = 1;
-        break;
-      default:
-        pure[0] = 1;
-        pure[1] = 0;
-        pure[2] = w;
-    }
-    mg = (1 - c) * g;
-    return [
-      (c * pure[0] + mg) * 255,
-      (c * pure[1] + mg) * 255,
-      (c * pure[2] + mg) * 255
-    ];
-  };
-  convert.hcg.hsv = function(hcg) {
-    const c = hcg[1] / 100;
-    const g = hcg[2] / 100;
-    const v = c + g * (1 - c);
-    let f = 0;
-    if (v > 0) {
-      f = c / v;
-    }
-    return [hcg[0], f * 100, v * 100];
-  };
-  convert.hcg.hsl = function(hcg) {
-    const c = hcg[1] / 100;
-    const g = hcg[2] / 100;
-    const l = g * (1 - c) + 0.5 * c;
-    let s = 0;
-    if (l > 0 && l < 0.5) {
-      s = c / (2 * l);
-    } else if (l >= 0.5 && l < 1) {
-      s = c / (2 * (1 - l));
-    }
-    return [hcg[0], s * 100, l * 100];
-  };
-  convert.hcg.hwb = function(hcg) {
-    const c = hcg[1] / 100;
-    const g = hcg[2] / 100;
-    const v = c + g * (1 - c);
-    return [hcg[0], (v - c) * 100, (1 - v) * 100];
-  };
-  convert.hwb.hcg = function(hwb) {
-    const w = hwb[1] / 100;
-    const b = hwb[2] / 100;
-    const v = 1 - b;
-    const c = v - w;
-    let g = 0;
-    if (c < 1) {
-      g = (v - c) / (1 - c);
-    }
-    return [hwb[0], c * 100, g * 100];
-  };
-  convert.apple.rgb = function(apple) {
-    return [apple[0] / 65535 * 255, apple[1] / 65535 * 255, apple[2] / 65535 * 255];
-  };
-  convert.rgb.apple = function(rgb) {
-    return [rgb[0] / 255 * 65535, rgb[1] / 255 * 65535, rgb[2] / 255 * 65535];
-  };
-  convert.gray.rgb = function(args) {
-    return [args[0] / 100 * 255, args[0] / 100 * 255, args[0] / 100 * 255];
-  };
-  convert.gray.hsl = function(args) {
-    return [0, 0, args[0]];
-  };
-  convert.gray.hsv = convert.gray.hsl;
-  convert.gray.hwb = function(gray) {
-    return [0, 100, gray[0]];
-  };
-  convert.gray.cmyk = function(gray) {
-    return [0, 0, 0, gray[0]];
-  };
-  convert.gray.lab = function(gray) {
-    return [gray[0], 0, 0];
-  };
-  convert.gray.hex = function(gray) {
-    const val = Math.round(gray[0] / 100 * 255) & 255;
-    const integer = (val << 16) + (val << 8) + val;
-    const string = integer.toString(16).toUpperCase();
-    return "000000".substring(string.length) + string;
-  };
-  convert.rgb.gray = function(rgb) {
-    const val = (rgb[0] + rgb[1] + rgb[2]) / 3;
-    return [val / 255 * 100];
+    })(e2);
   };
 });
 
-// node_modules/color-convert/route.js
-var require_route = __commonJS((exports2, module2) => {
-  var conversions = require_conversions();
-  function buildGraph() {
-    const graph = {};
-    const models = Object.keys(conversions);
-    for (let len = models.length, i = 0; i < len; i++) {
-      graph[models[i]] = {
-        distance: -1,
-        parent: null
+// node_modules/envalid/dist/envalid.cjs.development.js
+var require_envalid_cjs_development = __commonJS((exports2) => {
+  "use strict";
+  Object.defineProperty(exports2, "__esModule", {value: true});
+  function _extends() {
+    _extends = Object.assign || function(target) {
+      for (var i = 1; i < arguments.length; i++) {
+        var source = arguments[i];
+        for (var key in source) {
+          if (Object.prototype.hasOwnProperty.call(source, key)) {
+            target[key] = source[key];
+          }
+        }
+      }
+      return target;
+    };
+    return _extends.apply(this, arguments);
+  }
+  function _inheritsLoose(subClass, superClass) {
+    subClass.prototype = Object.create(superClass.prototype);
+    subClass.prototype.constructor = subClass;
+    subClass.__proto__ = superClass;
+  }
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf2(o2) {
+      return o2.__proto__ || Object.getPrototypeOf(o2);
+    };
+    return _getPrototypeOf(o);
+  }
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf2(o2, p2) {
+      o2.__proto__ = p2;
+      return o2;
+    };
+    return _setPrototypeOf(o, p);
+  }
+  function _isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct)
+      return false;
+    if (Reflect.construct.sham)
+      return false;
+    if (typeof Proxy === "function")
+      return true;
+    try {
+      Date.prototype.toString.call(Reflect.construct(Date, [], function() {
+      }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function _construct(Parent, args, Class) {
+    if (_isNativeReflectConstruct()) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct2(Parent2, args2, Class2) {
+        var a = [null];
+        a.push.apply(a, args2);
+        var Constructor = Function.bind.apply(Parent2, a);
+        var instance = new Constructor();
+        if (Class2)
+          _setPrototypeOf(instance, Class2.prototype);
+        return instance;
       };
     }
-    return graph;
+    return _construct.apply(null, arguments);
   }
-  function deriveBFS(fromModel) {
-    const graph = buildGraph();
-    const queue = [fromModel];
-    graph[fromModel].distance = 0;
-    while (queue.length) {
-      const current = queue.pop();
-      const adjacents = Object.keys(conversions[current]);
-      for (let len = adjacents.length, i = 0; i < len; i++) {
-        const adjacent = adjacents[i];
-        const node = graph[adjacent];
-        if (node.distance === -1) {
-          node.distance = graph[current].distance + 1;
-          node.parent = current;
-          queue.unshift(adjacent);
-        }
-      }
-    }
-    return graph;
+  function _isNativeFunction(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
   }
-  function link(from, to) {
-    return function(args) {
-      return to(from(args));
-    };
-  }
-  function wrapConversion(toModel, graph) {
-    const path = [graph[toModel].parent, toModel];
-    let fn = conversions[graph[toModel].parent][toModel];
-    let cur = graph[toModel].parent;
-    while (graph[cur].parent) {
-      path.unshift(graph[cur].parent);
-      fn = link(conversions[graph[cur].parent][cur], fn);
-      cur = graph[cur].parent;
-    }
-    fn.conversion = path;
-    return fn;
-  }
-  module2.exports = function(fromModel) {
-    const graph = deriveBFS(fromModel);
-    const conversion = {};
-    const models = Object.keys(graph);
-    for (let len = models.length, i = 0; i < len; i++) {
-      const toModel = models[i];
-      const node = graph[toModel];
-      if (node.parent === null) {
-        continue;
+  function _wrapNativeSuper(Class) {
+    var _cache = typeof Map === "function" ? new Map() : void 0;
+    _wrapNativeSuper = function _wrapNativeSuper2(Class2) {
+      if (Class2 === null || !_isNativeFunction(Class2))
+        return Class2;
+      if (typeof Class2 !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
       }
-      conversion[toModel] = wrapConversion(toModel, graph);
-    }
-    return conversion;
-  };
-});
-
-// node_modules/color-convert/index.js
-var require_color_convert = __commonJS((exports2, module2) => {
-  var conversions = require_conversions();
-  var route = require_route();
-  var convert = {};
-  var models = Object.keys(conversions);
-  function wrapRaw(fn) {
-    const wrappedFn = function(...args) {
-      const arg0 = args[0];
-      if (arg0 === void 0 || arg0 === null) {
-        return arg0;
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class2))
+          return _cache.get(Class2);
+        _cache.set(Class2, Wrapper);
       }
-      if (arg0.length > 1) {
-        args = arg0;
+      function Wrapper() {
+        return _construct(Class2, arguments, _getPrototypeOf(this).constructor);
       }
-      return fn(args);
-    };
-    if ("conversion" in fn) {
-      wrappedFn.conversion = fn.conversion;
-    }
-    return wrappedFn;
-  }
-  function wrapRounded(fn) {
-    const wrappedFn = function(...args) {
-      const arg0 = args[0];
-      if (arg0 === void 0 || arg0 === null) {
-        return arg0;
-      }
-      if (arg0.length > 1) {
-        args = arg0;
-      }
-      const result = fn(args);
-      if (typeof result === "object") {
-        for (let len = result.length, i = 0; i < len; i++) {
-          result[i] = Math.round(result[i]);
-        }
-      }
-      return result;
-    };
-    if ("conversion" in fn) {
-      wrappedFn.conversion = fn.conversion;
-    }
-    return wrappedFn;
-  }
-  models.forEach((fromModel) => {
-    convert[fromModel] = {};
-    Object.defineProperty(convert[fromModel], "channels", {value: conversions[fromModel].channels});
-    Object.defineProperty(convert[fromModel], "labels", {value: conversions[fromModel].labels});
-    const routes = route(fromModel);
-    const routeModels = Object.keys(routes);
-    routeModels.forEach((toModel) => {
-      const fn = routes[toModel];
-      convert[fromModel][toModel] = wrapRounded(fn);
-      convert[fromModel][toModel].raw = wrapRaw(fn);
-    });
-  });
-  module2.exports = convert;
-});
-
-// node_modules/ansi-styles/index.js
-var require_ansi_styles = __commonJS((exports2, module2) => {
-  "use strict";
-  var wrapAnsi16 = (fn, offset) => (...args) => {
-    const code = fn(...args);
-    return `[${code + offset}m`;
-  };
-  var wrapAnsi256 = (fn, offset) => (...args) => {
-    const code = fn(...args);
-    return `[${38 + offset};5;${code}m`;
-  };
-  var wrapAnsi16m = (fn, offset) => (...args) => {
-    const rgb = fn(...args);
-    return `[${38 + offset};2;${rgb[0]};${rgb[1]};${rgb[2]}m`;
-  };
-  var ansi2ansi = (n) => n;
-  var rgb2rgb = (r, g, b) => [r, g, b];
-  var setLazyProperty = (object, property, get) => {
-    Object.defineProperty(object, property, {
-      get: () => {
-        const value = get();
-        Object.defineProperty(object, property, {
-          value,
-          enumerable: true,
+      Wrapper.prototype = Object.create(Class2.prototype, {
+        constructor: {
+          value: Wrapper,
+          enumerable: false,
+          writable: true,
           configurable: true
-        });
-        return value;
-      },
-      enumerable: true,
-      configurable: true
-    });
-  };
-  var colorConvert;
-  var makeDynamicStyles = (wrap, targetSpace, identity, isBackground) => {
-    if (colorConvert === void 0) {
-      colorConvert = require_color_convert();
-    }
-    const offset = isBackground ? 10 : 0;
-    const styles = {};
-    for (const [sourceSpace, suite] of Object.entries(colorConvert)) {
-      const name = sourceSpace === "ansi16" ? "ansi" : sourceSpace;
-      if (sourceSpace === targetSpace) {
-        styles[name] = wrap(identity, offset);
-      } else if (typeof suite === "object") {
-        styles[name] = wrap(suite[targetSpace], offset);
-      }
-    }
-    return styles;
-  };
-  function assembleStyles() {
-    const codes = new Map();
-    const styles = {
-      modifier: {
-        reset: [0, 0],
-        bold: [1, 22],
-        dim: [2, 22],
-        italic: [3, 23],
-        underline: [4, 24],
-        inverse: [7, 27],
-        hidden: [8, 28],
-        strikethrough: [9, 29]
-      },
-      color: {
-        black: [30, 39],
-        red: [31, 39],
-        green: [32, 39],
-        yellow: [33, 39],
-        blue: [34, 39],
-        magenta: [35, 39],
-        cyan: [36, 39],
-        white: [37, 39],
-        blackBright: [90, 39],
-        redBright: [91, 39],
-        greenBright: [92, 39],
-        yellowBright: [93, 39],
-        blueBright: [94, 39],
-        magentaBright: [95, 39],
-        cyanBright: [96, 39],
-        whiteBright: [97, 39]
-      },
-      bgColor: {
-        bgBlack: [40, 49],
-        bgRed: [41, 49],
-        bgGreen: [42, 49],
-        bgYellow: [43, 49],
-        bgBlue: [44, 49],
-        bgMagenta: [45, 49],
-        bgCyan: [46, 49],
-        bgWhite: [47, 49],
-        bgBlackBright: [100, 49],
-        bgRedBright: [101, 49],
-        bgGreenBright: [102, 49],
-        bgYellowBright: [103, 49],
-        bgBlueBright: [104, 49],
-        bgMagentaBright: [105, 49],
-        bgCyanBright: [106, 49],
-        bgWhiteBright: [107, 49]
-      }
-    };
-    styles.color.gray = styles.color.blackBright;
-    styles.bgColor.bgGray = styles.bgColor.bgBlackBright;
-    styles.color.grey = styles.color.blackBright;
-    styles.bgColor.bgGrey = styles.bgColor.bgBlackBright;
-    for (const [groupName, group] of Object.entries(styles)) {
-      for (const [styleName, style] of Object.entries(group)) {
-        styles[styleName] = {
-          open: `[${style[0]}m`,
-          close: `[${style[1]}m`
-        };
-        group[styleName] = styles[styleName];
-        codes.set(style[0], style[1]);
-      }
-      Object.defineProperty(styles, groupName, {
-        value: group,
-        enumerable: false
-      });
-    }
-    Object.defineProperty(styles, "codes", {
-      value: codes,
-      enumerable: false
-    });
-    styles.color.close = "[39m";
-    styles.bgColor.close = "[49m";
-    setLazyProperty(styles.color, "ansi", () => makeDynamicStyles(wrapAnsi16, "ansi16", ansi2ansi, false));
-    setLazyProperty(styles.color, "ansi256", () => makeDynamicStyles(wrapAnsi256, "ansi256", ansi2ansi, false));
-    setLazyProperty(styles.color, "ansi16m", () => makeDynamicStyles(wrapAnsi16m, "rgb", rgb2rgb, false));
-    setLazyProperty(styles.bgColor, "ansi", () => makeDynamicStyles(wrapAnsi16, "ansi16", ansi2ansi, true));
-    setLazyProperty(styles.bgColor, "ansi256", () => makeDynamicStyles(wrapAnsi256, "ansi256", ansi2ansi, true));
-    setLazyProperty(styles.bgColor, "ansi16m", () => makeDynamicStyles(wrapAnsi16m, "rgb", rgb2rgb, true));
-    return styles;
-  }
-  Object.defineProperty(module2, "exports", {
-    enumerable: true,
-    get: assembleStyles
-  });
-});
-
-// node_modules/supports-color/browser.js
-var require_browser = __commonJS((exports2, module2) => {
-  "use strict";
-  module2.exports = {
-    stdout: false,
-    stderr: false
-  };
-});
-
-// node_modules/envalid/node_modules/chalk/source/util.js
-var require_util = __commonJS((exports2, module2) => {
-  "use strict";
-  var stringReplaceAll = (string, substring, replacer) => {
-    let index = string.indexOf(substring);
-    if (index === -1) {
-      return string;
-    }
-    const substringLength = substring.length;
-    let endIndex = 0;
-    let returnValue = "";
-    do {
-      returnValue += string.substr(endIndex, index - endIndex) + substring + replacer;
-      endIndex = index + substringLength;
-      index = string.indexOf(substring, endIndex);
-    } while (index !== -1);
-    returnValue += string.substr(endIndex);
-    return returnValue;
-  };
-  var stringEncaseCRLFWithFirstIndex = (string, prefix, postfix, index) => {
-    let endIndex = 0;
-    let returnValue = "";
-    do {
-      const gotCR = string[index - 1] === "\r";
-      returnValue += string.substr(endIndex, (gotCR ? index - 1 : index) - endIndex) + prefix + (gotCR ? "\r\n" : "\n") + postfix;
-      endIndex = index + 1;
-      index = string.indexOf("\n", endIndex);
-    } while (index !== -1);
-    returnValue += string.substr(endIndex);
-    return returnValue;
-  };
-  module2.exports = {
-    stringReplaceAll,
-    stringEncaseCRLFWithFirstIndex
-  };
-});
-
-// node_modules/envalid/node_modules/chalk/source/templates.js
-var require_templates = __commonJS((exports2, module2) => {
-  "use strict";
-  var TEMPLATE_REGEX = /(?:\\(u(?:[a-f\d]{4}|\{[a-f\d]{1,6}\})|x[a-f\d]{2}|.))|(?:\{(~)?(\w+(?:\([^)]*\))?(?:\.\w+(?:\([^)]*\))?)*)(?:[ \t]|(?=\r?\n)))|(\})|((?:.|[\r\n\f])+?)/gi;
-  var STYLE_REGEX = /(?:^|\.)(\w+)(?:\(([^)]*)\))?/g;
-  var STRING_REGEX = /^(['"])((?:\\.|(?!\1)[^\\])*)\1$/;
-  var ESCAPE_REGEX = /\\(u(?:[a-f\d]{4}|\{[a-f\d]{1,6}\})|x[a-f\d]{2}|.)|([^\\])/gi;
-  var ESCAPES = new Map([
-    ["n", "\n"],
-    ["r", "\r"],
-    ["t", "	"],
-    ["b", "\b"],
-    ["f", "\f"],
-    ["v", "\v"],
-    ["0", "\0"],
-    ["\\", "\\"],
-    ["e", ""],
-    ["a", "\x07"]
-  ]);
-  function unescape(c) {
-    const u = c[0] === "u";
-    const bracket = c[1] === "{";
-    if (u && !bracket && c.length === 5 || c[0] === "x" && c.length === 3) {
-      return String.fromCharCode(parseInt(c.slice(1), 16));
-    }
-    if (u && bracket) {
-      return String.fromCodePoint(parseInt(c.slice(2, -1), 16));
-    }
-    return ESCAPES.get(c) || c;
-  }
-  function parseArguments(name, arguments_) {
-    const results = [];
-    const chunks = arguments_.trim().split(/\s*,\s*/g);
-    let matches;
-    for (const chunk of chunks) {
-      const number = Number(chunk);
-      if (!Number.isNaN(number)) {
-        results.push(number);
-      } else if (matches = chunk.match(STRING_REGEX)) {
-        results.push(matches[2].replace(ESCAPE_REGEX, (m, escape, character) => escape ? unescape(escape) : character));
-      } else {
-        throw new Error(`Invalid Chalk template style argument: ${chunk} (in style '${name}')`);
-      }
-    }
-    return results;
-  }
-  function parseStyle(style) {
-    STYLE_REGEX.lastIndex = 0;
-    const results = [];
-    let matches;
-    while ((matches = STYLE_REGEX.exec(style)) !== null) {
-      const name = matches[1];
-      if (matches[2]) {
-        const args = parseArguments(name, matches[2]);
-        results.push([name].concat(args));
-      } else {
-        results.push([name]);
-      }
-    }
-    return results;
-  }
-  function buildStyle(chalk, styles) {
-    const enabled = {};
-    for (const layer of styles) {
-      for (const style of layer.styles) {
-        enabled[style[0]] = layer.inverse ? null : style.slice(1);
-      }
-    }
-    let current = chalk;
-    for (const [styleName, styles2] of Object.entries(enabled)) {
-      if (!Array.isArray(styles2)) {
-        continue;
-      }
-      if (!(styleName in current)) {
-        throw new Error(`Unknown Chalk style: ${styleName}`);
-      }
-      current = styles2.length > 0 ? current[styleName](...styles2) : current[styleName];
-    }
-    return current;
-  }
-  module2.exports = (chalk, temporary) => {
-    const styles = [];
-    const chunks = [];
-    let chunk = [];
-    temporary.replace(TEMPLATE_REGEX, (m, escapeCharacter, inverse, style, close, character) => {
-      if (escapeCharacter) {
-        chunk.push(unescape(escapeCharacter));
-      } else if (style) {
-        const string = chunk.join("");
-        chunk = [];
-        chunks.push(styles.length === 0 ? string : buildStyle(chalk, styles)(string));
-        styles.push({inverse, styles: parseStyle(style)});
-      } else if (close) {
-        if (styles.length === 0) {
-          throw new Error("Found extraneous } in Chalk template literal");
         }
-        chunks.push(buildStyle(chalk, styles)(chunk.join("")));
-        chunk = [];
-        styles.pop();
-      } else {
-        chunk.push(character);
-      }
-    });
-    chunks.push(chunk.join(""));
-    if (styles.length > 0) {
-      const errMsg = `Chalk template literal is missing ${styles.length} closing bracket${styles.length === 1 ? "" : "s"} (\`}\`)`;
-      throw new Error(errMsg);
-    }
-    return chunks.join("");
-  };
-});
-
-// node_modules/envalid/node_modules/chalk/source/index.js
-var require_source = __commonJS((exports2, module2) => {
-  "use strict";
-  var ansiStyles = require_ansi_styles();
-  var {stdout: stdoutColor, stderr: stderrColor} = require_browser();
-  var {
-    stringReplaceAll,
-    stringEncaseCRLFWithFirstIndex
-  } = require_util();
-  var levelMapping = [
-    "ansi",
-    "ansi",
-    "ansi256",
-    "ansi16m"
-  ];
-  var styles = Object.create(null);
-  var applyOptions = (object, options = {}) => {
-    if (options.level > 3 || options.level < 0) {
-      throw new Error("The `level` option should be an integer from 0 to 3");
-    }
-    const colorLevel = stdoutColor ? stdoutColor.level : 0;
-    object.level = options.level === void 0 ? colorLevel : options.level;
-  };
-  var ChalkClass = class {
-    constructor(options) {
-      return chalkFactory(options);
-    }
-  };
-  var chalkFactory = (options) => {
-    const chalk2 = {};
-    applyOptions(chalk2, options);
-    chalk2.template = (...arguments_) => chalkTag(chalk2.template, ...arguments_);
-    Object.setPrototypeOf(chalk2, Chalk.prototype);
-    Object.setPrototypeOf(chalk2.template, chalk2);
-    chalk2.template.constructor = () => {
-      throw new Error("`chalk.constructor()` is deprecated. Use `new chalk.Instance()` instead.");
+      });
+      return _setPrototypeOf(Wrapper, Class2);
     };
-    chalk2.template.Instance = ChalkClass;
-    return chalk2.template;
-  };
-  function Chalk(options) {
-    return chalkFactory(options);
+    return _wrapNativeSuper(Class);
   }
-  for (const [styleName, style] of Object.entries(ansiStyles)) {
-    styles[styleName] = {
-      get() {
-        const builder = createBuilder(this, createStyler(style.open, style.close, this._styler), this._isEmpty);
-        Object.defineProperty(this, styleName, {value: builder});
-        return builder;
-      }
-    };
+  function _assertThisInitialized(self2) {
+    if (self2 === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self2;
   }
-  styles.visible = {
-    get() {
-      const builder = createBuilder(this, this._styler, true);
-      Object.defineProperty(this, "visible", {value: builder});
-      return builder;
+  var EnvError = /* @__PURE__ */ function(_TypeError) {
+    _inheritsLoose(EnvError2, _TypeError);
+    function EnvError2(message) {
+      var _this;
+      _this = _TypeError.call(this, message) || this;
+      Object.setPrototypeOf(_assertThisInitialized(_this), (this instanceof EnvError2 ? this.constructor : void 0).prototype);
+      Error.captureStackTrace(_assertThisInitialized(_this), EnvError2);
+      _this.name = _this.constructor.name;
+      return _this;
     }
-  };
-  var usedModels = ["rgb", "hex", "keyword", "hsl", "hsv", "hwb", "ansi", "ansi256"];
-  for (const model of usedModels) {
-    styles[model] = {
-      get() {
-        const {level} = this;
-        return function(...arguments_) {
-          const styler = createStyler(ansiStyles.color[levelMapping[level]][model](...arguments_), ansiStyles.color.close, this._styler);
-          return createBuilder(this, styler, this._isEmpty);
-        };
-      }
-    };
-  }
-  for (const model of usedModels) {
-    const bgModel = "bg" + model[0].toUpperCase() + model.slice(1);
-    styles[bgModel] = {
-      get() {
-        const {level} = this;
-        return function(...arguments_) {
-          const styler = createStyler(ansiStyles.bgColor[levelMapping[level]][model](...arguments_), ansiStyles.bgColor.close, this._styler);
-          return createBuilder(this, styler, this._isEmpty);
-        };
-      }
-    };
-  }
-  var proto = Object.defineProperties(() => {
-  }, __assign(__assign({}, styles), {
-    level: {
-      enumerable: true,
-      get() {
-        return this._generator.level;
-      },
-      set(level) {
-        this._generator.level = level;
-      }
+    return EnvError2;
+  }(/* @__PURE__ */ _wrapNativeSuper(TypeError));
+  var EnvMissingError = /* @__PURE__ */ function(_ReferenceError) {
+    _inheritsLoose(EnvMissingError2, _ReferenceError);
+    function EnvMissingError2(message) {
+      var _this2;
+      _this2 = _ReferenceError.call(this, message) || this;
+      Object.setPrototypeOf(_assertThisInitialized(_this2), (this instanceof EnvMissingError2 ? this.constructor : void 0).prototype);
+      Error.captureStackTrace(_assertThisInitialized(_this2), EnvMissingError2);
+      _this2.name = _this2.constructor.name;
+      return _this2;
     }
-  }));
-  var createStyler = (open, close, parent) => {
-    let openAll;
-    let closeAll;
-    if (parent === void 0) {
-      openAll = open;
-      closeAll = close;
-    } else {
-      openAll = parent.openAll + open;
-      closeAll = close + parent.closeAll;
-    }
-    return {
-      open,
-      close,
-      openAll,
-      closeAll,
-      parent
+    return EnvMissingError2;
+  }(/* @__PURE__ */ _wrapNativeSuper(ReferenceError));
+  var _process;
+  var _process$versions;
+  var defaultLogger = /* @__PURE__ */ console.error.bind(console);
+  var isNode = !!(typeof process === "object" && ((_process = process) == null ? void 0 : (_process$versions = _process.versions) == null ? void 0 : _process$versions.node));
+  var colorWith = function colorWith2(colorCode) {
+    return function(str3) {
+      return isNode ? "[" + colorCode + "m" + str3 + "[0m" : str3;
     };
   };
-  var createBuilder = (self2, _styler, _isEmpty) => {
-    const builder = (...arguments_) => {
-      return applyStyle(builder, arguments_.length === 1 ? "" + arguments_[0] : arguments_.join(" "));
-    };
-    builder.__proto__ = proto;
-    builder._generator = self2;
-    builder._styler = _styler;
-    builder._isEmpty = _isEmpty;
-    return builder;
+  var colors = {
+    blue: /* @__PURE__ */ colorWith("34"),
+    white: /* @__PURE__ */ colorWith("37"),
+    yellow: /* @__PURE__ */ colorWith("33")
   };
-  var applyStyle = (self2, string) => {
-    if (self2.level <= 0 || !string) {
-      return self2._isEmpty ? "" : string;
-    }
-    let styler = self2._styler;
-    if (styler === void 0) {
-      return string;
-    }
-    const {openAll, closeAll} = styler;
-    if (string.indexOf("") !== -1) {
-      while (styler !== void 0) {
-        string = stringReplaceAll(string, styler.close, styler.open);
-        styler = styler.parent;
-      }
-    }
-    const lfIndex = string.indexOf("\n");
-    if (lfIndex !== -1) {
-      string = stringEncaseCRLFWithFirstIndex(string, closeAll, openAll, lfIndex);
-    }
-    return openAll + string + closeAll;
-  };
-  var template;
-  var chalkTag = (chalk2, ...strings) => {
-    const [firstString] = strings;
-    if (!Array.isArray(firstString)) {
-      return strings.join(" ");
-    }
-    const arguments_ = strings.slice(1);
-    const parts = [firstString.raw[0]];
-    for (let i = 1; i < firstString.length; i++) {
-      parts.push(String(arguments_[i - 1]).replace(/[{}\\]/g, "\\$&"), String(firstString.raw[i]));
-    }
-    if (template === void 0) {
-      template = require_templates();
-    }
-    return template(chalk2, parts.join(""));
-  };
-  Object.defineProperties(Chalk.prototype, styles);
-  var chalk = Chalk();
-  chalk.supportsColor = stdoutColor;
-  chalk.stderr = Chalk({level: stderrColor ? stderrColor.level : 0});
-  chalk.stderr.supportsColor = stderrColor;
-  chalk.Level = {
-    None: 0,
-    Basic: 1,
-    Ansi256: 2,
-    TrueColor: 3,
-    0: "None",
-    1: "Basic",
-    2: "Ansi256",
-    3: "TrueColor"
-  };
-  module2.exports = chalk;
-});
-
-// node_modules/envalid/src/reporter.js
-var require_reporter = __commonJS((exports2, module2) => {
-  var {EnvMissingError} = require_validators();
-  var chalk = require_source();
-  var RULE = chalk.grey("================================");
-  module2.exports = function defaultReporter({errors = {}, env: env2 = {}}) {
-    const errorKeys = Object.keys(errors);
-    if (!errorKeys.length)
+  var RULE = /* @__PURE__ */ colors.white("================================");
+  var defaultReporter = function defaultReporter2(_ref, _temp) {
+    var _ref$errors = _ref.errors, errors = _ref$errors === void 0 ? {} : _ref$errors;
+    var _ref2 = _temp === void 0 ? {
+      logger: defaultLogger
+    } : _temp, onError = _ref2.onError, logger2 = _ref2.logger;
+    if (!Object.keys(errors).length)
       return;
-    const missingVarsOutput = [];
-    const invalidVarsOutput = [];
-    for (const k of errorKeys) {
-      const err = errors[k];
+    var missingVarsOutput = [];
+    var invalidVarsOutput = [];
+    for (var _i = 0, _Object$entries = Object.entries(errors); _i < _Object$entries.length; _i++) {
+      var _Object$entries$_i = _Object$entries[_i], k = _Object$entries$_i[0], err = _Object$entries$_i[1];
       if (err instanceof EnvMissingError) {
-        missingVarsOutput.push(`    ${chalk.blue(k)}: ${errors[k].message || "(required)"}`);
+        missingVarsOutput.push("    " + colors.blue(k) + ": " + (err.message || "(required)"));
       } else
-        invalidVarsOutput.push(`    ${chalk.blue(k)}: ${errors[k].message}`);
+        invalidVarsOutput.push("    " + colors.blue(k) + ": " + ((err == null ? void 0 : err.message) || "(invalid format)"));
     }
     if (invalidVarsOutput.length) {
-      invalidVarsOutput.unshift(` ${chalk.yellow("Invalid")} environment variables:`);
+      invalidVarsOutput.unshift(" " + colors.yellow("Invalid") + " environment variables:");
     }
     if (missingVarsOutput.length) {
-      missingVarsOutput.unshift(` ${chalk.yellow("Missing")} environment variables:`);
+      missingVarsOutput.unshift(" " + colors.yellow("Missing") + " environment variables:");
     }
-    const output = [
-      RULE,
-      invalidVarsOutput.join("\n"),
-      missingVarsOutput.join("\n"),
-      chalk.yellow("\n Exiting with error code 1"),
-      RULE
-    ].filter((x) => !!x).join("\n");
-    console.error(output);
-    process.exit(1);
-  };
-});
-
-// node_modules/meant/index.js
-var require_meant = __commonJS((exports2, module2) => {
-  function levenshteinD(s1, s2) {
-    var d = [];
-    var i = 0;
-    for (i = 0; i <= s1.length; i++)
-      d[i] = [i];
-    for (i = 0; i <= s2.length; i++)
-      d[0][i] = i;
-    s2.split("").forEach(function(c2, j) {
-      s1.split("").forEach(function(c1, i2) {
-        if (c1 === c2) {
-          d[i2 + 1][j + 1] = d[i2][j];
-          return;
-        }
-        d[i2 + 1][j + 1] = Math.min(d[i2][j + 1] + 1, d[i2 + 1][j] + 1, d[i2][j] + 1);
-      });
-    });
-    return d[s1.length][s2.length];
-  }
-  function meant(scmd, commands) {
-    var d = [];
-    var bestSimilarity = [];
-    commands.forEach(function(cmd, i) {
-      var item = {};
-      item[levenshteinD(scmd, cmd)] = i;
-      d.push(item);
-    });
-    d.sort(function(a, b) {
-      return Number(Object.keys(a)[0]) - Number(Object.keys(b)[0]);
-    });
-    d.forEach(function(item) {
-      var key = Number(Object.keys(item)[0]);
-      if (scmd.length / 2 >= key) {
-        bestSimilarity.push(commands[item[key]]);
-      }
-    });
-    return bestSimilarity;
-  }
-  module2.exports = meant;
-});
-
-// node_modules/envalid/src/strictProxy.js
-var require_strictProxy = __commonJS((exports2, module2) => {
-  var meant = require_meant();
-  var didYouMean = (scmd, commands) => {
-    const bestSimilarity = meant(scmd, commands);
-    const suggestion = bestSimilarity.join(", ");
-    if (bestSimilarity.length > 0) {
-      throw new ReferenceError(`[envalid] Env var ${scmd} not found, did you mean ${suggestion}?`);
+    var output = [RULE, invalidVarsOutput.sort().join("\n"), missingVarsOutput.sort().join("\n"), colors.yellow("\n Exiting with error code 1"), RULE].filter(function(x) {
+      return !!x;
+    }).join("\n");
+    logger2(output);
+    if (onError) {
+      onError(errors);
+    } else if (isNode) {
+      process.exit(1);
+    } else {
+      throw new TypeError("Environment validation failed");
     }
   };
-  var inspectables = [
-    "length",
-    "inspect",
-    "hasOwnProperty",
-    Symbol.toStringTag,
-    Symbol.iterator,
-    "then",
-    "__esModule"
-  ];
-  var inspectSymbolStrings = ["Symbol(util.inspect.custom)", "Symbol(nodejs.util.inspect.custom)"];
-  module2.exports = (envObj, originalEnv) => new Proxy(envObj, {
-    get(target, name) {
-      if (inspectables.includes(name) || inspectSymbolStrings.includes(name.toString())) {
-        return envObj[name];
-      }
-      const varExists = envObj.hasOwnProperty(name);
-      if (!varExists) {
-        if (originalEnv.hasOwnProperty(name)) {
-          throw new ReferenceError(`[envalid] Env var ${name} was accessed but not validated. This var is set in the environment; please add an envalid validator for it.`);
-        }
-        didYouMean(name, Object.keys(envObj));
-        throw new ReferenceError(`[envalid] Env var not found: ${name}`);
-      }
-      return envObj[name];
-    },
-    set(target, name) {
-      throw new TypeError(`[envalid] Attempt to mutate environment value: ${name}`);
-    }
-  });
-});
-
-// node_modules/envalid/src/envalidWithoutDotenv.js
-var require_envalidWithoutDotenv = __commonJS((exports2, module2) => {
-  var {
-    EnvError,
-    EnvMissingError,
-    makeValidator,
-    bool,
-    num,
-    str: str2,
-    json,
-    url,
-    email,
-    host,
-    port
-  } = require_validators();
-  var {extend} = require_utils6();
-  var testOnlySymbol = Symbol("envalid - test only");
-  function validateVar({spec = {}, name, rawValue}) {
+  var testOnlySymbol = /* @__PURE__ */ Symbol("envalid - test only");
+  function validateVar(_ref) {
+    var spec = _ref.spec, name = _ref.name, rawValue = _ref.rawValue;
     if (typeof spec._parse !== "function") {
-      throw new EnvError(`Invalid spec for "${name}"`);
+      throw new EnvError('Invalid spec for "' + name + '"');
     }
-    const value = spec._parse(rawValue);
+    var value = spec._parse(rawValue);
     if (spec.choices) {
       if (!Array.isArray(spec.choices)) {
-        throw new TypeError(`"choices" must be an array (in spec for "${name}")`);
+        throw new TypeError('"choices" must be an array (in spec for "' + name + '")');
       } else if (!spec.choices.includes(value)) {
-        throw new EnvError(`Value "${value}" not in choices [${spec.choices}]`);
+        throw new EnvError('Value "' + value + '" not in choices [' + spec.choices + "]");
       }
     }
     if (value == null)
-      throw new EnvError(`Invalid value for env var "${name}"`);
+      throw new EnvError('Invalid value for env var "' + name + '"');
     return value;
   }
   function formatSpecDescription(spec) {
-    const egText = spec.example ? ` (eg. "${spec.example}")` : "";
-    const docsText = spec.docs ? `. See ${spec.docs}` : "";
-    return `${spec.desc}${egText}${docsText}` || "";
+    var egText = spec.example ? ' (eg. "' + spec.example + '")' : "";
+    var docsText = spec.docs ? ". See " + spec.docs : "";
+    return "" + spec.desc + egText + docsText;
   }
-  function cleanEnv(env2, specs = {}, options = {}) {
-    let output = {};
-    let defaultNodeEnv = "";
-    const errors = {};
-    const varKeys = Object.keys(specs);
-    if (!varKeys.includes("NODE_ENV")) {
-      defaultNodeEnv = validateVar({
-        name: "NODE_ENV",
-        spec: str2({choices: ["development", "test", "production"]}),
-        rawValue: env2.NODE_ENV || "production"
-      });
+  var readRawEnvValue = function readRawEnvValue2(env2, k) {
+    return env2[k];
+  };
+  var isTestOnlySymbol = function isTestOnlySymbol2(value) {
+    return value === testOnlySymbol;
+  };
+  function getSanitizedEnv(environment2, specs, options) {
+    var _options2;
+    if (options === void 0) {
+      options = {};
     }
-    for (const k of varKeys) {
-      const spec = specs[k];
-      const usingDevDefault = env2.NODE_ENV !== "production" && spec.hasOwnProperty("devDefault");
-      const devDefault = usingDevDefault ? spec.devDefault : void 0;
-      let rawValue = env2[k];
-      if (rawValue === void 0) {
-        rawValue = devDefault === void 0 ? spec.default : devDefault;
-      }
-      const usingFalsyDefault = spec.hasOwnProperty("default") && spec.default === rawValue || usingDevDefault && devDefault === rawValue;
+    var cleanedEnv = {};
+    var errors = {};
+    var varKeys = Object.keys(specs);
+    var rawNodeEnv = readRawEnvValue(environment2, "NODE_ENV");
+    for (var _i = 0, _varKeys = varKeys; _i < _varKeys.length; _i++) {
+      var _readRawEnvValue;
+      var k = _varKeys[_i];
+      var spec = specs[k];
+      var usingDevDefault = rawNodeEnv && rawNodeEnv !== "production" && spec.hasOwnProperty("devDefault");
+      var devDefaultValue = usingDevDefault ? spec.devDefault : void 0;
+      var rawValue = (_readRawEnvValue = readRawEnvValue(environment2, k)) != null ? _readRawEnvValue : devDefaultValue === void 0 ? spec["default"] : devDefaultValue;
+      var usingFalsyDefault = spec.hasOwnProperty("default") && spec["default"] === rawValue || usingDevDefault && devDefaultValue === rawValue;
       try {
-        if (rawValue === testOnlySymbol) {
+        if (isTestOnlySymbol(rawValue)) {
           throw new EnvMissingError(formatSpecDescription(spec));
         }
         if (rawValue === void 0) {
-          if (!usingFalsyDefault) {
+          if (!usingFalsyDefault)
             throw new EnvMissingError(formatSpecDescription(spec));
-          }
-          output[k] = void 0;
+          cleanedEnv[k] = void 0;
         } else {
-          output[k] = validateVar({name: k, spec, rawValue});
+          cleanedEnv[k] = validateVar({
+            name: k,
+            spec,
+            rawValue
+          });
         }
       } catch (err) {
-        if (options.reporter === null)
+        var _options;
+        if (((_options = options) == null ? void 0 : _options.reporter) === null)
           throw err;
         errors[k] = err;
       }
     }
-    output = options.strict ? output : extend(env2, output);
-    const computedNodeEnv = defaultNodeEnv || output.NODE_ENV;
-    Object.defineProperties(output, {
-      isDevelopment: {value: computedNodeEnv === "development"},
-      isDev: {value: computedNodeEnv === "development"},
-      isProduction: {value: computedNodeEnv === "production"},
-      isProd: {value: computedNodeEnv === "production"},
-      isTest: {value: computedNodeEnv === "test"}
+    var reporter = ((_options2 = options) == null ? void 0 : _options2.reporter) || defaultReporter;
+    reporter({
+      errors,
+      env: cleanedEnv
     });
-    if (options.transformer) {
-      output = options.transformer(output);
-    }
-    const reporter = options.reporter || require_reporter();
-    reporter({errors, env: output});
-    if (options.strict)
-      output = require_strictProxy()(output, env2);
-    return Object.freeze(output);
+    return cleanedEnv;
   }
-  var testOnly2 = (defaultValueForTests) => {
-    return process.env.NODE_ENV === "test" ? defaultValueForTests : testOnlySymbol;
-  };
-  module2.exports = {
-    cleanEnv,
-    makeValidator,
-    EnvError,
-    EnvMissingError,
-    testOnly: testOnly2,
-    bool,
-    num,
-    str: str2,
-    json,
-    host,
-    port,
-    url,
-    email
-  };
-});
-
-// node_modules/dotenv/lib/main.js
-var require_main = __commonJS((exports2, module2) => {
-  var fs = require("fs");
-  var path = require("path");
-  function log(message) {
-    console.log(`[dotenv][DEBUG] ${message}`);
-  }
-  var NEWLINE = "\n";
-  var RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/;
-  var RE_NEWLINES = /\\n/g;
-  var NEWLINES_MATCH = /\n|\r|\r\n/;
-  function parse(src, options) {
-    const debug11 = Boolean(options && options.debug);
-    const obj = {};
-    src.toString().split(NEWLINES_MATCH).forEach(function(line, idx) {
-      const keyValueArr = line.match(RE_INI_KEY_VAL);
-      if (keyValueArr != null) {
-        const key = keyValueArr[1];
-        let val = keyValueArr[2] || "";
-        const end = val.length - 1;
-        const isDoubleQuoted = val[0] === '"' && val[end] === '"';
-        const isSingleQuoted = val[0] === "'" && val[end] === "'";
-        if (isSingleQuoted || isDoubleQuoted) {
-          val = val.substring(1, end);
-          if (isDoubleQuoted) {
-            val = val.replace(RE_NEWLINES, NEWLINE);
+  var strictProxyMiddleware = function strictProxyMiddleware2(envObj, rawEnv) {
+    var inspectables = [
+      "length",
+      "inspect",
+      "hasOwnProperty",
+      "toJSON",
+      Symbol.toStringTag,
+      Symbol.iterator,
+      "asymmetricMatch",
+      "nodeType",
+      "then",
+      "__esModule"
+    ];
+    var inspectSymbolStrings = ["Symbol(util.inspect.custom)", "Symbol(nodejs.util.inspect.custom)"];
+    return new Proxy(envObj, {
+      get: function get(target, name) {
+        if (inspectables.includes(name) || inspectSymbolStrings.includes(name.toString())) {
+          return target[name];
+        }
+        var varExists = target.hasOwnProperty(name);
+        if (!varExists) {
+          if (typeof rawEnv === "object" && (rawEnv == null ? void 0 : rawEnv.hasOwnProperty == null ? void 0 : rawEnv.hasOwnProperty(name))) {
+            throw new ReferenceError("[envalid] Env var " + name + " was accessed but not validated. This var is set in the environment; please add an envalid validator for it.");
           }
-        } else {
-          val = val.trim();
+          throw new ReferenceError("[envalid] Env var not found: " + name);
         }
-        obj[key] = val;
-      } else if (debug11) {
-        log(`did not match key and value when parsing line ${idx + 1}: ${line}`);
+        return target[name];
+      },
+      set: function set(_target, name) {
+        throw new TypeError("[envalid] Attempt to mutate environment value: " + name);
       }
     });
-    return obj;
-  }
-  function config(options) {
-    let dotenvPath = path.resolve(process.cwd(), ".env");
-    let encoding = "utf8";
-    let debug11 = false;
-    if (options) {
-      if (options.path != null) {
-        dotenvPath = options.path;
+  };
+  var accessorMiddleware = function accessorMiddleware2(envObj, rawEnv) {
+    var computedNodeEnv = envObj.NODE_ENV || rawEnv.NODE_ENV;
+    var isProd = !computedNodeEnv || computedNodeEnv === "production";
+    Object.defineProperties(envObj, {
+      isDevelopment: {
+        value: computedNodeEnv === "development"
+      },
+      isDev: {
+        value: computedNodeEnv === "development"
+      },
+      isProduction: {
+        value: isProd
+      },
+      isProd: {
+        value: isProd
+      },
+      isTest: {
+        value: computedNodeEnv === "test"
       }
-      if (options.encoding != null) {
-        encoding = options.encoding;
-      }
-      if (options.debug != null) {
-        debug11 = true;
-      }
+    });
+    return envObj;
+  };
+  var applyDefaultMiddleware = function applyDefaultMiddleware2(cleanedEnv, rawEnv) {
+    return strictProxyMiddleware(accessorMiddleware(cleanedEnv, rawEnv), rawEnv);
+  };
+  function cleanEnv(environment2, specs, options) {
+    if (options === void 0) {
+      options = {};
     }
-    try {
-      const parsed = parse(fs.readFileSync(dotenvPath, {encoding}), {debug: debug11});
-      Object.keys(parsed).forEach(function(key) {
-        if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
-          process.env[key] = parsed[key];
-        } else if (debug11) {
-          log(`"${key}" is already defined in \`process.env\` and will not be overwritten`);
-        }
+    var cleaned = getSanitizedEnv(environment2, specs, options);
+    return Object.freeze(applyDefaultMiddleware(cleaned, environment2));
+  }
+  function customCleanEnv(environment2, specs, applyMiddleware, options) {
+    if (options === void 0) {
+      options = {};
+    }
+    var cleaned = getSanitizedEnv(environment2, specs, options);
+    return Object.freeze(applyMiddleware(cleaned, environment2));
+  }
+  var testOnly2 = function testOnly3(defaultValueForTests) {
+    return testOnlySymbol;
+  };
+  var isFQDN = function isFQDN2(input) {
+    if (!input.length)
+      return false;
+    var parts = input.split(".");
+    for (var part, i = 0; i < parts.length; i++) {
+      part = parts[i];
+      if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part))
+        return false;
+      if (/[\uff01-\uff5e]/.test(part))
+        return false;
+      if (part[0] === "-" || part[part.length - 1] === "-")
+        return false;
+    }
+    return true;
+  };
+  var ipv4Regex = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/;
+  var ipv6Regex = /([a-f0-9]+:+)+[a-f0-9]+/;
+  var isIP = function isIP2(input) {
+    if (!input.length)
+      return false;
+    return ipv4Regex.test(input) || ipv6Regex.test(input);
+  };
+  var EMAIL_REGEX2 = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  var makeValidator = function makeValidator2(parseFn) {
+    return function(spec) {
+      return _extends({}, spec, {
+        _parse: parseFn
       });
-      return {parsed};
-    } catch (e) {
-      return {error: e};
-    }
+    };
+  };
+  function bool(spec) {
+    return makeValidator(function(input) {
+      switch (input) {
+        case true:
+        case "true":
+        case "t":
+        case "1":
+          return true;
+        case false:
+        case "false":
+        case "f":
+        case "0":
+          return false;
+        default:
+          throw new EnvError('Invalid bool input: "' + input + '"');
+      }
+    })(spec);
   }
-  module2.exports.config = config;
-  module2.exports.parse = parse;
+  function num(spec) {
+    return makeValidator(function(input) {
+      var coerced = +input;
+      if (Number.isNaN(coerced))
+        throw new EnvError('Invalid number input: "' + input + '"');
+      return coerced;
+    })(spec);
+  }
+  function str2(spec) {
+    return makeValidator(function(input) {
+      if (typeof input === "string")
+        return input;
+      throw new EnvError('Not a string: "' + input + '"');
+    })(spec);
+  }
+  function email(spec) {
+    return makeValidator(function(x) {
+      if (EMAIL_REGEX2.test(x))
+        return x;
+      throw new EnvError('Invalid email address: "' + x + '"');
+    })(spec);
+  }
+  function host(spec) {
+    return makeValidator(function(input) {
+      if (!isFQDN(input) && !isIP(input)) {
+        throw new EnvError('Invalid host (domain or ip): "' + input + '"');
+      }
+      return input;
+    })(spec);
+  }
+  function port(spec) {
+    return makeValidator(function(input) {
+      var coerced = +input;
+      if (Number.isNaN(coerced) || "" + coerced !== "" + input || coerced % 1 !== 0 || coerced < 1 || coerced > 65535) {
+        throw new EnvError('Invalid port input: "' + input + '"');
+      }
+      return coerced;
+    })(spec);
+  }
+  function url(spec) {
+    return makeValidator(function(x) {
+      try {
+        new URL(x);
+        return x;
+      } catch (e) {
+        throw new EnvError('Invalid url: "' + x + '"');
+      }
+    })(spec);
+  }
+  function json(spec) {
+    return makeValidator(function(x) {
+      try {
+        return JSON.parse(x);
+      } catch (e) {
+        throw new EnvError('Invalid json: "' + x + '"');
+      }
+    })(spec);
+  }
+  exports2.EnvError = EnvError;
+  exports2.EnvMissingError = EnvMissingError;
+  exports2.accessorMiddleware = accessorMiddleware;
+  exports2.applyDefaultMiddleware = applyDefaultMiddleware;
+  exports2.bool = bool;
+  exports2.cleanEnv = cleanEnv;
+  exports2.customCleanEnv = customCleanEnv;
+  exports2.defaultReporter = defaultReporter;
+  exports2.email = email;
+  exports2.host = host;
+  exports2.json = json;
+  exports2.makeValidator = makeValidator;
+  exports2.num = num;
+  exports2.port = port;
+  exports2.str = str2;
+  exports2.strictProxyMiddleware = strictProxyMiddleware;
+  exports2.testOnly = testOnly2;
+  exports2.url = url;
 });
 
-// node_modules/envalid/src/envalid.js
-var require_envalid = __commonJS((exports2, module2) => {
-  var envalid2 = require_envalidWithoutDotenv();
-  var {extend} = require_utils6();
-  var fs = require("fs");
-  var dotenv = require_main();
-  function extendWithDotEnv(inputEnv, dotEnvPath = ".env") {
-    let dotEnvBuffer = null;
-    try {
-      dotEnvBuffer = fs.readFileSync(dotEnvPath);
-    } catch (err) {
-      if (err.code === "ENOENT")
-        return inputEnv;
-      throw err;
-    }
-    const parsed = dotenv.parse(dotEnvBuffer);
-    return extend(parsed, inputEnv);
+// node_modules/envalid/dist/index.js
+var require_dist = __commonJS((exports2, module2) => {
+  "use strict";
+  if (process.env.NODE_ENV === "production") {
+    module2.exports = require_envalid_cjs_production_min();
+  } else {
+    module2.exports = require_envalid_cjs_development();
   }
-  var originalCleanEnv = envalid2.cleanEnv;
-  envalid2.cleanEnv = function cleanEnv(inputEnv, specs = {}, options = {}) {
-    const env2 = options.dotEnvPath !== null ? extendWithDotEnv(inputEnv, options.dotEnvPath) : inputEnv;
-    return originalCleanEnv(env2, specs, options);
-  };
-  module2.exports = envalid2;
 });
 
 // node_modules/concat-map/index.js
@@ -13844,7 +12528,7 @@ var require_common3 = __commonJS((exports2, module2) => {
 });
 
 // node_modules/debug/src/browser.js
-var require_browser2 = __commonJS((exports2, module2) => {
+var require_browser = __commonJS((exports2, module2) => {
   exports2.formatArgs = formatArgs;
   exports2.save = save;
   exports2.load = load;
@@ -14006,6 +12690,15 @@ var require_browser2 = __commonJS((exports2, module2) => {
   };
 });
 
+// node_modules/supports-color/browser.js
+var require_browser2 = __commonJS((exports2, module2) => {
+  "use strict";
+  module2.exports = {
+    stdout: false,
+    stderr: false
+  };
+});
+
 // node_modules/debug/src/node.js
 var require_node = __commonJS((exports2, module2) => {
   var tty = require("tty");
@@ -14020,7 +12713,7 @@ var require_node = __commonJS((exports2, module2) => {
   }, "Instance method `debug.destroy()` is deprecated and no longer does anything. It will be removed in the next major version of `debug`.");
   exports2.colors = [6, 2, 3, 4, 5, 1];
   try {
-    const supportsColor = require_browser();
+    const supportsColor = require_browser2();
     if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
       exports2.colors = [
         20,
@@ -14178,7 +12871,7 @@ var require_node = __commonJS((exports2, module2) => {
 // node_modules/debug/src/index.js
 var require_src = __commonJS((exports2, module2) => {
   if (typeof process === "undefined" || process.type === "renderer" || process.browser === true || process.__nwjs) {
-    module2.exports = require_browser2();
+    module2.exports = require_browser();
   } else {
     module2.exports = require_node();
   }
@@ -15348,7 +14041,7 @@ var require_priority_queue = __commonJS((exports2) => {
 });
 
 // node_modules/p-queue/dist/index.js
-var require_dist = __commonJS((exports2) => {
+var require_dist2 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: true});
   var EventEmitter = require_eventemitter3();
@@ -19267,7 +17960,7 @@ var HttpErrors;
 
 // src/environment.ts
 var import_path = __toModule(require("path"));
-var import_envalid = __toModule(require_envalid());
+var import_envalid = __toModule(require_dist());
 var environment = () => import_envalid.default.cleanEnv(process.env, {
   GITHUB_EVENT_PATH: (0, import_envalid.str)({
     devDefault: (0, import_envalid.testOnly)("__mocks__/event.json")
@@ -19319,7 +18012,7 @@ var makeArray = (field) => field && Array.isArray(field) ? field : [field].filte
 
 // src/rules.ts
 var import_lodash = __toModule(require_lodash());
-var import_p_queue = __toModule(require_dist());
+var import_p_queue = __toModule(require_dist2());
 
 // src/util/catchHandler.ts
 var catchHandler = (debug11) => (error) => {
@@ -19605,7 +18298,7 @@ var handleReviewers = async (client, {owner, repo, prNumber, matchingRules}) => 
 };
 
 // src/statuses.ts
-var import_p_queue2 = __toModule(require_dist());
+var import_p_queue2 = __toModule(require_dist2());
 
 // src/util/getBlobURL.ts
 var debug7 = logger("getBlobURL");
@@ -19640,7 +18333,7 @@ var handleStatus = async (client, {owner, repo, matchingRules, rules, base, sha,
 // src/comment.ts
 var import_lodash2 = __toModule(require_lodash());
 var import_markdown_table = __toModule(require_markdown_table());
-var import_p_queue3 = __toModule(require_dist());
+var import_p_queue3 = __toModule(require_dist2());
 var debug9 = logger("comment");
 var TypeOfComments;
 (function(TypeOfComments2) {
@@ -19659,8 +18352,8 @@ var commentTemplate = (mentions) => `
 
    ${(0, import_markdown_table.default)([
   ["Rule", "Mention"],
-  ...mentions.map(({rule, URL, mentions: mentions2}) => [
-    `[${rule.replace(`${env.GITHUB_WORKSPACE}/`, "")}](${URL})`,
+  ...mentions.map(({rule, URL: URL2, mentions: mentions2}) => [
+    `[${rule.replace(`${env.GITHUB_WORKSPACE}/`, "")}](${URL2})`,
     mentions2.map((user) => formatUser(user)).join(LINE_BREAK)
   ])
 ], {align: ["l", "c"]})}
