@@ -113,7 +113,7 @@
     "p-queue": "6.6.2"
   },
   "devDependencies": {
-    "@types/debug": "4.1.6",
+    "@types/debug": "4.1.7",
     "@types/jest": "26.0.23",
     "@types/jsonpath": "0.2.0",
     "@types/lodash.groupby": "4.6.6",
