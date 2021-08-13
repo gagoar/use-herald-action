@@ -105,7 +105,7 @@
     "@octokit/rest": "18.5.2",
     "debug": "4.3.2",
     "envalid": "6.0.2",
-    "fast-glob": "3.2.5",
+    "fast-glob": "3.2.7",
     "jsonpath": "1.1.1",
     "lodash.groupby": "4.6.0",
     "markdown-table": "^2.0.0",
