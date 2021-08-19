@@ -7,6 +7,7 @@ import { mockCompareCommits, mockRequest, MockResponse } from './util/mockGitHub
 import getCompareCommitsResponse from '../__mocks__/scenarios/get_compare_commits.json';
 import { Main, mockedInput } from './util/helpers';
 import event from '../__mocks__/event.json';
+import { env } from '../src/environment';
 
 jest.mock('@actions/core');
 jest.mock('../src/comment');
@@ -181,7 +182,7 @@ describe('use-herald-action', () => {
               ],
               "matched": true,
               "name": "rule1.json",
-              "path": "/Users/gfrigerio/base/use-herald/__mocks__/rules/rule1.json",
+              "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule1.json",
               "teams": Array [],
               "users": Array [
                 "eeny",
