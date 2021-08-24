@@ -36,7 +36,6 @@ export enum RuleMatchers {
   includesInPatch = 'includesInPatch',
   eventJsonPath = 'eventJsonPath',
   includes = 'includes',
-
   isMemberOf = 'isMemberOf',
 }
 
