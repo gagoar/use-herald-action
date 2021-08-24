@@ -27,6 +27,7 @@ export const isValidRawRule = (content: unknown): content is RawRule => {
     (hasAttribute('labels', content) && !!content.labels && content.action === RuleActions.label) ||
     (hasAttribute('action', content) && content.action === RuleActions.status);
   const matchers = Object.keys(RuleMatchers).some((attr) => attr in content);
+  debug('validation:', Object.keys(RuleMatchers))
 
   debug('validation:', {
     rule: content,
