@@ -19905,6 +19905,7 @@ var SUPPORTED_EVENT_TYPES;
 })(SUPPORTED_EVENT_TYPES || (SUPPORTED_EVENT_TYPES = {}));
 var AllowedHttpErrors;
 (function(AllowedHttpErrors2) {
+  AllowedHttpErrors2[AllowedHttpErrors2["NOT_FOUND"] = 404] = "NOT_FOUND";
   AllowedHttpErrors2[AllowedHttpErrors2["UNPROCESSABLE_ENTITY"] = 422] = "UNPROCESSABLE_ENTITY";
 })(AllowedHttpErrors || (AllowedHttpErrors = {}));
 var HttpErrors;

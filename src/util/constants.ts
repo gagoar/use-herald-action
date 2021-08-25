@@ -52,6 +52,7 @@ export type OctokitFile = RestEndpointMethodTypes['repos']['compareCommits']['re
 export type RuleFile = Partial<OctokitFile> & Required<Pick<OctokitFile, 'filename' | 'blob_url'>>;
 
 export enum AllowedHttpErrors {
+  NOT_FOUND = 404,
   UNPROCESSABLE_ENTITY = 422,
 }
 export enum HttpErrors {
