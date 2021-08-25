@@ -1,4 +1,4 @@
-import github from '@actions/github';
+import * as github from '@actions/github';
 import PQueue from 'p-queue';
 import { catchHandler } from './util/catchHandler';
 import { OctokitClient } from './util/constants';
