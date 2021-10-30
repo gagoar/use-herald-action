@@ -8,6 +8,8 @@ var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __reflectGet = Reflect.get;
+var __reflectSet = Reflect.set;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __spreadValues = (a, b) => {
   for (var prop in b || (b = {}))
