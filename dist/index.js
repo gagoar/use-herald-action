@@ -6445,18 +6445,12 @@ var require_assertString = __commonJS({
     function assertString(input) {
       var isString = typeof input === "string" || input instanceof String;
       if (!isString) {
-        var invalidType;
-        if (input === null) {
+        var invalidType = _typeof(input);
+        if (input === null)
           invalidType = "null";
-        } else {
-          invalidType = _typeof(input);
-          if (invalidType === "object" && input.constructor && input.constructor.hasOwnProperty("name")) {
-            invalidType = input.constructor.name;
-          } else {
-            invalidType = "a ".concat(invalidType);
-          }
-        }
-        throw new TypeError("Expected string but received ".concat(invalidType, "."));
+        else if (invalidType === "object")
+          invalidType = input.constructor.name;
+        throw new TypeError("Expected a string but received a ".concat(invalidType));
       }
     }
     module2.exports = exports2.default;
@@ -6503,7 +6497,9 @@ var require_isFQDN = __commonJS({
     var default_fqdn_options = {
       require_tld: true,
       allow_underscores: false,
-      allow_trailing_dot: false
+      allow_trailing_dot: false,
+      allow_numeric_tld: false,
+      allow_wildcard: false
     };
     function isFQDN(str2, options) {
       (0, _assertString.default)(str2);
@@ -6511,37 +6507,43 @@ var require_isFQDN = __commonJS({
       if (options.allow_trailing_dot && str2[str2.length - 1] === ".") {
         str2 = str2.substring(0, str2.length - 1);
       }
+      if (options.allow_wildcard === true && str2.indexOf("*.") === 0) {
+        str2 = str2.substring(2);
+      }
       var parts = str2.split(".");
-      for (var i = 0; i < parts.length; i++) {
-        if (parts[i].length > 63) {
-          return false;
-        }
-      }
+      var tld = parts[parts.length - 1];
       if (options.require_tld) {
-        var tld = parts.pop();
-        if (!parts.length || !/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
+        if (parts.length < 2) {
           return false;
         }
-        if (/[\s\u2002-\u200B\u202F\u205F\u3000\uFEFF\uDB40\uDC20\u00A9\uFFFD]/.test(tld)) {
+        if (!/^([a-z\u00A1-\u00A8\u00AA-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
+          return false;
+        }
+        if (/\s/.test(tld)) {
           return false;
         }
       }
-      for (var part, _i = 0; _i < parts.length; _i++) {
-        part = parts[_i];
-        if (options.allow_underscores) {
-          part = part.replace(/_/g, "");
+      if (!options.allow_numeric_tld && /^\d+$/.test(tld)) {
+        return false;
+      }
+      return parts.every(function(part) {
+        if (part.length > 63) {
+          return false;
         }
-        if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
+        if (!/^[a-z_\u00a1-\uffff0-9-]+$/i.test(part)) {
           return false;
         }
         if (/[\uff01-\uff5e]/.test(part)) {
           return false;
         }
-        if (part[0] === "-" || part[part.length - 1] === "-") {
+        if (/^-|-$/.test(part)) {
           return false;
         }
-      }
-      return true;
+        if (!options.allow_underscores && /_/.test(part)) {
+          return false;
+        }
+        return true;
+      });
     }
     module2.exports = exports2.default;
     module2.exports.default = exports2.default;
@@ -6560,69 +6562,29 @@ var require_isIP = __commonJS({
     function _interopRequireDefault(obj) {
       return obj && obj.__esModule ? obj : { default: obj };
     }
-    var ipv4Maybe = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/;
-    var ipv6Block = /^[0-9A-F]{1,4}$/i;
+    var IPv4SegmentFormat = "(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])";
+    var IPv4AddressFormat = "(".concat(IPv4SegmentFormat, "[.]){3}").concat(IPv4SegmentFormat);
+    var IPv4AddressRegExp = new RegExp("^".concat(IPv4AddressFormat, "$"));
+    var IPv6SegmentFormat = "(?:[0-9a-fA-F]{1,4})";
+    var IPv6AddressRegExp = new RegExp("^(" + "(?:".concat(IPv6SegmentFormat, ":){7}(?:").concat(IPv6SegmentFormat, "|:)|") + "(?:".concat(IPv6SegmentFormat, ":){6}(?:").concat(IPv4AddressFormat, "|:").concat(IPv6SegmentFormat, "|:)|") + "(?:".concat(IPv6SegmentFormat, ":){5}(?::").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,2}|:)|") + "(?:".concat(IPv6SegmentFormat, ":){4}(?:(:").concat(IPv6SegmentFormat, "){0,1}:").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,3}|:)|") + "(?:".concat(IPv6SegmentFormat, ":){3}(?:(:").concat(IPv6SegmentFormat, "){0,2}:").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,4}|:)|") + "(?:".concat(IPv6SegmentFormat, ":){2}(?:(:").concat(IPv6SegmentFormat, "){0,3}:").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,5}|:)|") + "(?:".concat(IPv6SegmentFormat, ":){1}(?:(:").concat(IPv6SegmentFormat, "){0,4}:").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,6}|:)|") + "(?::((?::".concat(IPv6SegmentFormat, "){0,5}:").concat(IPv4AddressFormat, "|(?::").concat(IPv6SegmentFormat, "){1,7}|:))") + ")(%[0-9a-zA-Z-.:]{1,})?$");
     function isIP(str2) {
       var version = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "";
       (0, _assertString.default)(str2);
       version = String(version);
       if (!version) {
         return isIP(str2, 4) || isIP(str2, 6);
-      } else if (version === "4") {
-        if (!ipv4Maybe.test(str2)) {
+      }
+      if (version === "4") {
+        if (!IPv4AddressRegExp.test(str2)) {
           return false;
         }
         var parts = str2.split(".").sort(function(a, b) {
           return a - b;
         });
         return parts[3] <= 255;
-      } else if (version === "6") {
-        var addressAndZone = [str2];
-        if (str2.includes("%")) {
-          addressAndZone = str2.split("%");
-          if (addressAndZone.length !== 2) {
-            return false;
-          }
-          if (!addressAndZone[0].includes(":")) {
-            return false;
-          }
-          if (addressAndZone[1] === "") {
-            return false;
-          }
-        }
-        var blocks = addressAndZone[0].split(":");
-        var foundOmissionBlock = false;
-        var foundIPv4TransitionBlock = isIP(blocks[blocks.length - 1], 4);
-        var expectedNumberOfBlocks = foundIPv4TransitionBlock ? 7 : 8;
-        if (blocks.length > expectedNumberOfBlocks) {
-          return false;
-        }
-        if (str2 === "::") {
-          return true;
-        } else if (str2.substr(0, 2) === "::") {
-          blocks.shift();
-          blocks.shift();
-          foundOmissionBlock = true;
-        } else if (str2.substr(str2.length - 2) === "::") {
-          blocks.pop();
-          blocks.pop();
-          foundOmissionBlock = true;
-        }
-        for (var i = 0; i < blocks.length; ++i) {
-          if (blocks[i] === "" && i > 0 && i < blocks.length - 1) {
-            if (foundOmissionBlock) {
-              return false;
-            }
-            foundOmissionBlock = true;
-          } else if (foundIPv4TransitionBlock && i === blocks.length - 1) {
-          } else if (!ipv6Block.test(blocks[i])) {
-            return false;
-          }
-        }
-        if (foundOmissionBlock) {
-          return blocks.length >= 1;
-        }
-        return blocks.length === expectedNumberOfBlocks;
+      }
+      if (version === "6") {
+        return !!IPv6AddressRegExp.test(str2);
       }
       return false;
     }
