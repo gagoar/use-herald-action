@@ -163,6 +163,6 @@ export const main = async (): Promise<void> => {
       );
     }
   } catch (e) {
-    setFailed(e.message);
+    setFailed((e as Error).message);
   }
 };
