@@ -15406,13 +15406,13 @@ var require_lodash = __commonJS({
     var Map2 = getNative(root, "Map");
     var Promise2 = getNative(root, "Promise");
     var Set2 = getNative(root, "Set");
-    var WeakMap = getNative(root, "WeakMap");
+    var WeakMap2 = getNative(root, "WeakMap");
     var nativeCreate = getNative(Object, "create");
     var dataViewCtorString = toSource(DataView);
     var mapCtorString = toSource(Map2);
     var promiseCtorString = toSource(Promise2);
     var setCtorString = toSource(Set2);
-    var weakMapCtorString = toSource(WeakMap);
+    var weakMapCtorString = toSource(WeakMap2);
     var symbolProto = Symbol2 ? Symbol2.prototype : void 0;
     var symbolValueOf = symbolProto ? symbolProto.valueOf : void 0;
     var symbolToString = symbolProto ? symbolProto.toString : void 0;
@@ -15944,7 +15944,7 @@ var require_lodash = __commonJS({
       return baseIsNative(value) ? value : void 0;
     }
     var getTag = baseGetTag;
-    if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag || Map2 && getTag(new Map2()) != mapTag || Promise2 && getTag(Promise2.resolve()) != promiseTag || Set2 && getTag(new Set2()) != setTag || WeakMap && getTag(new WeakMap()) != weakMapTag) {
+    if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag || Map2 && getTag(new Map2()) != mapTag || Promise2 && getTag(Promise2.resolve()) != promiseTag || Set2 && getTag(new Set2()) != setTag || WeakMap2 && getTag(new WeakMap2()) != weakMapTag) {
       getTag = function(value) {
         var result = objectToString.call(value), Ctor = result == objectTag ? value.constructor : void 0, ctorString = Ctor ? toSource(Ctor) : void 0;
         if (ctorString) {
@@ -16162,11 +16162,11 @@ var require_eventemitter3 = __commonJS({
       else
         delete emitter._events[evt];
     }
-    function EventEmitter() {
+    function EventEmitter2() {
       this._events = new Events();
       this._eventsCount = 0;
     }
-    EventEmitter.prototype.eventNames = function eventNames() {
+    EventEmitter2.prototype.eventNames = function eventNames() {
       var names = [], events, name;
       if (this._eventsCount === 0)
         return names;
@@ -16179,7 +16179,7 @@ var require_eventemitter3 = __commonJS({
       }
       return names;
     };
-    EventEmitter.prototype.listeners = function listeners(event) {
+    EventEmitter2.prototype.listeners = function listeners(event) {
       var evt = prefix ? prefix + event : event, handlers = this._events[evt];
       if (!handlers)
         return [];
@@ -16190,7 +16190,7 @@ var require_eventemitter3 = __commonJS({
       }
       return ee;
     };
-    EventEmitter.prototype.listenerCount = function listenerCount(event) {
+    EventEmitter2.prototype.listenerCount = function listenerCount(event) {
       var evt = prefix ? prefix + event : event, listeners = this._events[evt];
       if (!listeners)
         return 0;
@@ -16198,7 +16198,7 @@ var require_eventemitter3 = __commonJS({
         return 1;
       return listeners.length;
     };
-    EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
+    EventEmitter2.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
       var evt = prefix ? prefix + event : event;
       if (!this._events[evt])
         return false;
@@ -16253,13 +16253,13 @@ var require_eventemitter3 = __commonJS({
       }
       return true;
     };
-    EventEmitter.prototype.on = function on(event, fn, context) {
+    EventEmitter2.prototype.on = function on(event, fn, context) {
       return addListener(this, event, fn, context, false);
     };
-    EventEmitter.prototype.once = function once(event, fn, context) {
+    EventEmitter2.prototype.once = function once(event, fn, context) {
       return addListener(this, event, fn, context, true);
     };
-    EventEmitter.prototype.removeListener = function removeListener(event, fn, context, once) {
+    EventEmitter2.prototype.removeListener = function removeListener(event, fn, context, once) {
       var evt = prefix ? prefix + event : event;
       if (!this._events[evt])
         return this;
@@ -16285,7 +16285,7 @@ var require_eventemitter3 = __commonJS({
       }
       return this;
     };
-    EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
+    EventEmitter2.prototype.removeAllListeners = function removeAllListeners(event) {
       var evt;
       if (event) {
         evt = prefix ? prefix + event : event;
@@ -16297,362 +16297,13 @@ var require_eventemitter3 = __commonJS({
       }
       return this;
     };
-    EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
-    EventEmitter.prototype.addListener = EventEmitter.prototype.on;
-    EventEmitter.prefixed = prefix;
-    EventEmitter.EventEmitter = EventEmitter;
+    EventEmitter2.prototype.off = EventEmitter2.prototype.removeListener;
+    EventEmitter2.prototype.addListener = EventEmitter2.prototype.on;
+    EventEmitter2.prefixed = prefix;
+    EventEmitter2.EventEmitter = EventEmitter2;
     if (typeof module2 !== "undefined") {
-      module2.exports = EventEmitter;
+      module2.exports = EventEmitter2;
     }
-  }
-});
-
-// node_modules/p-finally/index.js
-var require_p_finally = __commonJS({
-  "node_modules/p-finally/index.js"(exports2, module2) {
-    "use strict";
-    module2.exports = (promise, onFinally) => {
-      onFinally = onFinally || (() => {
-      });
-      return promise.then((val) => new Promise((resolve) => {
-        resolve(onFinally());
-      }).then(() => val), (err) => new Promise((resolve) => {
-        resolve(onFinally());
-      }).then(() => {
-        throw err;
-      }));
-    };
-  }
-});
-
-// node_modules/p-timeout/index.js
-var require_p_timeout = __commonJS({
-  "node_modules/p-timeout/index.js"(exports2, module2) {
-    "use strict";
-    var pFinally = require_p_finally();
-    var TimeoutError = class extends Error {
-      constructor(message) {
-        super(message);
-        this.name = "TimeoutError";
-      }
-    };
-    var pTimeout = (promise, milliseconds, fallback) => new Promise((resolve, reject) => {
-      if (typeof milliseconds !== "number" || milliseconds < 0) {
-        throw new TypeError("Expected `milliseconds` to be a positive number");
-      }
-      if (milliseconds === Infinity) {
-        resolve(promise);
-        return;
-      }
-      const timer = setTimeout(() => {
-        if (typeof fallback === "function") {
-          try {
-            resolve(fallback());
-          } catch (error) {
-            reject(error);
-          }
-          return;
-        }
-        const message = typeof fallback === "string" ? fallback : `Promise timed out after ${milliseconds} milliseconds`;
-        const timeoutError = fallback instanceof Error ? fallback : new TimeoutError(message);
-        if (typeof promise.cancel === "function") {
-          promise.cancel();
-        }
-        reject(timeoutError);
-      }, milliseconds);
-      pFinally(promise.then(resolve, reject), () => {
-        clearTimeout(timer);
-      });
-    });
-    module2.exports = pTimeout;
-    module2.exports.default = pTimeout;
-    module2.exports.TimeoutError = TimeoutError;
-  }
-});
-
-// node_modules/p-queue/dist/lower-bound.js
-var require_lower_bound = __commonJS({
-  "node_modules/p-queue/dist/lower-bound.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    function lowerBound(array, value, comparator) {
-      let first = 0;
-      let count = array.length;
-      while (count > 0) {
-        const step = count / 2 | 0;
-        let it = first + step;
-        if (comparator(array[it], value) <= 0) {
-          first = ++it;
-          count -= step + 1;
-        } else {
-          count = step;
-        }
-      }
-      return first;
-    }
-    exports2.default = lowerBound;
-  }
-});
-
-// node_modules/p-queue/dist/priority-queue.js
-var require_priority_queue = __commonJS({
-  "node_modules/p-queue/dist/priority-queue.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    var lower_bound_1 = require_lower_bound();
-    var PriorityQueue = class {
-      constructor() {
-        this._queue = [];
-      }
-      enqueue(run, options) {
-        options = Object.assign({ priority: 0 }, options);
-        const element = {
-          priority: options.priority,
-          run
-        };
-        if (this.size && this._queue[this.size - 1].priority >= options.priority) {
-          this._queue.push(element);
-          return;
-        }
-        const index = lower_bound_1.default(this._queue, element, (a, b) => b.priority - a.priority);
-        this._queue.splice(index, 0, element);
-      }
-      dequeue() {
-        const item = this._queue.shift();
-        return item === null || item === void 0 ? void 0 : item.run;
-      }
-      filter(options) {
-        return this._queue.filter((element) => element.priority === options.priority).map((element) => element.run);
-      }
-      get size() {
-        return this._queue.length;
-      }
-    };
-    exports2.default = PriorityQueue;
-  }
-});
-
-// node_modules/p-queue/dist/index.js
-var require_dist = __commonJS({
-  "node_modules/p-queue/dist/index.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    var EventEmitter = require_eventemitter3();
-    var p_timeout_1 = require_p_timeout();
-    var priority_queue_1 = require_priority_queue();
-    var empty = () => {
-    };
-    var timeoutError = new p_timeout_1.TimeoutError();
-    var PQueue4 = class extends EventEmitter {
-      constructor(options) {
-        var _a2, _b, _c, _d;
-        super();
-        this._intervalCount = 0;
-        this._intervalEnd = 0;
-        this._pendingCount = 0;
-        this._resolveEmpty = empty;
-        this._resolveIdle = empty;
-        options = Object.assign({ carryoverConcurrencyCount: false, intervalCap: Infinity, interval: 0, concurrency: Infinity, autoStart: true, queueClass: priority_queue_1.default }, options);
-        if (!(typeof options.intervalCap === "number" && options.intervalCap >= 1)) {
-          throw new TypeError(`Expected \`intervalCap\` to be a number from 1 and up, got \`${(_b = (_a2 = options.intervalCap) === null || _a2 === void 0 ? void 0 : _a2.toString()) !== null && _b !== void 0 ? _b : ""}\` (${typeof options.intervalCap})`);
-        }
-        if (options.interval === void 0 || !(Number.isFinite(options.interval) && options.interval >= 0)) {
-          throw new TypeError(`Expected \`interval\` to be a finite number >= 0, got \`${(_d = (_c = options.interval) === null || _c === void 0 ? void 0 : _c.toString()) !== null && _d !== void 0 ? _d : ""}\` (${typeof options.interval})`);
-        }
-        this._carryoverConcurrencyCount = options.carryoverConcurrencyCount;
-        this._isIntervalIgnored = options.intervalCap === Infinity || options.interval === 0;
-        this._intervalCap = options.intervalCap;
-        this._interval = options.interval;
-        this._queue = new options.queueClass();
-        this._queueClass = options.queueClass;
-        this.concurrency = options.concurrency;
-        this._timeout = options.timeout;
-        this._throwOnTimeout = options.throwOnTimeout === true;
-        this._isPaused = options.autoStart === false;
-      }
-      get _doesIntervalAllowAnother() {
-        return this._isIntervalIgnored || this._intervalCount < this._intervalCap;
-      }
-      get _doesConcurrentAllowAnother() {
-        return this._pendingCount < this._concurrency;
-      }
-      _next() {
-        this._pendingCount--;
-        this._tryToStartAnother();
-        this.emit("next");
-      }
-      _resolvePromises() {
-        this._resolveEmpty();
-        this._resolveEmpty = empty;
-        if (this._pendingCount === 0) {
-          this._resolveIdle();
-          this._resolveIdle = empty;
-          this.emit("idle");
-        }
-      }
-      _onResumeInterval() {
-        this._onInterval();
-        this._initializeIntervalIfNeeded();
-        this._timeoutId = void 0;
-      }
-      _isIntervalPaused() {
-        const now = Date.now();
-        if (this._intervalId === void 0) {
-          const delay = this._intervalEnd - now;
-          if (delay < 0) {
-            this._intervalCount = this._carryoverConcurrencyCount ? this._pendingCount : 0;
-          } else {
-            if (this._timeoutId === void 0) {
-              this._timeoutId = setTimeout(() => {
-                this._onResumeInterval();
-              }, delay);
-            }
-            return true;
-          }
-        }
-        return false;
-      }
-      _tryToStartAnother() {
-        if (this._queue.size === 0) {
-          if (this._intervalId) {
-            clearInterval(this._intervalId);
-          }
-          this._intervalId = void 0;
-          this._resolvePromises();
-          return false;
-        }
-        if (!this._isPaused) {
-          const canInitializeInterval = !this._isIntervalPaused();
-          if (this._doesIntervalAllowAnother && this._doesConcurrentAllowAnother) {
-            const job = this._queue.dequeue();
-            if (!job) {
-              return false;
-            }
-            this.emit("active");
-            job();
-            if (canInitializeInterval) {
-              this._initializeIntervalIfNeeded();
-            }
-            return true;
-          }
-        }
-        return false;
-      }
-      _initializeIntervalIfNeeded() {
-        if (this._isIntervalIgnored || this._intervalId !== void 0) {
-          return;
-        }
-        this._intervalId = setInterval(() => {
-          this._onInterval();
-        }, this._interval);
-        this._intervalEnd = Date.now() + this._interval;
-      }
-      _onInterval() {
-        if (this._intervalCount === 0 && this._pendingCount === 0 && this._intervalId) {
-          clearInterval(this._intervalId);
-          this._intervalId = void 0;
-        }
-        this._intervalCount = this._carryoverConcurrencyCount ? this._pendingCount : 0;
-        this._processQueue();
-      }
-      _processQueue() {
-        while (this._tryToStartAnother()) {
-        }
-      }
-      get concurrency() {
-        return this._concurrency;
-      }
-      set concurrency(newConcurrency) {
-        if (!(typeof newConcurrency === "number" && newConcurrency >= 1)) {
-          throw new TypeError(`Expected \`concurrency\` to be a number from 1 and up, got \`${newConcurrency}\` (${typeof newConcurrency})`);
-        }
-        this._concurrency = newConcurrency;
-        this._processQueue();
-      }
-      async add(fn, options = {}) {
-        return new Promise((resolve, reject) => {
-          const run = async () => {
-            this._pendingCount++;
-            this._intervalCount++;
-            try {
-              const operation = this._timeout === void 0 && options.timeout === void 0 ? fn() : p_timeout_1.default(Promise.resolve(fn()), options.timeout === void 0 ? this._timeout : options.timeout, () => {
-                if (options.throwOnTimeout === void 0 ? this._throwOnTimeout : options.throwOnTimeout) {
-                  reject(timeoutError);
-                }
-                return void 0;
-              });
-              resolve(await operation);
-            } catch (error) {
-              reject(error);
-            }
-            this._next();
-          };
-          this._queue.enqueue(run, options);
-          this._tryToStartAnother();
-          this.emit("add");
-        });
-      }
-      async addAll(functions, options) {
-        return Promise.all(functions.map(async (function_) => this.add(function_, options)));
-      }
-      start() {
-        if (!this._isPaused) {
-          return this;
-        }
-        this._isPaused = false;
-        this._processQueue();
-        return this;
-      }
-      pause() {
-        this._isPaused = true;
-      }
-      clear() {
-        this._queue = new this._queueClass();
-      }
-      async onEmpty() {
-        if (this._queue.size === 0) {
-          return;
-        }
-        return new Promise((resolve) => {
-          const existingResolve = this._resolveEmpty;
-          this._resolveEmpty = () => {
-            existingResolve();
-            resolve();
-          };
-        });
-      }
-      async onIdle() {
-        if (this._pendingCount === 0 && this._queue.size === 0) {
-          return;
-        }
-        return new Promise((resolve) => {
-          const existingResolve = this._resolveIdle;
-          this._resolveIdle = () => {
-            existingResolve();
-            resolve();
-          };
-        });
-      }
-      get size() {
-        return this._queue.size;
-      }
-      sizeBy(options) {
-        return this._queue.filter(options).length;
-      }
-      get pending() {
-        return this._pendingCount;
-      }
-      get isPaused() {
-        return this._isPaused;
-      }
-      get timeout() {
-        return this._timeout;
-      }
-      set timeout(milliseconds) {
-        this._timeout = milliseconds;
-      }
-    };
-    exports2.default = PQueue4;
   }
 });
 
@@ -17185,7 +16836,7 @@ var require_lib = __commonJS({
       if (!typeOpts.unsigned) {
         --bitLength;
       }
-      const lowerBound = typeOpts.unsigned ? 0 : -Math.pow(2, bitLength);
+      const lowerBound2 = typeOpts.unsigned ? 0 : -Math.pow(2, bitLength);
       const upperBound = Math.pow(2, bitLength) - 1;
       const moduloVal = typeOpts.moduloBitLength ? Math.pow(2, typeOpts.moduloBitLength) : Math.pow(2, bitLength);
       const moduloBound = typeOpts.moduloBitLength ? Math.pow(2, typeOpts.moduloBitLength - 1) : Math.pow(2, bitLength - 1);
@@ -17198,15 +16849,15 @@ var require_lib = __commonJS({
             throw new TypeError("Argument is not a finite number");
           }
           x = sign(x) * Math.floor(Math.abs(x));
-          if (x < lowerBound || x > upperBound) {
+          if (x < lowerBound2 || x > upperBound) {
             throw new TypeError("Argument is not in byte range");
           }
           return x;
         }
         if (!isNaN(x) && opts.clamp) {
           x = evenRound(x);
-          if (x < lowerBound)
-            x = lowerBound;
+          if (x < lowerBound2)
+            x = lowerBound2;
           if (x > upperBound)
             x = upperBound;
           return x;
@@ -19803,15 +19454,15 @@ var require_lib2 = __commonJS({
         agent
       });
     }
-    function AbortError(message) {
+    function AbortError3(message) {
       Error.call(this, message);
       this.type = "aborted";
       this.message = message;
       Error.captureStackTrace(this, this.constructor);
     }
-    AbortError.prototype = Object.create(Error.prototype);
-    AbortError.prototype.constructor = AbortError;
-    AbortError.prototype.name = "AbortError";
+    AbortError3.prototype = Object.create(Error.prototype);
+    AbortError3.prototype.constructor = AbortError3;
+    AbortError3.prototype.name = "AbortError";
     var URL$1 = Url.URL || whatwgUrl.URL;
     var PassThrough$1 = Stream.PassThrough;
     var isDomainOrSubdomain = function isDomainOrSubdomain2(destination, original) {
@@ -19831,7 +19482,7 @@ var require_lib2 = __commonJS({
         const signal = request.signal;
         let response = null;
         const abort = function abort2() {
-          let error = new AbortError("The user aborted a request.");
+          let error = new AbortError3("The user aborted a request.");
           reject(error);
           if (request.body && request.body instanceof Stream.Readable) {
             request.body.destroy(error);
@@ -22234,7 +21885,436 @@ var makeArray = (field) => field && Array.isArray(field) ? field : [field].filte
 
 // src/rules.ts
 var import_lodash = __toModule(require_lodash());
-var import_p_queue = __toModule(require_dist());
+
+// node_modules/p-queue/dist/index.js
+var import_eventemitter3 = __toModule(require_eventemitter3());
+
+// node_modules/p-timeout/index.js
+var TimeoutError = class extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "TimeoutError";
+  }
+};
+var AbortError = class extends Error {
+  constructor(message) {
+    super();
+    this.name = "AbortError";
+    this.message = message;
+  }
+};
+var getDOMException = (errorMessage) => globalThis.DOMException === void 0 ? new AbortError(errorMessage) : new DOMException(errorMessage);
+var getAbortedReason = (signal) => {
+  const reason = signal.reason === void 0 ? getDOMException("This operation was aborted.") : signal.reason;
+  return reason instanceof Error ? reason : getDOMException(reason);
+};
+function pTimeout(promise, milliseconds, fallback, options) {
+  let timer;
+  const cancelablePromise = new Promise((resolve, reject) => {
+    if (typeof milliseconds !== "number" || Math.sign(milliseconds) !== 1) {
+      throw new TypeError(`Expected \`milliseconds\` to be a positive number, got \`${milliseconds}\``);
+    }
+    if (milliseconds === Number.POSITIVE_INFINITY) {
+      resolve(promise);
+      return;
+    }
+    options = __spreadValues({
+      customTimers: { setTimeout, clearTimeout }
+    }, options);
+    if (options.signal) {
+      const { signal } = options;
+      if (signal.aborted) {
+        reject(getAbortedReason(signal));
+      }
+      signal.addEventListener("abort", () => {
+        reject(getAbortedReason(signal));
+      });
+    }
+    timer = options.customTimers.setTimeout.call(void 0, () => {
+      if (typeof fallback === "function") {
+        try {
+          resolve(fallback());
+        } catch (error) {
+          reject(error);
+        }
+        return;
+      }
+      const message = typeof fallback === "string" ? fallback : `Promise timed out after ${milliseconds} milliseconds`;
+      const timeoutError2 = fallback instanceof Error ? fallback : new TimeoutError(message);
+      if (typeof promise.cancel === "function") {
+        promise.cancel();
+      }
+      reject(timeoutError2);
+    }, milliseconds);
+    (async () => {
+      try {
+        resolve(await promise);
+      } catch (error) {
+        reject(error);
+      } finally {
+        options.customTimers.clearTimeout.call(void 0, timer);
+      }
+    })();
+  });
+  cancelablePromise.clear = () => {
+    clearTimeout(timer);
+    timer = void 0;
+  };
+  return cancelablePromise;
+}
+
+// node_modules/p-queue/dist/lower-bound.js
+function lowerBound(array, value, comparator) {
+  let first = 0;
+  let count = array.length;
+  while (count > 0) {
+    const step = Math.trunc(count / 2);
+    let it = first + step;
+    if (comparator(array[it], value) <= 0) {
+      first = ++it;
+      count -= step + 1;
+    } else {
+      count = step;
+    }
+  }
+  return first;
+}
+
+// node_modules/p-queue/dist/priority-queue.js
+var __classPrivateFieldGet = function(receiver, state, kind, f) {
+  if (kind === "a" && !f)
+    throw new TypeError("Private accessor was defined without a getter");
+  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+    throw new TypeError("Cannot read private member from an object whose class did not declare it");
+  return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+};
+var _PriorityQueue_queue;
+var PriorityQueue = class {
+  constructor() {
+    _PriorityQueue_queue.set(this, []);
+  }
+  enqueue(run, options) {
+    options = __spreadValues({
+      priority: 0
+    }, options);
+    const element = {
+      priority: options.priority,
+      run
+    };
+    if (this.size && __classPrivateFieldGet(this, _PriorityQueue_queue, "f")[this.size - 1].priority >= options.priority) {
+      __classPrivateFieldGet(this, _PriorityQueue_queue, "f").push(element);
+      return;
+    }
+    const index = lowerBound(__classPrivateFieldGet(this, _PriorityQueue_queue, "f"), element, (a, b) => b.priority - a.priority);
+    __classPrivateFieldGet(this, _PriorityQueue_queue, "f").splice(index, 0, element);
+  }
+  dequeue() {
+    const item = __classPrivateFieldGet(this, _PriorityQueue_queue, "f").shift();
+    return item === null || item === void 0 ? void 0 : item.run;
+  }
+  filter(options) {
+    return __classPrivateFieldGet(this, _PriorityQueue_queue, "f").filter((element) => element.priority === options.priority).map((element) => element.run);
+  }
+  get size() {
+    return __classPrivateFieldGet(this, _PriorityQueue_queue, "f").length;
+  }
+};
+_PriorityQueue_queue = new WeakMap();
+
+// node_modules/p-queue/dist/index.js
+var __classPrivateFieldSet = function(receiver, state, value, kind, f) {
+  if (kind === "m")
+    throw new TypeError("Private method is not writable");
+  if (kind === "a" && !f)
+    throw new TypeError("Private accessor was defined without a setter");
+  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+    throw new TypeError("Cannot write private member to an object whose class did not declare it");
+  return kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value), value;
+};
+var __classPrivateFieldGet2 = function(receiver, state, kind, f) {
+  if (kind === "a" && !f)
+    throw new TypeError("Private accessor was defined without a getter");
+  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+    throw new TypeError("Cannot read private member from an object whose class did not declare it");
+  return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+};
+var _PQueue_instances;
+var _PQueue_carryoverConcurrencyCount;
+var _PQueue_isIntervalIgnored;
+var _PQueue_intervalCount;
+var _PQueue_intervalCap;
+var _PQueue_interval;
+var _PQueue_intervalEnd;
+var _PQueue_intervalId;
+var _PQueue_timeoutId;
+var _PQueue_queue;
+var _PQueue_queueClass;
+var _PQueue_pendingCount;
+var _PQueue_concurrency;
+var _PQueue_isPaused;
+var _PQueue_resolveEmpty;
+var _PQueue_resolveIdle;
+var _PQueue_timeout;
+var _PQueue_throwOnTimeout;
+var _PQueue_doesIntervalAllowAnother_get;
+var _PQueue_doesConcurrentAllowAnother_get;
+var _PQueue_next;
+var _PQueue_resolvePromises;
+var _PQueue_onResumeInterval;
+var _PQueue_isIntervalPaused;
+var _PQueue_tryToStartAnother;
+var _PQueue_initializeIntervalIfNeeded;
+var _PQueue_onInterval;
+var _PQueue_processQueue;
+var empty = () => {
+};
+var timeoutError = new TimeoutError();
+var AbortError2 = class extends Error {
+};
+var PQueue = class extends import_eventemitter3.default {
+  constructor(options) {
+    var _a2, _b, _c, _d;
+    super();
+    _PQueue_instances.add(this);
+    _PQueue_carryoverConcurrencyCount.set(this, void 0);
+    _PQueue_isIntervalIgnored.set(this, void 0);
+    _PQueue_intervalCount.set(this, 0);
+    _PQueue_intervalCap.set(this, void 0);
+    _PQueue_interval.set(this, void 0);
+    _PQueue_intervalEnd.set(this, 0);
+    _PQueue_intervalId.set(this, void 0);
+    _PQueue_timeoutId.set(this, void 0);
+    _PQueue_queue.set(this, void 0);
+    _PQueue_queueClass.set(this, void 0);
+    _PQueue_pendingCount.set(this, 0);
+    _PQueue_concurrency.set(this, void 0);
+    _PQueue_isPaused.set(this, void 0);
+    _PQueue_resolveEmpty.set(this, empty);
+    _PQueue_resolveIdle.set(this, empty);
+    _PQueue_timeout.set(this, void 0);
+    _PQueue_throwOnTimeout.set(this, void 0);
+    options = __spreadValues({
+      carryoverConcurrencyCount: false,
+      intervalCap: Number.POSITIVE_INFINITY,
+      interval: 0,
+      concurrency: Number.POSITIVE_INFINITY,
+      autoStart: true,
+      queueClass: PriorityQueue
+    }, options);
+    if (!(typeof options.intervalCap === "number" && options.intervalCap >= 1)) {
+      throw new TypeError(`Expected \`intervalCap\` to be a number from 1 and up, got \`${(_b = (_a2 = options.intervalCap) === null || _a2 === void 0 ? void 0 : _a2.toString()) !== null && _b !== void 0 ? _b : ""}\` (${typeof options.intervalCap})`);
+    }
+    if (options.interval === void 0 || !(Number.isFinite(options.interval) && options.interval >= 0)) {
+      throw new TypeError(`Expected \`interval\` to be a finite number >= 0, got \`${(_d = (_c = options.interval) === null || _c === void 0 ? void 0 : _c.toString()) !== null && _d !== void 0 ? _d : ""}\` (${typeof options.interval})`);
+    }
+    __classPrivateFieldSet(this, _PQueue_carryoverConcurrencyCount, options.carryoverConcurrencyCount, "f");
+    __classPrivateFieldSet(this, _PQueue_isIntervalIgnored, options.intervalCap === Number.POSITIVE_INFINITY || options.interval === 0, "f");
+    __classPrivateFieldSet(this, _PQueue_intervalCap, options.intervalCap, "f");
+    __classPrivateFieldSet(this, _PQueue_interval, options.interval, "f");
+    __classPrivateFieldSet(this, _PQueue_queue, new options.queueClass(), "f");
+    __classPrivateFieldSet(this, _PQueue_queueClass, options.queueClass, "f");
+    this.concurrency = options.concurrency;
+    __classPrivateFieldSet(this, _PQueue_timeout, options.timeout, "f");
+    __classPrivateFieldSet(this, _PQueue_throwOnTimeout, options.throwOnTimeout === true, "f");
+    __classPrivateFieldSet(this, _PQueue_isPaused, options.autoStart === false, "f");
+  }
+  get concurrency() {
+    return __classPrivateFieldGet2(this, _PQueue_concurrency, "f");
+  }
+  set concurrency(newConcurrency) {
+    if (!(typeof newConcurrency === "number" && newConcurrency >= 1)) {
+      throw new TypeError(`Expected \`concurrency\` to be a number from 1 and up, got \`${newConcurrency}\` (${typeof newConcurrency})`);
+    }
+    __classPrivateFieldSet(this, _PQueue_concurrency, newConcurrency, "f");
+    __classPrivateFieldGet2(this, _PQueue_instances, "m", _PQueue_processQueue).call(this);
+  }
+  async add(fn, options = {}) {
+    return new Promise((resolve, reject) => {
+      const run = async () => {
+        var _a2;
+        var _b, _c;
+        __classPrivateFieldSet(this, _PQueue_pendingCount, (_b = __classPrivateFieldGet2(this, _PQueue_pendingCount, "f"), _b++, _b), "f");
+        __classPrivateFieldSet(this, _PQueue_intervalCount, (_c = __classPrivateFieldGet2(this, _PQueue_intervalCount, "f"), _c++, _c), "f");
+        try {
+          if ((_a2 = options.signal) === null || _a2 === void 0 ? void 0 : _a2.aborted) {
+            reject(new AbortError2("The task was aborted."));
+            return;
+          }
+          const operation = __classPrivateFieldGet2(this, _PQueue_timeout, "f") === void 0 && options.timeout === void 0 ? fn({ signal: options.signal }) : pTimeout(Promise.resolve(fn({ signal: options.signal })), options.timeout === void 0 ? __classPrivateFieldGet2(this, _PQueue_timeout, "f") : options.timeout, () => {
+            if (options.throwOnTimeout === void 0 ? __classPrivateFieldGet2(this, _PQueue_throwOnTimeout, "f") : options.throwOnTimeout) {
+              reject(timeoutError);
+            }
+            return void 0;
+          });
+          const result = await operation;
+          resolve(result);
+          this.emit("completed", result);
+        } catch (error) {
+          reject(error);
+          this.emit("error", error);
+        }
+        __classPrivateFieldGet2(this, _PQueue_instances, "m", _PQueue_next).call(this);
+      };
+      __classPrivateFieldGet2(this, _PQueue_queue, "f").enqueue(run, options);
+      __classPrivateFieldGet2(this, _PQueue_instances, "m", _PQueue_tryToStartAnother).call(this);
+      this.emit("add");
+    });
+  }
+  async addAll(functions, options) {
+    return Promise.all(functions.map(async (function_) => this.add(function_, options)));
+  }
+  start() {
+    if (!__classPrivateFieldGet2(this, _PQueue_isPaused, "f")) {
+      return this;
+    }
+    __classPrivateFieldSet(this, _PQueue_isPaused, false, "f");
+    __classPrivateFieldGet2(this, _PQueue_instances, "m", _PQueue_processQueue).call(this);
+    return this;
+  }
+  pause() {
+    __classPrivateFieldSet(this, _PQueue_isPaused, true, "f");
+  }
+  clear() {
+    __classPrivateFieldSet(this, _PQueue_queue, new (__classPrivateFieldGet2(this, _PQueue_queueClass, "f"))(), "f");
+  }
+  async onEmpty() {
+    if (__classPrivateFieldGet2(this, _PQueue_queue, "f").size === 0) {
+      return;
+    }
+    return new Promise((resolve) => {
+      const existingResolve = __classPrivateFieldGet2(this, _PQueue_resolveEmpty, "f");
+      __classPrivateFieldSet(this, _PQueue_resolveEmpty, () => {
+        existingResolve();
+        resolve();
+      }, "f");
+    });
+  }
+  async onSizeLessThan(limit) {
+    if (__classPrivateFieldGet2(this, _PQueue_queue, "f").size < limit) {
+      return;
+    }
+    return new Promise((resolve) => {
+      const listener = () => {
+        if (__classPrivateFieldGet2(this, _PQueue_queue, "f").size < limit) {
+          this.removeListener("next", listener);
+          resolve();
+        }
+      };
+      this.on("next", listener);
+    });
+  }
+  async onIdle() {
+    if (__classPrivateFieldGet2(this, _PQueue_pendingCount, "f") === 0 && __classPrivateFieldGet2(this, _PQueue_queue, "f").size === 0) {
+      return;
+    }
+    return new Promise((resolve) => {
+      const existingResolve = __classPrivateFieldGet2(this, _PQueue_resolveIdle, "f");
+      __classPrivateFieldSet(this, _PQueue_resolveIdle, () => {
+        existingResolve();
+        resolve();
+      }, "f");
+    });
+  }
+  get size() {
+    return __classPrivateFieldGet2(this, _PQueue_queue, "f").size;
+  }
+  sizeBy(options) {
+    return __classPrivateFieldGet2(this, _PQueue_queue, "f").filter(options).length;
+  }
+  get pending() {
+    return __classPrivateFieldGet2(this, _PQueue_pendingCount, "f");
+  }
+  get isPaused() {
+    return __classPrivateFieldGet2(this, _PQueue_isPaused, "f");
+  }
+  get timeout() {
+    return __classPrivateFieldGet2(this, _PQueue_timeout, "f");
+  }
+  set timeout(milliseconds) {
+    __classPrivateFieldSet(this, _PQueue_timeout, milliseconds, "f");
+  }
+};
+_PQueue_carryoverConcurrencyCount = new WeakMap(), _PQueue_isIntervalIgnored = new WeakMap(), _PQueue_intervalCount = new WeakMap(), _PQueue_intervalCap = new WeakMap(), _PQueue_interval = new WeakMap(), _PQueue_intervalEnd = new WeakMap(), _PQueue_intervalId = new WeakMap(), _PQueue_timeoutId = new WeakMap(), _PQueue_queue = new WeakMap(), _PQueue_queueClass = new WeakMap(), _PQueue_pendingCount = new WeakMap(), _PQueue_concurrency = new WeakMap(), _PQueue_isPaused = new WeakMap(), _PQueue_resolveEmpty = new WeakMap(), _PQueue_resolveIdle = new WeakMap(), _PQueue_timeout = new WeakMap(), _PQueue_throwOnTimeout = new WeakMap(), _PQueue_instances = new WeakSet(), _PQueue_doesIntervalAllowAnother_get = function _PQueue_doesIntervalAllowAnother_get2() {
+  return __classPrivateFieldGet2(this, _PQueue_isIntervalIgnored, "f") || __classPrivateFieldGet2(this, _PQueue_intervalCount, "f") < __classPrivateFieldGet2(this, _PQueue_intervalCap, "f");
+}, _PQueue_doesConcurrentAllowAnother_get = function _PQueue_doesConcurrentAllowAnother_get2() {
+  return __classPrivateFieldGet2(this, _PQueue_pendingCount, "f") < __classPrivateFieldGet2(this, _PQueue_concurrency, "f");
+}, _PQueue_next = function _PQueue_next2() {
+  var _a2;
+  __classPrivateFieldSet(this, _PQueue_pendingCount, (_a2 = __classPrivateFieldGet2(this, _PQueue_pendingCount, "f"), _a2--, _a2), "f");
+  __classPrivateFieldGet2(this, _PQueue_instances, "m", _PQueue_tryToStartAnother).call(this);
+  this.emit("next");
+}, _PQueue_resolvePromises = function _PQueue_resolvePromises2() {
+  __classPrivateFieldGet2(this, _PQueue_resolveEmpty, "f").call(this);
+  __classPrivateFieldSet(this, _PQueue_resolveEmpty, empty, "f");
+  if (__classPrivateFieldGet2(this, _PQueue_pendingCount, "f") === 0) {
+    __classPrivateFieldGet2(this, _PQueue_resolveIdle, "f").call(this);
+    __classPrivateFieldSet(this, _PQueue_resolveIdle, empty, "f");
+    this.emit("idle");
+  }
+}, _PQueue_onResumeInterval = function _PQueue_onResumeInterval2() {
+  __classPrivateFieldGet2(this, _PQueue_instances, "m", _PQueue_onInterval).call(this);
+  __classPrivateFieldGet2(this, _PQueue_instances, "m", _PQueue_initializeIntervalIfNeeded).call(this);
+  __classPrivateFieldSet(this, _PQueue_timeoutId, void 0, "f");
+}, _PQueue_isIntervalPaused = function _PQueue_isIntervalPaused2() {
+  const now = Date.now();
+  if (__classPrivateFieldGet2(this, _PQueue_intervalId, "f") === void 0) {
+    const delay = __classPrivateFieldGet2(this, _PQueue_intervalEnd, "f") - now;
+    if (delay < 0) {
+      __classPrivateFieldSet(this, _PQueue_intervalCount, __classPrivateFieldGet2(this, _PQueue_carryoverConcurrencyCount, "f") ? __classPrivateFieldGet2(this, _PQueue_pendingCount, "f") : 0, "f");
+    } else {
+      if (__classPrivateFieldGet2(this, _PQueue_timeoutId, "f") === void 0) {
+        __classPrivateFieldSet(this, _PQueue_timeoutId, setTimeout(() => {
+          __classPrivateFieldGet2(this, _PQueue_instances, "m", _PQueue_onResumeInterval).call(this);
+        }, delay), "f");
+      }
+      return true;
+    }
+  }
+  return false;
+}, _PQueue_tryToStartAnother = function _PQueue_tryToStartAnother2() {
+  if (__classPrivateFieldGet2(this, _PQueue_queue, "f").size === 0) {
+    if (__classPrivateFieldGet2(this, _PQueue_intervalId, "f")) {
+      clearInterval(__classPrivateFieldGet2(this, _PQueue_intervalId, "f"));
+    }
+    __classPrivateFieldSet(this, _PQueue_intervalId, void 0, "f");
+    __classPrivateFieldGet2(this, _PQueue_instances, "m", _PQueue_resolvePromises).call(this);
+    return false;
+  }
+  if (!__classPrivateFieldGet2(this, _PQueue_isPaused, "f")) {
+    const canInitializeInterval = !__classPrivateFieldGet2(this, _PQueue_instances, "m", _PQueue_isIntervalPaused).call(this);
+    if (__classPrivateFieldGet2(this, _PQueue_instances, "a", _PQueue_doesIntervalAllowAnother_get) && __classPrivateFieldGet2(this, _PQueue_instances, "a", _PQueue_doesConcurrentAllowAnother_get)) {
+      const job = __classPrivateFieldGet2(this, _PQueue_queue, "f").dequeue();
+      if (!job) {
+        return false;
+      }
+      this.emit("active");
+      job();
+      if (canInitializeInterval) {
+        __classPrivateFieldGet2(this, _PQueue_instances, "m", _PQueue_initializeIntervalIfNeeded).call(this);
+      }
+      return true;
+    }
+  }
+  return false;
+}, _PQueue_initializeIntervalIfNeeded = function _PQueue_initializeIntervalIfNeeded2() {
+  if (__classPrivateFieldGet2(this, _PQueue_isIntervalIgnored, "f") || __classPrivateFieldGet2(this, _PQueue_intervalId, "f") !== void 0) {
+    return;
+  }
+  __classPrivateFieldSet(this, _PQueue_intervalId, setInterval(() => {
+    __classPrivateFieldGet2(this, _PQueue_instances, "m", _PQueue_onInterval).call(this);
+  }, __classPrivateFieldGet2(this, _PQueue_interval, "f")), "f");
+  __classPrivateFieldSet(this, _PQueue_intervalEnd, Date.now() + __classPrivateFieldGet2(this, _PQueue_interval, "f"), "f");
+}, _PQueue_onInterval = function _PQueue_onInterval2() {
+  if (__classPrivateFieldGet2(this, _PQueue_intervalCount, "f") === 0 && __classPrivateFieldGet2(this, _PQueue_pendingCount, "f") === 0 && __classPrivateFieldGet2(this, _PQueue_intervalId, "f")) {
+    clearInterval(__classPrivateFieldGet2(this, _PQueue_intervalId, "f"));
+    __classPrivateFieldSet(this, _PQueue_intervalId, void 0, "f");
+  }
+  __classPrivateFieldSet(this, _PQueue_intervalCount, __classPrivateFieldGet2(this, _PQueue_carryoverConcurrencyCount, "f") ? __classPrivateFieldGet2(this, _PQueue_pendingCount, "f") : 0, "f");
+  __classPrivateFieldGet2(this, _PQueue_instances, "m", _PQueue_processQueue).call(this);
+}, _PQueue_processQueue = function _PQueue_processQueue2() {
+  while (__classPrivateFieldGet2(this, _PQueue_instances, "m", _PQueue_tryToStartAnother).call(this)) {
+  }
+};
 
 // src/util/catchHandler.ts
 var catchHandler = (debug11) => (error) => {
@@ -22438,7 +22518,7 @@ var _MatchingRules = class extends Array {
     return grouped || [];
   }
   static async load(rules, files, event, patchContent = []) {
-    const queue = new import_p_queue.default({ concurrency: MATCH_RULE_CONCURRENCY });
+    const queue = new PQueue({ concurrency: MATCH_RULE_CONCURRENCY });
     const fileNames = files.map(({ filename }) => filename);
     const matchingRules = rules.map((rule) => {
       return queue.add(async () => {
@@ -22519,9 +22599,6 @@ var handleReviewers = async (client, { owner, repo, prNumber, matchingRules }) =
   return result;
 };
 
-// src/statuses.ts
-var import_p_queue2 = __toModule(require_dist());
-
 // src/util/getBlobURL.ts
 var debug7 = logger("getBlobURL");
 var getBlobURL = (filename, files, owner, repo, base) => {
@@ -22535,7 +22612,7 @@ var getBlobURL = (filename, files, owner, repo, base) => {
 var debug8 = logger("statuses");
 var handleStatus = async (client, { owner, repo, matchingRules, rules, base, sha, files }, requestConcurrency = 1) => {
   debug8("called with:", matchingRules.map((rule) => rule.path));
-  const queue = new import_p_queue2.default({ concurrency: requestConcurrency });
+  const queue = new PQueue({ concurrency: requestConcurrency });
   const statusActionRules = rules.filter(({ action }) => action == RuleActions.status);
   const statuses = statusActionRules.map((rule) => ({
     owner,
@@ -22555,7 +22632,6 @@ var handleStatus = async (client, { owner, repo, matchingRules, rules, base, sha
 // src/comment.ts
 var import_lodash2 = __toModule(require_lodash());
 var import_markdown_table = __toModule(require_markdown_table());
-var import_p_queue3 = __toModule(require_dist());
 var debug9 = logger("comment");
 var TypeOfComments;
 (function(TypeOfComments2) {
@@ -22613,7 +22689,7 @@ var getAllComments = async (client, params) => {
 };
 var handleComment = async (client, { owner, repo, prNumber, matchingRules, files, base }, requestConcurrency = 1) => {
   debug9("handleComment called with:", matchingRules);
-  const queue = new import_p_queue3.default({ concurrency: requestConcurrency });
+  const queue = new PQueue({ concurrency: requestConcurrency });
   const rulesWithBlobURL = matchingRules.map((mRule) => __spreadProps(__spreadValues({}, mRule), {
     blobURL: getBlobURL(mRule.path, files, owner, repo, base)
   }));
