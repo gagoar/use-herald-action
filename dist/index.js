@@ -22447,7 +22447,7 @@ var _MatchingRules = class extends Array {
       });
     });
     const matchedRules = await Promise.all(matchingRules);
-    const filtered = matchedRules.filter((rule) => isMatchingRule(rule) && rule.matched);
+    const filtered = matchedRules.filter((rule) => isMatchingRule(rule) && rule.matched || rule.action === RuleActions.status);
     return new _MatchingRules(...filtered);
   }
 };
