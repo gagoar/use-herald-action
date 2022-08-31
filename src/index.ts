@@ -108,6 +108,8 @@ export const main = async (): Promise<void> => {
         files.reduce((memo, { patch }) => (patch ? [...memo, patch] : memo), [] as string[])
       );
 
+      const existsAnStatusRule = rules.some((rule) => rule.action === RuleActions.status)
+
       debug('matchingRules:', matchingRules);
 
       if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
@@ -122,17 +124,17 @@ export const main = async (): Promise<void> => {
       if (dryRun !== 'true') {
         debug('not a dry Run');
 
-        if (matchingRules.length) {
+        if (matchingRules.length || existsAnStatusRule) {
           await Promise.all(
             Object.keys(RuleActions).reduce((promises, actionName) => {
               const action = actionsMap[RuleActions[actionName as ActionName]];
 
               const rulesForAction = matchingRules.groupBy(actionName as ActionName);
 
-              if (!rulesForAction.length) {
+              if (!rulesForAction.length && actionName !== RuleActions.status) {
                 return promises;
               }
-
+              
               const options: ActionInput = {
                 owner,
                 repo,

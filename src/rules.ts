@@ -268,7 +268,7 @@ class MatchingRules extends Array<MatchingRule> {
 
     const matchedRules = await Promise.all(matchingRules);
 
-    const filtered = matchedRules.filter((rule) => isMatchingRule(rule) && rule.matched || rule.action === RuleActions.status);
+    const filtered = matchedRules.filter((rule) => isMatchingRule(rule) && rule.matched);
 
     return new MatchingRules(...filtered);
   }

@@ -22447,7 +22447,7 @@ var _MatchingRules = class extends Array {
       });
     });
     const matchedRules = await Promise.all(matchingRules);
-    const filtered = matchedRules.filter((rule) => isMatchingRule(rule) && rule.matched || rule.action === RuleActions.status);
+    const filtered = matchedRules.filter((rule) => isMatchingRule(rule) && rule.matched);
     return new _MatchingRules(...filtered);
   }
 };
@@ -22718,17 +22718,18 @@ var main = async () => {
         repo
       });
       const matchingRules = await rules.getMatchingRules(files, event, files.reduce((memo2, { patch }) => patch ? [...memo2, patch] : memo2, []));
+      const existsAnStatusRule = rules.some((rule) => rule.action === RuleActions.status);
       debug10("matchingRules:", matchingRules);
       if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
         throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules.filter((rule) => rule.errorLevel && rule.errorLevel === "error").map((rule) => rule.name).join(", ")}`);
       }
       if (dryRun !== "true") {
         debug10("not a dry Run");
-        if (matchingRules.length) {
+        if (matchingRules.length || existsAnStatusRule) {
           await Promise.all(Object.keys(RuleActions).reduce((promises, actionName) => {
             const action = actionsMap[RuleActions[actionName]];
             const rulesForAction = matchingRules.groupBy(actionName);
-            if (!rulesForAction.length) {
+            if (!rulesForAction.length && actionName !== RuleActions.status) {
               return promises;
             }
             const options = {
