@@ -22447,7 +22447,7 @@ var _MatchingRules = class extends Array {
       });
     });
     const matchedRules = await Promise.all(matchingRules);
-    const filtered = matchedRules.filter((rule) => isMatchingRule(rule) && rule.matched);
+    const filtered = matchedRules.filter((rule) => isMatchingRule(rule) && rule.matched || rule.action === RuleActions.status);
     return new _MatchingRules(...filtered);
   }
 };
@@ -22537,15 +22537,18 @@ var handleStatus = async (client, { owner, repo, matchingRules, rules, base, sha
   debug8("called with:", matchingRules.map((rule) => rule.path));
   const queue = new import_p_queue2.default({ concurrency: requestConcurrency });
   const statusActionRules = rules.filter(({ action }) => action == RuleActions.status);
-  const statuses = statusActionRules.map((rule) => ({
-    owner,
-    repo,
-    sha,
-    context: `Herald \u203A ${rule.name}`,
-    description: rule.description ? rule.description : STATUS_DESCRIPTION_COPY,
-    target_url: rule.targetURL ? rule.targetURL : getBlobURL(rule.path, files, owner, repo, base),
-    state: matchingRules.find((matchingRule) => matchingRule.path === rule.path) ? CommitStatus.SUCCESS : CommitStatus.FAILURE
-  }));
+  const statuses = statusActionRules.map((rule) => {
+    var _a2;
+    return {
+      owner,
+      repo,
+      sha,
+      context: `Herald \u203A ${rule.name}`,
+      description: rule.description ? rule.description : STATUS_DESCRIPTION_COPY,
+      target_url: rule.targetURL ? rule.targetURL : getBlobURL(rule.path, files, owner, repo, base),
+      state: ((_a2 = matchingRules.find((matchingRule) => matchingRule.path === rule.path)) == null ? void 0 : _a2.matched) ? CommitStatus.SUCCESS : CommitStatus.FAILURE
+    };
+  });
   debug8("statuses", statuses);
   const result = await Promise.all(statuses.map((status) => queue.add(() => client.repos.createCommitStatus(status)))).catch(catchHandler(debug8));
   debug8("result:", result);
@@ -22718,20 +22721,20 @@ var main = async () => {
         repo
       });
       const matchingRules = await rules.getMatchingRules(files, event, files.reduce((memo2, { patch }) => patch ? [...memo2, patch] : memo2, []));
-      const existsAnStatusRule = rules.some((rule) => rule.action === RuleActions.status);
       debug10("matchingRules:", matchingRules);
       if (!allRequiredRulesHaveMatched(rules, matchingRules)) {
         throw new Error(`Not all Rules with errorLevel set to error have matched. Please double check that these rules apply: ${rules.filter((rule) => rule.errorLevel && rule.errorLevel === "error").map((rule) => rule.name).join(", ")}`);
       }
       if (dryRun !== "true") {
         debug10("not a dry Run");
-        if (matchingRules.length || existsAnStatusRule) {
+        if (matchingRules.length) {
           await Promise.all(Object.keys(RuleActions).reduce((promises, actionName) => {
             const action = actionsMap[RuleActions[actionName]];
             const rulesForAction = matchingRules.groupBy(actionName);
-            if (!rulesForAction.length && actionName !== RuleActions.status) {
+            if (!rulesForAction.length) {
               return promises;
             }
+            console.log(actionName);
             const options = {
               owner,
               repo,

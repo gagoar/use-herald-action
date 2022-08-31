@@ -29,7 +29,7 @@ export const handleStatus: ActionMapInput = async (
     context: `Herald › ${rule.name}`,
     description: rule.description ? rule.description : STATUS_DESCRIPTION_COPY,
     target_url: rule.targetURL ? rule.targetURL : getBlobURL(rule.path, files, owner, repo, base),
-    state: matchingRules.find((matchingRule) => matchingRule.path === rule.path)
+    state: matchingRules.find((matchingRule) => matchingRule.path === rule.path)?.matched
       ? CommitStatus.SUCCESS
       : CommitStatus.FAILURE,
   }));
