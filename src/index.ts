@@ -132,7 +132,6 @@ export const main = async (): Promise<void> => {
               if (!rulesForAction.length) {
                 return promises;
               }
-              console.log(actionName)
               const options: ActionInput = {
                 owner,
                 repo,

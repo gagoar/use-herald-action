@@ -22734,7 +22734,6 @@ var main = async () => {
             if (!rulesForAction.length) {
               return promises;
             }
-            console.log(actionName);
             const options = {
               owner,
               repo,
