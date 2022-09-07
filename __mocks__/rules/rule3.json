@@ -1,9 +1,7 @@
 {
-    "name": "bot validation",
-    "description": "bot validation",
-    "action": "status",
-    "eventJsonPath": [
-        "$[?(@.type.match(/bot/i))]"
-    ],
-    "targetURL": "https://github.com/gagoar/use-herald-action/wiki"
+  "name": "bot validation",
+  "description": "bot validation",
+  "action": "status",
+  "eventJsonPath": ["$[?(@.type.match(/bot/i))]"],
+  "targetURL": "https://github.com/gagoar/use-herald-action/wiki"
 }

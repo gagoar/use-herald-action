@@ -55,9 +55,14 @@ describe('use-herald', () => {
       .get(`/repos/${login}/${name}/issues/${prIssue}/comments?page=1&per_page=100`)
       .reply(200, getCommentsResponse);
 
+
+    github
+      .post(`/repos/${login}/${name}/issues/2/comments`)
+      .replyWithError({ message: 'Resource not accessible by integration', code: HttpErrors.RESOURCE_NOT_ACCESSIBLE });
+
     github
       .post(`/repos/${login}/${name}/statuses/${head.sha}`)
-      .replyWithError({ message: 'Resource not accessible by integration', code: HttpErrors.RESOURCE_NOT_ACCESSIBLE });
+      .reply(201)
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { main } = require('../src') as Main;
@@ -68,7 +73,7 @@ describe('use-herald', () => {
     expect(setFailed.mock.calls).toMatchInlineSnapshot(`
       Array [
         Array [
-          "request to https://api.github.com/repos/gagoar/example_repo/statuses/ec26c3e57ca3a959ca5aad62de7213c562f8c821 failed, reason: Resource not accessible by integration",
+          "request to https://api.github.com/repos/gagoar/example_repo/issues/2/comments failed, reason: Resource not accessible by integration",
         ],
       ]
     `);
