@@ -55,9 +55,14 @@ describe('use-herald', () => {
       .get(`/repos/${login}/${name}/issues/${prIssue}/comments?page=1&per_page=100`)
       .reply(200, getCommentsResponse);
 
+
     github
       .post(`/repos/${login}/${name}/issues/2/comments`)
       .replyWithError({ message: 'Resource not accessible by integration', code: HttpErrors.RESOURCE_NOT_ACCESSIBLE });
+
+    github
+      .post(`/repos/${login}/${name}/statuses/${head.sha}`)
+      .reply(201)
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { main } = require('../src') as Main;
@@ -65,7 +70,6 @@ describe('use-herald', () => {
     await main();
 
     expect(setOutput).not.toHaveBeenCalled();
-
     expect(setFailed.mock.calls).toMatchInlineSnapshot(`
       Array [
         Array [

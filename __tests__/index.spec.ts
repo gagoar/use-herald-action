@@ -37,6 +37,10 @@ const getGithubMock = () =>
   });
 
 describe('use-herald-action', () => {
+  const owner = 'gagoar';
+  const repo = 'example_repo';
+  const sha = 'ec26c3e57ca3a959ca5aad62de7213c562f8c821';
+
   beforeEach(() => {
     getInput.mockClear();
     setFailed.mockClear();
@@ -83,6 +87,10 @@ describe('use-herald-action', () => {
 
     const github = getGithubMock();
 
+    github
+    .post(`/repos/${owner}/${repo}/statuses/${sha}`)
+    .reply(201, {})
+
     const { main } = require('../src') as Main;
 
     await main();
@@ -99,6 +107,10 @@ describe('use-herald-action', () => {
     });
 
     const github = getGithubMock();
+    
+    github
+    .post(`/repos/${owner}/${repo}/statuses/${sha}`)
+    .reply(201, {})
 
     const { main } = require('../src') as Main;
 
@@ -129,6 +141,22 @@ describe('use-herald-action', () => {
                 "miny",
                 "moe",
               ],
+            },
+            Object {
+              "action": "status",
+              "description": "bot validation",
+              "eventJsonPath": Array [
+                "$[?(@.type.match(/bot/i))]",
+              ],
+              "excludes": Array [],
+              "includes": Array [],
+              "includesInPatch": Array [],
+              "matched": false,
+              "name": "bot validation",
+              "path": "${env.GITHUB_WORKSPACE}/__mocks__/rules/rule3.json",
+              "targetURL": "https://github.com/gagoar/use-herald-action/wiki",
+              "teams": Array [],
+              "users": Array [],
             },
           ],
         ],

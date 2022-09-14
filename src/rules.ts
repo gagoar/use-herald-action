@@ -268,8 +268,11 @@ class MatchingRules extends Array<MatchingRule> {
 
     const matchedRules = await Promise.all(matchingRules);
 
-    const filtered = matchedRules.filter((rule) => isMatchingRule(rule) && rule.matched);
+    // status for now is the only type of rule that should always match given that it has an action regardless of the outcome.
+    const mandatoryRuleTypes = [RuleActions.status]
 
+    const filtered = matchedRules.filter((rule) =>
+      mandatoryRuleTypes.includes(rule.action as RuleActions) || isMatchingRule(rule) && rule.matched);
     return new MatchingRules(...filtered);
   }
 }
