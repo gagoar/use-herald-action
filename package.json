@@ -103,7 +103,7 @@
   "dependencies": {
     "@actions/core": "1.9.1",
     "@octokit/rest": "18.5.2",
-    "debug": "4.3.2",
+    "debug": "4.3.4",
     "envalid": "6.0.2",
     "fast-glob": "3.2.7",
     "jsonpath": "1.1.1",
@@ -113,7 +113,7 @@
     "p-queue": "6.6.2"
   },
   "devDependencies": {
-    "@types/debug": "4.1.7",
+    "@types/debug": "4.1.8",
     "@types/jest": "27.0.3",
     "@types/jsonpath": "0.2.0",
     "@types/lodash.groupby": "4.6.7",
