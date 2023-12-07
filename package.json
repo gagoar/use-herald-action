@@ -116,7 +116,7 @@
     "@types/debug": "4.1.7",
     "@types/jest": "27.0.3",
     "@types/jsonpath": "0.2.0",
-    "@types/lodash.groupby": "4.6.7",
+    "@types/lodash.groupby": "4.6.9",
     "@types/markdown-table": "2.0.0",
     "@types/node": "16.11.19",
     "@typescript-eslint/eslint-plugin": "4.33.0",
