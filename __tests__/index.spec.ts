@@ -21,7 +21,8 @@ jest.mock('../src/environment', () => {
   };
 });
 
-const event = require(`../${env.GITHUB_EVENT_PATH}`) as Event;
+// fixture always carries pull_request — narrowed since Event allows it optional for repository_dispatch.
+const event = require(`../${env.GITHUB_EVENT_PATH}`) as Required<Pick<Event, 'pull_request'>> & Event;
 
 const handleComment = comment.handleComment as jest.Mock<any>;
 const setOutput = actions.setOutput as jest.Mock<any>;
