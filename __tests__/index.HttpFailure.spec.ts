@@ -32,8 +32,9 @@ describe('use-herald', () => {
       name,
     },
     pull_request: { base, head },
+    // fixture always carries pull_request — narrowed since Event allows it optional for repository_dispatch.
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-  } = require(`../${env.GITHUB_EVENT_PATH}`) as Event;
+  } = require(`../${env.GITHUB_EVENT_PATH}`) as Required<Pick<Event, 'pull_request'>> & Event;
 
   const getGithubMock = () =>
     mockCompareCommits({

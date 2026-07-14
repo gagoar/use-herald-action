@@ -22,5 +22,5 @@ outputs:
   appliedRules:
     description: 'It will report back what rules have been applied'
 runs:
-  using: 'node12'
+  using: 'node20'
   main: 'dist/index.js'

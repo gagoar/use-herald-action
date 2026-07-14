@@ -17,7 +17,7 @@ describe('use-herald', () => {
     expect(setFailed.mock.calls).toMatchInlineSnapshot(`
       Array [
         Array [
-          "use-herald-action only supports [pull_request, pull_request_target, push] events for now, event found: tag",
+          "use-herald-action only supports [pull_request, pull_request_target, push, repository_dispatch] events for now, event found: tag",
         ],
       ]
     `);

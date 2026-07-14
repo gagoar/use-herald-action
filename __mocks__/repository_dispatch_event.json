@@ -1,0 +1,22 @@
+{
+  "action": "claude-review",
+  "client_payload": {
+    "repo": "example_repo",
+    "pr": 2,
+    "sha": "ec26c3e57ca3a959ca5aad62de7213c562f8c821",
+    "delivery_id": "d4e5f6a7-0000-0000-0000-000000000000"
+  },
+  "repository": {
+    "id": 186853002,
+    "name": "example_repo",
+    "owner": {
+      "login": "gagoar",
+      "id": 21031067
+    }
+  },
+  "sender": {
+    "login": "gagoar",
+    "id": 21031067,
+    "type": "User"
+  }
+}

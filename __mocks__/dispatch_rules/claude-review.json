@@ -1,0 +1,6 @@
+{
+  "name": "claude-review dispatch match",
+  "customMessage": "Route to the claude-review handler",
+  "action": "comment",
+  "eventJsonPath": ["$[?(@.pr==2)]"]
+}

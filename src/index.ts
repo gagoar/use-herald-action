@@ -40,6 +40,45 @@ export type ActionMapInput = (
   requestConcurrency?: number
 ) => Promise<unknown>;
 
+type PullRequestDiff = {
+  prNumber: number;
+  headSha: string;
+  baseSha: string;
+  files: RuleFile[];
+};
+
+const loadPullRequestDiff = async (
+  client: InstanceType<typeof Octokit>,
+  event: Event,
+  base: string | undefined
+): Promise<PullRequestDiff> => {
+  // Only pull_request/pull_request_target/push events reach here — main() guards this with isDispatchEvent.
+  const {
+    pull_request: {
+      head: { sha: headSha },
+      base: { sha: baseSha },
+    },
+    number: prNumber,
+    repository: {
+      name: repo,
+      owner: { login: owner },
+    },
+    // pull_request/number are guaranteed present for these event types; narrowed here rather than
+    // widening the shared Event type back to required fields.
+  } = event as Required<Pick<Event, 'pull_request' | 'number'>> & Event;
+
+  const {
+    data: { files },
+  } = await client.repos.compareCommits({
+    base: base || baseSha,
+    head: headSha,
+    owner,
+    repo,
+  });
+
+  return { prNumber, headSha, baseSha, files };
+};
+
 const actionsMap: Record<RuleActions, ActionMapInput> = {
   [RuleActions.status]: handleStatus,
   [RuleActions.comment]: handleComment,
@@ -61,22 +100,20 @@ export const main = async (): Promise<void> => {
   try {
     if (isEventSupported(env.GITHUB_EVENT_NAME)) {
       const event = loadJSONFile<Event>(env.GITHUB_EVENT_PATH);
+      // String(...): envalid's str({devDefault: 'pull_request'}) narrows GITHUB_EVENT_NAME's type to
+      // that literal at the type level, even though the runtime value is any supported event name.
+      const isDispatchEvent = String(env.GITHUB_EVENT_NAME) === SUPPORTED_EVENT_TYPES.repository_dispatch;
 
       const {
-        pull_request: {
-          head: { sha: headSha },
-          base: { sha: baseSha },
-        },
-        number: prNumber,
         repository: {
           name: repo,
           owner: { login: owner },
         },
       } = event;
 
-      const { GITHUB_TOKEN, rulesLocation, base = baseSha, dryRun } = getParams();
+      const { GITHUB_TOKEN, rulesLocation, base: baseInput, dryRun } = getParams();
 
-      debug('params:', { rulesLocation, base, dryRun });
+      debug('params:', { rulesLocation, base: baseInput, dryRun, isDispatchEvent });
 
       if (!rulesLocation) {
         const message = `${Props.rulesLocation} is required`;
@@ -93,14 +130,11 @@ export const main = async (): Promise<void> => {
       });
       const client = new EnhancedOctokit({ auth: GITHUB_TOKEN });
 
-      const {
-        data: { files },
-      } = await client.repos.compareCommits({
-        base,
-        head: headSha,
-        owner,
-        repo,
-      });
+      // repository_dispatch carries no pull_request to diff or act on — rules for that event type
+      // match purely via eventJsonPath against the whole event (incl. client_payload).
+      const { prNumber, headSha, baseSha, files } = isDispatchEvent
+        ? { prNumber: undefined, headSha: undefined, baseSha: undefined, files: [] as RuleFile[] }
+        : await loadPullRequestDiff(client, event, baseInput);
 
       const matchingRules = await rules.getMatchingRules(
         files,
@@ -119,7 +153,7 @@ export const main = async (): Promise<void> => {
         );
       }
 
-      if (dryRun !== 'true') {
+      if (dryRun !== 'true' && !isDispatchEvent) {
         debug('not a dry Run');
 
         if (matchingRules.length) {
@@ -135,11 +169,12 @@ export const main = async (): Promise<void> => {
               const options: ActionInput = {
                 owner,
                 repo,
-                prNumber,
+                // non-null: this branch only runs when isDispatchEvent is false, where loadPullRequestDiff always resolves these.
+                prNumber: prNumber as number,
                 matchingRules: rulesForAction,
                 rules,
-                sha: headSha,
-                base: baseSha,
+                sha: headSha as string,
+                base: baseSha as string,
                 files,
               };
 

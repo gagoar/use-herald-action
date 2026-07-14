@@ -19,6 +19,7 @@ export enum SUPPORTED_EVENT_TYPES {
 
   PULL_REQUEST_TARGET = 'pull_request_target',
   push = 'push',
+  repository_dispatch = 'repository_dispatch',
 }
 interface Commit {
   sha: string;
@@ -40,8 +41,11 @@ interface PullRequest {
 }
 export interface Event {
   action: string;
-  number: number;
-  pull_request: PullRequest;
+  // absent on repository_dispatch — that event carries client_payload instead, never a PR to diff.
+  number?: number;
+  pull_request?: PullRequest;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- repository_dispatch payload shape is caller-defined; matched only via eventJsonPath, never destructured.
+  client_payload?: Record<string, any>;
 
   repository: Repository;
 }
