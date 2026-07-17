@@ -76,7 +76,7 @@ const loadPullRequestDiff = async (
     repo,
   });
 
-  return { prNumber, headSha, baseSha, files };
+  return { prNumber, headSha, baseSha, files: files || [] };
 };
 
 const actionsMap: Record<RuleActions, ActionMapInput> = {

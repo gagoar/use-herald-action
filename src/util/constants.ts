@@ -49,7 +49,9 @@ export interface Event {
 
   repository: Repository;
 }
-export type OctokitFile = RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files'][0];
+export type OctokitFile = NonNullable<
+  RestEndpointMethodTypes['repos']['compareCommits']['response']['data']['files']
+>[0];
 
 export type RuleFile = Partial<OctokitFile> & Required<Pick<OctokitFile, 'filename' | 'blob_url'>>;
 

@@ -2393,7 +2393,7 @@ var require_utils2 = __commonJS({
       return (Number(max) - Number(min)) / Number(step) >= limit;
     };
     exports2.escapeNode = (block, n = 0, type) => {
-      let node = block.nodes[n];
+      const node = block.nodes[n];
       if (!node)
         return;
       if (type && node.type === type || node.type === "open" || node.type === "close") {
@@ -2444,8 +2444,14 @@ var require_utils2 = __commonJS({
       const result = [];
       const flat = (arr) => {
         for (let i = 0; i < arr.length; i++) {
-          let ele = arr[i];
-          Array.isArray(ele) ? flat(ele, result) : ele !== void 0 && result.push(ele);
+          const ele = arr[i];
+          if (Array.isArray(ele)) {
+            flat(ele);
+            continue;
+          }
+          if (ele !== void 0) {
+            result.push(ele);
+          }
         }
         return result;
       };
@@ -2461,9 +2467,9 @@ var require_stringify2 = __commonJS({
     "use strict";
     var utils = require_utils2();
     module2.exports = (ast, options = {}) => {
-      let stringify = (node, parent = {}) => {
-        let invalidBlock = options.escapeInvalid && utils.isInvalidBrace(parent);
-        let invalidNode = node.invalid === true && options.escapeInvalid === true;
+      const stringify = (node, parent = {}) => {
+        const invalidBlock = options.escapeInvalid && utils.isInvalidBrace(parent);
+        const invalidNode = node.invalid === true && options.escapeInvalid === true;
         let output = "";
         if (node.value) {
           if ((invalidBlock || invalidNode) && utils.isOpenOrClose(node)) {
@@ -2475,7 +2481,7 @@ var require_stringify2 = __commonJS({
           return node.value;
         }
         if (node.nodes) {
-          for (let child of node.nodes) {
+          for (const child of node.nodes) {
             output += stringify(child);
           }
         }
@@ -2767,7 +2773,7 @@ var require_fill_range = __commonJS({
         input = "0" + input;
       return negative ? "-" + input : input;
     };
-    var toSequence = (parts, options) => {
+    var toSequence = (parts, options, maxLen) => {
       parts.negatives.sort((a, b) => a < b ? -1 : a > b ? 1 : 0);
       parts.positives.sort((a, b) => a < b ? -1 : a > b ? 1 : 0);
       let prefix = options.capture ? "" : "?:";
@@ -2775,10 +2781,10 @@ var require_fill_range = __commonJS({
       let negatives = "";
       let result;
       if (parts.positives.length) {
-        positives = parts.positives.join("|");
+        positives = parts.positives.map((v) => toMaxLen(String(v), maxLen)).join("|");
       }
       if (parts.negatives.length) {
-        negatives = `-(${prefix}${parts.negatives.join("|")})`;
+        negatives = `-(${prefix}${parts.negatives.map((v) => toMaxLen(String(v), maxLen)).join("|")})`;
       }
       if (positives && negatives) {
         result = `${positives}|${negatives}`;
@@ -2860,7 +2866,7 @@ var require_fill_range = __commonJS({
         index++;
       }
       if (options.toRegex === true) {
-        return step > 1 ? toSequence(parts, options) : toRegex(range, null, __spreadValues({ wrap: false }, options));
+        return step > 1 ? toSequence(parts, options, maxLen) : toRegex(range, null, __spreadValues({ wrap: false }, options));
       }
       return range;
     };
@@ -2927,16 +2933,17 @@ var require_compile = __commonJS({
     var fill = require_fill_range();
     var utils = require_utils2();
     var compile = (ast, options = {}) => {
-      let walk = (node, parent = {}) => {
-        let invalidBlock = utils.isInvalidBrace(parent);
-        let invalidNode = node.invalid === true && options.escapeInvalid === true;
-        let invalid = invalidBlock === true || invalidNode === true;
-        let prefix = options.escapeInvalid === true ? "\\" : "";
+      const walk = (node, parent = {}) => {
+        const invalidBlock = utils.isInvalidBrace(parent);
+        const invalidNode = node.invalid === true && options.escapeInvalid === true;
+        const invalid = invalidBlock === true || invalidNode === true;
+        const prefix = options.escapeInvalid === true ? "\\" : "";
         let output = "";
         if (node.isOpen === true) {
           return prefix + node.value;
         }
         if (node.isClose === true) {
+          console.log("node.isClose", prefix, node.value);
           return prefix + node.value;
         }
         if (node.type === "open") {
@@ -2952,14 +2959,14 @@ var require_compile = __commonJS({
           return node.value;
         }
         if (node.nodes && node.ranges > 0) {
-          let args = utils.reduce(node.nodes);
-          let range = fill(...args, __spreadProps(__spreadValues({}, options), { wrap: false, toRegex: true }));
+          const args = utils.reduce(node.nodes);
+          const range = fill(...args, __spreadProps(__spreadValues({}, options), { wrap: false, toRegex: true, strictZeros: true }));
           if (range.length !== 0) {
             return args.length > 1 && range.length > 1 ? `(${range})` : range;
           }
         }
         if (node.nodes) {
-          for (let child of node.nodes) {
+          for (const child of node.nodes) {
             output += walk(child, node);
           }
         }
@@ -2979,7 +2986,7 @@ var require_expand = __commonJS({
     var stringify = require_stringify2();
     var utils = require_utils2();
     var append = (queue = "", stash = "", enclose = false) => {
-      let result = [];
+      const result = [];
       queue = [].concat(queue);
       stash = [].concat(stash);
       if (!stash.length)
@@ -2987,9 +2994,9 @@ var require_expand = __commonJS({
       if (!queue.length) {
         return enclose ? utils.flatten(stash).map((ele) => `{${ele}}`) : stash;
       }
-      for (let item of queue) {
+      for (const item of queue) {
         if (Array.isArray(item)) {
-          for (let value of item) {
+          for (const value of item) {
             result.push(append(value, stash, enclose));
           }
         } else {
@@ -3003,8 +3010,8 @@ var require_expand = __commonJS({
       return utils.flatten(result);
     };
     var expand = (ast, options = {}) => {
-      let rangeLimit = options.rangeLimit === void 0 ? 1e3 : options.rangeLimit;
-      let walk = (node, parent = {}) => {
+      const rangeLimit = options.rangeLimit === void 0 ? 1e3 : options.rangeLimit;
+      const walk = (node, parent = {}) => {
         node.queue = [];
         let p = parent;
         let q = parent.queue;
@@ -3021,7 +3028,7 @@ var require_expand = __commonJS({
           return;
         }
         if (node.nodes && node.ranges > 0) {
-          let args = utils.reduce(node.nodes);
+          const args = utils.reduce(node.nodes);
           if (utils.exceedsLimit(...args, options.step, rangeLimit)) {
             throw new RangeError("expanded array length exceeds range limit. Use options.rangeLimit to increase or disable the limit.");
           }
@@ -3033,7 +3040,7 @@ var require_expand = __commonJS({
           node.nodes = [];
           return;
         }
-        let enclose = utils.encloseBrace(node);
+        const enclose = utils.encloseBrace(node);
         let queue = node.queue;
         let block = node;
         while (block.type !== "brace" && block.type !== "root" && block.parent) {
@@ -3041,7 +3048,7 @@ var require_expand = __commonJS({
           queue = block.queue;
         }
         for (let i = 0; i < node.nodes.length; i++) {
-          let child = node.nodes[i];
+          const child = node.nodes[i];
           if (child.type === "comma" && node.type === "brace") {
             if (i === 1)
               queue.push("");
@@ -3073,7 +3080,7 @@ var require_constants = __commonJS({
   "node_modules/braces/lib/constants.js"(exports2, module2) {
     "use strict";
     module2.exports = {
-      MAX_LENGTH: 1024 * 64,
+      MAX_LENGTH: 1e4,
       CHAR_0: "0",
       CHAR_9: "9",
       CHAR_UPPERCASE_A: "A",
@@ -3148,21 +3155,20 @@ var require_parse2 = __commonJS({
       if (typeof input !== "string") {
         throw new TypeError("Expected a string");
       }
-      let opts = options || {};
-      let max = typeof opts.maxLength === "number" ? Math.min(MAX_LENGTH, opts.maxLength) : MAX_LENGTH;
+      const opts = options || {};
+      const max = typeof opts.maxLength === "number" ? Math.min(MAX_LENGTH, opts.maxLength) : MAX_LENGTH;
       if (input.length > max) {
         throw new SyntaxError(`Input length (${input.length}), exceeds max characters (${max})`);
       }
-      let ast = { type: "root", input, nodes: [] };
-      let stack = [ast];
+      const ast = { type: "root", input, nodes: [] };
+      const stack = [ast];
       let block = ast;
       let prev = ast;
       let brackets = 0;
-      let length = input.length;
+      const length = input.length;
       let index = 0;
       let depth = 0;
       let value;
-      let memo2 = {};
       const advance = () => input[index++];
       const push = (node) => {
         if (node.type === "text" && prev.type === "dot") {
@@ -3195,7 +3201,6 @@ var require_parse2 = __commonJS({
         }
         if (value === CHAR_LEFT_SQUARE_BRACKET) {
           brackets++;
-          let closed = true;
           let next;
           while (index < length && (next = advance())) {
             value += next;
@@ -3234,7 +3239,7 @@ var require_parse2 = __commonJS({
           continue;
         }
         if (value === CHAR_DOUBLE_QUOTE || value === CHAR_SINGLE_QUOTE || value === CHAR_BACKTICK) {
-          let open = value;
+          const open = value;
           let next;
           if (options.keepQuotes !== true) {
             value = "";
@@ -3256,8 +3261,8 @@ var require_parse2 = __commonJS({
         }
         if (value === CHAR_LEFT_CURLY_BRACE) {
           depth++;
-          let dollar = prev.value && prev.value.slice(-1) === "$" || block.dollar === true;
-          let brace = {
+          const dollar = prev.value && prev.value.slice(-1) === "$" || block.dollar === true;
+          const brace = {
             type: "brace",
             open: true,
             close: false,
@@ -3277,7 +3282,7 @@ var require_parse2 = __commonJS({
             push({ type: "text", value });
             continue;
           }
-          let type = "close";
+          const type = "close";
           block = stack.pop();
           block.close = true;
           push({ type, value });
@@ -3288,7 +3293,7 @@ var require_parse2 = __commonJS({
         if (value === CHAR_COMMA && depth > 0) {
           if (block.ranges > 0) {
             block.ranges = 0;
-            let open = block.nodes.shift();
+            const open = block.nodes.shift();
             block.nodes = [open, { type: "text", value: stringify(block) }];
           }
           push({ type: "comma", value });
@@ -3296,7 +3301,7 @@ var require_parse2 = __commonJS({
           continue;
         }
         if (value === CHAR_DOT && depth > 0 && block.commas === 0) {
-          let siblings = block.nodes;
+          const siblings = block.nodes;
           if (depth === 0 || siblings.length === 0) {
             push({ type: "text", value });
             continue;
@@ -3317,7 +3322,7 @@ var require_parse2 = __commonJS({
           }
           if (prev.type === "range") {
             siblings.pop();
-            let before = siblings[siblings.length - 1];
+            const before = siblings[siblings.length - 1];
             before.value += prev.value + value;
             prev = before;
             block.ranges--;
@@ -3342,8 +3347,8 @@ var require_parse2 = __commonJS({
               node.invalid = true;
             }
           });
-          let parent = stack[stack.length - 1];
-          let index2 = parent.nodes.indexOf(block);
+          const parent = stack[stack.length - 1];
+          const index2 = parent.nodes.indexOf(block);
           parent.nodes.splice(index2, 1, ...block.nodes);
         }
       } while (stack.length > 0);
@@ -3365,8 +3370,8 @@ var require_braces = __commonJS({
     var braces = (input, options = {}) => {
       let output = [];
       if (Array.isArray(input)) {
-        for (let pattern of input) {
-          let result = braces.create(pattern, options);
+        for (const pattern of input) {
+          const result = braces.create(pattern, options);
           if (Array.isArray(result)) {
             output.push(...result);
           } else {
@@ -3424,6 +3429,7 @@ var require_constants2 = __commonJS({
     var path = require("path");
     var WIN_SLASH = "\\\\/";
     var WIN_NO_SLASH = `[^${WIN_SLASH}]`;
+    var DEFAULT_MAX_EXTGLOB_RECURSION = 0;
     var DOT_LITERAL = "\\.";
     var PLUS_LITERAL = "\\+";
     var QMARK_LITERAL = "\\?";
@@ -3470,6 +3476,7 @@ var require_constants2 = __commonJS({
       END_ANCHOR: `(?:[${WIN_SLASH}]|$)`
     });
     var POSIX_REGEX_SOURCE = {
+      __proto__: null,
       alnum: "a-zA-Z0-9",
       alpha: "a-zA-Z",
       ascii: "\\x00-\\x7F",
@@ -3486,6 +3493,7 @@ var require_constants2 = __commonJS({
       xdigit: "A-Fa-f0-9"
     };
     module2.exports = {
+      DEFAULT_MAX_EXTGLOB_RECURSION,
       MAX_LENGTH: 1024 * 64,
       POSIX_REGEX_SOURCE,
       REGEX_BACKSLASH: /\\(?![*+?^${}(|)[\]])/g,
@@ -3495,6 +3503,7 @@ var require_constants2 = __commonJS({
       REGEX_SPECIAL_CHARS_GLOBAL: /([-*+?.^${}(|)[\]])/g,
       REGEX_REMOVE_BACKSLASH: /(?:\[.*?[^\\]\]|\\(?=.))/g,
       REPLACEMENTS: {
+        __proto__: null,
         "***": "*",
         "**/**": "**",
         "**/**/**": "**"
@@ -3969,6 +3978,213 @@ var require_parse3 = __commonJS({
     var syntaxError = (type, char) => {
       return `Missing ${type}: "${char}" - use "\\\\${char}" to match literal characters`;
     };
+    var splitTopLevel = (input) => {
+      const parts = [];
+      let bracket = 0;
+      let paren = 0;
+      let quote = 0;
+      let value = "";
+      let escaped = false;
+      for (const ch of input) {
+        if (escaped === true) {
+          value += ch;
+          escaped = false;
+          continue;
+        }
+        if (ch === "\\") {
+          value += ch;
+          escaped = true;
+          continue;
+        }
+        if (ch === '"') {
+          quote = quote === 1 ? 0 : 1;
+          value += ch;
+          continue;
+        }
+        if (quote === 0) {
+          if (ch === "[") {
+            bracket++;
+          } else if (ch === "]" && bracket > 0) {
+            bracket--;
+          } else if (bracket === 0) {
+            if (ch === "(") {
+              paren++;
+            } else if (ch === ")" && paren > 0) {
+              paren--;
+            } else if (ch === "|" && paren === 0) {
+              parts.push(value);
+              value = "";
+              continue;
+            }
+          }
+        }
+        value += ch;
+      }
+      parts.push(value);
+      return parts;
+    };
+    var isPlainBranch = (branch) => {
+      let escaped = false;
+      for (const ch of branch) {
+        if (escaped === true) {
+          escaped = false;
+          continue;
+        }
+        if (ch === "\\") {
+          escaped = true;
+          continue;
+        }
+        if (/[?*+@!()[\]{}]/.test(ch)) {
+          return false;
+        }
+      }
+      return true;
+    };
+    var normalizeSimpleBranch = (branch) => {
+      let value = branch.trim();
+      let changed = true;
+      while (changed === true) {
+        changed = false;
+        if (/^@\([^\\()[\]{}|]+\)$/.test(value)) {
+          value = value.slice(2, -1);
+          changed = true;
+        }
+      }
+      if (!isPlainBranch(value)) {
+        return;
+      }
+      return value.replace(/\\(.)/g, "$1");
+    };
+    var hasRepeatedCharPrefixOverlap = (branches) => {
+      const values = branches.map(normalizeSimpleBranch).filter(Boolean);
+      for (let i = 0; i < values.length; i++) {
+        for (let j = i + 1; j < values.length; j++) {
+          const a = values[i];
+          const b = values[j];
+          const char = a[0];
+          if (!char || a !== char.repeat(a.length) || b !== char.repeat(b.length)) {
+            continue;
+          }
+          if (a === b || a.startsWith(b) || b.startsWith(a)) {
+            return true;
+          }
+        }
+      }
+      return false;
+    };
+    var parseRepeatedExtglob = (pattern, requireEnd = true) => {
+      if (pattern[0] !== "+" && pattern[0] !== "*" || pattern[1] !== "(") {
+        return;
+      }
+      let bracket = 0;
+      let paren = 0;
+      let quote = 0;
+      let escaped = false;
+      for (let i = 1; i < pattern.length; i++) {
+        const ch = pattern[i];
+        if (escaped === true) {
+          escaped = false;
+          continue;
+        }
+        if (ch === "\\") {
+          escaped = true;
+          continue;
+        }
+        if (ch === '"') {
+          quote = quote === 1 ? 0 : 1;
+          continue;
+        }
+        if (quote === 1) {
+          continue;
+        }
+        if (ch === "[") {
+          bracket++;
+          continue;
+        }
+        if (ch === "]" && bracket > 0) {
+          bracket--;
+          continue;
+        }
+        if (bracket > 0) {
+          continue;
+        }
+        if (ch === "(") {
+          paren++;
+          continue;
+        }
+        if (ch === ")") {
+          paren--;
+          if (paren === 0) {
+            if (requireEnd === true && i !== pattern.length - 1) {
+              return;
+            }
+            return {
+              type: pattern[0],
+              body: pattern.slice(2, i),
+              end: i
+            };
+          }
+        }
+      }
+    };
+    var getStarExtglobSequenceOutput = (pattern) => {
+      let index = 0;
+      const chars = [];
+      while (index < pattern.length) {
+        const match = parseRepeatedExtglob(pattern.slice(index), false);
+        if (!match || match.type !== "*") {
+          return;
+        }
+        const branches = splitTopLevel(match.body).map((branch2) => branch2.trim());
+        if (branches.length !== 1) {
+          return;
+        }
+        const branch = normalizeSimpleBranch(branches[0]);
+        if (!branch || branch.length !== 1) {
+          return;
+        }
+        chars.push(branch);
+        index += match.end + 1;
+      }
+      if (chars.length < 1) {
+        return;
+      }
+      const source = chars.length === 1 ? utils.escapeRegex(chars[0]) : `[${chars.map((ch) => utils.escapeRegex(ch)).join("")}]`;
+      return `${source}*`;
+    };
+    var repeatedExtglobRecursion = (pattern) => {
+      let depth = 0;
+      let value = pattern.trim();
+      let match = parseRepeatedExtglob(value);
+      while (match) {
+        depth++;
+        value = match.body.trim();
+        match = parseRepeatedExtglob(value);
+      }
+      return depth;
+    };
+    var analyzeRepeatedExtglob = (body, options) => {
+      if (options.maxExtglobRecursion === false) {
+        return { risky: false };
+      }
+      const max = typeof options.maxExtglobRecursion === "number" ? options.maxExtglobRecursion : constants.DEFAULT_MAX_EXTGLOB_RECURSION;
+      const branches = splitTopLevel(body).map((branch) => branch.trim());
+      if (branches.length > 1) {
+        if (branches.some((branch) => branch === "") || branches.some((branch) => /^[*?]+$/.test(branch)) || hasRepeatedCharPrefixOverlap(branches)) {
+          return { risky: true };
+        }
+      }
+      for (const branch of branches) {
+        const safeOutput = getStarExtglobSequenceOutput(branch);
+        if (safeOutput) {
+          return { risky: true, safeOutput };
+        }
+        if (repeatedExtglobRecursion(branch) > max) {
+          return { risky: true };
+        }
+      }
+      return { risky: false };
+    };
     var parse = (input, options) => {
       if (typeof input !== "string") {
         throw new TypeError("Expected a string");
@@ -4101,6 +4317,8 @@ var require_parse3 = __commonJS({
         token.prev = prev;
         token.parens = state.parens;
         token.output = state.output;
+        token.startIndex = state.index;
+        token.tokensIndex = tokens.length;
         const output = (opts.capture ? "(" : "") + token.open;
         increment("parens");
         push({ type, value: value2, output: state.output ? "" : ONE_CHAR });
@@ -4108,6 +4326,26 @@ var require_parse3 = __commonJS({
         extglobs.push(token);
       };
       const extglobClose = (token) => {
+        const literal = input.slice(token.startIndex, state.index + 1);
+        const body = input.slice(token.startIndex + 2, state.index);
+        const analysis = analyzeRepeatedExtglob(body, opts);
+        if ((token.type === "plus" || token.type === "star") && analysis.risky) {
+          const safeOutput = analysis.safeOutput ? (token.output ? "" : ONE_CHAR) + (opts.capture ? `(${analysis.safeOutput})` : analysis.safeOutput) : void 0;
+          const open = tokens[token.tokensIndex];
+          open.type = "text";
+          open.value = literal;
+          open.output = safeOutput || utils.escapeRegex(literal);
+          for (let i = token.tokensIndex + 1; i < tokens.length; i++) {
+            tokens[i].value = "";
+            tokens[i].output = "";
+            delete tokens[i].suffix;
+          }
+          state.output = token.output + open.output;
+          state.backtrack = true;
+          push({ type: "paren", extglob: true, value, output: "" });
+          decrement("parens");
+          return;
+        }
         let output = token.close + (opts.capture ? ")" : "");
         let rest;
         if (token.type === "negate") {
@@ -4119,7 +4357,8 @@ var require_parse3 = __commonJS({
             output = token.close = `)$))${extglobStar}`;
           }
           if (token.inner.includes("*") && (rest = remaining()) && /^\.[^\\/.]+$/.test(rest)) {
-            output = token.close = `)${rest})${extglobStar})`;
+            const expression = parse(rest, __spreadProps(__spreadValues({}, options), { fastpaths: false })).output;
+            output = token.close = `)${expression})${extglobStar})`;
           }
           if (token.prev.type === "bos") {
             state.negatedExtglob = true;
@@ -4880,7 +5119,11 @@ var require_micromatch = __commonJS({
     var braces = require_braces();
     var picomatch = require_picomatch2();
     var utils = require_utils3();
-    var isEmptyString = (val) => val === "" || val === "./";
+    var isEmptyString = (v) => v === "" || v === "./";
+    var hasBraces = (v) => {
+      const index = v.indexOf("{");
+      return index > -1 && v.indexOf("}", index) > -1;
+    };
     var micromatch = (list, patterns, options) => {
       patterns = [].concat(patterns);
       list = [].concat(list);
@@ -4937,9 +5180,9 @@ var require_micromatch = __commonJS({
           options.onResult(state);
         items.push(state.output);
       };
-      let matches = micromatch(list, patterns, __spreadProps(__spreadValues({}, options), { onResult }));
+      let matches = new Set(micromatch(list, patterns, __spreadProps(__spreadValues({}, options), { onResult })));
       for (let item of items) {
-        if (!matches.includes(item)) {
+        if (!matches.has(item)) {
           result.add(item);
         }
       }
@@ -5020,7 +5263,7 @@ var require_micromatch = __commonJS({
     micromatch.braces = (pattern, options) => {
       if (typeof pattern !== "string")
         throw new TypeError("Expected a string");
-      if (options && options.nobrace === true || !/\{.*\}/.test(pattern)) {
+      if (options && options.nobrace === true || !hasBraces(pattern)) {
         return [pattern];
       }
       return braces(pattern, options);
@@ -5030,6 +5273,7 @@ var require_micromatch = __commonJS({
         throw new TypeError("Expected a string");
       return micromatch.braces(pattern, __spreadProps(__spreadValues({}, options), { expand: true }));
     };
+    micromatch.hasBraces = hasBraces;
     module2.exports = micromatch;
   }
 });
@@ -7296,29 +7540,11 @@ var require_assertString = __commonJS({
       value: true
     });
     exports2.default = assertString;
-    function _typeof(obj) {
-      "@babel/helpers - typeof";
-      if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-        _typeof = function _typeof2(obj2) {
-          return typeof obj2;
-        };
-      } else {
-        _typeof = function _typeof2(obj2) {
-          return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
-        };
-      }
-      return _typeof(obj);
-    }
     function assertString(input) {
-      var isString = typeof input === "string" || input instanceof String;
-      if (!isString) {
-        var invalidType = _typeof(input);
-        if (input === null)
-          invalidType = "null";
-        else if (invalidType === "object")
-          invalidType = input.constructor.name;
-        throw new TypeError("Expected a string but received a ".concat(invalidType));
-      }
+      if (input === void 0 || input === null)
+        throw new TypeError("Expected a string but received a ".concat(input));
+      if (input.constructor.name !== "String")
+        throw new TypeError("Expected a string but received a ".concat(input.constructor.name));
     }
     module2.exports = exports2.default;
     module2.exports.default = exports2.default;
@@ -7333,9 +7559,20 @@ var require_merge = __commonJS({
       value: true
     });
     exports2.default = merge;
+    function _typeof(o) {
+      "@babel/helpers - typeof";
+      return _typeof = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(o2) {
+        return typeof o2;
+      } : function(o2) {
+        return o2 && typeof Symbol == "function" && o2.constructor === Symbol && o2 !== Symbol.prototype ? "symbol" : typeof o2;
+      }, _typeof(o);
+    }
     function merge() {
       var obj = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
       var defaults = arguments.length > 1 ? arguments[1] : void 0;
+      if (_typeof(obj) !== "object" || obj === null) {
+        obj = {};
+      }
       for (var key in defaults) {
         if (typeof obj[key] === "undefined") {
           obj[key] = defaults[key];
@@ -7358,15 +7595,16 @@ var require_isFQDN = __commonJS({
     exports2.default = isFQDN;
     var _assertString = _interopRequireDefault(require_assertString());
     var _merge = _interopRequireDefault(require_merge());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
+    function _interopRequireDefault(e) {
+      return e && e.__esModule ? e : { default: e };
     }
     var default_fqdn_options = {
       require_tld: true,
       allow_underscores: false,
       allow_trailing_dot: false,
       allow_numeric_tld: false,
-      allow_wildcard: false
+      allow_wildcard: false,
+      ignore_max_length: false
     };
     function isFQDN(str2, options) {
       (0, _assertString.default)(str2);
@@ -7383,7 +7621,7 @@ var require_isFQDN = __commonJS({
         if (parts.length < 2) {
           return false;
         }
-        if (!/^([a-z\u00A1-\u00A8\u00AA-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
+        if (!options.allow_numeric_tld && !/^([a-z\u00A1-\u00A8\u00AA-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
           return false;
         }
         if (/\s/.test(tld)) {
@@ -7394,7 +7632,7 @@ var require_isFQDN = __commonJS({
         return false;
       }
       return parts.every(function(part) {
-        if (part.length > 63) {
+        if (part.length > 63 && !options.ignore_max_length) {
           return false;
         }
         if (!/^[a-z_\u00a1-\uffff0-9-]+$/i.test(part)) {
@@ -7426,32 +7664,38 @@ var require_isIP = __commonJS({
     });
     exports2.default = isIP;
     var _assertString = _interopRequireDefault(require_assertString());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
+    function _interopRequireDefault(e) {
+      return e && e.__esModule ? e : { default: e };
+    }
+    function _typeof(o) {
+      "@babel/helpers - typeof";
+      return _typeof = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(o2) {
+        return typeof o2;
+      } : function(o2) {
+        return o2 && typeof Symbol == "function" && o2.constructor === Symbol && o2 !== Symbol.prototype ? "symbol" : typeof o2;
+      }, _typeof(o);
     }
     var IPv4SegmentFormat = "(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])";
     var IPv4AddressFormat = "(".concat(IPv4SegmentFormat, "[.]){3}").concat(IPv4SegmentFormat);
     var IPv4AddressRegExp = new RegExp("^".concat(IPv4AddressFormat, "$"));
     var IPv6SegmentFormat = "(?:[0-9a-fA-F]{1,4})";
-    var IPv6AddressRegExp = new RegExp("^(" + "(?:".concat(IPv6SegmentFormat, ":){7}(?:").concat(IPv6SegmentFormat, "|:)|") + "(?:".concat(IPv6SegmentFormat, ":){6}(?:").concat(IPv4AddressFormat, "|:").concat(IPv6SegmentFormat, "|:)|") + "(?:".concat(IPv6SegmentFormat, ":){5}(?::").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,2}|:)|") + "(?:".concat(IPv6SegmentFormat, ":){4}(?:(:").concat(IPv6SegmentFormat, "){0,1}:").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,3}|:)|") + "(?:".concat(IPv6SegmentFormat, ":){3}(?:(:").concat(IPv6SegmentFormat, "){0,2}:").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,4}|:)|") + "(?:".concat(IPv6SegmentFormat, ":){2}(?:(:").concat(IPv6SegmentFormat, "){0,3}:").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,5}|:)|") + "(?:".concat(IPv6SegmentFormat, ":){1}(?:(:").concat(IPv6SegmentFormat, "){0,4}:").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,6}|:)|") + "(?::((?::".concat(IPv6SegmentFormat, "){0,5}:").concat(IPv4AddressFormat, "|(?::").concat(IPv6SegmentFormat, "){1,7}|:))") + ")(%[0-9a-zA-Z-.:]{1,})?$");
-    function isIP(str2) {
-      var version = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "";
-      (0, _assertString.default)(str2);
-      version = String(version);
+    var IPv6AddressRegExp = new RegExp("^(" + "(?:".concat(IPv6SegmentFormat, ":){7}(?:").concat(IPv6SegmentFormat, "|:)|") + "(?:".concat(IPv6SegmentFormat, ":){6}(?:").concat(IPv4AddressFormat, "|:").concat(IPv6SegmentFormat, "|:)|") + "(?:".concat(IPv6SegmentFormat, ":){5}(?::").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,2}|:)|") + "(?:".concat(IPv6SegmentFormat, ":){4}(?:(:").concat(IPv6SegmentFormat, "){0,1}:").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,3}|:)|") + "(?:".concat(IPv6SegmentFormat, ":){3}(?:(:").concat(IPv6SegmentFormat, "){0,2}:").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,4}|:)|") + "(?:".concat(IPv6SegmentFormat, ":){2}(?:(:").concat(IPv6SegmentFormat, "){0,3}:").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,5}|:)|") + "(?:".concat(IPv6SegmentFormat, ":){1}(?:(:").concat(IPv6SegmentFormat, "){0,4}:").concat(IPv4AddressFormat, "|(:").concat(IPv6SegmentFormat, "){1,6}|:)|") + "(?::((?::".concat(IPv6SegmentFormat, "){0,5}:").concat(IPv4AddressFormat, "|(?::").concat(IPv6SegmentFormat, "){1,7}|:))") + ")(%[0-9a-zA-Z.]{1,})?$");
+    function isIP(ipAddress) {
+      var options = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+      (0, _assertString.default)(ipAddress);
+      var version = (_typeof(options) === "object" ? options.version : arguments[1]) || "";
       if (!version) {
-        return isIP(str2, 4) || isIP(str2, 6);
-      }
-      if (version === "4") {
-        if (!IPv4AddressRegExp.test(str2)) {
-          return false;
-        }
-        var parts = str2.split(".").sort(function(a, b) {
-          return a - b;
+        return isIP(ipAddress, {
+          version: 4
+        }) || isIP(ipAddress, {
+          version: 6
         });
-        return parts[3] <= 255;
       }
-      if (version === "6") {
-        return !!IPv6AddressRegExp.test(str2);
+      if (version.toString() === "4") {
+        return IPv4AddressRegExp.test(ipAddress);
+      }
+      if (version.toString() === "6") {
+        return IPv6AddressRegExp.test(ipAddress);
       }
       return false;
     }
@@ -9470,13 +9714,15 @@ var require_brace_expansion = __commonJS({
       parts.push.apply(parts, p);
       return parts;
     }
-    function expandTop(str2) {
+    function expandTop(str2, options) {
       if (!str2)
         return [];
+      options = options || {};
+      var max = options.max == null ? Infinity : options.max;
       if (str2.substr(0, 2) === "{}") {
         str2 = "\\{\\}" + str2.substr(2);
       }
-      return expand(escapeBraces(str2), true).map(unescapeBraces);
+      return expand(escapeBraces(str2), max, true).map(unescapeBraces);
     }
     function embrace(str2) {
       return "{" + str2 + "}";
@@ -9490,87 +9736,90 @@ var require_brace_expansion = __commonJS({
     function gte(i, y) {
       return i >= y;
     }
-    function expand(str2, isTop) {
+    function expand(str2, max, isTop) {
       var expansions = [];
-      var m = balanced("{", "}", str2);
-      if (!m || /\$$/.test(m.pre))
-        return [str2];
-      var isNumericSequence = /^-?\d+\.\.-?\d+(?:\.\.-?\d+)?$/.test(m.body);
-      var isAlphaSequence = /^[a-zA-Z]\.\.[a-zA-Z](?:\.\.-?\d+)?$/.test(m.body);
-      var isSequence = isNumericSequence || isAlphaSequence;
-      var isOptions = m.body.indexOf(",") >= 0;
-      if (!isSequence && !isOptions) {
-        if (m.post.match(/,.*\}/)) {
-          str2 = m.pre + "{" + m.body + escClose + m.post;
-          return expand(str2);
-        }
-        return [str2];
-      }
-      var n;
-      if (isSequence) {
-        n = m.body.split(/\.\./);
-      } else {
-        n = parseCommaParts(m.body);
-        if (n.length === 1) {
-          n = expand(n[0], false).map(embrace);
-          if (n.length === 1) {
-            var post = m.post.length ? expand(m.post, false) : [""];
-            return post.map(function(p) {
-              return m.pre + n[0] + p;
-            });
+      for (; ; ) {
+        var m = balanced("{", "}", str2);
+        if (!m || /\$$/.test(m.pre))
+          return [str2];
+        var isNumericSequence = /^-?\d+\.\.-?\d+(?:\.\.-?\d+)?$/.test(m.body);
+        var isAlphaSequence = /^[a-zA-Z]\.\.[a-zA-Z](?:\.\.-?\d+)?$/.test(m.body);
+        var isSequence = isNumericSequence || isAlphaSequence;
+        var isOptions = m.body.indexOf(",") >= 0;
+        if (!isSequence && !isOptions) {
+          if (m.post.match(/,(?!,).*\}/)) {
+            str2 = m.pre + "{" + m.body + escClose + m.post;
+            isTop = true;
+            continue;
           }
+          return [str2];
         }
-      }
-      var pre = m.pre;
-      var post = m.post.length ? expand(m.post, false) : [""];
-      var N;
-      if (isSequence) {
-        var x = numeric(n[0]);
-        var y = numeric(n[1]);
-        var width = Math.max(n[0].length, n[1].length);
-        var incr = n.length == 3 ? Math.abs(numeric(n[2])) : 1;
-        var test = lte;
-        var reverse = y < x;
-        if (reverse) {
-          incr *= -1;
-          test = gte;
-        }
-        var pad = n.some(isPadded);
-        N = [];
-        for (var i = x; test(i, y); i += incr) {
-          var c;
-          if (isAlphaSequence) {
-            c = String.fromCharCode(i);
-            if (c === "\\")
-              c = "";
-          } else {
-            c = String(i);
-            if (pad) {
-              var need = width - c.length;
-              if (need > 0) {
-                var z = new Array(need + 1).join("0");
-                if (i < 0)
-                  c = "-" + z + c.slice(1);
-                else
-                  c = z + c;
-              }
+        var n;
+        if (isSequence) {
+          n = m.body.split(/\.\./);
+        } else {
+          n = parseCommaParts(m.body);
+          if (n.length === 1) {
+            n = expand(n[0], max, false).map(embrace);
+            if (n.length === 1) {
+              var post = m.post.length ? expand(m.post, max, false) : [""];
+              return post.map(function(p) {
+                return m.pre + n[0] + p;
+              });
             }
           }
-          N.push(c);
         }
-      } else {
-        N = concatMap(n, function(el) {
-          return expand(el, false);
-        });
-      }
-      for (var j = 0; j < N.length; j++) {
-        for (var k = 0; k < post.length; k++) {
-          var expansion = pre + N[j] + post[k];
-          if (!isTop || isSequence || expansion)
-            expansions.push(expansion);
+        var pre = m.pre;
+        var post = m.post.length ? expand(m.post, max, false) : [""];
+        var N;
+        if (isSequence) {
+          var x = numeric(n[0]);
+          var y = numeric(n[1]);
+          var width = Math.max(n[0].length, n[1].length);
+          var incr = n.length == 3 ? Math.max(Math.abs(numeric(n[2])), 1) : 1;
+          var test = lte;
+          var reverse = y < x;
+          if (reverse) {
+            incr *= -1;
+            test = gte;
+          }
+          var pad = n.some(isPadded);
+          N = [];
+          for (var i = x; test(i, y) && N.length < max; i += incr) {
+            var c;
+            if (isAlphaSequence) {
+              c = String.fromCharCode(i);
+              if (c === "\\")
+                c = "";
+            } else {
+              c = String(i);
+              if (pad) {
+                var need = width - c.length;
+                if (need > 0) {
+                  var z = new Array(need + 1).join("0");
+                  if (i < 0)
+                    c = "-" + z + c.slice(1);
+                  else
+                    c = z + c;
+                }
+              }
+            }
+            N.push(c);
+          }
+        } else {
+          N = concatMap(n, function(el) {
+            return expand(el, max, false);
+          });
         }
+        for (var j = 0; j < N.length; j++) {
+          for (var k = 0; k < post.length && expansions.length < max; k++) {
+            var expansion = pre + N[j] + post[k];
+            if (!isTop || isSequence || expansion)
+              expansions.push(expansion);
+          }
+        }
+        return expansions;
       }
-      return expansions;
     }
   }
 });
@@ -20979,7 +21228,8 @@ var require_dist_node4 = __commonJS({
     }
     var deprecation = require_dist_node3();
     var once = _interopDefault(require_once());
-    var logOnce = once((deprecation2) => console.warn(deprecation2));
+    var logOnceCode = once((deprecation2) => console.warn(deprecation2));
+    var logOnceHeaders = once((deprecation2) => console.warn(deprecation2));
     var RequestError = class extends Error {
       constructor(message, statusCode, options) {
         super(message);
@@ -20988,13 +21238,14 @@ var require_dist_node4 = __commonJS({
         }
         this.name = "HttpError";
         this.status = statusCode;
-        Object.defineProperty(this, "code", {
-          get() {
-            logOnce(new deprecation.Deprecation("[@octokit/request-error] `error.code` is deprecated, use `error.status`."));
-            return statusCode;
-          }
-        });
-        this.headers = options.headers || {};
+        let headers;
+        if ("headers" in options && typeof options.headers !== "undefined") {
+          headers = options.headers;
+        }
+        if ("response" in options) {
+          this.response = options.response;
+          headers = options.response.headers;
+        }
         const requestCopy = Object.assign({}, options.request);
         if (options.request.headers.authorization) {
           requestCopy.headers = Object.assign({}, options.request.headers, {
@@ -21003,6 +21254,18 @@ var require_dist_node4 = __commonJS({
         }
         requestCopy.url = requestCopy.url.replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]").replace(/\baccess_token=\w+/g, "access_token=[REDACTED]");
         this.request = requestCopy;
+        Object.defineProperty(this, "code", {
+          get() {
+            logOnceCode(new deprecation.Deprecation("[@octokit/request-error] `error.code` is deprecated, use `error.status`."));
+            return statusCode;
+          }
+        });
+        Object.defineProperty(this, "headers", {
+          get() {
+            logOnceHeaders(new deprecation.Deprecation("[@octokit/request-error] `error.headers` is deprecated, use `error.response.headers`."));
+            return headers || {};
+          }
+        });
       }
     };
     exports2.RequestError = RequestError;
@@ -21022,11 +21285,12 @@ var require_dist_node5 = __commonJS({
     var isPlainObject = require_is_plain_object2();
     var nodeFetch = _interopDefault(require_lib3());
     var requestError = require_dist_node4();
-    var VERSION = "5.4.14";
+    var VERSION = "5.6.3";
     function getBufferResponse(response) {
       return response.arrayBuffer();
     }
     function fetchWrapper(requestOptions) {
+      const log = requestOptions.request && requestOptions.request.log ? requestOptions.request.log : console;
       if (isPlainObject.isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) {
         requestOptions.body = JSON.stringify(requestOptions.body);
       }
@@ -21039,11 +21303,16 @@ var require_dist_node5 = __commonJS({
         body: requestOptions.body,
         headers: requestOptions.headers,
         redirect: requestOptions.redirect
-      }, requestOptions.request)).then((response) => {
+      }, requestOptions.request)).then(async (response) => {
         url = response.url;
         status = response.status;
         for (const keyAndValue of response.headers) {
           headers[keyAndValue[0]] = keyAndValue[1];
+        }
+        if ("deprecation" in headers) {
+          const matches = headers.link && headers.link.match(/<([^>]+)>; rel="deprecation"/);
+          const deprecationLink = matches && matches.pop();
+          log.warn(`[@octokit/request] "${requestOptions.method} ${requestOptions.url}" is deprecated. It is scheduled to be removed on ${headers.sunset}${deprecationLink ? `. See ${deprecationLink}` : ""}`);
         }
         if (status === 204 || status === 205) {
           return;
@@ -21053,40 +21322,40 @@ var require_dist_node5 = __commonJS({
             return;
           }
           throw new requestError.RequestError(response.statusText, status, {
-            headers,
+            response: {
+              url,
+              status,
+              headers,
+              data: void 0
+            },
             request: requestOptions
           });
         }
         if (status === 304) {
           throw new requestError.RequestError("Not modified", status, {
-            headers,
+            response: {
+              url,
+              status,
+              headers,
+              data: await getResponseData(response)
+            },
             request: requestOptions
           });
         }
         if (status >= 400) {
-          return response.text().then((message) => {
-            const error = new requestError.RequestError(message, status, {
+          const data = await getResponseData(response);
+          const error = new requestError.RequestError(toErrorMessage(data), status, {
+            response: {
+              url,
+              status,
               headers,
-              request: requestOptions
-            });
-            try {
-              let responseBody = JSON.parse(error.message);
-              Object.assign(error, responseBody);
-              let errors = responseBody.errors;
-              error.message = error.message + ": " + errors.map(JSON.stringify).join(", ");
-            } catch (e) {
-            }
-            throw error;
+              data
+            },
+            request: requestOptions
           });
+          throw error;
         }
-        const contentType = response.headers.get("content-type");
-        if (/application\/json/.test(contentType)) {
-          return response.json();
-        }
-        if (!contentType || /^text\/|charset=utf-8$/.test(contentType)) {
-          return response.text();
-        }
-        return getBufferResponse(response);
+        return getResponseData(response);
       }).then((data) => {
         return {
           status,
@@ -21095,14 +21364,33 @@ var require_dist_node5 = __commonJS({
           data
         };
       }).catch((error) => {
-        if (error instanceof requestError.RequestError) {
+        if (error instanceof requestError.RequestError)
           throw error;
-        }
         throw new requestError.RequestError(error.message, 500, {
-          headers,
           request: requestOptions
         });
       });
+    }
+    async function getResponseData(response) {
+      const contentType = response.headers.get("content-type");
+      if (/application\/json/.test(contentType)) {
+        return response.json();
+      }
+      if (!contentType || /^text\/|charset=utf-8$/.test(contentType)) {
+        return response.text();
+      }
+      return getBufferResponse(response);
+    }
+    function toErrorMessage(data) {
+      if (typeof data === "string")
+        return data;
+      if ("message" in data) {
+        if (Array.isArray(data.errors)) {
+          return `${data.message}: ${data.errors.map(JSON.stringify).join(", ")}`;
+        }
+        return data.message;
+      }
+      return `Unknown error: ${JSON.stringify(data)}`;
     }
     function withDefaults(oldEndpoint, newDefaults) {
       const endpoint2 = oldEndpoint.defaults(newDefaults);
@@ -21141,17 +21429,20 @@ var require_dist_node6 = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     var request = require_dist_node5();
     var universalUserAgent = require_dist_node();
-    var VERSION = "4.6.1";
-    var GraphqlError = class extends Error {
-      constructor(request2, response) {
-        const message = response.data.errors[0].message;
-        super(message);
-        Object.assign(this, response.data);
-        Object.assign(this, {
-          headers: response.headers
-        });
-        this.name = "GraphqlError";
+    var VERSION = "4.8.0";
+    function _buildMessageForResponseErrors(data) {
+      return `Request failed due to following response errors:
+` + data.errors.map((e) => ` - ${e.message}`).join("\n");
+    }
+    var GraphqlResponseError = class extends Error {
+      constructor(request2, headers, response) {
+        super(_buildMessageForResponseErrors(response));
         this.request = request2;
+        this.headers = headers;
+        this.response = response;
+        this.name = "GraphqlResponseError";
+        this.errors = response.errors;
+        this.data = response.data;
         if (Error.captureStackTrace) {
           Error.captureStackTrace(this, this.constructor);
         }
@@ -21195,10 +21486,7 @@ var require_dist_node6 = __commonJS({
           for (const key of Object.keys(response.headers)) {
             headers[key] = response.headers[key];
           }
-          throw new GraphqlError(requestOptions, {
-            headers,
-            data: response.data
-          });
+          throw new GraphqlResponseError(requestOptions, headers, response.data);
         }
         return response.data.data;
       });
@@ -21226,6 +21514,7 @@ var require_dist_node6 = __commonJS({
         url: "/graphql"
       });
     }
+    exports2.GraphqlResponseError = GraphqlResponseError;
     exports2.graphql = graphql$1;
     exports2.withCustomRequest = withCustomRequest;
   }
@@ -21313,7 +21602,8 @@ var require_dist_node8 = __commonJS({
       }
       return target;
     }
-    var VERSION = "3.3.1";
+    var VERSION = "3.6.0";
+    var _excluded = ["authStrategy"];
     var Octokit2 = class {
       constructor(options = {}) {
         const hook = new beforeAfterHook.Collection();
@@ -21362,7 +21652,7 @@ var require_dist_node8 = __commonJS({
         } else {
           const {
             authStrategy
-          } = options, otherOptions = _objectWithoutProperties(options, ["authStrategy"]);
+          } = options, otherOptions = _objectWithoutProperties(options, _excluded);
           const auth = authStrategy(Object.assign({
             request: this.request,
             log: this.log,
@@ -21437,8 +21727,47 @@ var require_dist_node10 = __commonJS({
   "node_modules/@octokit/plugin-paginate-rest/dist-node/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var VERSION = "2.13.3";
+    var VERSION = "2.21.3";
+    function ownKeys(object, enumerableOnly) {
+      var keys = Object.keys(object);
+      if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        enumerableOnly && (symbols = symbols.filter(function(sym) {
+          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        })), keys.push.apply(keys, symbols);
+      }
+      return keys;
+    }
+    function _objectSpread2(target) {
+      for (var i = 1; i < arguments.length; i++) {
+        var source = arguments[i] != null ? arguments[i] : {};
+        i % 2 ? ownKeys(Object(source), true).forEach(function(key) {
+          _defineProperty(target, key, source[key]);
+        }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function(key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+      }
+      return target;
+    }
+    function _defineProperty(obj, key, value) {
+      if (key in obj) {
+        Object.defineProperty(obj, key, {
+          value,
+          enumerable: true,
+          configurable: true,
+          writable: true
+        });
+      } else {
+        obj[key] = value;
+      }
+      return obj;
+    }
     function normalizePaginatedListResponse(response) {
+      if (!response.data) {
+        return _objectSpread2(_objectSpread2({}, response), {}, {
+          data: []
+        });
+      }
       const responseNeedsNormalization = "total_count" in response.data && !("url" in response.data);
       if (!responseNeedsNormalization)
         return response;
@@ -21473,16 +21802,29 @@ var require_dist_node10 = __commonJS({
               return {
                 done: true
               };
-            const response = await requestMethod({
-              method,
-              url,
-              headers
-            });
-            const normalizedResponse = normalizePaginatedListResponse(response);
-            url = ((normalizedResponse.headers.link || "").match(/<([^>]+)>;\s*rel="next"/) || [])[1];
-            return {
-              value: normalizedResponse
-            };
+            try {
+              const response = await requestMethod({
+                method,
+                url,
+                headers
+              });
+              const normalizedResponse = normalizePaginatedListResponse(response);
+              url = ((normalizedResponse.headers.link || "").match(/<([^>]+)>;\s*rel="next"/) || [])[1];
+              return {
+                value: normalizedResponse
+              };
+            } catch (error) {
+              if (error.status !== 409)
+                throw error;
+              url = "";
+              return {
+                value: {
+                  status: 200,
+                  headers: {},
+                  data: []
+                }
+              };
+            }
           }
         })
       };
@@ -21513,7 +21855,7 @@ var require_dist_node10 = __commonJS({
     var composePaginateRest = Object.assign(paginate, {
       iterator
     });
-    var paginatingEndpoints = ["GET /app/installations", "GET /applications/grants", "GET /authorizations", "GET /enterprises/{enterprise}/actions/permissions/organizations", "GET /enterprises/{enterprise}/actions/runner-groups", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners", "GET /enterprises/{enterprise}/actions/runners", "GET /enterprises/{enterprise}/actions/runners/downloads", "GET /events", "GET /gists", "GET /gists/public", "GET /gists/starred", "GET /gists/{gist_id}/comments", "GET /gists/{gist_id}/commits", "GET /gists/{gist_id}/forks", "GET /installation/repositories", "GET /issues", "GET /marketplace_listing/plans", "GET /marketplace_listing/plans/{plan_id}/accounts", "GET /marketplace_listing/stubbed/plans", "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts", "GET /networks/{owner}/{repo}/events", "GET /notifications", "GET /organizations", "GET /orgs/{org}/actions/permissions/repositories", "GET /orgs/{org}/actions/runner-groups", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/runners", "GET /orgs/{org}/actions/runners", "GET /orgs/{org}/actions/runners/downloads", "GET /orgs/{org}/actions/secrets", "GET /orgs/{org}/actions/secrets/{secret_name}/repositories", "GET /orgs/{org}/blocks", "GET /orgs/{org}/credential-authorizations", "GET /orgs/{org}/events", "GET /orgs/{org}/failed_invitations", "GET /orgs/{org}/hooks", "GET /orgs/{org}/installations", "GET /orgs/{org}/invitations", "GET /orgs/{org}/invitations/{invitation_id}/teams", "GET /orgs/{org}/issues", "GET /orgs/{org}/members", "GET /orgs/{org}/migrations", "GET /orgs/{org}/migrations/{migration_id}/repositories", "GET /orgs/{org}/outside_collaborators", "GET /orgs/{org}/projects", "GET /orgs/{org}/public_members", "GET /orgs/{org}/repos", "GET /orgs/{org}/team-sync/groups", "GET /orgs/{org}/teams", "GET /orgs/{org}/teams/{team_slug}/discussions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/invitations", "GET /orgs/{org}/teams/{team_slug}/members", "GET /orgs/{org}/teams/{team_slug}/projects", "GET /orgs/{org}/teams/{team_slug}/repos", "GET /orgs/{org}/teams/{team_slug}/team-sync/group-mappings", "GET /orgs/{org}/teams/{team_slug}/teams", "GET /projects/columns/{column_id}/cards", "GET /projects/{project_id}/collaborators", "GET /projects/{project_id}/columns", "GET /repos/{owner}/{repo}/actions/artifacts", "GET /repos/{owner}/{repo}/actions/runners", "GET /repos/{owner}/{repo}/actions/runners/downloads", "GET /repos/{owner}/{repo}/actions/runs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs", "GET /repos/{owner}/{repo}/actions/secrets", "GET /repos/{owner}/{repo}/actions/workflows", "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs", "GET /repos/{owner}/{repo}/assignees", "GET /repos/{owner}/{repo}/branches", "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations", "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs", "GET /repos/{owner}/{repo}/code-scanning/alerts", "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances", "GET /repos/{owner}/{repo}/code-scanning/analyses", "GET /repos/{owner}/{repo}/collaborators", "GET /repos/{owner}/{repo}/comments", "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/commits", "GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head", "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments", "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls", "GET /repos/{owner}/{repo}/commits/{ref}/check-runs", "GET /repos/{owner}/{repo}/commits/{ref}/check-suites", "GET /repos/{owner}/{repo}/commits/{ref}/statuses", "GET /repos/{owner}/{repo}/contributors", "GET /repos/{owner}/{repo}/deployments", "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses", "GET /repos/{owner}/{repo}/events", "GET /repos/{owner}/{repo}/forks", "GET /repos/{owner}/{repo}/git/matching-refs/{ref}", "GET /repos/{owner}/{repo}/hooks", "GET /repos/{owner}/{repo}/invitations", "GET /repos/{owner}/{repo}/issues", "GET /repos/{owner}/{repo}/issues/comments", "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/issues/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/comments", "GET /repos/{owner}/{repo}/issues/{issue_number}/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/labels", "GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline", "GET /repos/{owner}/{repo}/keys", "GET /repos/{owner}/{repo}/labels", "GET /repos/{owner}/{repo}/milestones", "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels", "GET /repos/{owner}/{repo}/notifications", "GET /repos/{owner}/{repo}/pages/builds", "GET /repos/{owner}/{repo}/projects", "GET /repos/{owner}/{repo}/pulls", "GET /repos/{owner}/{repo}/pulls/comments", "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments", "GET /repos/{owner}/{repo}/pulls/{pull_number}/commits", "GET /repos/{owner}/{repo}/pulls/{pull_number}/files", "GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments", "GET /repos/{owner}/{repo}/releases", "GET /repos/{owner}/{repo}/releases/{release_id}/assets", "GET /repos/{owner}/{repo}/secret-scanning/alerts", "GET /repos/{owner}/{repo}/stargazers", "GET /repos/{owner}/{repo}/subscribers", "GET /repos/{owner}/{repo}/tags", "GET /repos/{owner}/{repo}/teams", "GET /repositories", "GET /repositories/{repository_id}/environments/{environment_name}/secrets", "GET /scim/v2/enterprises/{enterprise}/Groups", "GET /scim/v2/enterprises/{enterprise}/Users", "GET /scim/v2/organizations/{org}/Users", "GET /search/code", "GET /search/commits", "GET /search/issues", "GET /search/labels", "GET /search/repositories", "GET /search/topics", "GET /search/users", "GET /teams/{team_id}/discussions", "GET /teams/{team_id}/discussions/{discussion_number}/comments", "GET /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /teams/{team_id}/discussions/{discussion_number}/reactions", "GET /teams/{team_id}/invitations", "GET /teams/{team_id}/members", "GET /teams/{team_id}/projects", "GET /teams/{team_id}/repos", "GET /teams/{team_id}/team-sync/group-mappings", "GET /teams/{team_id}/teams", "GET /user/blocks", "GET /user/emails", "GET /user/followers", "GET /user/following", "GET /user/gpg_keys", "GET /user/installations", "GET /user/installations/{installation_id}/repositories", "GET /user/issues", "GET /user/keys", "GET /user/marketplace_purchases", "GET /user/marketplace_purchases/stubbed", "GET /user/memberships/orgs", "GET /user/migrations", "GET /user/migrations/{migration_id}/repositories", "GET /user/orgs", "GET /user/public_emails", "GET /user/repos", "GET /user/repository_invitations", "GET /user/starred", "GET /user/subscriptions", "GET /user/teams", "GET /users", "GET /users/{username}/events", "GET /users/{username}/events/orgs/{org}", "GET /users/{username}/events/public", "GET /users/{username}/followers", "GET /users/{username}/following", "GET /users/{username}/gists", "GET /users/{username}/gpg_keys", "GET /users/{username}/keys", "GET /users/{username}/orgs", "GET /users/{username}/projects", "GET /users/{username}/received_events", "GET /users/{username}/received_events/public", "GET /users/{username}/repos", "GET /users/{username}/starred", "GET /users/{username}/subscriptions"];
+    var paginatingEndpoints = ["GET /app/hook/deliveries", "GET /app/installations", "GET /applications/grants", "GET /authorizations", "GET /enterprises/{enterprise}/actions/permissions/organizations", "GET /enterprises/{enterprise}/actions/runner-groups", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners", "GET /enterprises/{enterprise}/actions/runners", "GET /enterprises/{enterprise}/audit-log", "GET /enterprises/{enterprise}/secret-scanning/alerts", "GET /enterprises/{enterprise}/settings/billing/advanced-security", "GET /events", "GET /gists", "GET /gists/public", "GET /gists/starred", "GET /gists/{gist_id}/comments", "GET /gists/{gist_id}/commits", "GET /gists/{gist_id}/forks", "GET /installation/repositories", "GET /issues", "GET /licenses", "GET /marketplace_listing/plans", "GET /marketplace_listing/plans/{plan_id}/accounts", "GET /marketplace_listing/stubbed/plans", "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts", "GET /networks/{owner}/{repo}/events", "GET /notifications", "GET /organizations", "GET /orgs/{org}/actions/cache/usage-by-repository", "GET /orgs/{org}/actions/permissions/repositories", "GET /orgs/{org}/actions/runner-groups", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/runners", "GET /orgs/{org}/actions/runners", "GET /orgs/{org}/actions/secrets", "GET /orgs/{org}/actions/secrets/{secret_name}/repositories", "GET /orgs/{org}/audit-log", "GET /orgs/{org}/blocks", "GET /orgs/{org}/code-scanning/alerts", "GET /orgs/{org}/codespaces", "GET /orgs/{org}/credential-authorizations", "GET /orgs/{org}/dependabot/secrets", "GET /orgs/{org}/dependabot/secrets/{secret_name}/repositories", "GET /orgs/{org}/events", "GET /orgs/{org}/external-groups", "GET /orgs/{org}/failed_invitations", "GET /orgs/{org}/hooks", "GET /orgs/{org}/hooks/{hook_id}/deliveries", "GET /orgs/{org}/installations", "GET /orgs/{org}/invitations", "GET /orgs/{org}/invitations/{invitation_id}/teams", "GET /orgs/{org}/issues", "GET /orgs/{org}/members", "GET /orgs/{org}/migrations", "GET /orgs/{org}/migrations/{migration_id}/repositories", "GET /orgs/{org}/outside_collaborators", "GET /orgs/{org}/packages", "GET /orgs/{org}/packages/{package_type}/{package_name}/versions", "GET /orgs/{org}/projects", "GET /orgs/{org}/public_members", "GET /orgs/{org}/repos", "GET /orgs/{org}/secret-scanning/alerts", "GET /orgs/{org}/settings/billing/advanced-security", "GET /orgs/{org}/team-sync/groups", "GET /orgs/{org}/teams", "GET /orgs/{org}/teams/{team_slug}/discussions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/invitations", "GET /orgs/{org}/teams/{team_slug}/members", "GET /orgs/{org}/teams/{team_slug}/projects", "GET /orgs/{org}/teams/{team_slug}/repos", "GET /orgs/{org}/teams/{team_slug}/teams", "GET /projects/columns/{column_id}/cards", "GET /projects/{project_id}/collaborators", "GET /projects/{project_id}/columns", "GET /repos/{owner}/{repo}/actions/artifacts", "GET /repos/{owner}/{repo}/actions/caches", "GET /repos/{owner}/{repo}/actions/runners", "GET /repos/{owner}/{repo}/actions/runs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs", "GET /repos/{owner}/{repo}/actions/secrets", "GET /repos/{owner}/{repo}/actions/workflows", "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs", "GET /repos/{owner}/{repo}/assignees", "GET /repos/{owner}/{repo}/branches", "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations", "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs", "GET /repos/{owner}/{repo}/code-scanning/alerts", "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances", "GET /repos/{owner}/{repo}/code-scanning/analyses", "GET /repos/{owner}/{repo}/codespaces", "GET /repos/{owner}/{repo}/codespaces/devcontainers", "GET /repos/{owner}/{repo}/codespaces/secrets", "GET /repos/{owner}/{repo}/collaborators", "GET /repos/{owner}/{repo}/comments", "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/commits", "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments", "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls", "GET /repos/{owner}/{repo}/commits/{ref}/check-runs", "GET /repos/{owner}/{repo}/commits/{ref}/check-suites", "GET /repos/{owner}/{repo}/commits/{ref}/status", "GET /repos/{owner}/{repo}/commits/{ref}/statuses", "GET /repos/{owner}/{repo}/contributors", "GET /repos/{owner}/{repo}/dependabot/secrets", "GET /repos/{owner}/{repo}/deployments", "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses", "GET /repos/{owner}/{repo}/environments", "GET /repos/{owner}/{repo}/events", "GET /repos/{owner}/{repo}/forks", "GET /repos/{owner}/{repo}/git/matching-refs/{ref}", "GET /repos/{owner}/{repo}/hooks", "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries", "GET /repos/{owner}/{repo}/invitations", "GET /repos/{owner}/{repo}/issues", "GET /repos/{owner}/{repo}/issues/comments", "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/issues/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/comments", "GET /repos/{owner}/{repo}/issues/{issue_number}/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/labels", "GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline", "GET /repos/{owner}/{repo}/keys", "GET /repos/{owner}/{repo}/labels", "GET /repos/{owner}/{repo}/milestones", "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels", "GET /repos/{owner}/{repo}/notifications", "GET /repos/{owner}/{repo}/pages/builds", "GET /repos/{owner}/{repo}/projects", "GET /repos/{owner}/{repo}/pulls", "GET /repos/{owner}/{repo}/pulls/comments", "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments", "GET /repos/{owner}/{repo}/pulls/{pull_number}/commits", "GET /repos/{owner}/{repo}/pulls/{pull_number}/files", "GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments", "GET /repos/{owner}/{repo}/releases", "GET /repos/{owner}/{repo}/releases/{release_id}/assets", "GET /repos/{owner}/{repo}/releases/{release_id}/reactions", "GET /repos/{owner}/{repo}/secret-scanning/alerts", "GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations", "GET /repos/{owner}/{repo}/stargazers", "GET /repos/{owner}/{repo}/subscribers", "GET /repos/{owner}/{repo}/tags", "GET /repos/{owner}/{repo}/teams", "GET /repos/{owner}/{repo}/topics", "GET /repositories", "GET /repositories/{repository_id}/environments/{environment_name}/secrets", "GET /search/code", "GET /search/commits", "GET /search/issues", "GET /search/labels", "GET /search/repositories", "GET /search/topics", "GET /search/users", "GET /teams/{team_id}/discussions", "GET /teams/{team_id}/discussions/{discussion_number}/comments", "GET /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /teams/{team_id}/discussions/{discussion_number}/reactions", "GET /teams/{team_id}/invitations", "GET /teams/{team_id}/members", "GET /teams/{team_id}/projects", "GET /teams/{team_id}/repos", "GET /teams/{team_id}/teams", "GET /user/blocks", "GET /user/codespaces", "GET /user/codespaces/secrets", "GET /user/emails", "GET /user/followers", "GET /user/following", "GET /user/gpg_keys", "GET /user/installations", "GET /user/installations/{installation_id}/repositories", "GET /user/issues", "GET /user/keys", "GET /user/marketplace_purchases", "GET /user/marketplace_purchases/stubbed", "GET /user/memberships/orgs", "GET /user/migrations", "GET /user/migrations/{migration_id}/repositories", "GET /user/orgs", "GET /user/packages", "GET /user/packages/{package_type}/{package_name}/versions", "GET /user/public_emails", "GET /user/repos", "GET /user/repository_invitations", "GET /user/starred", "GET /user/subscriptions", "GET /user/teams", "GET /users", "GET /users/{username}/events", "GET /users/{username}/events/orgs/{org}", "GET /users/{username}/events/public", "GET /users/{username}/followers", "GET /users/{username}/following", "GET /users/{username}/gists", "GET /users/{username}/gpg_keys", "GET /users/{username}/keys", "GET /users/{username}/orgs", "GET /users/{username}/packages", "GET /users/{username}/projects", "GET /users/{username}/received_events", "GET /users/{username}/received_events/public", "GET /users/{username}/repos", "GET /users/{username}/starred", "GET /users/{username}/subscriptions"];
     function isPaginatingEndpoint(arg) {
       if (typeof arg === "string") {
         return paginatingEndpoints.includes(arg);
@@ -23549,7 +23891,7 @@ var loadPullRequestDiff = async (client, event, base) => {
     owner,
     repo
   });
-  return { prNumber, headSha, baseSha, files };
+  return { prNumber, headSha, baseSha, files: files || [] };
 };
 var actionsMap = {
   [RuleActions.status]: handleStatus,
