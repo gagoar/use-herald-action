@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: auth
-        uses: jnwng/github-app-installation-token-action@v2
+        uses: jnwng/github-app-installation-token-action@c54add4c02866dc41e106745ac6dcf5cdd6339e5 # v2
         with:
           appId: ${{ secrets.UHA_APP_ID }}
           installationId: ${{ secrets.UHA_INSTALLATION_ID }}
@@ -19,7 +19,7 @@ jobs:
       - name: Install packages
         run: npm install
       - id: herald
-        uses: gagoar/use-herald-action@master
+        uses: ./
         with:
           GITHUB_TOKEN: ${{ steps.auth.outputs.token }}
           rulesLocation: herald_rules/*.json
