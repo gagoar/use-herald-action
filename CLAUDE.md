@@ -15,7 +15,6 @@ npx jest __tests__/rules.spec.ts # single test file
 npx jest -t "pattern"            # single test by name
 npx jest -u                      # update snapshots
 npm run lint                     # eslint index.ts
-npx pretty-quick                 # prettier format
 npx ts-auto-guard src/rules.ts   # regenerate src/rules.guard.ts
 ```
 
@@ -37,6 +36,10 @@ npx ts-auto-guard src/rules.ts   # regenerate src/rules.guard.ts
 - Node: `.nvmrc` says 16.13.1 but the action runtime and esbuild target is node20
   (`engines.node >=20.0.0`). CI step labels say "Node.js 12.x" — that's a stale label;
   the steps actually read `.nvmrc`.
+- Formatting and lint-autofixable issues are applied automatically pre-commit (husky +
+  lint-staged runs `eslint --fix` and `pretty-quick --staged` on `*.ts`) — don't hand-format.
+  Strict TS settings (`strictNullChecks`, `noUnusedLocals`, `noUnusedParameters`, etc. in
+  `tsconfig.json`) are not auto-fixed and must be satisfied when writing code.
 
 ## Architecture map
 
@@ -67,11 +70,9 @@ npx ts-auto-guard src/rules.ts   # regenerate src/rules.guard.ts
 
 Rule JSON syntax and end-user documentation live in `README.md`, not here.
 
-## Conventions
+## Adding a new action handler
 
-- Prettier: single quotes, semicolons, `printWidth: 120`. ESLint:
-  `@typescript-eslint/recommended` + prettier config. TypeScript `strict: true`.
-- Adding a new action handler: implement `ActionMapInput`, register it in `actionsMap`
-  (`src/index.ts`), add the value to the `RuleActions` enum (`src/rules.ts`),
-  regenerate guards (`npx ts-auto-guard src/rules.ts`), and add a `*.spec.ts` with
-  `nock` fixtures under `__mocks__/scenarios/`.
+Implement `ActionMapInput`, register it in `actionsMap` (`src/index.ts`), add the
+value to the `RuleActions` enum (`src/rules.ts`), regenerate guards
+(`npx ts-auto-guard src/rules.ts`), and add a `*.spec.ts` with `nock` fixtures under
+`__mocks__/scenarios/`.
